@@ -1,3 +1,4 @@
 module github.com/AmarnathCJD/Yoko
 
-go 1.16
+// +heroku goVersion go1.12.17
+go 1.12.17
