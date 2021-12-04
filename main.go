@@ -69,7 +69,7 @@ func main() {
                    return
                   }
                 err, out, errout := Shellout(m.Payload)
-                result := fmt.Sprintf("Yoko-GO# ~: %s", out)
+                result := fmt.Sprintf("Yoko-GO# ~: %s \nError: %d, %q", out, err, errout)
                 b.Reply(m, result)
         })
 	b.Start()
