@@ -20,7 +20,7 @@ func Shellout(command string) string {
     cmd := exec.Command("bash", "-c", command)
     cmd.Stdout = &stdout
     cmd.Stderr = &stderr
-    err := cmd.Run()
+    cmd.Run()
     return stdout.String()
 }
 
