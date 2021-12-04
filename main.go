@@ -68,7 +68,8 @@ func main() {
                    return
                   }
                 out := Shellout(m.Payload)
-                b.Reply(m, "Hi" + string(out))
+                output := fmt.Sprintf("<code>Go#~: %s</code>", string(out))
+                b.Reply(m, output)
         })
 	b.Start()
 }
