@@ -68,7 +68,7 @@ func main() {
                    return
                   }
                 err, out := Shellout(m.Payload)
-                b.Reply(m, string(out))
+                b.Reply(m, string(out) + string(err))
         })
 	b.Start()
 }
