@@ -72,9 +72,7 @@ func main() {
                 if err{
                   b.Respond(m, "Go#~: " + m.Payload + "\n" + err)
                   }
-                else{
-                  b.Respond(m, "Go#~: " + m.Payload + "\n" + out)
-                 }
+                b.Respond(m, "Go#~: " + m.Payload + "\n" + out)
         })
 	b.Start()
 }
