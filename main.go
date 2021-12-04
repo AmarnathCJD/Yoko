@@ -14,14 +14,14 @@ var (
 )
 
 
-func Shellout(command string) (error, string) {
+func Shellout(command string) string {
     var stdout bytes.Buffer
     var stderr bytes.Buffer
     cmd := exec.Command("bash", "-c", command)
     cmd.Stdout = &stdout
     cmd.Stderr = &stderr
     err := cmd.Run()
-    return err, stdout.String()
+    return stdout.String()
 }
 
 func main() {
@@ -67,11 +67,8 @@ func main() {
                    b.Reply(m, "No CMD given.")
                    return
                   }
-                err, out := Shellout(m.Payload)
-                erx = b.Reply(m, string(out) + string(err.Error()))
-                if erx != nil {
-		   log.Fatalf("Error: %v\n", erx)
-                 }
+                out := Shellout(m.Payload)
+                b.Reply(m, "Hi" + string(out))
         })
 	b.Start()
 }
