@@ -72,7 +72,7 @@ func main() {
                   b.Reply(m, "Go#~: " + string(m.Payload) + "\n" + string(err.Error()))
                   return
                 }
-                b.Reply(m, "Go#~: " + string(m.Payload) + "\n" + string(out))
+                b.Reply(m, string(out))
         })
 	b.Start()
 }
