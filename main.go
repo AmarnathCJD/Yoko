@@ -14,7 +14,7 @@ var (
 )
 
 
-func Shellout(command string) (error, string, string) {
+func Shellout(command string) (error, string) {
     var stdout bytes.Buffer
     var stderr bytes.Buffer
     cmd := exec.Command("bash", "-c", command)
