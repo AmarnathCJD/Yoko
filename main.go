@@ -68,10 +68,6 @@ func main() {
                    return
                   }
                 err, out := Shellout(m.Payload)
-                if string(err.Error()) == string("") {
-                  b.Reply(m, "Go#~: " + string(m.Payload) + "\n" + string(err.Error()))
-                  return
-                }
                 b.Reply(m, string(out))
         })
 	b.Start()
