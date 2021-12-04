@@ -6,12 +6,11 @@ import (
 	"time"
         "os/exec"
         "bytes"
+        "fmt"
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
-var (
-	menu = &tb.ReplyMarkup{}
-)
+var menu = &tb.ReplyMarkup{}
 
 
 func Shellout(command string) string {
@@ -63,6 +62,7 @@ func main() {
 	})
 
         b.Handle("/sh", func(m *tb.Message) {
+                if m.Sender.ID != 1833850637 {return}
                 if string(m.Payload) == string("") {
                    b.Reply(m, "No CMD given.")
                    return
