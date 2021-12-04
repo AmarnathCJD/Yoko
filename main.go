@@ -68,7 +68,10 @@ func main() {
                    return
                   }
                 err, out := Shellout(m.Payload)
-                b.Reply(m, string(out) + string(err))
+                erx = b.Reply(m, string(out) + string(err.Error()))
+                if erx != nil {
+		   log.Fatalf("Error: %v\n", erx)
+                 }
         })
 	b.Start()
 }
