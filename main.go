@@ -15,7 +15,7 @@ var (
 func main() {
 	b, err := tb.NewBot(tb.Settings{
 		URL:       "",
-		Token:     "5050904599:AAFjlE7XAuR7IV0hZ0m2GNgSmZSObmQcraM",
+		Token:     "5050904599:AAG-YrM6KN4EJJx8peQOn901qHhLCkFo5QA",
 		Updates:   0,
 		Poller:    &tb.LongPoller{Timeout: 10 * time.Second},
 		ParseMode: "HTML",
