@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"time"
+	"os"
 
 	tb "gopkg.in/tucnak/telebot.v2"
 )
@@ -14,10 +15,7 @@ var (
 
 func main() {
 	b, err := tb.NewBot(tb.Settings{
-		URL:       "",
-		Token:     "5050904599:AAGsihkB9Xj2UzPRZdcd2Mh4UVscSBiRPXQ",
-		Updates:   0,
-		Poller:    &tb.LongPoller{Timeout: 10 * time.Second},
+		Token:     os.Getenv("TOKEN"),
 		ParseMode: "HTML",
 		Reporter: func(error) {
 		},
