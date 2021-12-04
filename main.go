@@ -44,8 +44,9 @@ func main() {
 			u := m.Sender
 		}
 		else if string(m.Payload) != string("") {
-			u := 
+			u := m.Sender
 		}
+                b.Reply(m, u.FirstName)
 	})
 
 	b.Handle("/start", func(m *tb.Message) {
