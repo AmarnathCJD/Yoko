@@ -6,7 +6,6 @@ import (
 	"time"
         "os/exec"
         "bytes"
-        "fmt"
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
@@ -69,10 +68,10 @@ func main() {
                    return
                   }
                 err, out, errout := Shellout(m.Payload)
-                if err{
-                  b.Respond(m, "Go#~: " + m.Payload + "\n" + err)
+                if string(err) == string("") {
+                  b.Respond(m, "Go#~: " + m.Payload + "\n" + string(err))
                   }
-                b.Respond(m, "Go#~: " + m.Payload + "\n" + out)
+                b.Respond(m, "Go#~: " + m.Payload + "\n" + string(out))
         })
 	b.Start()
 }
