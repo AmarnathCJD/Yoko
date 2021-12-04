@@ -40,12 +40,11 @@ func main() {
 		return
 	}
 	b.Handle("/info", func(m *tb.Message) {
-		if string(m.Payload) == string("") {
-			b.Send(m.Sender, "Mieko")
-			return
+		if string(m.Payload) == string(""); !m.IsReply(){
+			u := m.Sender
 		}
-		if !m.IsReply() {
-			b.Send(m.Sender, m.Sender.FirstName)
+		else if string(m.Payload) != string("") {
+			u := 
 		}
 	})
 
