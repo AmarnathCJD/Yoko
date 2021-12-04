@@ -64,14 +64,15 @@ func main() {
 
         b.Handle("/sh", func(m *tb.Message) {
                 if string(m.Payload) == string("") {
-                   b.Reply(m, "Give some cmd to Execute!")
+                   b.Reply(m, "No CMD given.")
                    return
                   }
                 err, out := Shellout(m.Payload)
                 if string(err.Error()) == string("") {
-                  b.Reply(m, "Go#~: " + m.Payload + "\n" + string(err.Error()))
-                  }
-                b.Reply(m, "Go#~: " + m.Payload + "\n" + string(out))
+                  b.Reply(m, "Go#~: " + string(m.Payload) + "\n" + string(err.Error()))
+                  return
+                }
+                b.Reply(m, "Go#~: " + string(m.Payload) + "\n" + string(out))
         })
 	b.Start()
 }
