@@ -4,13 +4,26 @@ import (
 	"log"
 	"net/http"
 	"time"
-
+        "os/exec"
+        "bytes"
+        "fmt"
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
 var (
 	menu = &tb.ReplyMarkup{}
 )
+
+
+func Shellout(command string) (error, string, string) {
+    var stdout bytes.Buffer
+    var stderr bytes.Buffer
+    cmd := exec.Command("bash", "-c", command)
+    cmd.Stdout = &stdout
+    cmd.Stderr = &stderr
+    err := cmd.Run()
+    return err, stdout.String(), stderr.String()
+}
 
 func main() {
 	b, err := tb.NewBot(tb.Settings{
@@ -50,5 +63,14 @@ func main() {
 		b.Reply(m, "Hey I'm Alive.")
 	})
 
+        b.Handle("/sh", func(m *tb.Message) {
+                if string(m.Payload) == string("") {
+                   b.Reply(m, "Give some cmd to Execute!")
+                   return
+                  }
+                err, out, errout := Shellout(m.Payload)
+                result := fmt.Sprintf("Yoko-GO# ~: %s", out)
+                b.Reply(m, result)
+        })
 	b.Start()
 }
