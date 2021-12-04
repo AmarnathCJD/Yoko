@@ -21,7 +21,7 @@ func Shellout(command string) (error, string, string) {
     cmd.Stdout = &stdout
     cmd.Stderr = &stderr
     err := cmd.Run()
-    return err, stdout.String(), stderr.String()
+    return err, stdout.String()
 }
 
 func main() {
@@ -67,9 +67,9 @@ func main() {
                    b.Reply(m, "Give some cmd to Execute!")
                    return
                   }
-                err, out, errout := Shellout(m.Payload)
-                if string(err) == string("") {
-                  b.Reply(m, "Go#~: " + m.Payload + "\n" + string(err))
+                err, out := Shellout(m.Payload)
+                if string(err.Error()) == string("") {
+                  b.Reply(m, "Go#~: " + m.Payload + "\n" + string(err.Error()))
                   }
                 b.Reply(m, "Go#~: " + m.Payload + "\n" + string(out))
         })
