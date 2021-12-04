@@ -69,8 +69,12 @@ func main() {
                    return
                   }
                 err, out, errout := Shellout(m.Payload)
-                fmt.Println(err, out, errout)
-                b.Reply(m, "Ok")
+                if err{
+                  b.Respond(m, "Go#~: " + m.Payload + "\n" + err)
+                  }
+                else{
+                  b.Respond(m, "Go#~: " + m.Payload + "\n" + out)
+                 }
         })
 	b.Start()
 }
