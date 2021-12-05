@@ -11,8 +11,8 @@ func ban(m *tb.Message) {
 	}
 	user, _ := get_user(m)
 	if user == nil {
-		b.Reply(m, "You dont seem to be referring to a user or the ID specified is incorrect..")
-	}
+		return
+        }
 	err := b.Ban(m.Chat, &tb.ChatMember{
 		User: user,
 	})
