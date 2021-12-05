@@ -1,9 +1,7 @@
 package main
 
 import (
-	"bytes"
 	"log"
-	"os/exec"
 
 	tb "gopkg.in/tucnak/telebot.v2"
 )
