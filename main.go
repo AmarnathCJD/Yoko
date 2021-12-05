@@ -37,7 +37,7 @@ func EvalCmd(command string) string {
     if err != nil{
 	return err.Error()
     }
-    return r
+    return string(r)
 }
     
 
