@@ -19,9 +19,7 @@ func evaluate(m *tb.Message) {
 	fmt.Println(err)
 	a := eval.Args{"fmt.Sprint": eval.MakeDataRegularInterface(fmt.Sprint), "bot": eval.MakeDataRegularInterface(b), "e": eval.MakeDataRegularInterface(m), "split": eval.MakeDataRegularInterface(strings.SplitN)}
 	r, err := expr.EvalToInterface(a)
-	eval_err := fmt.Sprintf("<b>%s%s</code>", string(m.Payload), string(fmt.Sprint(r)))
-	b.Reply(m, "<b>► EVALGo</b>\n"+string(m.Payload)+"\n\n<b>► OUTPUT</b>\n<code>"+fmt.Sprint(err.Error())+"</code>")
-	b.Reply(m, eval_err)
+	b.Reply(m, "<b>► EVALGo</b>\n"+string(m.Payload)+"\n\n<b>► OUTPUT</b>\n<code>"+fmt.Sprint(err.Error())+fmt.Sprint(r)+"</code>")
 }
 
 func execute(m *tb.Message) {
