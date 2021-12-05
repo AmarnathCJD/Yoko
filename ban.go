@@ -9,7 +9,11 @@ func ban(m *tb.Message) {
 		b.Reply(m, "This command is for groups.")
 		return
 	}
-	user, _ := get_user(m)
+	user_id, _ := get_user(m)
+        if user_id == nil {
+		return 
+        }
+        user = get_entity(user_id)
 	if user == nil {
 		return
         }
