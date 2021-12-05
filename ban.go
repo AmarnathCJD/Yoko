@@ -9,7 +9,7 @@ func ban(m *tb.Message) {
 		b.Reply(m, "This command is for groups.")
 		return
 	}
-	user_id, _ := get_user(m)
+	user_id, xtra := get_user(m)
         if user_id == nil {
 		return 
         }
@@ -21,6 +21,10 @@ func ban(m *tb.Message) {
 		User: user,
 	})
 	if err == nil {
+                if string(xtra) != string(""){
+                    b.Reply(m, "<b>"+user.FirstName+"</b> was banned. ~\n<b>Reason:</b>"+xtra)
+		    return
+                }
 		b.Reply(m, "<b>"+user.FirstName+"</b> was banned. ~")
 		return
 	}
