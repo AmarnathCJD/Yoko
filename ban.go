@@ -18,7 +18,7 @@ func ban(m *tb.Message) {
 		return
         }
 	err := b.Ban(m.Chat, &tb.ChatMember{
-		User: user,
+		User: &tb.User{ID: int(user.ID)},
 	})
 	if err == nil {
                 if string(xtra) != string(""){
