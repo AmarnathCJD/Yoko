@@ -40,5 +40,6 @@ func main() {
 	b.Handle("/info", info)
 	b.Handle("/sh", execute)
 	b.Handle("/ban", ban)
+        b.Handle("/ux", u)
 	b.Start()
 }
