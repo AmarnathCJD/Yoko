@@ -31,13 +31,21 @@ func get_user(m *tb.Message) (*tb.User, string) {
 		x := strings.SplitN(m.Payload, " ", 2)
 		if isInt(x[0]) {
 			user_obj, err := b.ChatByID(x[0])
+                        user_objb := user_obj
                         if err != nil{
                                 b.Reply(m, "Looks like I don't have control over that user, or the ID isn't a valid one. If you reply to one of their messages, I'll be able to interact with them.")
                                 return nil, ""
                         }
+                        user_obj := &tb.User{ID: user_obj.ID, Username: user_obj.Username, FirstName: user_obj.FirstName, LastName: user_obj.LastName}
 			if len(x) > 1 {
-				return user_obj *tb.Chat, x[1]
+                                if user_objb.Title{
+                                     return user_obj, "type is chat"
+                                }
+				return user_obj, x[1]
 			} else {
+                                if user_objb.Title{
+                                     return user_obj, "type is chat"
+                                }
 				return user_obj, ""
 			}
 		} else {
