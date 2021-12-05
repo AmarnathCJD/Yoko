@@ -8,10 +8,11 @@ import (
         "bytes"
         "fmt"
 	tb "gopkg.in/tucnak/telebot.v2"
-        "github.com/traefik/yaegi/interp"
-        "github.com/containous/yaegi/stdlib"
 
 )
+
+import "github.com/traefik/yaegi/interp"
+
 
 var (
  menu = &tb.ReplyMarkup{}
