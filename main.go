@@ -33,7 +33,8 @@ func EvalCmd(command string) string {
     if err != nil{
 	return err.Error()
     }
-    r, err := expr.EvalToInterface(nil)
+    a := eval.Args{"fmt": eval.MakeDataRegularInterface(fmt)}
+    r, err := expr.EvalToInterface(a)
     if err != nil{
 	return err.Error()
     }
