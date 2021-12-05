@@ -55,8 +55,7 @@ func main() {
           r, err := expr.EvalToInterface(a)
           if err != nil{
          	out := err.Error()
-             }
-          else{
+          } else {
              out := fmt.Sprint(r)
           }
           eval_out := fmt.Sprintf("<b>► EVALGo</b>\n%s\n\n<b>► OUTPUT\n<code>%d</code>", string(m.Payload), out)
