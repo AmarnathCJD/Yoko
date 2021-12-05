@@ -11,7 +11,7 @@ import (
 
 )
 
-import "github.com/traefik/yaegi/interp"
+import yk "https://github.com/traefik/yaegi"
 
 
 var (
