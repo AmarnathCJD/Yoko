@@ -50,5 +50,5 @@ func execute(m *tb.Message) {
 }
 
 func u(m *tb.Message) {
- b.Raw("getUsers", [m.Payload])
+ fmt.Println(b.Raw("getUsers", [m.Payload]))
 }
