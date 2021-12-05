@@ -30,7 +30,7 @@ func get_user(m *tb.Message) (int, string) {
 	} else if len(m.Payload) != 0 {
 		x := strings.SplitN(m.Payload, " ", 2)
 		if isInt(x[0]) {
-			user_id = strconv.Atoi(x[0])
+			user_id := strconv.Atoi(x[0])
 			if len(x) > 1 {
 				return user_id, x[1]
 			} else {
@@ -65,7 +65,7 @@ func info(m *tb.Message) {
         if user_id == nil{
             return b.Reply(m, "No user")
         }
-        user_obj = get_entity(m, user_id)
+        user_obj := get_entity(m, user_id)
 	final_msg := fmt.Sprintf("<b>User info</b>\n<b>ID:</b> <code>%s</code>\n<b>First Name:</b> %s\n<b>Last Name:</b> %s\n<b>IsBot:</b> %s\n<b>Username:</b> @%s\n\n<b>Gbanned:</b> %s", strconv.Itoa(user_obj.ID), user_obj.FirstName, user_obj.LastName, strconv.FormatBool(user_obj.IsBot), user_obj.Username, "No")
 	_, err := b.Reply(m, final_msg)
 	if err != nil {
