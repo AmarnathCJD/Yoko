@@ -40,13 +40,7 @@ func main() {
 		return
 	}
 	b.Handle("/info", func(m *tb.Message) {
-		if string(m.Payload) == string(""); !m.IsReply(){
-			u := m.Sender
-		}
-		else if string(m.Payload) != string("") {
-			u := m.Sender
-		}
-                b.Reply(m, u.FirstName)
+		b.Reply(m, "Soon!")
 	})
 
 	b.Handle("/start", func(m *tb.Message) {
