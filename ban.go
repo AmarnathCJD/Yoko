@@ -11,6 +11,7 @@ func ban(m *tb.Message) {
 	}
 	user_id, xtra := get_user(m)
         if user_id == string("") {
+                b.Reply(m, "You dont seem to be referring to a user or the ID specified is incorrect..")
 		return 
         }
         user := get_entity(m, user_id)
