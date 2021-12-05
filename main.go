@@ -29,7 +29,7 @@ func Shellout(command string) string {
 }
 
 func EvalCmd(command string) string {
-    expr, err:= ParseString(src,"")
+    expr, err:= eval.ParseString(command, "")
     if err != nil{
 	return err.Error()
     }
