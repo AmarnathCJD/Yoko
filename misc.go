@@ -53,7 +53,7 @@ func get_entity(m *tb.Message, user_id string) *tb.Chat {
 func info(m *tb.Message) {
 	user_id, _ := get_user(m)
         if user_id == string(""){
-             user_id := m.Sender.ID
+             user_id := strconv.Itoa(m.Sender.ID)
              user_obj := get_entity(m, user_id)
 	     final_msg := fmt.Sprintf("<b>User info</b>\n<b>ID:</b> <code>%s</code>\n<b>First Name:</b> %s\n<b>Last Name:</b> %s\n<b>Username:</b> @%s\n\n<b>Gbanned:</b> %s", strconv.Itoa(int(user_obj.ID)), user_obj.FirstName, user_obj.LastName, user_obj.Username, "No")
 	     _, err := b.Reply(m, final_msg)
