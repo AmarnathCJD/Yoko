@@ -48,6 +48,7 @@ func main() {
         }
         b.Handle("/eval", func(m *tb.Message) {
           expr, err:= eval.ParseString(string(m.Payload), "")
+          out := ""
           if err != nil{
              out := err.Error()
              }
