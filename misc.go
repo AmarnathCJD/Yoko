@@ -21,7 +21,7 @@ func isInt(s string) bool {
 
 func get_user(m *tb.Message) (string, string) {
 	if m.IsReply() {
-		user_obj, _ := strconv.Itoa(m.ReplyTo.Sender.ID)
+		user_obj := strconv.Itoa(m.ReplyTo.Sender.ID)
 		if len(m.Payload) != 0 {
 			return user_obj, m.Payload
 		} else {
