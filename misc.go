@@ -50,8 +50,8 @@ func get_user(m *tb.Message) (int, string) {
 	}
 }
 
-func get_entity(m *tb.Message, user_id int) &tb.Chat{
- entity, err = b.ChatByID(user_id)
+func get_entity(m *tb.Message, user_id int) &tb.Chat {
+ entity, err = b.ChatByID(strconv.Itoa(user_id))
  if err != nil{
           b.Reply(m, "Looks like I don't have control over that user, or the ID isn't a valid one. If you reply to one of their messages, I'll be able to interact with them.")
           return nil
