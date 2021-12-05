@@ -53,7 +53,7 @@ func get_user(m *tb.Message) (*tb.User, string) {
 }
 func info(m *tb.Message) {
 	user_obj, _ := get_user(m)
-        if user_obj == "unknown"{
+        if fmt.Sprint(user_obj) == "unknown"{
            b.Reply(m, "Looks like I don't have control over that user, or the ID isn't a valid one. If you reply to one of their messages, I'll be able to interact with them.")
            return
         }
