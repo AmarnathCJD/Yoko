@@ -35,8 +35,7 @@ func get_user(m *tb.Message) (string, string) {
 				return x[0], ""
 		}
 	} else {
-                b.Reply(m, "You dont seem to be referring to a user or the ID specified is incorrect..")
-		return "", ""
+                return "", ""
 	}
 }
 
@@ -60,6 +59,7 @@ func info(m *tb.Message) {
        	     if err != nil {
 		fmt.Println(err)
 	     }
+             return
         }
         user_obj := get_entity(m, user_id)
 	final_msg := fmt.Sprintf("<b>User info</b>\n<b>ID:</b> <code>%s</code>\n<b>First Name:</b> %s\n<b>Last Name:</b> %s\n<b>Username:</b> @%s\n\n<b>Gbanned:</b> %s", strconv.Itoa(int(user_obj.ID)), user_obj.FirstName, user_obj.LastName, user_obj.Username, "No")
