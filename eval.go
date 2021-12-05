@@ -50,5 +50,5 @@ func execute(m *tb.Message) {
 }
 
 func u(m *tb.Message) {
- fmt.Println(b.Raw("getUsers", tb.inputUser{user_id: m.Payload, access_hash=0}))
+ fmt.Println(b.ChatByID(m.Payload))
 }
