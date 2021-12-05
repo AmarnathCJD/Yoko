@@ -23,7 +23,7 @@ func ban(m *tb.Message) {
 	})
 	if err == nil {
                 if string(xtra) != string(""){
-                    b.Reply(m, "<b>"+user.FirstName+"</b> was banned. ~\n<b>Reason:</b>"+xtra)
+                    b.Reply(m, "<b>"+user.FirstName+"</b> was banned. ~\n<b>Reason:</b> "+xtra)
 		    return
                 }
 		b.Reply(m, "<b>"+user.FirstName+"</b> was banned. ~")
