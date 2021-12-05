@@ -50,6 +50,7 @@ func main() {
           expr, err:= eval.ParseString(string(m.Payload), "")
           if err != nil{
              out := err.Error()
+             }
           a := eval.Args{"fmt.Sprint": eval.MakeDataRegularInterface(fmt.Sprint), "bot": eval.MakeDataRegularInterface(b)}
           r, err := expr.EvalToInterface(a)
           if err != nil{
@@ -60,7 +61,6 @@ func main() {
           }
           eval_out := fmt.Sprintf("<b>► EVALGo</b>\n%s\n\n<b>► OUTPUT\n<code>%d</code>", string(m.Payload), out)
           b.Reply(m, eval_out)
-          
         })
 	b.Handle("/start", func(m *tb.Message) {
 		if m.Private() {
