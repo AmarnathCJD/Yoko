@@ -18,7 +18,7 @@ func isInt(s string) bool {
 	return true
 }
 
-func get_user(m *tb.Message) (*tb.User, string) {
+func get_user(m *tb.Message) (*tb.User *tb.Chat, string) {
 	if m.IsReply() {
 		user_obj := m.ReplyTo.Sender
 		if len(m.Payload) != 0 {
