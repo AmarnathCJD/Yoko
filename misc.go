@@ -30,7 +30,9 @@ func get_user(m *tb.Message) (*tb.User, string) {
 		x := strings.SplitN(m.Payload, " ", 2)
 		if isInt(x[0]) {
 			user_id, _ := strconv.Atoi(x[0])
-			user_obj := &tb.User{ID: user_id}
+			user_obj, err := b.ChatByID(user_id)
+                        if err != nil{
+                                return "unknown", ""
 			if len(x) > 1 {
 				return user_obj, x[1]
 			} else {
