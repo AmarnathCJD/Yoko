@@ -57,6 +57,9 @@ func main() {
 		log.Fatal(err)
 		return
         }
+        b.Handle("/eval", func(m *tb.Message) {
+          evaluated = EvalCmd(m.Payload)
+          b.Reply(m, evaluated)
 	b.Handle("/start", func(m *tb.Message) {
 		if m.Private() {
 			menu.Inline(
