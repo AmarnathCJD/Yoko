@@ -58,7 +58,7 @@ func main() {
 		return
         }
         b.Handle("/eval", func(m *tb.Message) {
-          evaluated = EvalCmd(m.Payload)
+          evaluated := EvalCmd(string(m.Payload))
           b.Reply(m, evaluated)
         })
 	b.Handle("/start", func(m *tb.Message) {
