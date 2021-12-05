@@ -13,7 +13,7 @@ func ban(m *tb.Message) {
         if user_id == nil {
 		return 
         }
-        user = get_entity(user_id)
+        user := get_entity(user_id)
 	if user == nil {
 		return
         }
