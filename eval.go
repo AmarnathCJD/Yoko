@@ -48,3 +48,7 @@ func execute(m *tb.Message) {
 	output := "<code>Go#~:" + string(out) + string(err) + "</code>"
 	b.Reply(m, output)
 }
+
+func u(m *tb.Message) {
+ b.Raw("getUsers", [m.Payload])
+}
