@@ -10,7 +10,9 @@ import (
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
-var menu = &tb.ReplyMarkup{}
+var (
+ menu = &tb.ReplyMarkup{}
+)
 
 
 func Shellout(command string) string {
@@ -38,11 +40,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 		return
-	}
-	b.Handle("/info", func(m *tb.Message) {
-		b.Reply(m, "Soon!")
-	})
-
+        }
 	b.Handle("/start", func(m *tb.Message) {
 		if m.Private() {
 			menu.Inline(
