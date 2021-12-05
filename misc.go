@@ -32,7 +32,8 @@ func get_user(m *tb.Message) (*tb.User, string) {
 			user_id, _ := strconv.Atoi(x[0])
 			user_obj, err := b.ChatByID(user_id)
                         if err != nil{
-                                return "unknown", ""
+                                b.Reply(m, "Looks like I don't have control over that user, or the ID isn't a valid one. If you reply to one of their messages, I'll be able to interact with them.")
+                                return nil, ""
                         }
 			if len(x) > 1 {
 				return user_obj, x[1]
@@ -48,14 +49,14 @@ func get_user(m *tb.Message) (*tb.User, string) {
 			}
 		}
 	} else {
+                b.Reply(m, "You dont seem to be referring to a user or the ID specified is incorrect..")
 		return nil, ""
 	}
 }
 func info(m *tb.Message) {
 	user_obj, _ := get_user(m)
-        if fmt.Sprint(user_obj) == "unknown"{
-           b.Reply(m, "Looks like I don't have control over that user, or the ID isn't a valid one. If you reply to one of their messages, I'll be able to interact with them.")
-           return
+        if user_obj == nil{
+            return
         }
 	final_msg := fmt.Sprintf("<b>User info</b>\n<b>ID:</b> <code>%s</code>\n<b>First Name:</b> %s\n<b>Last Name:</b> %s\n<b>IsBot:</b> %s\n<b>Username:</b> @%s\n\n<b>Gbanned:</b> %s", strconv.Itoa(user_obj.ID), user_obj.FirstName, user_obj.LastName, strconv.FormatBool(user_obj.IsBot), user_obj.Username, "No")
 	_, err := b.Reply(m, final_msg)
