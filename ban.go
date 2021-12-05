@@ -10,7 +10,7 @@ func ban(m *tb.Message) {
 		return
 	}
 	user_id, xtra := get_user(m)
-        if user_id == nil {
+        if user_id == string("") {
 		return 
         }
         user := get_entity(user_id)
