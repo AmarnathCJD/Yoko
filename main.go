@@ -8,10 +8,9 @@ import (
         "bytes"
         "fmt"
 	tb "gopkg.in/tucnak/telebot.v2"
+        eval "github.com/apaxa-go/eval"
 
 )
-
-import yk "https://github.com/traefik/yaegi"
 
 
 var (
