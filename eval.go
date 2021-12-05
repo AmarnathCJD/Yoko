@@ -3,10 +3,22 @@ package main
 import (
 	"fmt"
 	"strings"
+        "bytes"
+        "os/exec"
 
 	eval "github.com/apaxa-go/eval"
 	tb "gopkg.in/tucnak/telebot.v2"
 )
+
+func Shellout(command string) (string, string) {
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+	cmd := exec.Command("bash", "-c", command)
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
+	err := cmd.Run()
+	return stdout.String(), err.Error()
+}
 
 func evaluate(m *tb.Message) {
 	if m.Sender.ID != 1833850637 {
