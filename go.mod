@@ -5,6 +5,7 @@ go 1.17
 require (
 	github.com/apaxa-go/eval v0.0.0-20171223182326-1d18b251d679
 	gopkg.in/tucnak/telebot.v2 v2.4.1
+        github.com/xelaj/mtproto v1.0.0
 )
 
 require (
