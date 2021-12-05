@@ -15,9 +15,8 @@ func evaluate(m *tb.Message) {
 	if string(m.Payload) == string("") {
 		return
 	}
-	expr, err := eval.ParseString(string(m.Payload), "")
-	fmt.Println(err)
-	a := eval.Args{"fmt.Sprint": eval.MakeDataRegularInterface(fmt.Sprint), "bot": eval.MakeDataRegularInterface(b), "e": eval.MakeDataRegularInterface(m), "split": eval.MakeDataRegularInterface(strings.SplitN)}
+	expr, _ := eval.ParseString(string(m.Payload), "")
+	a := eval.Args{"fmt.Sprint": eval.MakeDataRegularInterface(fmt.Sprint), "bot": eval.MakeDataRegularInterface(b), "e": eval.MakeDataRegularInterface(m)}
 	r, err := expr.EvalToInterface(a)
 	b.Reply(m, "<b>► EVALGo</b>\n"+string(m.Payload)+"\n\n<b>► OUTPUT</b>\n<code>"+fmt.Sprint(err.Error())+fmt.Sprint(r)+"</code>")
 }
