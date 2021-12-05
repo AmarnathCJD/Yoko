@@ -28,6 +28,19 @@ func Shellout(command string) string {
     return stdout.String()
 }
 
+func EvalCmd(command string) string {
+    expr, err:= ParseString(src,"")
+    if err != nil{
+	return err.Error()
+    }
+    r, err := expr.EvalToInterface(nil)
+    if err != nil{
+	return err.Error()
+    }
+    return r
+}
+    
+
 func main() {
 	b, err := tb.NewBot(tb.Settings{
 		URL:       "",
