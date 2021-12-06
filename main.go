@@ -20,12 +20,6 @@ var (
 	})
 )
 
-const (
- appID 4529547
- appHash "55bc2f0ca39d588ce5471e52acbf5a69"
- botToken "5050904599:AAG-YrM6KN4EJJx8peQOn901qHhLCkFo5QA"
-)
-
 
 func main() {
 	if err != nil {
