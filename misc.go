@@ -95,8 +95,3 @@ func unfo(m *tb.Message) {
  fmt.Println(u)
  b.Reply(m, string(u))
 }
-
-func x(x string) error {
- f := "Hi"
- return f
-}
