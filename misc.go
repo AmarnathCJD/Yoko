@@ -8,7 +8,6 @@ import (
         "net/http"
         "io/ioutil"
         "time"
-        "encoding/json"
 
 	tb "gopkg.in/tucnak/telebot.v2"
 )
