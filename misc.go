@@ -52,9 +52,10 @@ func get_entity(m *tb.Message, user_id string) *tb.Chat {
 func getUser(username string) (string, error) {
  resp, err := http.Get("https://roseflask.herokuapp.com/username?username=" + username)
  if err != nil{
-    return nil, err
+    return "", err
  }
- return string(resp), err
+ response := fmt.Sprint(resp)
+ return response, err
 }
 
 func info(m *tb.Message) {
