@@ -24,7 +24,7 @@ func isInt(s string) bool {
 }
 
 
-func get_user(m *tb.Message) (interface{}, string) {
+func get_user(m *tb.Message) (*tb.User, string) {
 	if m.IsReply() {
 		user_obj := m.ReplyTo.Sender
 		if len(m.Payload) != 0 {
@@ -36,14 +36,15 @@ func get_user(m *tb.Message) (interface{}, string) {
 		x := strings.SplitN(m.Payload, " ", 2)
 		if isInt(x[0]) {
 			user_obj, err := b.ChatByID(x[0])
+                        user := &tb.User{ID: user_obj.ID, FirstName: user_obj.FirstName, LastName: user_obj.LastName, Username: user_obj.Username}
                         if err != nil{
                                 b.Reply(m, "Looks like I don't have control over that user, or the ID isn't a valid one. If you reply to one of their messages, I'll be able to interact with them.")
                                 return nil, ""
                         }
 			if len(x) > 1 {
-				return user_obj, x[1]
+				return user, x[1]
 			} else {
-				return user_obj, ""
+				return user, ""
 			}
 		} else {
 			user_obj := &tb.User{Username: x[0]}
@@ -81,18 +82,7 @@ func getJson(url string) (string, error) {
 }
 
 func info(m *tb.Message) {
-	user_id, _ := get_user(m)
-        if user_id == string(""){
-             user_id := strconv.Itoa(m.Sender.ID)
-             user_obj := get_entity(m, user_id)
-	     final_msg := fmt.Sprintf("<b>User info</b>\n<b>ID:</b> <code>%s</code>\n<b>First Name:</b> %s\n<b>Last Name:</b> %s\n<b>Username:</b> @%s\n\n<b>Gbanned:</b> %s", strconv.Itoa(int(user_obj.ID)), user_obj.FirstName, user_obj.LastName, user_obj.Username, "No")
-	     _, err := b.Reply(m, final_msg)
-       	     if err != nil {
-		fmt.Println(err)
-	     }
-             return
-        }
-        user_obj := get_entity(m, user_id)
+        user_obj := get_user(m)
 	final_msg := fmt.Sprintf("<b>User info</b>\n<b>ID:</b> <code>%s</code>\n<b>First Name:</b> %s\n<b>Last Name:</b> %s\n<b>Username:</b> @%s\n\n<b>Gbanned:</b> %s", strconv.Itoa(int(user_obj.ID)), user_obj.FirstName, user_obj.LastName, user_obj.Username, "No")
 	_, err := b.Reply(m, final_msg)
 	if err != nil {
