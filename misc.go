@@ -91,10 +91,11 @@ func info(m *tb.Message) {
 	}
 }
 
+var data map[string]interface{}
+
 func unfo(m *tb.Message) {
  u, _ := getJson(m.Payload)
- dr := map[string]interface{}
- err := json.Unmarshal([]byte(u), &dr)
+ err := json.Unmarshal([]byte(u), &data)
  fmt.Println(err)
- b.Reply(m, string(dr["username"]))
+ b.Reply(m, string(data["username"]))
 }
