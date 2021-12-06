@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 	"unicode"
+        "net/http"
 
 	tb "gopkg.in/tucnak/telebot.v2"
 )
@@ -48,6 +49,12 @@ func get_entity(m *tb.Message, user_id string) *tb.Chat {
  return entity
 }
     
+func getUser(username string) (string, error) {
+ resp, err := http.Get("https://roseflask.herokuapp.com/username?username=" + username)
+ if err != nil{
+    return nil, err
+ }
+ return resp, err
 
 func info(m *tb.Message) {
 	user_id, _ := get_user(m)
@@ -67,4 +74,9 @@ func info(m *tb.Message) {
 	if err != nil {
 		fmt.Println(err)
 	}
+}
+
+func unfo(m *tb.Message) {
+ u, _ = getUser(m.Payload)
+ b.Reply(m, u)
 }
