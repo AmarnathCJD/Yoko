@@ -79,6 +79,6 @@ func info(m *tb.Message) {
 }
 
 func unfo(m *tb.Message) {
- u, _ = getUser(m.Payload)
+ u, _ := getUser(m.Payload)
  b.Reply(m, u)
 }
