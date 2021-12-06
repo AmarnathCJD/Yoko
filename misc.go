@@ -54,7 +54,7 @@ func getUser(username string) (string, error) {
  if err != nil{
     return "", err
  }
- response := fmt.Sprint(resp)
+ response := fmt.Sprint(resp.Body)
  return response, err
 }
 
