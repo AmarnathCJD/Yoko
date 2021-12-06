@@ -24,9 +24,9 @@ func isInt(s string) bool {
 }
 
 
-func get_user(m *tb.Message) (string, string) {
+func get_user(m *tb.Message) (interface{}, string) {
 	if m.IsReply() {
-		user_obj := strconv.Itoa(m.ReplyTo.Sender.ID)
+		user_obj := m.ReplyTo.Sender
 		if len(m.Payload) != 0 {
 			return user_obj, m.Payload
 		} else {
@@ -34,13 +34,28 @@ func get_user(m *tb.Message) (string, string) {
 		}
 	} else if len(m.Payload) != 0 {
 		x := strings.SplitN(m.Payload, " ", 2)
-                if len(x) > 1 {
-				return x[0], x[1]
-                } else {
-				return x[0], ""
+		if isInt(x[0]) {
+			user_obj, err := b.ChatByID(x[0])
+                        if err != nil{
+                                b.Reply(m, "Looks like I don't have control over that user, or the ID isn't a valid one. If you reply to one of their messages, I'll be able to interact with them.")
+                                return nil, ""
+                        }
+			if len(x) > 1 {
+				return user_obj, x[1]
+			} else {
+				return user_obj, ""
+			}
+		} else {
+			user_obj := &tb.User{Username: x[0]}
+			if len(x) > 1 {
+				return user_obj, x[1]
+			} else {
+				return user_obj, ""
+			}
 		}
 	} else {
-                return "", ""
+                b.Reply(m, "You dont seem to be referring to a user or the ID specified is incorrect..")
+		return nil, ""
 	}
 }
 
