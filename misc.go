@@ -55,13 +55,13 @@ func get_entity(m *tb.Message, user_id string) *tb.Chat {
 }
 
 func getJson(url string) error {
-    r, err := myClient.Get("https://roseflask.herokuapp.com/username?username=" + username)
+    r, err := myClient.Get("https://roseflask.herokuapp.com/username?username=" + url)
     if err != nil {
         return err
     }
     defer r.Body.Close()
 
-    return json.NewDecoder(r.Body).Decode(string)
+    return json.NewDecoder(r.Body).Decode()
 }
 
 func info(m *tb.Message) {
