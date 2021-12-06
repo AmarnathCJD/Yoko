@@ -7,9 +7,13 @@ import (
 	"unicode"
         "net/http"
         "io/ioutil"
+        "time"
+        "encoding/json"
 
 	tb "gopkg.in/tucnak/telebot.v2"
 )
+
+var myClient = &http.Client{Timeout: 10 * time.Second}
 
 func isInt(s string) bool {
 	for _, c := range s {
@@ -49,14 +53,15 @@ func get_entity(m *tb.Message, user_id string) *tb.Chat {
  }
  return entity
 }
-    
-func getUser(username string) (string, error) {
- resp, err := http.Get("https://roseflask.herokuapp.com/username?username=" + username)
- if err != nil{
-    return "", err
- }
- r := fmt.Sprint(ioutil.ReadAll(resp.Body))
- return r, err
+
+func getJson(url string) error {
+    r, err := myClient.Get("https://roseflask.herokuapp.com/username?username=" + username)
+    if err != nil {
+        return err
+    }
+    defer r.Body.Close()
+
+    return json.NewDecoder(r.Body).Decode(string)
 }
 
 func info(m *tb.Message) {
@@ -80,7 +85,7 @@ func info(m *tb.Message) {
 }
 
 func unfo(m *tb.Message) {
- u, err := getUser(m.Payload)
- fmt.Println(err, u)
+ u := getJson(m.Payload)
+ fmt.Println(u)
  b.Reply(m, string(u))
 }
