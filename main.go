@@ -4,7 +4,6 @@ import (
 	"log"
 
 	tb "gopkg.in/tucnak/telebot.v2"
-        tl "github.com/xelaj/mtproto/telegram"
 )
 
 var (
