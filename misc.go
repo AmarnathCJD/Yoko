@@ -34,6 +34,9 @@ func get_user(m *tb.Message) (string, string) {
 		}
 	} else if len(m.Payload) != 0 {
 		x := strings.SplitN(m.Payload, " ", 2)
+                if !isInt(x[0]){
+                   u := getJson(x[0])
+                   
                 if len(x) > 1 {
 				return x[0], x[1]
                 } else {
@@ -89,4 +92,9 @@ func unfo(m *tb.Message) {
  u, _ := getJson(m.Payload)
  fmt.Println(u)
  b.Reply(m, string(u))
+}
+
+func x(x string) error {
+ f := "Hi"
+ return f
 }
