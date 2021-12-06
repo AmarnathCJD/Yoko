@@ -54,7 +54,7 @@ func getUser(username string) (string, error) {
  if err != nil{
     return nil, err
  }
- return resp, err
+ return string(resp), err
 
 func info(m *tb.Message) {
 	user_id, _ := get_user(m)
