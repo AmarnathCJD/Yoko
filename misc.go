@@ -81,6 +81,6 @@ func info(m *tb.Message) {
 
 func unfo(m *tb.Message) {
  u, err := getUser(m.Payload)
- fmt.Println(err)
- b.Reply(m, u)
+ fmt.Println(err, u)
+ b.Reply(m, string(u))
 }
