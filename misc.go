@@ -8,6 +8,7 @@ import (
         "net/http"
         "io/ioutil"
         "time"
+        "encoding/json"
 
 	tb "gopkg.in/tucnak/telebot.v2"
 )
@@ -92,6 +93,10 @@ func info(m *tb.Message) {
 
 func unfo(m *tb.Message) {
  u, _ := getJson(m.Payload)
- fmt.Println(u)
- b.Reply(m, string(u))
+ dr := map[string]interface{}
+ err := json.Unmarshal([]byte(u), &dr)
+ if err != nil{
+    fmt.Println(err)
+ }
+ b.Reply(m, string(dr["username"])
 }
