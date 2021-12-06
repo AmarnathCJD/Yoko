@@ -54,14 +54,16 @@ func get_entity(m *tb.Message, user_id string) *tb.Chat {
  return entity
 }
 
-func getJson(url string) error {
-    r, err := myClient.Get("https://roseflask.herokuapp.com/username?username=" + url)
+func getJson(url string) (string, error) {
+    resp, err := myClient.Get("https://roseflask.herokuapp.com/username?username=" + url)
     if err != nil {
-        return err
+        fmt.Println("No response from request")
+        return "", err
     }
-    defer r.Body.Close()
-
-    return json.NewDecoder(r.Body).Decode()
+    defer resp.Body.Close()
+    body, err := ioutil.ReadAll(resp.Body)
+    fmt.Println(string(body))   
+    return string(body), err
 }
 
 func info(m *tb.Message) {
@@ -85,7 +87,7 @@ func info(m *tb.Message) {
 }
 
 func unfo(m *tb.Message) {
- u := getJson(m.Payload)
+ u, _ := getJson(m.Payload)
  fmt.Println(u)
  b.Reply(m, string(u))
 }
