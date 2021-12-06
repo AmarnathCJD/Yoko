@@ -6,6 +6,7 @@ import (
 	"strings"
 	"unicode"
         "net/http"
+        "io/ioutil"
 
 	tb "gopkg.in/tucnak/telebot.v2"
 )
@@ -54,8 +55,8 @@ func getUser(username string) (string, error) {
  if err != nil{
     return "", err
  }
- response := fmt.Sprint(resp.Body)
- return response, err
+ r := fmt.Sprint(ioutil.ReadAll(resp.Body))
+ return r, err
 }
 
 func info(m *tb.Message) {
@@ -79,6 +80,7 @@ func info(m *tb.Message) {
 }
 
 func unfo(m *tb.Message) {
- u, _ := getUser(m.Payload)
+ u, err := getUser(m.Payload)
+ fmt.Println(err)
  b.Reply(m, u)
 }
