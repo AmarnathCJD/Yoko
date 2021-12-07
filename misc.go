@@ -95,5 +95,5 @@ var data map[string]interface{}
 
 func unfo(m *tb.Message) {
  u, _ := getJson(m.Payload)
- b.Reply(m, string(u.m("username"))
+ b.Reply(m, string(u.m("username")))
 }
