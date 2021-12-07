@@ -94,15 +94,10 @@ func getJson(url string) (mapType, error) {
 
 func info(m *tb.Message) {
         user_obj, _ := get_user(m)
-	final_msg := fmt.Sprintf("<b>User info</b>\n<b>ID:</b> <code>%s</code>\n<b>First Name:</b> %s\n<b>Last Name:</b> %s\n<b>Username:</b> @%s\n\n<b>Gbanned:</b> %s", strconv.Itoa(int(user_obj.ID)), user_obj.FirstName, user_obj.LastName, user_obj.Username, "No")
+	final_msg := fmt.Sprintf("<b>User info</b>\n<b>ID:</b> <code>%s</code>\n<b>First Name:</b> %s\n<b>Last Name:</b> %s\n<b>Username:</b> @%s\n<b>User Link:</b> <a href='tg://user?id=%s'>%s</a>\n\n<b>Gbanned:</b> %s", strconv.Itoa(int(user_obj.ID)), user_obj.FirstName, user_obj.LastName, user_obj.Username, strconv.Itoa(int(user_obj.ID)), "link", "No")
 	_, err := b.Reply(m, final_msg)
 	if err != nil {
 		fmt.Println(err)
 	}
 }
 
-
-func unfo(m *tb.Message) {
- u, _ := getJson(m.Payload)
- fmt.Println(u["id"].(float64))
-}
