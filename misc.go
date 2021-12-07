@@ -106,8 +106,7 @@ func info(m *tb.Message) {
         } else {
           user_obj, _ := get_user(m)
           final_msg := fmt.Sprintf("<b>User info</b>\n<b>ID:</b> <code>%s</code>\n<b>First Name:</b> %s\n<b>Last Name:</b> %s\n<b>Username:</b> @%s\n<b>User Link:</b> <a href='tg://user?id=%s'>%s</a>\n\n<b>Gbanned:</b> %s", strconv.Itoa(int(user_obj.ID)), user_obj.FirstName, user_obj.LastName, user_obj.Username, strconv.Itoa(int(user_obj.ID)), "link", "No")
-          p, _ := b.ProfilePhotosOf(user_obj)
-      	  b.Reply(m, final_msg, p[0])
+      	  b.Reply(m, final_msg)
         }
 }
 
