@@ -70,16 +70,16 @@ func get_entity(m *tb.Message, user_id string) *tb.Chat {
  return entity
 }
 
-func getJson(url string) (string, error) {
+func getJson(url string) (mapType, error) {
     resp, err := myClient.Get("https://roseflask.herokuapp.com/username?username=" + url)
     if err != nil {
         fmt.Println("No response from request")
         return "", err
     }
     defer resp.Body.Close()
-    body, err := ioutil.ReadAll(resp.Body)
-    fmt.Println(string(body))   
-    return string(body), err
+    var t mapType
+    json.NewDecoder(res.Body).Decode(&t)   
+    return t, err
 }
 
 func info(m *tb.Message) {
@@ -95,7 +95,5 @@ var data map[string]interface{}
 
 func unfo(m *tb.Message) {
  u, _ := getJson(m.Payload)
- err := json.Unmarshal([]byte(u), &data)
- fmt.Println(err)
- b.Reply(m, string(data["username"]))
+ b.Reply(m, string(u.m("username"))
 }
