@@ -47,7 +47,12 @@ func get_user(m *tb.Message) (*tb.User, string) {
 				return user, ""
 			}
 		} else {
-			user_obj := &tb.User{Username: x[0]}
+                        u, err := getJson(m.Payload)
+                        if err != nil {
+                           b.Reply(m, string(err.Error()))
+                           return nil, ""
+                        }
+			user_obj := &tb.User{ID: u["id"].(int), Username: u["username"].(string), FirstName: u["first_name"].(string), LastName: u["last_name"].(string)}
 			if len(x) > 1 {
 				return user_obj, x[1]
 			} else {
