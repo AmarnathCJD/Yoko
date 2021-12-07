@@ -96,9 +96,8 @@ func info(m *tb.Message) {
 	}
 }
 
-var data map[string]interface{}
 
 func unfo(m *tb.Message) {
  u, _ := getJson(m.Payload)
- fmt.Println(u["dc_id"].(float64))
+ fmt.Println(u["id"].(float64))
 }
