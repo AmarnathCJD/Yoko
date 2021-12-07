@@ -6,7 +6,6 @@ import (
 	"strings"
 	"unicode"
         "net/http"
-        "io/ioutil"
         "time"
         "encoding/json"
 
@@ -80,7 +79,7 @@ func getJson(url string) (mapType, error) {
     resp, err := myClient.Get("https://roseflask.herokuapp.com/username?username=" + url)
     if err != nil {
         fmt.Println("No response from request")
-        return "", err
+        return nil, err
     }
     defer resp.Body.Close()
     var t mapType
@@ -101,5 +100,5 @@ var data map[string]interface{}
 
 func unfo(m *tb.Message) {
  u, _ := getJson(m.Payload)
- b.Reply(m, string(u.m("username")))
+ fmt.Println(u.m("username"))
 }
