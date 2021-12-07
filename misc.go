@@ -42,11 +42,11 @@ func get_user(m *tb.Message) (*tb.User, string) {
 		x := strings.SplitN(m.Payload, " ", 2)
 		if isInt(x[0]) {
 			user_obj, err := b.ChatByID(x[0])
-                        user := &tb.User{ID: int(user_obj.ID), FirstName: user_obj.FirstName, LastName: user_obj.LastName, Username: user_obj.Username}
                         if err != nil{
                                 b.Reply(m, "Looks like I don't have control over that user, or the ID isn't a valid one. If you reply to one of their messages, I'll be able to interact with them.")
                                 return nil, ""
                         }
+                        user := &tb.User{ID: int(user_obj.ID), FirstName: user_obj.FirstName, LastName: user_obj.LastName, Username: user_obj.Username}
 			if len(x) > 1 {
 				return user, x[1]
 			} else {
