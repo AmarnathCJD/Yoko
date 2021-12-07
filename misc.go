@@ -70,6 +70,12 @@ func get_entity(m *tb.Message, user_id string) *tb.Chat {
  return entity
 }
 
+type mapType map[string]interface{}
+
+func (t mapType) m(s string) mapType {
+   return t[s].(map[string]interface{})
+}
+
 func getJson(url string) (mapType, error) {
     resp, err := myClient.Get("https://roseflask.herokuapp.com/username?username=" + url)
     if err != nil {
@@ -78,7 +84,7 @@ func getJson(url string) (mapType, error) {
     }
     defer resp.Body.Close()
     var t mapType
-    json.NewDecoder(res.Body).Decode(&t)   
+    json.NewDecoder(resp.Body).Decode(&t)   
     return t, err
 }
 
