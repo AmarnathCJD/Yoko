@@ -52,7 +52,7 @@ func get_user(m *tb.Message) (*tb.User, string) {
                            b.Reply(m, string(err.Error()))
                            return nil, ""
                         }
-			user_obj := &tb.User{ID: u["id"].(int), Username: u["username"].(string), FirstName: u["first_name"].(string), LastName: u["last_name"].(string)}
+			user_obj := &tb.User{ID: int(u["id"].(fload64)), Username: u["username"].(string), FirstName: u["first_name"].(string), LastName: u["last_name"].(string)}
 			if len(x) > 1 {
 				return user_obj, x[1]
 			} else {
