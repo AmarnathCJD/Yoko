@@ -23,6 +23,17 @@ func isInt(s string) bool {
 	return true
 }
 
+type MovieClient struct {
+	Client *http.Client
+}
+
+func GetNewClient() *MovieClient {
+	var mc *MovieClient
+	mc = new(MovieClient)
+	mc.Client = &http.Client{}
+	return mc
+}
+
 func IfThenElse(condition bool, a interface{}, b interface{}) interface{} {
     if condition {
         return a
@@ -141,11 +152,11 @@ type MovieInfo struct {
 	PosterLink  string
 }
 
-func IMDb(m, *tb.Message) {
+func IMDb(m *tb.Message) {
  query := strings.Replace(m.Payload, " ", "+", len(m.Payload))
- doc, _ := myClient.GetHTMLDoc(fmt.Sprintf("https://www.imdb.com/find?q=%%22%s%%22&s=tt", query))
+ doc, _ := mc.GetHTMLDoc(fmt.Sprintf("https://www.imdb.com/find?q=%%22%s%%22&s=tt", query))
  url, success := doc.Find(".result_text").First().Find("a").Attr("href")
- document, _ := myClient.GetHTMLDoc(fmt.Sprintf("https://www.imdb.com%s", url))
+ document, _ := mc.GetHTMLDoc(fmt.Sprintf("https://www.imdb.com%s", url))
  movieNameSelector := document.Find(".title_wrapper").First().Find("h1").Text()
  movieName := strings.Replace(strings.TrimSpace(movieNameSelector), "\u00a0", " ", -1)
  b.Reply(m, string(movieName))
