@@ -149,3 +149,4 @@ func IMDb(m, *tb.Message) {
  movieNameSelector := document.Find(".title_wrapper").First().Find("h1").Text()
  movieName := strings.Replace(strings.TrimSpace(movieNameSelector), "\u00a0", " ", -1)
  b.Reply(m, string(movieName))
+}
