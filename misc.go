@@ -30,6 +30,15 @@ func IfThenElse(condition bool, a interface{}, b interface{}) interface{} {
     return b
 }
 
+func stringInSlice(a string, list []string) bool {
+    for _, b := range list {
+        if b == a {
+            return true
+        }
+    }
+    return false
+}
+
 func get_user(m *tb.Message) (*tb.User, string) {
 	if m.IsReply() {
 		user_obj := m.ReplyTo.Sender
@@ -71,7 +80,9 @@ func get_user(m *tb.Message) (*tb.User, string) {
 	}
 }
 
-
+func get_perm(chat *tb.Chat, user *tb.User) {
+ mb, err := b.ChatMemberOf(chat, user)
+ if stringInSlice()
 
 func get_entity(m *tb.Message, user_id string) *tb.Chat {
  entity, err := b.ChatByID(user_id)
