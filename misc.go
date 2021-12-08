@@ -6,10 +6,9 @@ import (
 	"strings"
 	"unicode"
         "net/http"
-        "log"
         "time"
         "encoding/json"
-        "github.com/gocolly/colly"
+        "github.com/StalkR/imdb"
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
@@ -154,18 +153,7 @@ type MovieInfo struct {
 }
 
 func IMDb(m *tb.Message) {
- keywordsList := strings.Split(m.Payload, " ")
- URL := "https://www.imdb.com/search/keyword/?keywords=" + keywordsList[0]
- for i := 1; i < len(keywordsList); i++ {
-	URL += "%2C" + keywordsList[i]
-	}
- c := colly.NewCollector()
- c.OnHTML(`h3[class="lister-item-header"]`, func(element *colly.HTMLElement) {
-		fmt.Println(strings.TrimSpace(element.DOM.Children().Text()))
-	})
-
- c.OnRequest(func(request *colly.Request) {
-		log.Println("Visiting:", request.URL.String())
-	})
- fmt.Sprint(c.Visit(URL))
+ client := http.DefaultClient
+ results, err := imdb.SearchTitle(client, m.Payload)
+ fmt.Println(results)
 }
