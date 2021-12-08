@@ -119,5 +119,5 @@ func gp(m *tb.Message) {
     b.Reply(m, string(err.Error()))
     return 
  }
- b.Reply(m, fmt.Sprint(x.Rights.CanPinMessages))
+ b.Reply(m, fmt.Sprint(x))
 }
