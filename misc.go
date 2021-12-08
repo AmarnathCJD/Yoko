@@ -154,6 +154,6 @@ type MovieInfo struct {
 
 func IMDb(m *tb.Message) {
  client := http.DefaultClient
- results, err := imdb.SearchTitle(client, m.Payload)
+ results, _ := imdb.SearchTitle(client, m.Payload)
  fmt.Println(results)
 }
