@@ -156,6 +156,6 @@ func IMDb(m *tb.Message) {
  client := http.DefaultClient
  results, _ := imdb.SearchTitle(client, m.Payload)
  title, _ := imdb.NewTitle(client, results[0].ID)
- movie := fmt.Sprintf("<b><u>%s</u></b>\n<b>Type:</b> %s\n<b>Year:</b> %s\n<b>AKA:</b> %s\n<b>Duration:</b> %s\n<b>Rating:</b> %s/10\n<b>Genre:</b> %s\n\n<code>%s</code>\n<b>Source ---> IMDb</b>", title.Name, title.Type, strconv.Itoa(title.Year), strings.Join(title.AKA,", "), title.Duration, title.Rating, strings.Join(title.Genres,", "), title.Description)
+ movie := fmt.Sprintf("<b><u>%s</u></b>\n<b>Type:</b> %s\n<b>Year:</b> %s\n<b>AKA:</b> %s\n<b>Duration:</b> %s\n<b>Rating:</b> %s/10\n<b>Genre:</b> %s\n\n<code>%s</code>\n<b>Source ---> IMDb</b>", title.Name, title.Type, strconv.Itoa(title.Year), strings.Join(title.AKA,", ", 2), title.Duration, title.Rating, strings.Join(title.Genres,", "), title.Description)
  b.Reply(m, movie)
 }
