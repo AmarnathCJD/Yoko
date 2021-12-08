@@ -143,9 +143,9 @@ type MovieInfo struct {
 
 func IMDb(m, *tb.Message) {
  query := strings.Replace(m.Payload, " ", "+", len(m.Payload))
- document, err := myClient.GetHTMLDoc(fmt.Sprintf("https://www.imdb.com/find?q=%%22%s%%22&s=tt", query))
- url, success := document.Find(".result_text").First().Find("a").Attr("href")
- document, err := myClient.GetHTMLDoc(fmt.Sprintf("https://www.imdb.com%s", url))
+ doc, _ := myClient.GetHTMLDoc(fmt.Sprintf("https://www.imdb.com/find?q=%%22%s%%22&s=tt", query))
+ url, success := doc.Find(".result_text").First().Find("a").Attr("href")
+ document, _ := myClient.GetHTMLDoc(fmt.Sprintf("https://www.imdb.com%s", url))
  movieNameSelector := document.Find(".title_wrapper").First().Find("h1").Text()
- movieName = strings.Replace(strings.TrimSpace(movieName), "\u00a0", " ", -1)
+ movieName := strings.Replace(strings.TrimSpace(movieNameSelector), "\u00a0", " ", -1)
  b.Reply(m, string(movieName))
