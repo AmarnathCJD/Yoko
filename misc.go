@@ -153,6 +153,7 @@ type MovieInfo struct {
 }
 
 func IMDb(m *tb.Message) {
+ mc := GetNewClient()
  query := strings.Replace(m.Payload, " ", "+", len(m.Payload))
  doc, _ := mc.GetHTMLDoc(fmt.Sprintf("https://www.imdb.com/find?q=%%22%s%%22&s=tt", query))
  url, success := doc.Find(".result_text").First().Find("a").Attr("href")
