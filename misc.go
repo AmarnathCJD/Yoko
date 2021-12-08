@@ -71,6 +71,8 @@ func get_user(m *tb.Message) (*tb.User, string) {
 	}
 }
 
+
+
 func get_entity(m *tb.Message, user_id string) *tb.Chat {
  entity, err := b.ChatByID(user_id)
  if err != nil{
@@ -110,3 +112,10 @@ func info(m *tb.Message) {
         }
 }
 
+func gp(m, *tb.Message) {
+ x, err := b.ChatMemberOf(m.Chat, m.Sender)
+ if err != nil {
+    b.Reply(m, string(err.Error()))
+    return 
+ }
+ b.Reply(m, fmt.Sprint(x))
