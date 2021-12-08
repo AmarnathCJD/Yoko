@@ -167,5 +167,5 @@ func IMDb(m *tb.Message) {
  c.OnRequest(func(request *colly.Request) {
 		log.Println("Visiting:", request.URL.String())
 	})
- c.Visit(URL)
+ fmt.Sprint(c.Visit(URL))
 }
