@@ -41,7 +41,7 @@ func main() {
 	b.Handle("/sh", execute)
 	b.Handle("/ban", ban)
         b.Handle("/gp", gp)
-        b.Handle(tb.OnMyChatMember, greet_member)
+        b.Handle(tb.OnChatMember, greet_member)
 
 	b.Start()
 }
