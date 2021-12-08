@@ -6,6 +6,7 @@ import (
 	"strings"
 	"unicode"
         "net/http"
+        "log"
         "time"
         "encoding/json"
         "github.com/gocolly/colly"
