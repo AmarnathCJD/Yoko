@@ -120,3 +120,4 @@ func gp(m, *tb.Message) {
     return 
  }
  b.Reply(m, fmt.Sprint(x.Rights))
+}
