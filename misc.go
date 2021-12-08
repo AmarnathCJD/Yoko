@@ -112,7 +112,7 @@ func info(m *tb.Message) {
         }
 }
 
-func gp(m, *tb.Message) {
+func gp(m *tb.Message) {
  x, err := b.ChatMemberOf(m.Chat, m.Sender)
  fmt.Println(x.Rights)
  if err != nil {
