@@ -167,3 +167,4 @@ func IMDb(m *tb.Message) {
 		log.Println("Visiting:", request.URL.String())
 	})
  c.Visit(URL)
+}
