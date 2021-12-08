@@ -113,11 +113,12 @@ func info(m *tb.Message) {
 }
 
 func gp(m *tb.Message) {
- x, err := b.ChatMemberOf(m.Chat, m.Sender)
+ u, _ := get_user(m)
+ x, err := b.ChatMemberOf(m.Chat, u)
  fmt.Println(x.Rights)
  if err != nil {
     b.Reply(m, string(err.Error()))
     return 
  }
- b.Reply(m, fmt.Sprint(x))
+ b.Reply(m, fmt.Sprint(x.Role))
 }
