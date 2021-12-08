@@ -64,7 +64,7 @@ func get_user(m *tb.Message) (*tb.User, string) {
 		} else {
                         u, err := getJson(m.Payload)
                         if err != nil {
-                           b.Reply(m, string(err.Error()))
+                           b.Reply(m, fmt.Sprint(err.Error()))
                            return nil, ""
                         }
 			user_obj := &tb.User{ID: int(u["id"].(float64)), Username: u["username"].(string), FirstName: u["first_name"].(string), LastName: u["last_name"].(string)}
@@ -81,8 +81,8 @@ func get_user(m *tb.Message) (*tb.User, string) {
 }
 
 func get_perm(chat *tb.Chat, user *tb.User) {
- mb, err := b.ChatMemberOf(chat, user)
- if stringInSlice()
+ b.ChatMemberOf(chat, user)
+}
 
 func get_entity(m *tb.Message, user_id string) *tb.Chat {
  entity, err := b.ChatByID(user_id)
