@@ -6,6 +6,6 @@ import (
 )
 
 func greet_member(m *tb.Message){
- fmt.Println("detected")
+ b.Reply(m, "Hi")
  fmt.Println(m)
 }
