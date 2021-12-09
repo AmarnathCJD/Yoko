@@ -23,10 +23,11 @@ func lock(m *tb.Message){
      }
  }
  if len(to_lock) == 0{
-    b.Reply(m, fmt.Sprintf("✨ Unknown lock types:- %s\nCheck <code>/locktypes</code>!", m.Payload))
+    b.Reply(m, fmt.Sprintf("✨ Unknown lock types:- %s\nCheck /locktypes !", m.Payload))
     return
  }
  b.Reply(m, "Locked " + locked_msg)
+ 
 }
 
 func locktypes(m *tb.Message){
