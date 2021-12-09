@@ -23,4 +23,5 @@ func lock(m *tb.Message){
  if len(to_lock) == 0{
     b.Reply(m, fmt.Sprintf("✨ Unknown lock types:- %s\nCheck <code>/locktypes</code>!", m.Payload))
     return
+ }
 }
