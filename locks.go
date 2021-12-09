@@ -34,5 +34,6 @@ func locktypes(m *tb.Message){
  lock_types := ""
  for _, lock := range LOCK_TYPES {
      lock_types += fmt.Sprintf("\n<b>~</b> %s", lock)
+ }
  b.Reply(m, "The available lock types are:" + lock_types)
 }
