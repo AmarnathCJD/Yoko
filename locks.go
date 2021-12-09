@@ -16,7 +16,7 @@ func lock(m *tb.Message){
  to_lock := make([]string, 15)
  for _, lock := range args {
      if stringInSlice(lock, LOCK_TYPES){
-        append(to_lock, lock)
+        to_lock = append(to_lock, lock)
      }
  }
  fmt.Println(to_lock, len(to_lock))
