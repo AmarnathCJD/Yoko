@@ -5,9 +5,11 @@ import (
  "fmt"
 )
 
+var LOCK_TYPES = [31]string{"all","album","audio", "bot", "button",  "command", "comment", "contact", "document",  "email",  "emojigame",  "forward",  "forwardbot", "forwardchannel","forwarduser","game", "gif",  "inline", "invitelink",  "location",  "phone",  "photo", "poll", "rtl",  "sticker", "text", "url", "video", "videonote",  "voice", "anonchannel"}
+
 func lock(m *tb.Message){
  if m.Payload == string(""){
     b.Reply(m, "You haven't specified a type to lock.")
  }
- 
+ fmt.Println(LOCK_TYPES)
 }
