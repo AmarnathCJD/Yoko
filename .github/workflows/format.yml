@@ -25,3 +25,4 @@ jobs:
         uses: wearerequired/lint-action@v1
         with:
           gofmt: true
+          golint: true
