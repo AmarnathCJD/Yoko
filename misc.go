@@ -23,23 +23,6 @@ func isInt(s string) bool {
 	return true
 }
 
-type MovieClient struct {
-	Client *http.Client
-}
-
-func GetNewClient() *MovieClient {
-	var mc *MovieClient
-	mc = new(MovieClient)
-	mc.Client = &http.Client{}
-	return mc
-}
-
-func IfThenElse(condition bool, a interface{}, b interface{}) interface{} {
-    if condition {
-        return a
-    }
-    return b
-}
 
 func stringInSlice(a string, list []string) bool {
     for _, b := range list {
@@ -91,18 +74,6 @@ func get_user(m *tb.Message) (*tb.User, string) {
 	}
 }
 
-func get_perm(chat *tb.Chat, user *tb.User) {
- b.ChatMemberOf(chat, user)
-}
-
-func get_entity(m *tb.Message, user_id string) *tb.Chat {
- entity, err := b.ChatByID(user_id)
- if err != nil{
-          b.Reply(m, "Looks like I don't have control over that user, or the ID isn't a valid one. If you reply to one of their messages, I'll be able to interact with them.")
-          return nil
- }
- return entity
-}
 
 type mapType map[string]interface{}
 
