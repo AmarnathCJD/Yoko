@@ -43,5 +43,6 @@ func main() {
         b.Handle("/gp", gp)
         b.Handle(tb.OnChatMember, greet_member)
         b.Handle("/imdb", IMDb)
+        b.Handel("/lock", lock)
 	b.Start()
 }
