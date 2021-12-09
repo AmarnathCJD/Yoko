@@ -27,6 +27,6 @@ func lock(m *tb.Message){
 }
 
 func locktypes(m *tb.Message){
- lock_types := strings.Join(LOCK_TYPES,"\n<b>-</b>")
+ lock_types := strings.Join(LOCK_TYPES,"\n<b>~</b> ")
  b.Reply(m, "The available lock types are:" + lock_types)
 }
