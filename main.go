@@ -13,7 +13,7 @@ var (
 )
 
 var (
-	b, err = tb.NewBot(tb.Settings{
+	b, _ = tb.NewBot(tb.Settings{
 		Token:       "5050904599:AAG-YrM6KN4EJJx8peQOn901qHhLCkFo5QA",
 		Synchronous: false,
 		Poller:      &tb.LongPoller{Timeout: 10},
