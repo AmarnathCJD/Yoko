@@ -145,12 +145,6 @@ func gp(m *tb.Message) {
  b.Reply(m, fmt.Sprint(x.Rights))
 }
 
-type MovieInfo struct {
-	Name        string
-	Rating      string
-	Description string
-	PosterLink  string
-}
 
 func IMDb(m *tb.Message) {
  client := http.DefaultClient
