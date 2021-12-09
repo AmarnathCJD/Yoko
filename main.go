@@ -42,5 +42,6 @@ func main() {
         b.Handle(tb.OnChatMember, greet_member)
         b.Handle("/imdb", IMDb)
         b.Handle("/lock", lock)
+        b.Handle("/locktypes", locktypes)
 	b.Start()
 }
