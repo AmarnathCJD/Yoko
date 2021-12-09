@@ -12,10 +12,12 @@ func lock(m *tb.Message){
  if m.Payload == string(""){
     b.Reply(m, "You haven't specified a type to lock.")
  }
- lk := strings.Split(m.Payload, " ")
- for _, lock := range lk {
+ args := strings.Split(m.Payload, " ")
+ to_lock := []string
+ for _, lock := range args {
      if stringInSlice(lock, LOCK_TYPES){
-        fmt.Println(lock)
+        append(to_lock, lock)
      }
  }
+ fmt.Println(to_lock, len(to_lock))
 }
