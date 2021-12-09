@@ -5,6 +5,7 @@ import (
         "go.mongodb.org/mongo-driver/mongo"
         "go.mongodb.org/mongo-driver/mongo/options"
 	tb "gopkg.in/tucnak/telebot.v2"
+    "fmt"
 )
 
 var (
@@ -23,6 +24,7 @@ var (
 
 
 func main() {
+        fmt.Println(db)
 	b.Handle("/eval", evaluate)
 	b.Handle("/start", func(m *tb.Message) {
 		if m.Private() {
