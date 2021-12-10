@@ -29,7 +29,7 @@ func lock_item(chat_id int64, item string) bool {
 	return true
 }
 
-func get_locks(chat_id int64) []string{} {
+func get_locks(chat_id int64) []string {
  filter := bson.M{"chat_id": chat_id}
  locked := locks_db.FindOne(context.TODO(), filter)
  if locked.Err() != nil{
