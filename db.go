@@ -21,7 +21,7 @@ func lock_item(chat_id int64, item string) bool {
 	} else {
                 var lock_list bson.M
 		locks := locked.Decode(&lock_list)
-                fmt.Println(locks)
+                fmt.Println(lock_list)
 	}
 	return true
 }
