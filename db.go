@@ -21,7 +21,7 @@ func lock_item(chat_id int64, item string) bool {
 	} else {
                 var lock_list mapType
 		locked.Decode(&lock_list)
-                new_locks := lock_list["locks"].(primitive.Ainterface{})
+                new_locks := lock_list["locks"].(primitive.A)
                 new_locks = append(new_locks, item)
                 _, err := locks_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"locks", new_locks}}}})
                 fmt.Println(err)
