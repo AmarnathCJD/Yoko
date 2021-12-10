@@ -21,7 +21,7 @@ func lock_item(chat_id int64, item string) bool {
 	} else {
                 var lock_list mapType
 		locked.Decode(&lock_list)
-                new_locks := lock_list.locks
+                new_locks := lock_list["locks"].([]interface{})
                 new_locks = append(new_locks, item)
                 _, err := locks_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"locks", new_locks}}}})
                 fmt.Sprintf(err)
@@ -37,5 +37,5 @@ func get_locks(chat_id int64) string{
  }
  var lock_list bson.M
  locked.Decode(&lock_list)
- return fmt.Sprint(lock_list.locks)
+ return fmt.Sprint(lock_list["locks"].([]interface{}))
 }
