@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -10,8 +9,6 @@ var (
 	database = db.Database("go")
 	locks_db = database.Collection("locks_db")
 )
-
-
 
 func lock_item(chat_id int64, item string) bool {
 	filter := bson.M{"chat_id": chat_id}
@@ -33,7 +30,7 @@ func get_locks(chat_id int64) bson.A {
  filter := bson.M{"chat_id": chat_id}
  locked := locks_db.FindOne(context.TODO(), filter)
  if locked.Err() != nil{
-    return ""
+    return nil
  }
  var lock_list bson.M
  locked.Decode(&lock_list)
