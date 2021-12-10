@@ -22,7 +22,7 @@ func lock_item(chat_id int64, item string) bool {
 	} else {
                 var lock_list bson.M
 		locked.Decode(&lock_list)
-                new_lock := lock_list["locks"]
+                new_lock := lock_list["locks"].([]string)
                 for _, x := range new_lock {
                     fmt.Println(x)
                 }
