@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-        "encoding/json"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -24,6 +23,7 @@ func lock_item(chat_id int64, item string) bool {
                 var lock_list bson.M
 		locked.Decode(&lock_list)
                 fmt.Println(lock_list["chat_id"].(int64))
+                fmt.Println(lock_list["locks"])
 	}
 	return true
 }
