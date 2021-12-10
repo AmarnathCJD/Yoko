@@ -30,7 +30,7 @@ func get_locks(chat_id int64) bson.A {
  filter := bson.M{"chat_id": chat_id}
  locked := locks_db.FindOne(context.TODO(), filter)
  if locked.Err() != nil{
-    return nil
+    return bson.A{}
  }
  var lock_list bson.M
  locked.Decode(&lock_list)
