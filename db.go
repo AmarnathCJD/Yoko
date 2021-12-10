@@ -24,7 +24,7 @@ func lock_item(chat_id int64, item string) bool {
                 new_locks := lock_list["locks"].([]interface{})
                 new_locks = append(new_locks, item)
                 _, err := locks_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"locks", new_locks}}}})
-                fmt.Sprintf(err)
+                fmt.Println(err)
 	}
 	return true
 }
