@@ -17,7 +17,7 @@ func lock_item(chat_id int64, item string) bool {
 	locked := locks_db.FindOne(context.TODO(), filter)
 	if locked.Err() != nil {
 		lock := bson.D{{"chat_id", chat_id}, {"locks", []string{item}}}
-		xd, err := locks_db.InsertOne(context.TODO(), lock)
+		locks_db.InsertOne(context.TODO(), lock)
 	} else {
                 var lock_list bson.M
 		locks := locked.Decode(&lock_list)
