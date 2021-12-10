@@ -20,7 +20,7 @@ func lock_item(chat_id int64, item string) bool {
 		locks_db.InsertOne(context.TODO(), lock)
 	} else {
                 var lock_list bson.M
-		locks := locked.Decode(&lock_list)
+		locked.Decode(&lock_list)
                 fmt.Println(lock_list)
 	}
 	return true
