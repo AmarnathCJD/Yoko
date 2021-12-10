@@ -1,9 +1,10 @@
 package main
 
 import (
+	"bytes"
+	"context"
 	"fmt"
-        "bytes"
-        "os/exec"
+	"os/exec"
 
 	eval "github.com/apaxa-go/eval"
 	tb "gopkg.in/tucnak/telebot.v2"
@@ -27,12 +28,15 @@ func evaluate(m *tb.Message) {
 		return
 	}
 	expr, _ := eval.ParseString(string(m.Payload), "")
-	a := eval.Args{"fmt.Sprint": eval.MakeDataRegularInterface(fmt.Sprint), "bot": eval.MakeDataRegularInterface(b), "e": eval.MakeDataRegularInterface(m), "import": eval.MakeDataRegularInterface("import"), "get_user": eval.MakeDataRegularInterface(get_user)}
+	a := eval.Args{"fmt.Sprint": eval.MakeDataRegularInterface(fmt.Sprint), "bot": eval.MakeDataRegularInterface(b), "e": eval.MakeDataRegularInterface(m), "import": eval.MakeDataRegularInterface("import"), "get_user": eval.MakeDataRegularInterface(get_user), "db": eval.MakeDataRegularInterface(db), "ctx": eval.MakeDataRegularInterface(context.TODO())}
 	r, err := expr.EvalToInterface(a)
-        if r != nil{
-          b.Reply(m, "<b>► EVALGo</b>\n"+string(m.Payload)+"\n\n<b>► OUTPUT</b>\n<code>"+fmt.Sprint(r)+"</code>")
-          return
-        }
+	if r != nil {
+		_, err := b.Reply(m, "<b>► EVALGo</b>\n"+string(m.Payload)+"\n\n<b>► OUTPUT</b>\n<code>"+fmt.Sprint(r)+"</code>")
+		if err != nil {
+			fmt.Printf("err: %v\n", err)
+		}
+		return
+	}
 	b.Reply(m, "<b>► EVALGo</b>\n"+string(m.Payload)+"\n\n<b>► OUTPUT</b>\n<code>"+fmt.Sprint(err.Error())+"</code>")
 }
 

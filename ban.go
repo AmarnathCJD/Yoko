@@ -12,15 +12,15 @@ func ban(m *tb.Message) {
 	user, xtra := get_user(m)
 	if user == nil {
 		return
-        }
+	}
 	err := b.Ban(m.Chat, &tb.ChatMember{
 		User: user,
 	})
 	if err == nil {
-                if string(xtra) != string(""){
-                    b.Reply(m, "<b>"+user.FirstName+"</b> was banned. ~\n<b>Reason:</b> "+xtra)
-		    return
-                }
+		if string(xtra) != string("") {
+			b.Reply(m, "<b>"+user.FirstName+"</b> was banned. ~\n<b>Reason:</b> "+xtra)
+			return
+		}
 		b.Reply(m, "<b>"+user.FirstName+"</b> was banned. ~")
 		return
 	}
