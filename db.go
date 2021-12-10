@@ -3,14 +3,12 @@ package main
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 )
 
 var (
 	database = db.Database("go")
-	ctx, _   = context.WithTimeout(context.Background(), 10*time.Second)
 	locks_db = database.Collection("locks")
 )
 
