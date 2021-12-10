@@ -23,8 +23,7 @@ func lock_item(chat_id int64, item string) bool {
 	} else {
                 var lock_list bson.M
 		locked.Decode(&lock_list)
-                js, _ := json.Marshal(lock_list)
-                fmt.Println(js)
+                fmt.Println(lock_list["chat_id"].(int64))
 	}
 	return true
 }
