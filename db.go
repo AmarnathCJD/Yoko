@@ -23,15 +23,13 @@ func lock_item(chat_id int64, item string) bool {
                 var lock_list bson.M
 		locked.Decode(&lock_list)
                 new_lock := lock_list["locks"].(bson.A)
-                for _, x := range new_lock {
-                    fmt.Println(x)
-                }
+                new_lock = append(new_lock, item)
                 locks_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"locks", new_lock}}}})
 	}
 	return true
 }
 
-func get_locks(chat_id int64) interface{} {
+func get_locks(chat_id int64) bson.A {
  filter := bson.M{"chat_id": chat_id}
  locked := locks_db.FindOne(context.TODO(), filter)
  if locked.Err() != nil{
@@ -39,5 +37,5 @@ func get_locks(chat_id int64) interface{} {
  }
  var lock_list bson.M
  locked.Decode(&lock_list)
- return lock_list["locks"]
+ return lock_list["locks"].(bson.A)
 }
