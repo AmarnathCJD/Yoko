@@ -33,5 +33,6 @@ func main() {
 	b.Handle("/imdb", IMDb)
 	b.Handle("/lock", lock)
 	b.Handle("/locktypes", locktypes)
+        b.Handle("locks", locked)
 	b.Start()
 }
