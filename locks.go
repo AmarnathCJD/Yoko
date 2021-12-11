@@ -60,7 +60,7 @@ func check_locks(m *tb.Message) {
  b.Reply(m, locked)
 }
 
-func unlock(m *tb.Message) {
+b.Handle("/unlock", func unlock(m *tb.Message) {
         if m.Payload == string("") {
 		b.Reply(m, "You haven't specified a type to unlock.")
 		return
@@ -89,4 +89,4 @@ func unlock(m *tb.Message) {
         }
 	b.Reply(m, "Unlocked "+locked_msg)
         unlock_item(m.Chat.ID, to_unlock)
-}
+})
