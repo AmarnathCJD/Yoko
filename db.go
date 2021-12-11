@@ -19,17 +19,19 @@ func isTrue(a string, list bson.A) bool {
 	return false
 }
 
-func lock_item(chat_id int64, item string) bool {
+func lock_item(chat_id int64, items []string) bool {
 	filter := bson.M{"chat_id": chat_id}
 	locked := locks_db.FindOne(context.TODO(), filter)
 	if locked.Err() != nil {
-		lock := bson.D{{"chat_id", chat_id}, {"locks", []string{item}}}
+		lock := bson.D{{"chat_id", chat_id}, {"locks", items}}
 		locks_db.InsertOne(context.TODO(), lock)
 	} else {
                 var lock_list bson.M
 		locked.Decode(&lock_list)
                 new_lock := lock_list["locks"].(bson.A)
-                new_lock = append(new_lock, item)
+                for _, lock := range items{
+                   new_lock = append(new_lock, lock)
+                }
                 locks_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"locks", new_lock}}}})
 	}
 	return true
