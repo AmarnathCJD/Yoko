@@ -52,10 +52,10 @@ func check_locks(m *tb.Message) {
  lock_c := get_locks(m.Chat.ID)
  for _, lock := range LOCK_TYPES {
      if isTrue(lock, lock_c){
-        locked += fmt.Sprintf("\n**-> %s:** true", lock)
+        locked += fmt.Sprintf("\n<b>-» %s:</b> true", lock)
      } else {
-        locked += fmt.Sprintf("\n**-> %s:** false", lock)
+        locked += fmt.Sprintf("\n<b>-» %s:</b> false", lock)
      }
  }
- b.Reply(m, locked, &tb.SendOptions{ParseMode: "Markdown"})
+ b.Reply(m, locked)
 }
