@@ -124,6 +124,6 @@ func Crypto(m *tb.Message) {
  defer resp.Body.Close()
  var r mapType
  json.NewDecoder(resp.Body).Decode(&r)
- crypto := fmt.Sprintf("<b>Crypto Prices</b>\n%s: %s", "bitcoin", int(r["bitcoin"].(map[string]interface{})["usd"]))
+ crypto := fmt.Sprintf("<b>Crypto Prices</b>\n%s: %s", "bitcoin", int(r["bitcoin"].(map[string]interface{})["usd"].(float64)))
  b.Reply(m, crypto)
 }
