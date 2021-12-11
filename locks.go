@@ -38,3 +38,15 @@ func locktypes(m *tb.Message) {
 	}
 	b.Reply(m, "The available lock types are:"+lock_types)
 }
+
+func locked(m *tb.Message) {
+ locked := "✨ Chat LockSettings"
+ lock_c := get_locks(m.Chat.ID)
+ for _, lock := range LOCK_TYPES {
+     if stringInSlice(lock, lock_c){
+        locked += fmt.Sprintf("\n<b>~</b> %s: true", lock)
+     } else {
+        locked += fmt.Sprintf("\n<b>~</b> %s: false", lock)
+ }
+ b.Reply(m, locked)
+}
