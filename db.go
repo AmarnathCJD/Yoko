@@ -43,5 +43,6 @@ func get_locks(chat_id int64) bson.A {
  }
  var lock_list bson.M
  locked.Decode(&lock_list)
+ fmt.Println(lock_list["locks"].(bson.A))
  return lock_list["locks"].(bson.A)
 }
