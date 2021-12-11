@@ -121,7 +121,9 @@ func IMDb(m *tb.Message) {
 }
 
 func Crypto(m *tb.Message) {
- cg := gecko.NewClient(nil)
- rate, _ := cg.ExchangeRates()
- fmt.Println(rate)
+ resp, _ := myClient.Get("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2C%20litecoin&vs_currencies=usd")
+ defer resp.Body.Close()
+ var r mapType
+ json.NewDecoder(resp.Body).Decode(&r)
+ b.Reply(m, fmt.Sprint(r))
 }
