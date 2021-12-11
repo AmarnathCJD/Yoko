@@ -120,10 +120,16 @@ func IMDb(m *tb.Message) {
 }
 
 func Crypto(m *tb.Message) {
- resp, _ := myClient.Get("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2C%20litecoin&vs_currencies=usd")
- defer resp.Body.Close()
- var r mapType
- json.NewDecoder(resp.Body).Decode(&r)
- crypto := fmt.Sprintf("<b>Crypto Prices</b>\n%s: %d", "bitcoin", int(r["bitcoin"].(map[string]interface{})["usd"].(float64)))
- b.Reply(m, crypto)
+	resp, _ := myClient.Get("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Clitecoin%2Cdogecoin%2Cbabydoge%2Cethereum%2Cxrp&vs_currencies=usd%2Cinr")
+	defer resp.Body.Close()
+	var r mapType
+	json.NewDecoder(resp.Body).Decode(&r)
+	crypto := fmt.Sprintf("<b>Crypto Prices</b>\n%s: %d$\n%s: %d$\n%s: %f$\n%s: %d$\n%s: %f$", "Bitcoin", int(r["bitcoin"].(map[string]interface{})["usd"].(float64)), "Ethereum", int(r["ethereum"].(map[string]interface{})["usd"].(float64)), "Dogecoin", r["dogecoin"].(map[string]interface{})["usd"].(float64), "Litecoin", int(r["litecoin"].(map[string]interface{})["usd"].(float64)), "Babydoge", r["babydoge"].(map[string]interface{})["usd"].(float64))
+	b.Reply(m, crypto)
+}
+
+func parsex(m *tb.Message) {
+	a, d, c := parse_message(m)
+	x := fmt.Sprint(a, d, c)
+	b.Reply(m, x)
 }

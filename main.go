@@ -33,8 +33,10 @@ func main() {
 	b.Handle("/imdb", IMDb)
 	b.Handle("/lock", lock)
 	b.Handle("/locktypes", locktypes)
-        b.Handle("/locks", check_locks)
-        b.Handle("/unlock", unlock)
-        b.Handle("/crypto", Crypto)
+	b.Handle("/locks", check_locks)
+	b.Handle("/unlock", unlock)
+	b.Handle("/crypto", Crypto)
+	b.Handle("/parse", parsex)
+	b.Handle("/save", save)
 	b.Start()
 }
