@@ -10,6 +10,15 @@ var (
 	locks_db = database.Collection("locks_db")
 )
 
+func isTrue(a string, list bson.A) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
+}
+
 func lock_item(chat_id int64, item string) bool {
 	filter := bson.M{"chat_id": chat_id}
 	locked := locks_db.FindOne(context.TODO(), filter)
