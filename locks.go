@@ -55,11 +55,10 @@ func check_locks(m *tb.Message) {
  lock_c := get_locks(m.Chat.ID)
  for _, lock := range LOCK_TYPES {
      if isTrue(lock, lock_c){
-        locked += fmt.Sprintf("\n<b>-›</b> %s: true", lock)
+        locked += fmt.Sprintf("\n<b>•»/b> %s: true", lock)
      } else {
-        locked += fmt.Sprintf("\n<b>-›</b> %s: false", lock)
+        locked += fmt.Sprintf("\n<b>•»</b> %s: false", lock)
      }
  }
- fmt.Println(locked)
  b.Reply(m, locked)
 }
