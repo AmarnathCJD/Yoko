@@ -10,6 +10,7 @@ import (
 	"unicode"
 
 	"github.com/StalkR/imdb"
+        gecko "github.com/superoo7/go-gecko/v3"
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
@@ -117,4 +118,10 @@ func IMDb(m *tb.Message) {
 	title, _ := imdb.NewTitle(client, results[0].ID)
 	movie := fmt.Sprintf("<b><u>%s</u></b>\n<b>Type:</b> %s\n<b>Year:</b> %s\n<b>AKA:</b> %s\n<b>Duration:</b> %s\n<b>Rating:</b> %s/10\n<b>Genre:</b> %s\n\n<code>%s</code>\n<b>Source ---> IMDb</b>", title.Name, title.Type, strconv.Itoa(title.Year), title.AKA[0], title.Duration, title.Rating, strings.Join(title.Genres, ", "), title.Description)
 	b.Reply(m, &tb.Photo{File: tb.FromURL(title.Poster.URL), Caption: movie})
+}
+
+func Crypto(m *tb.Message) {
+ cg := gecko.NewClient(nil)
+ rate, _ := cg.ExchangeRates()
+ fmt.Println(rate)
 }
