@@ -18,9 +18,7 @@ func lock(m *tb.Message) {
 	to_lock := make([]string, 0)
         if stringInSlice("all", args){
            b.Reply(m, "Locked <code>all</code>")
-           for _, lock := range LOCK_TYPES{
-               lock_item(m.Chat.ID, lock)
-           }
+           lock_item(m.Chat.ID, LOCK_TYPES)
            return
         }
 	locked_msg := ""
@@ -28,7 +26,6 @@ func lock(m *tb.Message) {
 		if stringInSlice(lock, LOCK_TYPES) {
 			to_lock = append(to_lock, lock)
 			locked_msg += fmt.Sprintf("\n- <code>%s</code>", lock)
-			lock_item(m.Chat.ID, lock)
 		}
 	}
 	if len(to_lock) == 0 {
@@ -40,6 +37,7 @@ func lock(m *tb.Message) {
           return
         }
 	b.Reply(m, "Locked "+locked_msg)
+        lock_item(m.Chat.ID, to_lock)
 }
 
 func locktypes(m *tb.Message) {
