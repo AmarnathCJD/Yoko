@@ -34,5 +34,6 @@ func main() {
 	b.Handle("/lock", lock)
 	b.Handle("/locktypes", locktypes)
         b.Handle("/locks", check_locks)
+        b.Handle("/unlock", unlock)
 	b.Start()
 }
