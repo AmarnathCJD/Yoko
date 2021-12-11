@@ -35,5 +35,6 @@ func main() {
 	b.Handle("/locktypes", locktypes)
         b.Handle("/locks", check_locks)
         b.Handle("/unlock", unlock)
+        b.Handle("/crypto", Crypto)
 	b.Start()
 }
