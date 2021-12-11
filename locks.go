@@ -60,5 +60,5 @@ func check_locks(m *tb.Message) {
         locked += fmt.Sprintf("\n<b>•»</b> %s: false", lock)
      }
  }
- b.Reply(m, locked)
+ b.Reply(m, string(locked))
 }
