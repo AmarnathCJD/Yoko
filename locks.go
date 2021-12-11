@@ -53,6 +53,7 @@ func locktypes(m *tb.Message) {
 func check_locks(m *tb.Message) {
  locked := "✨ Chat LockSettings"
  lock_c := get_locks(m.Chat.ID)
+ fmt.Println(lock_c)
  for _, lock := range LOCK_TYPES {
      if isTrue(lock, lock_c){
         locked += fmt.Sprintf("\n<b>•»/b> %s: true", lock)
@@ -60,5 +61,5 @@ func check_locks(m *tb.Message) {
         locked += fmt.Sprintf("\n<b>•»</b> %s: false", lock)
      }
  }
- b.Reply(m, string(locked))
+ b.Reply(m, locked)
 }
