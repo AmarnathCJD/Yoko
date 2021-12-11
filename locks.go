@@ -85,6 +85,7 @@ func unlock(m *tb.Message) {
 	}
         if len(to_unlock) == 1{
           b.Reply(m, fmt.Sprintf("Unlocked <code>%s</code>.", to_unlock[0]))
+          unlock_item(m.Chat.ID, to_unlock)
           return
         }
 	b.Reply(m, "Unlocked "+unlocked_msg)
