@@ -58,6 +58,7 @@ func unlock_item(chat_id int64, items []string) bool {
                 for _, lock := range items{
                    new_lock = remove(new_lock, lock)
                 }
+                fmt.Println(new_lock)
                 locks_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"locks", new_lock}}}})
 	}
 	return true
