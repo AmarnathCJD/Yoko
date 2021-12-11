@@ -15,7 +15,7 @@ var (
 
 var (
 	b, _ = tb.NewBot(tb.Settings{
-		Token:       "5050904599:AAG-YrM6KN4EJJx8peQOn901qHhLCkFo5QA",
+		Token:       "5050904599:AAEqSus8jD5vTVZzQeTVo4cBc8IwsRha_I0",
 		Synchronous: false,
 		Poller:      &tb.LongPoller{Timeout: 10},
 		ParseMode:   "HTML",
