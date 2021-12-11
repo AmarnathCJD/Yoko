@@ -1,9 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"strings"
-
+        "fmt"
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
@@ -17,7 +16,7 @@ func lock(m *tb.Message) {
 	args := strings.Split(m.Payload, " ")
 	to_lock := make([]string, 0)
         if stringInSlice("all", args){
-           b.Reply(m, "Locked <code>all</code>")
+           b.Reply(m, "Locked <code>all</code>.")
            lock_item(m.Chat.ID, LOCK_TYPES)
            return
         }
@@ -53,11 +52,10 @@ func check_locks(m *tb.Message) {
  lock_c := get_locks(m.Chat.ID)
  for _, lock := range LOCK_TYPES {
      if isTrue(lock, lock_c){
-        locked += fmt.Sprintf("\n<b>-›</b> %s: true", lock)
+        locked += fmt.Sprintf("\n**-> %s:** true", lock)
      } else {
-        locked += fmt.Sprintf("\n<b>-›</b> %s: false", lock)
+        locked += fmt.Sprintf("\n**-> %s:** false", lock)
      }
  }
- fmt.Println(locked)
- b.Reply(m, locked)
+ b.Reply(m, locked, ParseMode: "Markdown")
 }
