@@ -16,7 +16,7 @@ func lock(m *tb.Message) {
 	}
 	args := strings.Split(m.Payload, " ")
 	to_lock := make([]string, 0)
-        if stringinSlice("all", args){
+        if stringInSlice("all", args){
            b.Reply(m, "Locked <code>all</code>")
            for _, lock := range LOCK_TYPES{
                lock_item(m.Chat.ID, lock)
