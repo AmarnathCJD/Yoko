@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
-        "fmt"
 )
 
 var (
@@ -51,7 +50,6 @@ func unlock_item(chat_id int64, items []string) bool {
 	filter := bson.M{"chat_id": chat_id}
 	locked := locks_db.FindOne(context.TODO(), filter)
 	if locked.Err() != nil {
-                fmt.Println("owo")
 		return false
 	} else {
                 var lock_list bson.M
@@ -60,7 +58,6 @@ func unlock_item(chat_id int64, items []string) bool {
                 for _, lock := range items{
                    new_lock = remove(new_lock, lock)
                 }
-                fmt.Println(new_lock)
                 locks_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"locks", new_lock}}}})
 	}
 	return true
