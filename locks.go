@@ -57,5 +57,5 @@ func check_locks(m *tb.Message) {
         locked += fmt.Sprintf("\n**-> %s:** false", lock)
      }
  }
- b.Reply(m, locked, ParseMode: "Markdown")
+ b.Reply(m, locked, &tb.SendOptions{ParseMode: "Markdown"})
 }
