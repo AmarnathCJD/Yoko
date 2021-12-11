@@ -10,7 +10,7 @@ import (
 	"unicode"
 
 	"github.com/StalkR/imdb"
-        gecko "github.com/superoo7/go-gecko.v3"
+        gecko "github.com/superoo7/go-gecko"
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
