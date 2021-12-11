@@ -7,7 +7,7 @@ import (
 
 var (
 	database = db.Database("go")
-	locks_db = database.Collection("locks_db")
+	locks_db = database.Collection("locks_dbd")
 )
 
 func isTrue(a string, list bson.A) bool {
