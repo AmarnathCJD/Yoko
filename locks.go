@@ -47,6 +47,7 @@ func locked(m *tb.Message) {
         locked += fmt.Sprintf("\n<b>~</b> %s: true", lock)
      } else {
         locked += fmt.Sprintf("\n<b>~</b> %s: false", lock)
+     }
  }
  b.Reply(m, locked)
 }
