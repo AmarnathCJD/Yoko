@@ -51,6 +51,7 @@ func unlock_item(chat_id int64, items []string) bool {
 	filter := bson.M{"chat_id": chat_id}
 	locked := locks_db.FindOne(context.TODO(), filter)
 	if locked.Err() != nil {
+                fmt.Println("owo")
 		return false
 	} else {
                 var lock_list bson.M
