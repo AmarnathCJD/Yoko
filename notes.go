@@ -31,6 +31,9 @@ func rgtest(c tb.Context) error {
 
 func all_notes(c tb.Context) error {
  notes := get_notes(c.Chat().ID)
- fmt.Println(notes)
+ nots := fmt.Sprintf("Notes in <b>%s</b>", c.Chat().Title)
+ for _, x := range notes{
+  nots += fmt.Sprintf("<b>-&gt;</b> <code>%s</code>", x["name"].(string))
+ b.Reply(m, nots)
  return nil
 }
