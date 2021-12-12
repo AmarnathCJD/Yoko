@@ -35,8 +35,8 @@ func all_notes(c tb.Context) error {
  notes := get_notes(c.Chat().ID)
  nots := fmt.Sprintf("Notes in <b>%s</b>", c.Chat().Title)
  for _, x := range notes{
-  nots += fmt.Sprintf("<b>-&gt;</b> <code>%s</code>", x.(bson.M)["name"].(string))
+  nots += fmt.Sprintf("\n<b>-&gt;</b> <code>%s</code>", x.(bson.M)["name"].(string))
  }
- b.Reply(m, nots)
+ b.Reply(m, nots + "\nYou can retrieve these notes by using <code>/get notename</code>")
  return nil
 }
