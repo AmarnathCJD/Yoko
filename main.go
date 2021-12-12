@@ -41,6 +41,8 @@ func main() {
 	b.Handle("/eval", evaluate)
 	b.Handle("/sh", execute)
 	b.Handle("/tr", translate)
+        b.Handle("/saved", all_notes)
+        b.Handle("/notes", all_notes)
 	b.Handle(tb.OnChatMember, func(c tb.Context) error {
 		fmt.Println(c)
 		return nil
