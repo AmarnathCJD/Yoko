@@ -10,9 +10,9 @@ import (
 func parse_message(m *tb.Message) (string, string, []string) {
 	if m.IsReply() {
 		file_id, file_type := get_file(m.ReplyTo)
-                fmt.Println(file_id)
 		buttons := get_reply_markup(m.ReplyTo)
 		args := strings.SplitN(m.Text, " ", 3)
+                fmt.Println(args)
 		if len(args) == 3 {
 			note, name := args[2], args[1]
 			note += buttons
