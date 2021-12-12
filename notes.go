@@ -33,10 +33,14 @@ func rgtest(c tb.Context) error {
 func all_notes(c tb.Context) error {
  m := c.Message()
  notes := get_notes(c.Chat().ID)
- nots := fmt.Sprintf("Notes in <b>%s</b>", c.Chat().Title)
- for _, x := range notes{
-  nots += fmt.Sprintf("\n<b>-&gt;</b> <code>%s</code>", x.(bson.M)["name"].(string))
+ if len(notes) == 0{
+    b.Reply(m, fmt.Sprintf("There are no notes in %s!", m.Chat.Title))
+    return nil
  }
- b.Reply(m, nots + "\nYou can retrieve these notes by using <code>/get notename</code>")
+ note := fmt.Sprintf("Notes in <b>%s</b>", c.Chat().Title)
+ for _, x := range notes{
+  note += fmt.Sprintf("\n<b>-&gt;</b> <code>%s</code>", x.(bson.M)["name"].(string))
+ }
+ b.Reply(m, note + "\nYou can retrieve these notes by using <code>/get notename</code>")
  return nil
 }
