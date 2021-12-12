@@ -34,6 +34,7 @@ func all_notes(c tb.Context) error {
  nots := fmt.Sprintf("Notes in <b>%s</b>", c.Chat().Title)
  for _, x := range notes{
   nots += fmt.Sprintf("<b>-&gt;</b> <code>%s</code>", x["name"].(string))
+ }
  b.Reply(m, nots)
  return nil
 }
