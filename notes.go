@@ -30,7 +30,6 @@ func rgtest(c tb.Context) error {
 }
 
 func all_notes(c tb.Context) error {
- m := c.Message()
  notes := get_notes(c.Chat().ID)
  fmt.Println(notes)
  return nil
