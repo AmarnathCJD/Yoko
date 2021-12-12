@@ -10,7 +10,7 @@ import (
 	"unicode"
 
 	"github.com/StalkR/imdb"
-	tb "gopkg.in/tucnak/telebot.v2"
+	tb "gopkg.in/tucnak/telebot.v3"
 )
 
 var myClient = &http.Client{Timeout: 10 * time.Second}
