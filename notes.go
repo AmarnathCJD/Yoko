@@ -33,7 +33,7 @@ func rgtest(c tb.Context) error {
 func all_notes(c tb.Context) error {
  m := c.Message()
  notes := get_notes(c.Chat().ID)
- if len(notes) == 0{
+ if notes == nil{
     b.Reply(m, fmt.Sprintf("There are no notes in %s!", m.Chat.Title))
     return nil
  }
