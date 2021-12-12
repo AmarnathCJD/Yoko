@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	tb "gopkg.in/tucnak/telebot.v2"
+	tb "gopkg.in/tucnak/telebot.v3"
 )
 
 func parse_message(m *tb.Message) (string, string, []string) {

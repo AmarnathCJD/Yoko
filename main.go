@@ -2,10 +2,11 @@ package main
 
 import (
 	"context"
+	"fmt"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	tb "gopkg.in/tucnak/telebot.v2"
+	tb "gopkg.in/tucnak/telebot.v3"
 )
 
 var (
@@ -15,28 +16,35 @@ var (
 
 var (
 	b, _ = tb.NewBot(tb.Settings{
+		URL:         "",
 		Token:       "5050904599:AAEqSus8jD5vTVZzQeTVo4cBc8IwsRha_I0",
-		Synchronous: false,
 		Poller:      &tb.LongPoller{Timeout: 10},
+		Synchronous: false,
+		Verbose:     false,
 		ParseMode:   "HTML",
+		OnError: func(error, tb.Context) {
+		},
+		Offline: false,
 	})
 )
 
 func main() {
-	b.Handle("/eval", evaluate)
-	b.Handle("/start", start)
 	b.Handle("/info", info)
-	b.Handle("/sh", execute)
-	b.Handle("/ban", ban)
-	b.Handle("/gp", gp)
-	b.Handle(tb.OnChatMember, greet_member)
 	b.Handle("/imdb", IMDb)
+	b.Handle("/crypto", Crypto)
+	b.Handle("/start", start)
+	b.Handle("/save", save)
 	b.Handle("/lock", lock)
 	b.Handle("/locktypes", locktypes)
 	b.Handle("/locks", check_locks)
 	b.Handle("/unlock", unlock)
-	b.Handle("/crypto", Crypto)
-	b.Handle("/parse", parsex)
-	b.Handle("/save", save)
+	b.Handle("/eval", evaluate)
+	b.Handle("/sh", execute)
+	b.Handle("/tr", translate)
+	b.Handle(tb.OnChatMember, func(c tb.Context) error {
+		fmt.Println(c)
+		return nil
+	})
+	b.Handle(tb.OnUserJoined, greet_member)
 	b.Start()
 }

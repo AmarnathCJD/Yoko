@@ -4,22 +4,23 @@ import (
 	"fmt"
 	"strings"
 
-	tb "gopkg.in/tucnak/telebot.v2"
+	tb "gopkg.in/tucnak/telebot.v3"
 )
 
 var LOCK_TYPES = []string{"all", "album", "anonchannel", "audio", "bot", "button", "command", "comment", "contact", "document", "email", "emojigame", "forward", "forwardbot", "forwardchannel", "forwarduser", "game", "gif", "inline", "invitelink", "location", "phone", "photo", "poll", "rtl", "sticker", "text", "url", "video", "videonote", "voice"}
 
-func lock(m *tb.Message) {
+func lock(c tb.Context) error {
+	m := c.Message()
 	if m.Payload == string("") {
 		b.Reply(m, "You haven't specified a type to lock.")
-		return
+		return nil
 	}
 	args := strings.Split(m.Payload, " ")
 	to_lock := make([]string, 0)
 	if stringInSlice("all", args) {
 		b.Reply(m, "Locked <code>all</code>.")
 		lock_item(m.Chat.ID, LOCK_TYPES)
-		return
+		return nil
 	}
 	locked_msg := ""
 	for _, lock := range args {
@@ -30,25 +31,29 @@ func lock(m *tb.Message) {
 	}
 	if len(to_lock) == 0 {
 		b.Reply(m, fmt.Sprintf("✨ Unknown lock types:- %s\nCheck /locktypes !", m.Payload))
-		return
+		return nil
 	}
 	if len(to_lock) == 1 {
 		b.Reply(m, fmt.Sprintf("Locked <code>%s</code>.", to_lock[0]))
-		return
+		return nil
 	}
 	b.Reply(m, "Locked "+locked_msg)
 	lock_item(m.Chat.ID, to_lock)
+	return nil
 }
 
-func locktypes(m *tb.Message) {
+func locktypes(c tb.Context) error {
+	m := c.Message()
 	lock_types := ""
 	for _, lock := range LOCK_TYPES {
 		lock_types += fmt.Sprintf("\n<b>~</b> %s", lock)
 	}
 	b.Reply(m, "The available lock types are:"+lock_types)
+	return nil
 }
 
-func check_locks(m *tb.Message) {
+func check_locks(c tb.Context) error {
+	m := c.Message()
 	locked := "✨ Chat LockSettings"
 	lock_c := get_locks(m.Chat.ID)
 	for _, lock := range LOCK_TYPES {
@@ -59,19 +64,21 @@ func check_locks(m *tb.Message) {
 		}
 	}
 	b.Reply(m, locked)
+	return nil
 }
 
-func unlock(m *tb.Message) {
+func unlock(c tb.Context) error {
+	m := c.Message()
 	if m.Payload == string("") {
 		b.Reply(m, "You haven't specified a type to unlock.")
-		return
+		return nil
 	}
 	args := strings.Split(m.Payload, " ")
 	to_unlock := make([]string, 0)
 	if stringInSlice("all", args) {
 		b.Reply(m, "Unlocked all.")
 		unlock_item(m.Chat.ID, LOCK_TYPES)
-		return
+		return nil
 	}
 	unlocked_msg := ""
 	for _, lock := range args {
@@ -82,13 +89,34 @@ func unlock(m *tb.Message) {
 	}
 	if len(to_unlock) == 0 {
 		b.Reply(m, fmt.Sprintf("✨ Unknown lock types:- %s\nCheck /locktypes !", m.Payload))
-		return
+		return nil
 	}
 	if len(to_unlock) == 1 {
 		b.Reply(m, fmt.Sprintf("Unlocked <code>%s</code>.", to_unlock[0]))
 		unlock_item(m.Chat.ID, to_unlock)
-		return
+		return nil
 	}
 	b.Reply(m, "Unlocked "+unlocked_msg)
 	unlock_item(m.Chat.ID, to_unlock)
+	return nil
+}
+
+func anonchannel(c tb.Context) error {
+	fmt.Println("hii")
+	if c.Chat().Type != "channel" {
+		return nil
+	}
+	m := c.Message()
+	lock_c := get_locks(m.Chat.ID)
+	x := false
+	for _, y := range lock_c {
+		if y == "anonchannel" {
+			x = true
+		}
+	}
+	if !x {
+		return nil
+	}
+	fmt.Println("CHannel Msg", c.Sender())
+	return nil
 }
