@@ -53,7 +53,7 @@ func gnote(c tb.Context) error {
     return nil
  }
  f := unparse_message(fmt.Sprint(note["note"]), note["file"].(bson.A))
- fmt.Println(f)
+ b.Reply(m, f)
  return nil
 }
  
