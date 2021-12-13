@@ -52,7 +52,7 @@ func gnote(c tb.Context) error {
     b.Reply(m, "No note found!")
     return nil
  }
- unparse_message(note["note"].(string), note["file"].([]string))
+ unparse_message(note["note"].(string), note["file"].(bson.A))
  return nil
 }
  
