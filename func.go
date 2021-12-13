@@ -65,12 +65,12 @@ func get_file(m *tb.Message) (string, string) {
 	}
 }
 
-func make_file(id string, f string) interface{}{
+func make_file(id string, f string, note string) interface{}{
  if f == "document"{
-    file := tb.Document{File: {FileID: id}}
+    file := tb.Document{File: tb.File{FileID: id}, Caption: note}
     return file
  } else if f == "sticker"{
-    file := tb.Sticker{File: {FileID: id}}
+    file := tb.Sticker{File: tb.File{FileID: id}}
     return file
  }
 }
