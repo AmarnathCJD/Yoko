@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	tb "gopkg.in/tucnak/telebot.v3"
+        "go.mongodb.org/mongo-driver/bson"
 )
 
 func parse_message(m *tb.Message) (string, string, []string) {
@@ -94,7 +95,7 @@ func get_reply_markup(m *tb.Message) string {
 	return reply_mark
 }
 
-func unparse_message(note string, media []string) {
+func unparse_message(note string, media bson.A) {
  file := make_file(media[0], media[1], note)
  fmt.Println(file)
 }
