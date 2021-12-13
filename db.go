@@ -83,7 +83,6 @@ func save_note(chat_id int64, name string, note string, file []string) bool {
 	if notes.Err() != nil {
 		var notes bson.A
 		note := bson.M{"name": name, "note": note, "file": file}
-		fmt.Println(note)
 		notes = append(notes, note)
 		to_insert := bson.D{{"chat_id", chat_id}, {"notes", notes}}
 		notes_db.InsertOne(context.TODO(), to_insert)
