@@ -87,6 +87,10 @@ func get_reply_markup(m *tb.Message) string {
 	return reply_mark
 }
 
-func unparse_message(note string, file []string) {
- fmt.Println("h")
+func unparse_message(note string, media []string) {
+ file := nil
+ if media{
+    file = make_file(media[0], media[1])
+ }
+ fmt.Println(file)
 }
