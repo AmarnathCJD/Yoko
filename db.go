@@ -120,8 +120,8 @@ func get_note(chat_id int64, name string) bson.M {
         }
  notes := note["notes"].(bson.A)
  for _, y := range notes{
-   if y["name"].(string) == name{
-      return y
+   if y.(bson.M)["name"].(string) == name{
+      return y.(bson.M)
    }
  }
  return nil
