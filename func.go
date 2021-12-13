@@ -96,7 +96,7 @@ func get_reply_markup(m *tb.Message) string {
 }
 
 func unparse_message(note bson.A, media bson.A) {
- fmt.Println("zu")
+ fmt.Println(note)
  file := make_file(media[0].(string), media[1].(string), "hi")
  fmt.Println(file)
 }
