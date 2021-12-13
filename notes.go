@@ -45,4 +45,13 @@ func all_notes(c tb.Context) error {
  return nil
 }
 
-
+func get_note(c tb.Context) error {
+ m = c.Message()
+ note := get_note(m.Chat.ID, m.Payload)
+ if note == nil{
+    b.Reply(m, "No note found!")
+    return nil
+ }
+ unparse_message(note["note"].(string), note["file"].([]string))
+}
+ 
