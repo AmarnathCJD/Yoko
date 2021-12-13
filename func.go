@@ -67,10 +67,10 @@ func get_file(m *tb.Message) (string, string) {
 
 func make_file(id string, f string) interface{}{
  if f == "document"{
-    file := tb.Document{File: FileID(id)}
+    file := tb.Document{File: {FileID: id}}
     return file
  } else if f == "sticker"{
-    file := tb.Sticker{File: FileID(id)}
+    file := tb.Sticker{File: {FileID: id}}
     return file
  }
 }
@@ -94,6 +94,6 @@ func get_reply_markup(m *tb.Message) string {
 }
 
 func unparse_message(note string, media []string) {
- file = make_file(media[0], media[1])
+ file := make_file(media[0], media[1])
  fmt.Println(file)
 }
