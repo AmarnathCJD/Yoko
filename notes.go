@@ -52,9 +52,7 @@ func gnote(c tb.Context) error {
     b.Reply(m, "No note found!")
     return nil
  }
- f := unparse_message(fmt.Sprint(note["note"]), note["file"].(bson.A))
- _, err := b.Reply(m, f.(tb.Sticker))
- fmt.Println(err)
+ unparse_message(fmt.Sprint(note["note"]), note["file"].(bson.A), m)
  return nil
 }
  
