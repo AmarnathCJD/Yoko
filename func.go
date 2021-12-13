@@ -65,6 +65,10 @@ func get_file(m *tb.Message) (string, string) {
 	}
 }
 
+func make_file(id string, f string) interface{}{
+ return ""
+}
+
 func get_reply_markup(m *tb.Message) string {
 	reply_mark := ""
 	mark := m.ReplyMarkup
@@ -81,4 +85,8 @@ func get_reply_markup(m *tb.Message) string {
 		reply_mark += btn
 	}
 	return reply_mark
+}
+
+func unparse_message(note string, file []string) {
+ fmt.Println("h")
 }
