@@ -15,7 +15,6 @@ func parse_message(m *tb.Message) (string, string, []string) {
                 if m.ReplyTo.ReplyMarkup != nil{
 		  buttons = get_reply_markup(m.ReplyTo)
                 }
-                fmt.Println("2")
 		args := strings.SplitN(m.Text, " ", 3)
 		if len(args) == 3 {
 			note, name := args[2], args[1]
@@ -95,8 +94,8 @@ func get_reply_markup(m *tb.Message) string {
 	return reply_mark
 }
 
-func unparse_message(note string, media bson.A) {
+func unparse_message(note string, media bson.A) interface{} {
  fmt.Println(note)
  file := make_file(media[0].(string), media[1].(string), "hi")
- fmt.Println(file)
+ return file
 }
