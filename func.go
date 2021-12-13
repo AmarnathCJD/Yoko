@@ -65,15 +65,14 @@ func get_file(m *tb.Message) (string, string) {
 	}
 }
 
-func make_file(id string, f string, note string) interface{}{
+func make_file(id string, f string, note string, m tb.Message){
  if f == "document"{
     file := tb.Document{File: tb.File{FileID: id}, Caption: note}
-    return file
+    b.Reply(m, file)
  } else if f == "sticker"{
     file := tb.Sticker{File: tb.File{FileID: id}}
-    return file
+    b.Reply(m, file)
  }
- return nil
 }
 
 func get_reply_markup(m *tb.Message) string {
@@ -94,8 +93,6 @@ func get_reply_markup(m *tb.Message) string {
 	return reply_mark
 }
 
-func unparse_message(note string, media bson.A) interface{} {
- fmt.Println(note)
- file := make_file(media[0].(string), media[1].(string), "hi")
- return file
+func unparse_message(note string, media bson.A, m tb.Message) {
+ make_file(media[0].(string), media[1].(string), "hi", m)
 }
