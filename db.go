@@ -102,10 +102,27 @@ func get_notes(chat_id int64) bson.A {
 	filter := bson.M{"chat_id": chat_id}
 	note_find := notes_db.FindOne(context.TODO(), filter)
 	var note bson.M
-	note_find.Decode(&note)
+	note_find.Decode(&note
         if note == nil{
            return nil
         }
 	notes := note["notes"].(bson.A)
 	return notes
+}
+
+func get_note(chat_id int64, name string) bson.M {
+ filter := bson.M{"chat_id": chat_id}
+ note_find := notes_db.FindOne(context.TODO(), filter)
+ var note bson.M
+ note_find.Decode(&note)
+ if note == nil{
+           return nil
+        }
+ notes := note["notes"].(bson.A)
+ for _, y := range notes{
+   if y["name"].(string) == name{
+      return y
+   }
+ }
+ return nil
 }
