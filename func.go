@@ -73,6 +73,7 @@ func make_file(id string, f string, note string) interface{}{
     file := tb.Sticker{File: tb.File{FileID: id}}
     return file
  }
+ return nil
 }
 
 func get_reply_markup(m *tb.Message) string {
@@ -94,6 +95,6 @@ func get_reply_markup(m *tb.Message) string {
 }
 
 func unparse_message(note string, media []string) {
- file := make_file(media[0], media[1])
+ file := make_file(media[0], media[1], note)
  fmt.Println(file)
 }
