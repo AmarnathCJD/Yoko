@@ -70,7 +70,7 @@ func make_file(id string, f string, note string, m *tb.Message){
     file := tb.Document{File: tb.File{FileID: id}, Caption: note}
     b.Reply(m, file)
  } else if f == "sticker"{
-    file := tb.Sticker{File: tb.File{FileID: id}}
+    file := &tb.Sticker{File: tb.File{FileID: id}, }
     _, err := b.Reply(m, file)
     fmt.Println(err)
  }
