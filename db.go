@@ -90,7 +90,7 @@ func save_note(chat_id int64, name string, note string, file []string) bool {
 		notes.Decode(&dec_note)
 		notez := dec_note["notes"].(bson.A)
 		new_note := bson.M{"name": name, "note": note, "file": file}
-		note = append(notez, new_note)
+		notez = append(notez, new_note)
 		notes_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"notes", notez}}}})
 	}
 	return true
