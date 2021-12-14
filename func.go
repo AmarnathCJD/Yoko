@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
+        "regexp"
         "go.mongodb.org/mongo-driver/bson"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
@@ -65,6 +66,7 @@ func get_file(m *tb.Message) (string, string) {
 }
 
 func unparse_message(file interface{}, note string, m *tb.Message){
+ button_parser()
  if len(file.(bson.A)) != 0{
   id, f := file.(bson.A)[0].(string), file.(bson.A)[1].(string)
   if f == "document"{
