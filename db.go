@@ -80,18 +80,18 @@ func save_note(chat_id int64, name string, note string, file []string) bool {
 	filter := bson.M{"chat_id": chat_id}
 	notes := notes_db.FindOne(context.TODO(), filter)
 	if notes.Err() != nil {
-		var notes bson.A
+		var notez bson.A
 		note_s := bson.M{"name": name, "note": note, "file": file}
-		notes = append(notes, note_s)
-		to_insert := bson.D{{"chat_id", chat_id}, {"notes", notes}}
+		notez = append(notez, note_s)
+		to_insert := bson.D{{"chat_id", chat_id}, {"notes", notez}}
 		notes_db.InsertOne(context.TODO(), to_insert)
 	} else {
 		var dec_note bson.M
 		notes.Decode(&dec_note)
-		note := dec_note["notes"].(bson.A)
+		notez := dec_note["notes"].(bson.A)
 		new_note := bson.M{"name": name, "note": note, "file": file}
-		note = append(note, new_note)
-		notes_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"notes", note}}}})
+		note = append(notez, new_note)
+		notes_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"notes", notez}}}})
 	}
 	return true
 }
