@@ -53,7 +53,7 @@ func gnote(c tb.Context) error {
     b.Reply(m, "No note found!")
     return nil
  }
- unparse_message(note["file"], fmt.Sprint(note["note"]), m)
+ unparse_message(note["file"], note["note"].(string), m)
  return nil
 }
  
@@ -69,6 +69,10 @@ func hash_regex(next tb.HandlerFunc) tb.HandlerFunc {
 
 func hash_note(c tb.Context) error {
  args := strings.SplitN(c.Message().Text, "#", 2)
- fmt.Println(args[1])
+ note := get_note(c.Message().Chat.ID, args)
+ if note == nil{
+    return nil
+ }
+ unparse_message(note["file"], note["note"].(string), c.Message())
  return nil
 }
