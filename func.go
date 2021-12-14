@@ -65,8 +65,9 @@ func get_file(m *tb.Message) (string, string) {
 }
 
 func unparse_message(file interface{}, note string, m *tb.Message){
+ fmt.Sprint(file.(bson.A))
  if file != nil{
-  id, f := file.(bson.A)[1].(string), file.(bson.A)[0].(string)
+  id, f := file.(bson.A)[0].(string), file.(bson.A)[1].(string)
   if f == "document"{
     file := &tb.Document{File: tb.File{FileID: id}, Caption: note}
     b.Reply(m, file)
