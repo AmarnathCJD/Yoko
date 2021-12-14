@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
         "regexp"
+        "strings"
 	tb "gopkg.in/tucnak/telebot.v3"
         "go.mongodb.org/mongo-driver/bson"
 )
@@ -67,6 +68,7 @@ func hash_regex(next tb.HandlerFunc) tb.HandlerFunc {
 }
 
 func hash_note(c tb.Context) error {
- fmt.Println("#")
+ args := strings.SplitN(c.Message().Text, "#", 2)
+ fmt.Println(args[1])
  return nil
 }
