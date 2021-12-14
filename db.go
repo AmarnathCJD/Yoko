@@ -10,7 +10,7 @@ var (
 	database = db.Database("go")
         opts = options.Update().SetUpsert(true)
 	locks_db = database.Collection("locks_dbx")
-	notes_db = database.Collection("note")
+	notes_db = database.Collection("notde")
 )
 
 func isTrue(a string, list bson.A) bool {
@@ -30,6 +30,16 @@ func remove(s bson.A, r string) bson.A {
 	}
 	return s
 }
+
+func deduplicate_note(s bson.A, x string) bson.A {
+ for i, v := range s{
+  if v.(bson.M)["name"].(string) == x{
+     return append(s[:i], s[i+1:]...)
+     }
+ }
+ return s
+}
+
 
 func lock_item(chat_id int64, items []string) bool {
 	filter := bson.M{"chat_id": chat_id}
@@ -91,6 +101,7 @@ func save_note(chat_id int64, name string, note string, file []string) bool {
 		notes.Decode(&dec_note)
 		notez := dec_note["notes"].(bson.A)
 		new_note := bson.M{"name": name, "note": note, "file": file}
+                notez = deduplicate_note(notez, name)
 		notez = append(notez, new_note)
 		notes_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"notes", notez}}}}, opts)
 	}
