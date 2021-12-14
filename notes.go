@@ -62,7 +62,6 @@ func hash_regex(next tb.HandlerFunc) tb.HandlerFunc {
     if match{
        return next(c)
     }
-    }
     return nil
   }
 }
