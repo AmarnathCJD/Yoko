@@ -67,7 +67,7 @@ func get_file(m *tb.Message) (string, string) {
 
 func make_file(id string, f string, note string, m *tb.Message){
  if f == "document"{
-    file := tb.Document{File: tb.File{FileID: id}, Caption: note}
+    file := &tb.Document{File: tb.File{FileID: id}, Caption: note}
     b.Reply(m, file)
  } else if f == "sticker"{
     file := &tb.Sticker{File: tb.File{FileID: id}, }
