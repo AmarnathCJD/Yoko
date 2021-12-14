@@ -65,14 +65,31 @@ func get_file(m *tb.Message) (string, string) {
 	}
 }
 
-func make_file(id string, f string, note string, m *tb.Message){
+func unparse_message(id string, f string, note string, m *tb.Message){
  if f == "document"{
     file := &tb.Document{File: tb.File{FileID: id}, Caption: note}
     b.Reply(m, file)
  } else if f == "sticker"{
     file := &tb.Sticker{File: tb.File{FileID: id}, }
-    _, err := b.Reply(m, file)
-    fmt.Println(err)
+    b.Reply(m, file)
+ } else if f == "photo"{
+    file := &tb.Photo{File: tb.File{FileID: id}, Caption: note}
+    b.Reply(m, file)
+ } else if f == "audio"{
+    file := &tb.Audio{File: tb.File{FileID: id}, Caption: note}
+    b.Reply(m, file)
+ } else if f == "voice"{
+    file := &tb.Voice{File: tb.File{FileID: id}, Caption: note}
+    b.Reply(m, file)
+ } else if f == "video"{
+    file := &tb.Video{File: tb.File{FileID: id}, Caption: note}
+    b.Reply(m, file)
+ } else if f == "animation"{
+    file := &tb.Animation{File: tb.File{FileID: id}, Caption: note}
+    b.Reply(m, file)
+ } else if f == "videonote"{
+    file := &tb.VideoNote{File: tb.File{FileID: id}, Caption: note}
+    b.Reply(m, file)
  }
 }
 
@@ -94,6 +111,3 @@ func get_reply_markup(m *tb.Message) string {
 	return reply_mark
 }
 
-func unparse_message(note string, media bson.A, m *tb.Message) {
- make_file(media[0].(string), media[1].(string), "hi", m)
-}
