@@ -69,7 +69,7 @@ func hash_regex(next tb.HandlerFunc) tb.HandlerFunc {
 
 func hash_note(c tb.Context) error {
  args := strings.SplitN(c.Message().Text, "#", 2)
- note := get_note(c.Message().Chat.ID, args)
+ note := get_note(c.Message().Chat.ID, args[1])
  if note == nil{
     return nil
  }
