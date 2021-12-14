@@ -56,3 +56,7 @@ func gnote(c tb.Context) error {
  return nil
 }
  
+func hash_note(c tb.Context) error {
+ fmt.Println("#")
+ return nil
+}
