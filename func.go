@@ -117,3 +117,12 @@ func get_reply_markup(m *tb.Message) string {
 	return reply_mark
 }
 
+var BTN_URL_REGEX = regexp.MustCompile(
+    r"(\\[([^\\[]+?)\\]\\((btnurl|buttonurl):(?:/{0,2})(.+?)(:same)?\\))"
+
+func button_parser(){
+ rg := "Hi[Google](buttonurl://google.com) [Yahoo](buttonurl://google.com:same)"
+ c := BTN_URL_REGEX.FindAllStringSubmatch(rg, -1)
+ fmt.Println(c)
+}
+)
