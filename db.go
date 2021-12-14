@@ -9,7 +9,7 @@ import (
 var (
 	database = db.Database("go")
 	locks_db = database.Collection("locks_dbx")
-	notes_db = database.Collection("notes")
+	notes_db = database.Collection("note")
 )
 
 func isTrue(a string, list bson.A) bool {
@@ -81,8 +81,8 @@ func save_note(chat_id int64, name string, note string, file []string) bool {
 	notes := notes_db.FindOne(context.TODO(), filter)
 	if notes.Err() != nil {
 		var notes bson.A
-		note := bson.M{"name": name, "note": note, "file": file}
-		notes = append(notes, note)
+		note_s := bson.M{"name": name, "note": note, "file": file}
+		notes = append(notes, note_s)
 		to_insert := bson.D{{"chat_id", chat_id}, {"notes", notes}}
 		notes_db.InsertOne(context.TODO(), to_insert)
 	} else {
