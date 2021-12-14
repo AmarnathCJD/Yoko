@@ -2,12 +2,13 @@ package main
 
 import (
 	"context"
-
+        "go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
 var (
 	database = db.Database("go")
+        opts = options.Update().SetUpsert(true)
 	locks_db = database.Collection("locks_dbx")
 	notes_db = database.Collection("note")
 )
@@ -43,7 +44,7 @@ func lock_item(chat_id int64, items []string) bool {
 		for _, lock := range items {
 			new_lock = append(new_lock, lock)
 		}
-		locks_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"locks", new_lock}}}})
+		locks_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"locks", new_lock}}}}, opts)
 	}
 	return true
 }
@@ -60,7 +61,7 @@ func unlock_item(chat_id int64, items []string) bool {
 		for _, lock := range items {
 			new_lock = remove(new_lock, lock)
 		}
-		locks_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"locks", new_lock}}}})
+		locks_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"locks", new_lock}}}}, opts)
 	}
 	return true
 }
@@ -91,7 +92,7 @@ func save_note(chat_id int64, name string, note string, file []string) bool {
 		notez := dec_note["notes"].(bson.A)
 		new_note := bson.M{"name": name, "note": note, "file": file}
 		notez = append(notez, new_note)
-		notes_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"notes", notez}}}})
+		notes_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"notes", notez}}}}, opts)
 	}
 	return true
 }
