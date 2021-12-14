@@ -44,6 +44,7 @@ func main() {
         b.Handle("/saved", all_notes)
         b.Handle("/notes", all_notes)
         b.Handle("/get", gnote)
+        b.Handle(tb.OnText, hash_note, hash_regex)
 	b.Handle(tb.OnChatMember, func(c tb.Context) error {
 		fmt.Println(c)
 		return nil
