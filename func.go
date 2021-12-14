@@ -67,7 +67,8 @@ func get_file(m *tb.Message) (string, string) {
 func unparse_message(id string, f string, note string, m *tb.Message){
  if f == "document"{
     file := &tb.Document{File: tb.File{FileID: id}, Caption: note}
-    b.Reply(m, file)
+    _, err := b.Reply(m, file)
+    fmt.Println(err)
  } else if f == "sticker"{
     file := &tb.Sticker{File: tb.File{FileID: id}, }
     b.Reply(m, file)
