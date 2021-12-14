@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	tb "gopkg.in/tucnak/telebot.v3"
-        "go.mongodb.org/mongo-driver/bson"
 )
 
 func parse_message(m *tb.Message) (string, string, []string) {
@@ -88,7 +87,7 @@ func unparse_message(id string, f string, note string, m *tb.Message){
     file := &tb.Animation{File: tb.File{FileID: id}, Caption: note}
     b.Reply(m, file)
  } else if f == "videonote"{
-    file := &tb.VideoNote{File: tb.File{FileID: id}, Caption: note}
+    file := &tb.VideoNote{File: tb.File{FileID: id}, }
     b.Reply(m, file)
  }
 }
