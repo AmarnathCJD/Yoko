@@ -125,7 +125,11 @@ func test(cx tb.Context) error {
 	var rows []tb.Row
 	btns := &tb.ReplyMarkup{Selective: true}
 	for _, m := range c {
-		rows = append(rows, btns.Row(btns.URL(m[2],m[4])))
+                if m[5] != string("") && len(rows) != 0{
+                   rows[-1] = append(rows[-1], btns.URL(m[2],m[4]))
+                } else {
+		   rows = append(rows, btns.Row(btns.URL(m[2],m[4])))
+                }
 	}
         btns.Inline(rows...)
         _, err := b.Reply(cx.Message(), "Hi", btns) 
