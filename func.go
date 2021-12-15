@@ -67,6 +67,7 @@ func get_file(m *tb.Message) (string, string) {
 
 func unparse_message(file interface{}, note string, m *tb.Message) {
         text, buttons := button_parser(note)
+        fmt.Println(buttons)
 	if len(file.(bson.A)) != 0 {
 		id, f := file.(bson.A)[0].(string), file.(bson.A)[1].(string)
 		if f == "document" {
