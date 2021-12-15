@@ -124,7 +124,7 @@ var BTN_URL_REGEX = regexp.MustCompile(`(\[([^\[]+?)\]\((btnurl|buttonurl):(?:/{
 func button_parser(){
  rg := "Hi[Google](buttonurl://google.com) [Yahoo](buttonurl://google.com:same)"
  c := BTN_URL_REGEX.FindAllStringSubmatch(rg, -1)
- menu.Inline()
+ menu := &tb.ReplyMarkup{ResizeReplyKeyboard: true}
  row := menu.Row()
  for _, m := range c{
    if m[5] != string("") && len(menu) != 0{
@@ -137,3 +137,4 @@ func button_parser(){
  }
  fmt.Println(menu)
 }
+# evening
