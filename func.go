@@ -70,25 +70,25 @@ func unparse_message(file interface{}, note string, m *tb.Message) {
 	if file != nil && len(file.(bson.A)) != 0 {
 		id, f := file.(bson.A)[0].(string), file.(bson.A)[1].(string)
 		if f == "document" {
-			file := &tb.Document{File: tb.File{FileID: id}, Caption: note}
+			file := &tb.Document{File: tb.File{FileID: id}, Caption: text}
 		        b.Reply(m, file, buttons)
 		} else if f == "sticker" {
 			file := &tb.Sticker{File: tb.File{FileID: id}}
 			b.Reply(m, file, buttons)
 		} else if f == "photo" {
-			file := &tb.Photo{File: tb.File{FileID: id}, Caption: note}
+			file := &tb.Photo{File: tb.File{FileID: id}, Caption: text}
 			b.Reply(m, file, buttons)
 		} else if f == "audio" {
-			file := &tb.Audio{File: tb.File{FileID: id}, Caption: note}
+			file := &tb.Audio{File: tb.File{FileID: id}, Caption: text}
 			b.Reply(m, file, buttons)
 		} else if f == "voice" {
-			file := &tb.Voice{File: tb.File{FileID: id}, Caption: note}
+			file := &tb.Voice{File: tb.File{FileID: id}, Caption: text}
 			b.Reply(m, file, buttons)
 		} else if f == "video" {
-			file := &tb.Video{File: tb.File{FileID: id}, Caption: note}
+			file := &tb.Video{File: tb.File{FileID: id}, Caption: text}
 			b.Reply(m, file, buttons)
 		} else if f == "animation" {
-			file := &tb.Animation{File: tb.File{FileID: id}, Caption: note}
+			file := &tb.Animation{File: tb.File{FileID: id}, Caption: text}
 			b.Reply(m, file, buttons)
 		} else if f == "videonote" {
 			file := &tb.VideoNote{File: tb.File{FileID: id}}
@@ -131,8 +131,7 @@ func button_parser(text string) (string, *tb.ReplyMarkup) {
                 }
 	}
         btns.Inline(rows...)
-        note := BTN_URL_REGEX.Split(text, -1)
-        note = note[0]
+        note := BTN_URL_REGEX.Split(text, -1)[0]
         return note, btns
 }
 
