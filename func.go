@@ -138,7 +138,7 @@ func button_parser(){
  fmt.Println(menu)
 }
 
-func test(c tb.Context) error {
+func test(cx tb.Context) error {
         BTN_URL_REGEX := regexp.MustCompile(`(\[([^\[]+?)\]\((btnurl|buttonurl):(?:/{0,2})(.+?)(:same)?\))`)
 	rg := "Hi[Google](buttonurl://google.com:same) [Yahoo](buttonurl://google.com:same)"
 	c := BTN_URL_REGEX.FindAllStringSubmatch(rg, -1)
@@ -154,7 +154,7 @@ func test(c tb.Context) error {
 			row = append(row, btns.Row(btns.URL(m[2], m[4])))
 		}
 	}
-        _, err := b.Reply(c.Message(), "Hi", btns) 
+        _, err := b.Reply(cx.Message(), "Hi", btns) 
         fmt.Println(err) 
         return nil
 }
