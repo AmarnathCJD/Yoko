@@ -119,25 +119,6 @@ func get_reply_markup(m *tb.Message) string {
 	return reply_mark
 }
 
-var BTN_URL_REGEX = regexp.MustCompile(`(\[([^\[]+?)\]\((btnurl|buttonurl):(?:/{0,2})(.+?)(:same)?\))`)
-
-func button_parser(){
- rg := "Hi[Google](buttonurl://google.com) [Yahoo](buttonurl://google.com:same)"
- c := BTN_URL_REGEX.FindAllStringSubmatch(rg, -1)
- menu := &tb.ReplyMarkup{ResizeReplyKeyboard: true}
- row := menu.Row()
- for _, m := range c{
-   if m[5] != string("") && len(menu) != 0{
-      row = append(row, menu.URL(m[2], m[4]))
-   } else {
-      append(menu, row)
-      row = menu.Row()
-      row = append(row, menu.URL(m[2], m[4]))
-   }
- }
- fmt.Println(menu)
-}
-
 func test(cx tb.Context) error {
         BTN_URL_REGEX := regexp.MustCompile(`(\[([^\[]+?)\]\((btnurl|buttonurl):(?:/{0,2})(.+?)(:same)?\))`)
 	rg := "Hi[Google](buttonurl://google.com:same) [Yahoo](buttonurl://google.com:same)"
