@@ -95,7 +95,9 @@ func unparse_message(file interface{}, note string, m *tb.Message) {
 			b.Reply(m, file, buttons)
 		}
 	} else if note != string("") {
-		b.Reply(m, text, buttons)
+             
+		_, err := b.Reply(m, text, buttons)
+                fmt.Println(err)
 	}
 }
 
