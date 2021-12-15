@@ -131,7 +131,8 @@ func button_parser(text string) (string, *tb.ReplyMarkup) {
                 }
 	}
         btns.Inline(rows...)
-        note := BTN_URL_REGEX.Split(text, -1)[0]
+        note := BTN_URL_REGEX.Split(text, -1)
+        note = note[0]
         return note, btns
 }
 
