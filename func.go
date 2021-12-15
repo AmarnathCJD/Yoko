@@ -126,4 +126,5 @@ func button_parser(){
  c := BTN_URL_REGEX.FindAllStringSubmatch(rg, -1)
  for _, m := range c{
    fmt.Println(m[0])
+ }
 }
