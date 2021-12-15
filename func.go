@@ -120,7 +120,7 @@ func get_reply_markup(m *tb.Message) string {
 
 func test(cx tb.Context) error {
         BTN_URL_REGEX := regexp.MustCompile(`(\[([^\[]+?)\]\((btnurl|buttonurl):(?:/{0,2})(.+?)(:same)?\))`)
-	rg := "Hi[Google](buttonurl://google.com:same) [Yahoo](buttonurl://google.com:same) [Yahoo](buttonurl://google.com) [Yahoo](buttonurl://google.com:same) [Gey](buttonurl://google.com:same) "
+	rg := "Hi[Google](buttonurl://google.com:same) [Yahoo](buttonurl://google.com:same) [Yahoo](buttonurl://google.com) [Yahoo](buttonurl://google.com) [Gey](buttonurl://google.com) [Gey](buttonurl://google.com:same) "
 	c := BTN_URL_REGEX.FindAllStringSubmatch(rg, -1)
 	var rows []tb.Row
 	btns := &tb.ReplyMarkup{Selective: true}
