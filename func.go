@@ -133,6 +133,7 @@ func button_parser(){
       buttons = append(buttons, row)
       row = menu.Row()
       row = append(row, menu.URL(m[2], m[4]))
+   }
  }
  fmt.Println(buttons)
 }
