@@ -126,7 +126,7 @@ func test(cx tb.Context) error {
 	btns := &tb.ReplyMarkup{Selective: true}
 	for _, m := range c {
                 if m[5] != string("") && len(rows) != 0{
-                   rows[-1] = append(rows[-1], btns.URL(m[2],m[4]))
+                   rows[len(rows) - 1] = append(rows[len(rows) - 1], btns.URL(m[2],m[4]))
                 } else {
 		   rows = append(rows, btns.Row(btns.URL(m[2],m[4])))
                 }
