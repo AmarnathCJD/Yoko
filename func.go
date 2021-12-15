@@ -122,19 +122,14 @@ func test(cx tb.Context) error {
         BTN_URL_REGEX := regexp.MustCompile(`(\[([^\[]+?)\]\((btnurl|buttonurl):(?:/{0,2})(.+?)(:same)?\))`)
 	rg := "Hi[Google](buttonurl://google.com:same) [Yahoo](buttonurl://google.com:same)"
 	c := BTN_URL_REGEX.FindAllStringSubmatch(rg, -1)
-	var row []tb.Row
+	var rows []tb.Row
 	btns := &tb.ReplyMarkup{Selective: true}
 	for _, m := range c {
-		if m[5] == string("") {
-			if len(row) != 0 {
-				btns.Inline(row...)
-			}
-			btns.Inline(btns.Row(btns.URL(m[2], m[4])))
-		} else {
-			row = append(row, btns.Row(btns.URL(m[2], m[4])))
-		}
+		rows = append(rows, btns.Row(btns.URL(m[2],m[3])))
 	}
+        btns.Inline(rows...)
         _, err := b.Reply(cx.Message(), "Hi", btns) 
         fmt.Println(err) 
         return nil
 }
+
