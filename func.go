@@ -118,7 +118,7 @@ func get_reply_markup(m *tb.Message) string {
 	return reply_mark
 }
 
-func button_parser(text string) (note string, btns tb.ReplyMarkup) {
+func button_parser(text string) (string, *tb.ReplyMarkup) {
         BTN_URL_REGEX := regexp.MustCompile(`(\[([^\[]+?)\]\((btnurl|buttonurl):(?:/{0,2})(.+?)(:same)?\))`)
 	c := BTN_URL_REGEX.FindAllStringSubmatch(rg, -1)
 	var rows []tb.Row
