@@ -125,6 +125,6 @@ func button_parser(){
  rg := "Hi[Google](buttonurl://google.com) [Yahoo](buttonurl://google.com:same)"
  c := BTN_URL_REGEX.FindAllStringSubmatch(rg, -1)
  for _, m := range c{
-   fmt.Println(m[1]])
+   fmt.Println(m[1])
  }
 }
