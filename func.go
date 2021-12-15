@@ -118,9 +118,8 @@ func get_reply_markup(m *tb.Message) string {
 	return reply_mark
 }
 
-func test(cx tb.Context) error {
+func button_parser(text string) (note string, btns tb.ReplyMarkup) {
         BTN_URL_REGEX := regexp.MustCompile(`(\[([^\[]+?)\]\((btnurl|buttonurl):(?:/{0,2})(.+?)(:same)?\))`)
-	rg := "Hi[Google](buttonurl://google.com:same) [Yahoo](buttonurl://google.com:same) [Yahoo](buttonurl://google.com) [Yahoo](buttonurl://google.com) [Gey](buttonurl://google.com) [Gey](buttonurl://google.com:same) "
 	c := BTN_URL_REGEX.FindAllStringSubmatch(rg, -1)
 	var rows []tb.Row
 	btns := &tb.ReplyMarkup{Selective: true}
@@ -132,8 +131,7 @@ func test(cx tb.Context) error {
                 }
 	}
         btns.Inline(rows...)
-        _, err := b.Reply(cx.Message(), "Hi", btns) 
-        fmt.Println(err) 
-        return nil
+        note := BTN_URL_REGEX.Split(text, -1)[0]
+        return note, btns
 }
 
