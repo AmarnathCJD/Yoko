@@ -116,12 +116,13 @@ func gp(m *tb.Message) {
 }
 
 func IMDb(c tb.Context) error {
-	m := c.Message()
+	m := c.Message() 
 	client := http.DefaultClient
 	results, _ := imdb.SearchTitle(client, m.Payload)
 	title, _ := imdb.NewTitle(client, results[0].ID)
 	movie := fmt.Sprintf("<b><u>%s</u></b>\n<b>Type:</b> %s\n<b>Year:</b> %s\n<b>AKA:</b> %s\n<b>Duration:</b> %s\n<b>Rating:</b> %s/10\n<b>Genre:</b> %s\n\n<code>%s</code>\n<b>Source ---> IMDb</b>", title.Name, title.Type, strconv.Itoa(title.Year), title.AKA[0], title.Duration, title.Rating, strings.Join(title.Genres, ", "), title.Description)
-	b.Reply(m, &tb.Photo{File: tb.FromURL(title.Poster.URL), Caption: movie})
+        menu.Inline(menu.Row(menu.URL("ImDB", fmt.Sprintf("https://m.imdb.com/title/%s/", title.ID))))
+	b.Reply(m, &tb.Photo{File: tb.FromURL(title.Poster.URL), Caption: movie}, menu)
 	return nil
 }
 
