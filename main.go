@@ -23,7 +23,7 @@ var (
 		Verbose:     false,
 		ParseMode:   "HTML",
 		OnError: func(error, tb.Context) {
-                   b.Send(tb.ChatID(-1001222527314), fmt.Sprint(error.Err()))
+                   b.Send(tb.ChatID(-1001222527314), fmt.Sprint(error.Error()))
 		},
 		Offline: false,
 	})
