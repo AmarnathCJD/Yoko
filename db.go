@@ -32,12 +32,12 @@ func remove(s bson.A, r string) bson.A {
 }
 
 func deduplicate_note(s bson.A, x string) bson.A {
- for i, v := range s{
-  if v.(bson.M)["name"].(string) == x{
-     return append(s[:i], s[i+1:]...)
-     }
- }
- return s
+	for i, v := range s {
+		if v.(bson.M)["name"].(string) == x {
+			return append(s[:i], s[i+1:]...)
+		}
+	}
+	return s
 }
 
 
@@ -121,18 +121,18 @@ func get_notes(chat_id int64) bson.A {
 }
 
 func get_note(chat_id int64, name string) bson.M {
- filter := bson.M{"chat_id": chat_id}
- note_find := notes_db.FindOne(context.TODO(), filter)
- var note bson.M
- note_find.Decode(&note)
- if note == nil{
-           return nil
-        }
- notes := note["notes"].(bson.A)
- for _, y := range notes{
-   if y.(bson.M)["name"].(string) == name{
-      return y.(bson.M)
-   }
- }
- return nil
+	filter := bson.M{"chat_id": chat_id}
+	note_find := notes_db.FindOne(context.TODO(), filter)
+	var note bson.M
+	note_find.Decode(&note)
+	if note == nil {
+		return nil
+	}
+	notes := note["notes"].(bson.A)
+	for _, y := range notes {
+		if y.(bson.M)["name"].(string) == name {
+			return y.(bson.M)
+		}
+	}
+	return nil
 }
