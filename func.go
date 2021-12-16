@@ -67,7 +67,8 @@ func get_file(m *tb.Message) (string, string) {
 
 func unparse_message(file interface{}, note string, m *tb.Message) {
         text, buttons := button_parser(note)
-	if file != nil{
+        if file != nil{
+	 if len(file.(bson.A)) != 0 {
                 fmt.Println(6)
 		id, f := file.(bson.A)[0].(string), file.(bson.A)[1].(string)
 		if f == "document" {
@@ -95,6 +96,7 @@ func unparse_message(file interface{}, note string, m *tb.Message) {
 			file := &tb.VideoNote{File: tb.File{FileID: id}}
 			b.Reply(m, file, buttons)
 		}
+           }
 	} else {
 		_, err := b.Reply(m, text, buttons)
                 fmt.Println(err)
