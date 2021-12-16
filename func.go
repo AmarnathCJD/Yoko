@@ -67,7 +67,7 @@ func get_file(m *tb.Message) (string, string) {
 
 func unparse_message(file interface{}, note string, m *tb.Message) {
         text, buttons := button_parser(note)
-        fmt.Println(file.(bson.A) == [])
+        fmt.Println(file.(bson.A) == []string)
         if file != nil{
 	 if len(file.(bson.A)) != 0 {
                 fmt.Println(6)
