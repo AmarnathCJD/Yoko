@@ -69,3 +69,7 @@ func hash_note(c tb.Context) error {
 	unparse_message(note["file"], note["note"].(string), c.Message())
 	return nil
 }
+
+func clear_note(c tb.Context) error {
+ return nil
+}
