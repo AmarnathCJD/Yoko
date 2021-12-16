@@ -67,6 +67,8 @@ func get_file(m *tb.Message) (string, string) {
 
 func unparse_message(file interface{}, note string, m *tb.Message) {
         text, buttons := button_parser(note)
+        fmt.Println(file == nil)
+        fmt.Println(len(file.(bson.A)))
         if file != nil{
 	 if len(file.(bson.A)) != 0 {
                 fmt.Println(6)
@@ -136,7 +138,6 @@ func button_parser(text string) (string, *tb.ReplyMarkup) {
 	}
         btns.Inline(rows...)
         note := BTN_URL_REGEX.Split(text, -1)[0]
-        fmt.Println(note)
         return note, btns
 }
 
