@@ -172,7 +172,7 @@ func uD(c tb.Context) error {
 	var v mapType
 	defer resp.Body.Close()
 	json.NewDecoder(resp.Body).Decode(&v)
-        res := v["list"].([]interface{})
+        res := v["list"].([]interface{})[0]
         fmt.Println(res)
 	b.Reply(c.Message(), fmt.Sprint("6"))
 	return nil
