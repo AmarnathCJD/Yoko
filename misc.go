@@ -174,6 +174,6 @@ func uD(c tb.Context) error {
 	json.NewDecoder(resp.Body).Decode(&v)
         res := v["list"].([]interface{})[0]
         fmt.Println(res)
-	b.Reply(c.Message(), fmt.Sprint("6"))
+	b.Reply(c.Message(), fmt.Sprint(res["definition"]))
 	return nil
 }
