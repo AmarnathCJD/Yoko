@@ -173,6 +173,6 @@ func uD(c tb.Context) error {
 	var v mapType
 	defer resp.Body.Close()
 	json.NewDecoder(resp.Body).Decode(&v)
-	fmt.Println(v)
+	fmt.Println(v, api)
         return nil
 }
