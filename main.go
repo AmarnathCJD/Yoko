@@ -23,7 +23,6 @@ var (
 		Verbose:     false,
 		ParseMode:   "HTML",
 		OnError: func(error, tb.Context) {
-                   b.Send(tb.ChatID(-1001222527314), "Error")
 		},
 		Offline: false,
 	})
@@ -34,18 +33,22 @@ func main() {
 	b.Handle("/imdb", IMDb)
 	b.Handle("/crypto", Crypto)
 	b.Handle("/start", start)
-	b.Handle("/save", save)
-	b.Handle("/lock", lock)
+	b.Handle("/save", save, change_info)
+	b.Handle("/lock", lock, change_info)
 	b.Handle("/locktypes", locktypes)
 	b.Handle("/locks", check_locks)
-	b.Handle("/unlock", unlock)
+	b.Handle("/unlock", unlock, change_info)
 	b.Handle("/eval", evaluate)
 	b.Handle("/sh", execute)
 	b.Handle("/tr", translate)
-        b.Handle("/saved", all_notes)
-        b.Handle("/notes", all_notes)
-        b.Handle("/get", gnote)
-        b.Handle(tb.OnText, hash_note, hash_regex)
+	b.Handle("/saved", all_notes)
+	b.Handle("/notes", all_notes)
+	b.Handle("/get", gnote)
+	b.Handle("/promote", promote, add_admins)
+	b.Handle("/superpromote", promote, add_admins)
+	b.Handle("/demote", demote, add_admins)
+	b.Handle("/xu", x)
+	b.Handle(tb.OnText, hash_note, hash_regex)
 	b.Handle(tb.OnChatMember, func(c tb.Context) error {
 		fmt.Println(c)
 		return nil

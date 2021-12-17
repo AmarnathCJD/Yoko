@@ -2,19 +2,20 @@ package main
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
-        "regexp"
-        "go.mongodb.org/mongo-driver/bson"
+
+	"go.mongodb.org/mongo-driver/bson"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
 
 func parse_message(m *tb.Message) (string, string, []string) {
 	if m.IsReply() {
 		file_id, file_type := get_file(m.ReplyTo)
-                buttons := ""
-                if m.ReplyTo.ReplyMarkup != nil{
-		  buttons = get_reply_markup(m.ReplyTo)
-                }
+		buttons := ""
+		if m.ReplyTo.ReplyMarkup != nil {
+			buttons = get_reply_markup(m.ReplyTo)
+		}
 		args := strings.SplitN(m.Text, " ", 3)
 		if len(args) == 3 {
 			note, name := args[2], args[1]
@@ -66,15 +67,12 @@ func get_file(m *tb.Message) (string, string) {
 }
 
 func unparse_message(file interface{}, note string, m *tb.Message) {
-        text, buttons := button_parser(note)
-        fmt.Println(file.(bson.A)[0] == "")
-        if file != nil{
-	 if len(file.(bson.A)) != 0 {
-                fmt.Println(6)
+	text, buttons := button_parser(note)
+	if file != nil && file.(bson.A)[0] != string("") {
 		id, f := file.(bson.A)[0].(string), file.(bson.A)[1].(string)
 		if f == "document" {
 			file := &tb.Document{File: tb.File{FileID: id}, Caption: text}
-		        b.Reply(m, file, buttons)
+			b.Reply(m, file, buttons)
 		} else if f == "sticker" {
 			file := &tb.Sticker{File: tb.File{FileID: id}}
 			b.Reply(m, file, buttons)
@@ -97,13 +95,10 @@ func unparse_message(file interface{}, note string, m *tb.Message) {
 			file := &tb.VideoNote{File: tb.File{FileID: id}}
 			b.Reply(m, file, buttons)
 		}
-           }
 	} else {
-		_, err := b.Reply(m, text, buttons)
-                fmt.Println(err)
+		b.Reply(m, text, buttons)
 	}
 }
-
 
 func get_reply_markup(m *tb.Message) string {
 	reply_mark := ""
@@ -124,19 +119,38 @@ func get_reply_markup(m *tb.Message) string {
 }
 
 func button_parser(text string) (string, *tb.ReplyMarkup) {
-        BTN_URL_REGEX := regexp.MustCompile(`(\[([^\[]+?)\]\((btnurl|buttonurl):(?:/{0,2})(.+?)(:same)?\))`)
+	BTN_URL_REGEX := regexp.MustCompile(`(\[([^\[]+?)\]\((btnurl|buttonurl):(?:/{0,2})(.+?)(:same)?\))`)
 	c := BTN_URL_REGEX.FindAllStringSubmatch(text, -1)
 	var rows []tb.Row
 	btns := &tb.ReplyMarkup{Selective: true}
 	for _, m := range c {
-                if m[5] != string("") && len(rows) != 0{
-                   rows[len(rows) - 1] = append(rows[len(rows) - 1], btns.URL(m[2],m[4]))
-                } else {
-		   rows = append(rows, btns.Row(btns.URL(m[2],m[4])))
-                }
+		if m[5] != string("") && len(rows) != 0 {
+			rows[len(rows)-1] = append(rows[len(rows)-1], btns.URL(m[2], m[4]))
+		} else {
+			rows = append(rows, btns.Row(btns.URL(m[2], m[4])))
+		}
 	}
-        btns.Inline(rows...)
-        note := BTN_URL_REGEX.Split(text, -1)[0]
-        return note, btns
+	btns.Inline(rows...)
+	note := BTN_URL_REGEX.Split(text, -1)[0]
+	return note, btns
 }
 
+func change_info(next tb.HandlerFunc) tb.HandlerFunc {
+	return func(c tb.Context) error {
+		p, _ := b.ChatMemberOf(c.Chat(), c.Sender())
+		if p.Role == "member" {
+			b.Reply(c.Message(), "You need to be an admin to do this!")
+			return nil
+		} else if p.Role == "creator" {
+			return next(c)
+		} else if p.Role == "administrator" {
+			if p.Rights.CanChangeInfo {
+				return next(c)
+			} else {
+				b.Reply(c.Message(), "You are missing the following rights to use this command: CanChangeInfo")
+				return nil
+			}
+		}
+		return nil
+	}
+}

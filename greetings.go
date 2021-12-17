@@ -8,7 +8,6 @@ import (
 
 func greet_member(c tb.Context) error {
 	m := c.Message()
-	b.Reply(m, "Hi")
-	fmt.Println(m)
+	fmt.Println(m.Chat.Title)
 	return nil
 }
