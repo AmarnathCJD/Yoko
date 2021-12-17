@@ -166,3 +166,12 @@ func translate(c tb.Context) error {
 	b.Reply(m, translated)
 	return nil
 }
+
+func uD(c tb.Context) error {
+	api := fmt.Sprint("http://api.urbandictionary.com/v0/define?term=%s", c.Message().Payload)
+	resp, _ := myClient.Get(api)
+	var v mapType
+	defer resp.Body.Close()
+	json.NewDecoder(resp.Body).Decode(&v)
+	fmt.Println(v)
+}
