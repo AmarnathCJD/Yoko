@@ -173,7 +173,7 @@ func uD(c tb.Context) error {
 	var v mapType
 	defer resp.Body.Close()
 	json.NewDecoder(resp.Body).Decode(&v)
-	ud := fmt.Sprintf("<b>%s:</b>\n\n%s\n\n<i>%s</i>", c.Message().Payload, v["list"][0]["definition"], v["list"][0]["example"])
+	ud := fmt.Sprintf("<b>%s:</b>\n\n%s\n\n<i>%s</i>", c.Message().Payload, v.([][]string)["list"][0]["definition"], v["list"][0]["example"])
 	b.Reply(c.Message(), ud)
 	return nil
 }
