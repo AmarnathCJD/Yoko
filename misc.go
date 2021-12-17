@@ -9,7 +9,6 @@ import (
 	"strings"
 	"time"
 	"unicode"
-        "go.mongodb.org/mongo-driver/bson"
 	"github.com/StalkR/imdb"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
@@ -173,7 +172,7 @@ func uD(c tb.Context) error {
 	var v mapType
 	defer resp.Body.Close()
 	json.NewDecoder(resp.Body).Decode(&v)
-        res := v["list"].(bson.A)
+        res := v["list"].([]interface)
 	b.Reply(c.Message(), fmt.Sprint(res))
 	return nil
 }
