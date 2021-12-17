@@ -49,6 +49,7 @@ func main() {
 	b.Handle("/demote", demote, add_admins)
 	b.Handle("/adminlist", adminlist)
 	b.Handle(tb.OnText, hash_note, hash_regex)
+        b.Handle("/ud", uD)
 	b.Handle(tb.OnChatMember, func(c tb.Context) error {
 		fmt.Println(c)
 		return nil
