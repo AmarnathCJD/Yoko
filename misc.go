@@ -173,6 +173,7 @@ func uD(c tb.Context) error {
 	defer resp.Body.Close()
 	json.NewDecoder(resp.Body).Decode(&v)
         res := v["list"].([]interface{})
-	b.Reply(c.Message(), fmt.Sprint(res))
+        fmt.Println(res)
+	b.Reply(c.Message(), fmt.Sprint("6"))
 	return nil
 }
