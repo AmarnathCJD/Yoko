@@ -35,19 +35,17 @@ func promote(c tb.Context) error {
 		b.Reply(c.Message(), "Pffff, I wish I could just promote myself.")
 		return nil
 	}
-	title := "Admin"
-	if xtra != string("") {
-		title = xtra
-	}
 	arg := strings.SplitN(c.Message().Text, " ", 2)[0]
 	if arg == "/promote" {
 		err := b.Promote(c.Chat(), &tb.ChatMember{
 			Rights: tb.Rights{CanRestrictMembers: true, CanPinMessages: true, CanChangeInfo: false, CanDeleteMessages: true, CanInviteUsers: true},
 			User:   user,
-			Title:  title,
 		})
 		if err == nil {
 			b.Reply(c.Message(), "✨ Successfully superpromoted! ~")
+			if xtra != string("") {
+				b.SetAdminTitle(c.Chat(), user, xtra)
+			}
 		} else if err.Error() == string("telegram: can't remove chat owner (400)") {
 			b.Reply(c.Message(), "I would love to promote the chat creator, but... well, they already have all the power.")
 		} else if err.Error() == "telegram unknown: Bad Request: not enough rights (400)" {
@@ -63,10 +61,12 @@ func promote(c tb.Context) error {
 		err := b.Promote(c.Chat(), &tb.ChatMember{
 			Rights: tb.Rights{CanRestrictMembers: true, CanPinMessages: true, CanChangeInfo: true, CanDeleteMessages: true, CanInviteUsers: true, CanPromoteMembers: true, CanManageVoiceChats: true},
 			User:   user,
-			Title:  title,
 		})
 		if err == nil {
 			b.Reply(c.Message(), "✨ Successfully superpromoted! ~")
+			if xtra != string("") {
+				b.SetAdminTitle(c.Chat(), user, xtra)
+			}
 		} else if err.Error() == string("telegram: can't remove chat owner (400)") {
 			b.Reply(c.Message(), "I would love to promote the chat creator, but... well, they already have all the power.")
 		} else if err.Error() == "telegram unknown: Bad Request: not enough rights (400)" {
@@ -105,5 +105,27 @@ func demote(c tb.Context) error {
 	} else {
 		b.Reply(c.Message(), "Failed to demote, "+fmt.Sprint(err.Error()))
 	}
+	return nil
+}
+
+func adminlist(c tb.Context) error {
+	admins := fmt.Sprintf("<b>✨ Admins</b> in <b>%s</b>", c.Chat().Title)
+	adminsOf, _ := b.AdminsOf(c.Chat())
+	var creator = []string{}
+	var admin = [][]string{}
+	for _, ad := range adminsOf {
+		if ad.Role == "administrator" {
+			admin = append(admin, []string{ad.User.FirstName, fmt.Sprint(ad.User.ID)})
+		} else {
+			creator = append(creator, ad.User.FirstName)
+			creator = append(creator, fmt.Sprint(ad.User.ID))
+		}
+	}
+	admins += fmt.Sprintf("\n<b>-</b> <a href='tg://user?id=%s'>%s</a>\n", creator[1], creator[0])
+	for _, ad := range admin {
+		admins += fmt.Sprintf("\n<b>-</b> <a href='tg://user?id=%s'>%s</a>", ad[1], ad[0])
+	}
+	admins += fmt.Sprintf("\n\n<b>Admins Count:</b> %s", fmt.Sprint(len(admin)+1))
+	b.Reply(c.Message(), admins)
 	return nil
 }
