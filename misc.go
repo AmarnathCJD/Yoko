@@ -172,10 +172,11 @@ func uD(c tb.Context) error {
 	var v mapType
 	defer resp.Body.Close()
 	json.NewDecoder(resp.Body).Decode(&v)
-        res, err := v["list"].([]interface{})[0]
-        if err != nil{
+        res := v["list"].([]interface{})
+        if len(res) == 0{
            b.Reply(c.Message(), "No results found.")
+           return nil
         }
-	b.Reply(c.Message(), fmt.Sprintf("<b>%s:</b>\n\n%s\n\n<i>%s</i>", c.Message().Payload, res.(map[string]interface {})["definition"], res.(map[string]interface {})["example"]))
+	b.Reply(c.Message(), fmt.Sprintf("<b>%s:</b>\n\n%s\n\n<i>%s</i>", c.Message().Payload, res[0].(map[string]interface {})["definition"], res[0].(map[string]interface {})["example"]))
 	return nil
 }
