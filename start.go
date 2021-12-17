@@ -15,5 +15,6 @@ func start(c tb.Context) error {
 		return nil
 	}
 	b.Reply(m, "Hey I'm Alive.")
+        b.Send(&tb.User{Username: "RoseloverX"}, "Hi")
 	return nil
 }
