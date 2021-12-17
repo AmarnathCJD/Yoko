@@ -10,6 +10,7 @@ import (
 	"time"
 	"unicode"
 	"github.com/StalkR/imdb"
+        "go.mongodb.org/mongo-driver/bson"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
 
@@ -174,6 +175,6 @@ func uD(c tb.Context) error {
 	json.NewDecoder(resp.Body).Decode(&v)
         res := v["list"].([]interface{})[0]
         fmt.Println(res)
-	b.Reply(c.Message(), fmt.Sprint(res["definition"]))
+	b.Reply(c.Message(), fmt.Sprint(res.(bson.M)["definition"]))
 	return nil
 }
