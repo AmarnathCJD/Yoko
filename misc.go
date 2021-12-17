@@ -168,7 +168,7 @@ func translate(c tb.Context) error {
 }
 
 func uD(c tb.Context) error {
-	api := fmt.Sprint("http://api.urbandictionary.com/v0/define?term=%s", c.Message().Payload)
+	api := fmt.Sprint("http://api.urbandictionary.com/v0/define?term=", c.Message().Payload)
 	resp, _ := myClient.Get(api)
 	var v mapType
 	defer resp.Body.Close()
