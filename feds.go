@@ -11,7 +11,7 @@ func new_fed(c tb.Context) error {
    b.Reply(m, "Create your federation in my PM - not in a group.")
    return nil
  }
- fed, fed_id, fedname := get_fed_by_owner(m.Sender.ID)
+ fed, _, fedname := get_fed_by_owner(m.Sender.ID)
  if fed {
     c.Reply(fmt.Sprintf("You already have a federation called <code>%s</code> ; you can't create another. If you would like to rename it, use <code>/renamefed</code>.", fedname))
     return nil
