@@ -5,6 +5,7 @@ import (
         "go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/bson"
         "github.com/google/uuid"
+        "fmt"
 )
 
 var (
@@ -144,7 +145,7 @@ func make_fed(user_id int64, fedname string) {
  fmt.Println(uid)
 }
 
-func get_fed(user_id int64) (string, string) {
+func get_fed_by_owner(user_id int64) (bool, string, string) {
  filter := bson.M{"user_id": user_id}
  fed := feds.FindOne(context.TODO(), filter)
  if fed.Err() != nil {
