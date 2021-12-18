@@ -16,5 +16,13 @@ func new_fed(c tb.Context) error {
     c.Reply(fmt.Sprintf("You already have a federation called <code>%s</code> ; you can't create another. If you would like to rename it, use <code>/renamefed</code>.", fedname))
     return nil
  }
+ fed_name := m.Payload
+ if fed_name == string("") {
+    c.Reply("You need to give your federation a name! Federation names can be up to 64 characters long.")
+    return nil
+ } else if len(fed_name) > 64 {
+    c.Reply("Federation names can only be upto 64 charactors long.")
+    return nil
+ }
  return nil
 }
