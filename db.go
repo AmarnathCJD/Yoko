@@ -140,9 +140,10 @@ func get_note(chat_id int64, name string) bson.M {
 	return nil
 }
 
-func make_fed(user_id int64, fedname string) {
+func make_new_fed(user_id int64, fedname string) (string, string) {
  uid := uuid.New().String()
  fmt.Println(uid)
+ return uid, fedname
 }
 
 func get_fed_by_owner(user_id int64) (bool, string, string) {
