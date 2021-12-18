@@ -5,7 +5,7 @@ import (
 )
 
 func new_fed(c tb.Context) error {
- if !c.Message.Private(){
+ if !c.Message().Private(){
    b.Reply(c.Message(), "Create your federation in my PM - not in a group.")
    return nil
  }
