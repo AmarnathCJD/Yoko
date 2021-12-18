@@ -142,7 +142,8 @@ func get_note(chat_id int64, name string) bson.M {
 
 func make_new_fed(user_id int64, fedname string) (string, string) {
  uid := uuid.New().String()
- fmt.Println(uid)
+ filter := bson.M{"user_id": user_id}
+ feds.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"fed_id", uid}, {"fedname", fedname}}}}, opts)
  return uid, fedname
 }
 
