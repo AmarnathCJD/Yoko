@@ -4,6 +4,7 @@ import (
 	"context"
         "go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/bson"
+        "github.com/google/uuid"
 )
 
 var (
@@ -11,6 +12,7 @@ var (
         opts = options.Update().SetUpsert(true)
 	locks_db = database.Collection("locks_dbx")
 	notes_db = database.Collection("notde")
+        feds = database.Collection("feda")
 )
 
 func isTrue(a string, list bson.A) bool {
@@ -135,4 +137,20 @@ func get_note(chat_id int64, name string) bson.M {
 		}
 	}
 	return nil
+}
+
+func make_fed(user_id int64, fedname string) {
+ uid := uuid.New().String()
+ fmt.Println(uid)
+}
+
+func get_fed(user_id int64) (string, string) {
+ filter := bson.M{"user_id": user_id}
+ fed := feds.FindOne(context.TODO(), filter)
+ if fed.Err() != nil {
+    return false, "", ""
+ }
+ var fed_info bson.M
+ fed.Decode(&fed_info)
+ return true, fed_info["fed_id"].(string), fed_info["fedname"].(string)
 }
