@@ -48,11 +48,11 @@ func execute(c tb.Context) error {
 		return nil
 	}
 	if string(m.Payload) == string("") {
-		b.Reply(m, "No CMD given.")
+		c.Reply("No CMD given.")
 		return nil
 	}
 	out, err := Shellout(m.Payload)
-	output := "<code>Go#~:" + string(out) + string(err) + "</code>"
-	b.Reply(m, output)
+	output := fmt.Sprintf("<code>Go#~: %s %s", out, err)
+	c.Reply(output)
 	return nil
 }
