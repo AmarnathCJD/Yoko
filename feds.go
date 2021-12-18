@@ -24,5 +24,7 @@ func new_fed(c tb.Context) error {
     c.Reply("Federation names can only be upto 64 charactors long.")
     return nil
  }
+ _, fname := make_new_fed(m.Sender.ID, fed_name)
+ fmt.Println(fname)
  return nil
 }
