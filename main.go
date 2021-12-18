@@ -50,6 +50,7 @@ func main() {
 	b.Handle("/adminlist", adminlist)
 	b.Handle(tb.OnText, hash_note, hash_regex)
         b.Handle("/ud", uD)
+        b.Handle("/newfed", new_fed)
 	b.Handle(tb.OnChatMember, func(c tb.Context) error {
 		fmt.Println(c)
 		return nil
