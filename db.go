@@ -5,7 +5,6 @@ import (
         "go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/bson"
         "github.com/google/uuid"
-        "fmt"
 )
 
 var (
