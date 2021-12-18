@@ -2,17 +2,18 @@ package main
 
 import (
 	"context"
-        "go.mongodb.org/mongo-driver/mongo/options"
+
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
-        "github.com/google/uuid"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var (
 	database = db.Database("go")
-        opts = options.Update().SetUpsert(true)
+	opts     = options.Update().SetUpsert(true)
 	locks_db = database.Collection("locks_dbx")
 	notes_db = database.Collection("notde")
-        feds = database.Collection("feda")
+	feds     = database.Collection("feda")
 )
 
 func isTrue(a string, list bson.A) bool {
@@ -41,7 +42,6 @@ func deduplicate_note(s bson.A, x string) bson.A {
 	}
 	return s
 }
-
 
 func lock_item(chat_id int64, items []string) bool {
 	filter := bson.M{"chat_id": chat_id}
@@ -103,7 +103,7 @@ func save_note(chat_id int64, name string, note string, file []string) bool {
 		notes.Decode(&dec_note)
 		notez := dec_note["notes"].(bson.A)
 		new_note := bson.M{"name": name, "note": note, "file": file}
-                notez = deduplicate_note(notez, name)
+		notez = deduplicate_note(notez, name)
 		notez = append(notez, new_note)
 		notes_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"notes", notez}}}}, opts)
 	}
@@ -115,9 +115,9 @@ func get_notes(chat_id int64) bson.A {
 	note_find := notes_db.FindOne(context.TODO(), filter)
 	var note bson.M
 	note_find.Decode(&note)
-        if note == nil{
-           return nil
-        }
+	if note == nil {
+		return nil
+	}
 	notes := note["notes"].(bson.A)
 	return notes
 }
@@ -140,19 +140,19 @@ func get_note(chat_id int64, name string) bson.M {
 }
 
 func make_new_fed(user_id int64, fedname string) (string, string) {
- uid := uuid.New().String()
- filter := bson.M{"user_id": user_id}
- feds.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"fed_id", uid}, {"fedname", fedname}}}}, opts)
- return uid, fedname
+	uid := uuid.New().String()
+	filter := bson.M{"user_id": user_id}
+	feds.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"fed_id", uid}, {"fedname", fedname}}}}, opts)
+	return uid, fedname
 }
 
 func get_fed_by_owner(user_id int64) (bool, string, string) {
- filter := bson.M{"user_id": user_id}
- fed := feds.FindOne(context.TODO(), filter)
- if fed.Err() != nil {
-    return false, "", ""
- }
- var fed_info bson.M
- fed.Decode(&fed_info)
- return true, fed_info["fed_id"].(string), fed_info["fedname"].(string)
+	filter := bson.M{"user_id": user_id}
+	fed := feds.FindOne(context.TODO(), filter)
+	if fed.Err() != nil {
+		return false, "", ""
+	}
+	var fed_info bson.M
+	fed.Decode(&fed_info)
+	return true, fed_info["fed_id"].(string), fed_info["fedname"].(string)
 }
