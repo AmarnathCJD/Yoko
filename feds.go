@@ -1,7 +1,7 @@
 package main
 
 import (
- tb "gopkg.in/tucnak/telebot.v3
+ tb "gopkg.in/tucnak/telebot.v3"
  "fmt"
 )
 
