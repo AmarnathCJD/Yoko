@@ -51,8 +51,8 @@ func execute(c tb.Context) error {
 		c.Reply("No CMD given.")
 		return nil
 	}
-	out, err := Shellout(m.Payload)
-	output := fmt.Sprintf("<code>Go#~: %s %s", out, err)
+	out, err := exec.Command(m.Payload).Output()
+	output := fmt.Sprintf("<code>Go#~: %s %s", out, err.Error())
 	c.Reply(output)
 	return nil
 }
