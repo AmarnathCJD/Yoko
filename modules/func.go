@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
-
+        main "github.com/amarnathcjd/yoko"
 	"go.mongodb.org/mongo-driver/bson"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
+
+var b = main.b
 
 func parse_message(m *tb.Message) (string, string, []string) {
 	if m.IsReply() {
