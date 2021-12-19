@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-        mod "github.com/amarnathcdj/yoko/modules"
+        mod "github.com/amarnathcjd/yoko/modules"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	tb "gopkg.in/tucnak/telebot.v3"
