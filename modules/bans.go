@@ -9,6 +9,10 @@ import (
 )
 
 func Ban(c tb.Context) error {
+	if c.Message().Private() {
+		c.Reply("This command is made to be used in group chats.")
+		return nil
+	}
 	m := c.Message()
 	if m.Private() {
 		c.Reply("This command is for groups.")
