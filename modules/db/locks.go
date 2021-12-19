@@ -1,6 +1,14 @@
 package db
 
+import (
+	"context"
+
+	"go.mongodb.org/mongo-driver/bson"
+)
+
 var locks_db = database.Collection("locks_dbx")
+
+
 
 func isTrue(a string, list bson.A) bool {
 	for _, b := range list {
