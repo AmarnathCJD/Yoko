@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-
+        mod "github.com/amarnathcdj/yoko/modules"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	tb "gopkg.in/tucnak/telebot.v3"
@@ -29,32 +29,32 @@ var (
 )
 
 func main() {
-	b.Handle("/info", info)
-	b.Handle("/imdb", IMDb)
-	b.Handle("/crypto", Crypto)
-	b.Handle("/start", start)
-	b.Handle("/save", save, change_info)
-	b.Handle("/lock", lock, change_info)
-	b.Handle("/locktypes", locktypes)
-	b.Handle("/locks", check_locks)
-	b.Handle("/unlock", unlock, change_info)
-	b.Handle("/eval", evaluate)
-	b.Handle("/sh", execute)
-	b.Handle("/tr", translate)
-	b.Handle("/saved", all_notes)
-	b.Handle("/notes", all_notes)
-	b.Handle("/get", gnote)
-	b.Handle("/promote", promote, add_admins)
-	b.Handle("/superpromote", promote, add_admins)
-	b.Handle("/demote", demote, add_admins)
-	b.Handle("/adminlist", adminlist)
-	b.Handle(tb.OnText, hash_note, hash_regex)
-        b.Handle("/ud", uD)
+	b.Handle("/info", mod.info)
+	b.Handle("/imdb", mod.IMDb)
+	b.Handle("/crypto", mod.Crypto)
+	b.Handle("/start", mod.start)
+	b.Handle("/save", mod.save, mod.change_info)
+	b.Handle("/lock", mod.lock, mod.change_info)
+	b.Handle("/locktypes", mod.locktypes)
+	b.Handle("/locks", mod.check_locks)
+	b.Handle("/unlock", mod.unlock, mod.change_info)
+	b.Handle("/eval", mod.evaluate)
+	b.Handle("/sh", mod.execute)
+	b.Handle("/tr", mod.translate)
+	b.Handle("/saved", mod.all_notes)
+	b.Handle("/notes", mod.all_notes)
+	b.Handle("/get", mod.gnote)
+	b.Handle("/promote", mod.promote, mod.add_admins)
+	b.Handle("/superpromote", mod.promote, mod.add_admins)
+	b.Handle("/demote", mod.demote, mod.add_admins)
+	b.Handle("/adminlist", mod.adminlist)
+	b.Handle(tb.OnText, mod.hash_note, mod.hash_regex)
+        b.Handle("/ud", mod.uD)
         b.Handle("/newfed", new_fed)
 	b.Handle(tb.OnChatMember, func(c tb.Context) error {
 		fmt.Println(c)
 		return nil
 	})
-	b.Handle(tb.OnUserJoined, greet_member)
+	b.Handle(tb.OnUserJoined, mod.greet_member)
 	b.Start()
 }
