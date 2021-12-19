@@ -6,6 +6,21 @@ var (
  notes_db = database.Collection("notde")
 )
 
+import (
+	"context"
+
+	"go.mongodb.org/mongo-driver/bson"
+)
+
+func deduplicate_note(s bson.A, x string) bson.A {
+	for i, v := range s {
+		if v.(bson.M)["name"].(string) == x {
+			return append(s[:i], s[i+1:]...)
+		}
+	}
+	return s
+}
+
 func save_note(chat_id int64, name string, note string, file []string) bool {
 	filter := bson.M{"chat_id": chat_id}
 	notes := notes_db.FindOne(context.TODO(), filter)
