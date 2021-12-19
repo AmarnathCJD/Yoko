@@ -5,10 +5,12 @@ import (
 	"regexp"
 	"strings"
 	"go.mongodb.org/mongo-driver/bson"
+        DB "github.com/amarnathcjd/yoko/modules/db"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
 
 var b = main.b
+var db = DB
 
 func parse_message(m *tb.Message) (string, string, []string) {
 	if m.IsReply() {
