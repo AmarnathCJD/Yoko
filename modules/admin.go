@@ -7,8 +7,11 @@ import (
 	tb "gopkg.in/tucnak/telebot.v3"
 )
 
-func add_admins(next tb.HandlerFunc) tb.HandlerFunc {
+func Add_admins(next tb.HandlerFunc) tb.HandlerFunc {
 	return func(c tb.Context) error {
+		if c.Message().Private() {
+			return next(c)
+		}
 		p, _ := c.Bot().ChatMemberOf(c.Chat(), c.Sender())
 		if p.Role == "member" {
 			c.Reply("You need to be an admin to do this!")
@@ -27,7 +30,11 @@ func add_admins(next tb.HandlerFunc) tb.HandlerFunc {
 	}
 }
 
-func promote(c tb.Context) error {
+func Promote(c tb.Context) error {
+	if c.Message().Private() {
+		c.Reply("This command is made to be used in group chats.")
+		return nil
+	}
 	user, xtra := get_user(c.Message())
 	if user == nil {
 		return nil
@@ -42,20 +49,23 @@ func promote(c tb.Context) error {
 			User:   user,
 		})
 		if err == nil {
-			c.Reply("✨ Successfully superpromoted! ~")
 			if xtra != string("") {
-				c.Bot().SetAdminTitle(c.Chat(), user, xtra)
+				res := edit_title(c, user, xtra, true)
+				if !res {
+					return nil
+				}
 			}
+			c.Reply("✨ Successfully promoted! ~")
 		} else if err.Error() == string("telegram: can't remove chat owner (400)") {
 			c.Reply("I would love to promote the chat creator, but... well, they already have all the power.")
 		} else if err.Error() == "telegram unknown: Bad Request: not enough rights (400)" {
-			c.Reply("Failed to promote, "+"Make sure I'm admin and can appoint new admins.")
+			c.Reply("Failed to promote, " + "Make sure I'm admin and can appoint new admins.")
 		} else if err.Error() == "telegram unknown: Bad Request: CHAT_ADMIN_REQUIRED (400)" {
 			c.Reply("This user has been already promoted by someone otherthan me; I can't change their permissions!")
 		} else if err.Error() == "telegram unknown: Bad Request: USER_PRIVACY_RESTRICTED (400)" {
 			c.Reply("Failed to promote, use was not found in this chat.")
 		} else {
-			c.Reply("Failed to promote, "+fmt.Sprint(err.Error()))
+			c.Reply("Failed to promote, " + fmt.Sprint(err.Error()))
 		}
 	} else if arg == "/superpromote" {
 		err := c.Bot().Promote(c.Chat(), &tb.ChatMember{
@@ -63,26 +73,33 @@ func promote(c tb.Context) error {
 			User:   user,
 		})
 		if err == nil {
-			c.Reply(c.Message(), "✨ Successfully superpromoted! ~")
 			if xtra != string("") {
-				c.Bot().SetAdminTitle(c.Chat(), user, xtra)
+				res := edit_title(c, user, xtra, true)
+				if !res {
+					return nil
+				}
 			}
+			c.Reply(c.Message(), "✨ Successfully superpromoted! ~")
 		} else if err.Error() == string("telegram: can't remove chat owner (400)") {
 			c.Reply("I would love to promote the chat creator, but... well, they already have all the power.")
 		} else if err.Error() == "telegram unknown: Bad Request: not enough rights (400)" {
-			c.Reply("Failed to promote, "+"Make sure I'm admin and can appoint new admins.")
+			c.Reply("Failed to promote, " + "Make sure I'm admin and can appoint new admins.")
 		} else if err.Error() == "telegram unknown: Bad Request: CHAT_ADMIN_REQUIRED (400)" {
 			c.Reply("This user has been already promoted by someone otherthan me; I can't change their permissions!")
 		} else if err.Error() == "telegram unknown: Bad Request: USER_PRIVACY_RESTRICTED (400)" {
 			c.Reply("Failed to promote, user was not found in this chat.")
 		} else {
-			c.Reply("Failed to promote, "+fmt.Sprint(err.Error()))
+			c.Reply("Failed to promote, " + fmt.Sprint(err.Error()))
 		}
 	}
 	return nil
 }
 
-func demote(c tb.Context) error {
+func Demote(c tb.Context) error {
+	if c.Message().Private() {
+		c.Reply("This command is made to be used in group chats.")
+		return nil
+	}
 	user, _ := get_user(c.Message())
 	if user == nil {
 		return nil
@@ -99,16 +116,16 @@ func demote(c tb.Context) error {
 	} else if err.Error() == "telegram: can't remove chat owner (400)" {
 		c.Reply("I don't really feel like staging a mutiny today, I think the chat owner deserves to stay an admin.")
 	} else if err.Error() == "telegram unknown: Bad Request: not enough rights (400)" {
-		c.Reply("Failed to demote, "+"Make sure I'm admin and can appoint new admins.")
+		c.Reply("Failed to demote, " + "Make sure I'm admin and can appoint new admins.")
 	} else if err.Error() == "telegram unknown: Bad Request: CHAT_ADMIN_REQUIRED (400)" {
 		c.Reply("This user has been already promoted by someone otherthan me; I can't change their permissions!")
 	} else {
-		c.Reply("Failed to demote, "+fmt.Sprint(err.Error()))
+		c.Reply("Failed to demote, " + fmt.Sprint(err.Error()))
 	}
 	return nil
 }
 
-func adminlist(c tb.Context) error {
+func Adminlist(c tb.Context) error {
 	admins := fmt.Sprintf("<b>✨ Admins</b> in <b>%s</b>", c.Chat().Title)
 	adminsOf, _ := c.Bot().AdminsOf(c.Chat())
 	var creator = []string{}
@@ -128,4 +145,44 @@ func adminlist(c tb.Context) error {
 	admins += fmt.Sprintf("\n\n<b>Admins Count:</b> %s", fmt.Sprint(len(admin)+1))
 	c.Reply(admins)
 	return nil
+}
+
+func Set_title(c tb.Context) error {
+	if c.Message().Private() {
+		c.Reply("This command is made to be used in group chats.")
+		return nil
+	}
+	user, title := get_user(c.Message())
+	if user == nil {
+		return nil
+	} else if title == string("") {
+		c.Reply("You need to give me a title name")
+		return nil
+	}
+	edit_title(c, user, title, false)
+	return nil
+}
+
+func edit_title(c tb.Context, user *tb.User, title string, promote bool) bool {
+	err := c.Bot().SetAdminTitle(c.Chat(), user, title)
+	if err == nil {
+		if promote {
+			return true
+		}
+		c.Reply(fmt.Sprintf("<b>%s</b>'s Admin title was changed to <b>%s</b>.", user.FirstName, title))
+		return true
+	} else if err.Error() == "telegram unknown: Bad Request: user is not an administrator (400)" {
+		c.Reply("This user is not an admin!")
+	} else if err.Error() == "telegram unknown: Bad Request: not enough rights to change custom title of the user (400)" {
+		c.Reply("I don't have permission, because that user was promoted by other someone else.")
+	} else if err.Error() == "telegram unknown: Bad Request: not enough rights (400)" {
+		c.Reply("Failed to change admin title, Make sure I'm admin and can appoint new admins.")
+	} else if err.Error() == "telegram unknown: Bad Request: only creator can edit their custom title (400)" {
+		c.Reply("I don't have permission to edit admin title of the chat's creator.")
+	} else if err.Error() == "telegram unknown: Bad Request: ADMIN_RANK_EMOJI_NOT_ALLOWED (400)" {
+		c.Reply("Admin titles cannot contain emoji.")
+	} else {
+		c.Reply(err.Error())
+	}
+	return false
 }

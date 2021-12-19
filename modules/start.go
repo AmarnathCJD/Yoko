@@ -4,7 +4,9 @@ import (
 	tb "gopkg.in/tucnak/telebot.v3"
 )
 
-func start(c tb.Context) error {
+var menu = &tb.ReplyMarkup{}
+
+func Start(c tb.Context) error {
 	m := c.Message()
 	if m.Private() {
 		menu.Inline(

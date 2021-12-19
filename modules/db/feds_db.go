@@ -9,14 +9,14 @@ import (
 
 var feds = database.Collection("feda")
 
-func make_new_fed(user_id int64, fedname string) (string, string) {
+func Make_new_fed(user_id int64, fedname string) (string, string) {
 	uid := uuid.New().String()
 	filter := bson.M{"user_id": user_id}
 	feds.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"fed_id", uid}, {"fedname", fedname}}}}, opts)
 	return uid, fedname
 }
 
-func get_fed_by_owner(user_id int64) (bool, string, string) {
+func Get_fed_by_owner(user_id int64) (bool, string, string) {
 	filter := bson.M{"user_id": user_id}
 	fed := feds.FindOne(context.TODO(), filter)
 	if fed.Err() != nil {

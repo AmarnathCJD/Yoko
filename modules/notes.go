@@ -2,13 +2,15 @@ package modules
 
 import (
 	"fmt"
-        "regexp"
-        "strings"
+	"regexp"
+	"strings"
+
+	"github.com/amarnathcjd/yoko/modules/db"
+	"go.mongodb.org/mongo-driver/bson"
 	tb "gopkg.in/tucnak/telebot.v3"
-        "go.mongodb.org/mongo-driver/bson"
 )
 
-func save(c tb.Context) error {
+func Save(c tb.Context) error {
 	m := c.Message()
 	name, note, file := parse_message(m)
 	if name == string("") {
@@ -19,14 +21,13 @@ func save(c tb.Context) error {
 		return nil
 	}
 	b.Reply(m, fmt.Sprintf("✨ Saved note <code>%s</code>", name))
-	save_note(m.Chat.ID, name, note, file)
-	get_notes(m.Chat.ID)
+	db.Save_note(m.Chat.ID, name, note, file)
 	return nil
 }
 
-func all_notes(c tb.Context) error {
+func All_notes(c tb.Context) error {
 	m := c.Message()
-	notes := get_notes(c.Chat().ID)
+	notes := db.Get_notes(c.Chat().ID)
 	if notes == nil {
 		b.Reply(m, fmt.Sprintf("There are no notes in %s!", m.Chat.Title))
 		return nil
@@ -39,9 +40,9 @@ func all_notes(c tb.Context) error {
 	return nil
 }
 
-func gnote(c tb.Context) error {
+func Gnote(c tb.Context) error {
 	m := c.Message()
-	note := get_note(m.Chat.ID, m.Payload)
+	note := db.Get_note(m.Chat.ID, m.Payload)
 	if note == nil {
 		b.Reply(m, "No note found!")
 		return nil
@@ -49,8 +50,8 @@ func gnote(c tb.Context) error {
 	unparse_message(note["file"], note["note"].(string), m)
 	return nil
 }
- 
-func hash_regex(next tb.HandlerFunc) tb.HandlerFunc {
+
+func Hash_regex(next tb.HandlerFunc) tb.HandlerFunc {
 	return func(c tb.Context) error {
 		match, _ := regexp.MatchString("\\#(\\S+)", c.Message().Text)
 		if match {
@@ -60,9 +61,9 @@ func hash_regex(next tb.HandlerFunc) tb.HandlerFunc {
 	}
 }
 
-func hash_note(c tb.Context) error {
+func Hash_note(c tb.Context) error {
 	args := strings.SplitN(c.Message().Text, "#", 2)
-	note := get_note(c.Message().Chat.ID, args[1])
+	note := db.Get_note(c.Message().Chat.ID, args[1])
 	if note == nil {
 		return nil
 	}
@@ -71,5 +72,5 @@ func hash_note(c tb.Context) error {
 }
 
 func clear_note(c tb.Context) error {
- return nil
+	return nil
 }

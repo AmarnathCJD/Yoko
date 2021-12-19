@@ -4,17 +4,14 @@ import (
 	"context"
 
 	"go.mongodb.org/mongo-driver/bson"
-        "go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var (
- database = modules.db.Database("go")
- opts     = options.Update().SetUpsert(true)
- notes_db = database.Collection("notde")
+	database = db.Database("go")
+	opts     = options.Update().SetUpsert(true)
+	notes_db = database.Collection("notde")
 )
-
-
-
 
 func deduplicate_note(s bson.A, x string) bson.A {
 	for i, v := range s {
@@ -25,7 +22,7 @@ func deduplicate_note(s bson.A, x string) bson.A {
 	return s
 }
 
-func save_note(chat_id int64, name string, note string, file []string) bool {
+func Save_note(chat_id int64, name string, note string, file []string) bool {
 	filter := bson.M{"chat_id": chat_id}
 	notes := notes_db.FindOne(context.TODO(), filter)
 	if notes.Err() != nil {
@@ -46,7 +43,7 @@ func save_note(chat_id int64, name string, note string, file []string) bool {
 	return true
 }
 
-func get_notes(chat_id int64) bson.A {
+func Get_notes(chat_id int64) bson.A {
 	filter := bson.M{"chat_id": chat_id}
 	note_find := notes_db.FindOne(context.TODO(), filter)
 	var note bson.M
@@ -58,7 +55,7 @@ func get_notes(chat_id int64) bson.A {
 	return notes
 }
 
-func get_note(chat_id int64, name string) bson.M {
+func Get_note(chat_id int64, name string) bson.M {
 	filter := bson.M{"chat_id": chat_id}
 	note_find := notes_db.FindOne(context.TODO(), filter)
 	var note bson.M

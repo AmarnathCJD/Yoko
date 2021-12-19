@@ -8,9 +8,7 @@ import (
 
 var locks_db = database.Collection("locks_dbx")
 
-
-
-func isTrue(a string, list bson.A) bool {
+func IsTrue(a string, list bson.A) bool {
 	for _, b := range list {
 		if b == a {
 			return true
@@ -28,7 +26,7 @@ func remove(s bson.A, r string) bson.A {
 	return s
 }
 
-func lock_item(chat_id int64, items []string) bool {
+func Lock_item(chat_id int64, items []string) bool {
 	filter := bson.M{"chat_id": chat_id}
 	locked := locks_db.FindOne(context.TODO(), filter)
 	if locked.Err() != nil {
@@ -46,7 +44,7 @@ func lock_item(chat_id int64, items []string) bool {
 	return true
 }
 
-func unlock_item(chat_id int64, items []string) bool {
+func Unlock_item(chat_id int64, items []string) bool {
 	filter := bson.M{"chat_id": chat_id}
 	locked := locks_db.FindOne(context.TODO(), filter)
 	if locked.Err() != nil {
@@ -63,7 +61,7 @@ func unlock_item(chat_id int64, items []string) bool {
 	return true
 }
 
-func get_locks(chat_id int64) bson.A {
+func Get_locks(chat_id int64) bson.A {
 	filter := bson.M{"chat_id": chat_id}
 	locked := locks_db.FindOne(context.TODO(), filter)
 	if locked.Err() != nil {

@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+
+	"github.com/amarnathcjd/yoko/bot"
 	"go.mongodb.org/mongo-driver/bson"
-        DB "github.com/amarnathcjd/yoko/modules/db"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
 
-var b = main.b
-var db = DB
+var b = bot.Bot
 
 func parse_message(m *tb.Message) (string, string, []string) {
 	if m.IsReply() {
@@ -138,7 +138,7 @@ func button_parser(text string) (string, *tb.ReplyMarkup) {
 	return note, btns
 }
 
-func change_info(next tb.HandlerFunc) tb.HandlerFunc {
+func Change_info(next tb.HandlerFunc) tb.HandlerFunc {
 	return func(c tb.Context) error {
 		p, _ := b.ChatMemberOf(c.Chat(), c.Sender())
 		if p.Role == "member" {

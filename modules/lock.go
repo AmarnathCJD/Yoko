@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"strings"
 
+	db "github.com/amarnathcjd/yoko/modules/db"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
 
 var LOCK_TYPES = []string{"all", "album", "anonchannel", "audio", "bot", "button", "command", "comment", "contact", "document", "email", "emojigame", "forward", "forwardbot", "forwardchannel", "forwarduser", "game", "gif", "inline", "invitelink", "location", "phone", "photo", "poll", "rtl", "sticker", "text", "url", "video", "videonote", "voice"}
 
-func lock(c tb.Context) error {
+func Lock(c tb.Context) error {
 	m := c.Message()
 	if m.Payload == string("") {
 		b.Reply(m, "You haven't specified a type to lock.")
@@ -19,7 +20,7 @@ func lock(c tb.Context) error {
 	to_lock := make([]string, 0)
 	if stringInSlice("all", args) {
 		b.Reply(m, "Locked <code>all</code>.")
-		lock_item(m.Chat.ID, LOCK_TYPES)
+		db.Lock_item(m.Chat.ID, LOCK_TYPES)
 		return nil
 	}
 	locked_msg := ""
@@ -38,11 +39,11 @@ func lock(c tb.Context) error {
 		return nil
 	}
 	b.Reply(m, "Locked "+locked_msg)
-	lock_item(m.Chat.ID, to_lock)
+	db.Lock_item(m.Chat.ID, to_lock)
 	return nil
 }
 
-func locktypes(c tb.Context) error {
+func Locktypes(c tb.Context) error {
 	m := c.Message()
 	lock_types := ""
 	for _, lock := range LOCK_TYPES {
@@ -52,12 +53,12 @@ func locktypes(c tb.Context) error {
 	return nil
 }
 
-func check_locks(c tb.Context) error {
+func Check_locks(c tb.Context) error {
 	m := c.Message()
 	locked := "✨ Chat LockSettings"
-	lock_c := get_locks(m.Chat.ID)
+	lock_c := db.Get_locks(m.Chat.ID)
 	for _, lock := range LOCK_TYPES {
-		if isTrue(lock, lock_c) {
+		if db.IsTrue(lock, lock_c) {
 			locked += fmt.Sprintf("\n<b>-&gt; %s:</b> true", lock)
 		} else {
 			locked += fmt.Sprintf("\n<b>-&gt; %s:</b> false", lock)
@@ -67,7 +68,7 @@ func check_locks(c tb.Context) error {
 	return nil
 }
 
-func unlock(c tb.Context) error {
+func Unlock(c tb.Context) error {
 	m := c.Message()
 	if m.Payload == string("") {
 		b.Reply(m, "You haven't specified a type to unlock.")
@@ -77,7 +78,7 @@ func unlock(c tb.Context) error {
 	to_unlock := make([]string, 0)
 	if stringInSlice("all", args) {
 		b.Reply(m, "Unlocked all.")
-		unlock_item(m.Chat.ID, LOCK_TYPES)
+		db.Unlock_item(m.Chat.ID, LOCK_TYPES)
 		return nil
 	}
 	unlocked_msg := ""
@@ -93,11 +94,11 @@ func unlock(c tb.Context) error {
 	}
 	if len(to_unlock) == 1 {
 		b.Reply(m, fmt.Sprintf("Unlocked <code>%s</code>.", to_unlock[0]))
-		unlock_item(m.Chat.ID, to_unlock)
+		db.Unlock_item(m.Chat.ID, to_unlock)
 		return nil
 	}
 	b.Reply(m, "Unlocked "+unlocked_msg)
-	unlock_item(m.Chat.ID, to_unlock)
+	db.Unlock_item(m.Chat.ID, to_unlock)
 	return nil
 }
 
@@ -107,7 +108,7 @@ func anonchannel(c tb.Context) error {
 		return nil
 	}
 	m := c.Message()
-	lock_c := get_locks(m.Chat.ID)
+	lock_c := db.Get_locks(m.Chat.ID)
 	x := false
 	for _, y := range lock_c {
 		if y == "anonchannel" {

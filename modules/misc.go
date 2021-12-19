@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 	"unicode"
+
 	"github.com/StalkR/imdb"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
@@ -89,7 +90,7 @@ func getJson(url string) (mapType, error) {
 	return t, err
 }
 
-func info(c tb.Context) error {
+func Info(c tb.Context) error {
 	m := c.Message()
 	if !m.IsReply() && string(m.Payload) == string("") {
 		user_obj := m.Sender
@@ -136,7 +137,7 @@ func Crypto(c tb.Context) error {
 	return nil
 }
 
-func translate(c tb.Context) error {
+func Translate(c tb.Context) error {
 	m := c.Message()
 	text, lang := "", "en"
 	if !m.IsReply() && m.Payload == string("") {
@@ -166,17 +167,17 @@ func translate(c tb.Context) error {
 	return nil
 }
 
-func uD(c tb.Context) error {
+func Ud(c tb.Context) error {
 	api := fmt.Sprint("http://api.urbandictionary.com/v0/define?term=", c.Message().Payload)
 	resp, _ := myClient.Get(api)
 	var v mapType
 	defer resp.Body.Close()
 	json.NewDecoder(resp.Body).Decode(&v)
-        res := v["list"].([]interface{})
-        if len(res) == 0{
-           b.Reply(c.Message(), "No results found.")
-           return nil
-        }
-	b.Reply(c.Message(), fmt.Sprintf("<b>%s:</b>\n\n%s\n\n<i>%s</i>", c.Message().Payload, res[0].(map[string]interface {})["definition"], res[0].(map[string]interface {})["example"]))
+	res := v["list"].([]interface{})
+	if len(res) == 0 {
+		b.Reply(c.Message(), "No results found.")
+		return nil
+	}
+	b.Reply(c.Message(), fmt.Sprintf("<b>%s:</b>\n\n%s\n\n<i>%s</i>", c.Message().Payload, res[0].(map[string]interface{})["definition"], res[0].(map[string]interface{})["example"]))
 	return nil
 }
