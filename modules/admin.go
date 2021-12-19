@@ -7,29 +7,6 @@ import (
 	tb "gopkg.in/tucnak/telebot.v3"
 )
 
-func Add_admins(next tb.HandlerFunc) tb.HandlerFunc {
-	return func(c tb.Context) error {
-		if c.Message().Private() {
-			return next(c)
-		}
-		p, _ := c.Bot().ChatMemberOf(c.Chat(), c.Sender())
-		if p.Role == "member" {
-			c.Reply("You need to be an admin to do this!")
-			return nil
-		} else if p.Role == "creator" {
-			return next(c)
-		} else if p.Role == "administrator" {
-			if p.Rights.CanPromoteMembers {
-				return next(c)
-			} else {
-				c.Reply("You are missing the following rights to use this command: CanPromoteUsers")
-				return nil
-			}
-		}
-		return nil
-	}
-}
-
 func Promote(c tb.Context) error {
 	if c.Message().Private() {
 		c.Reply("This command is made to be used in group chats.")

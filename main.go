@@ -26,8 +26,10 @@ func main() {
 	bot.Bot.Handle("/demote", mod.Demote, mod.Add_admins)
 	bot.Bot.Handle("/adminlist", mod.Adminlist)
 	bot.Bot.Handle("/settitle", mod.Set_title)
+	bot.Bot.Handle("/title", mod.Set_title)
 	bot.Bot.Handle(tb.OnText, mod.Hash_note, mod.Hash_regex)
 	bot.Bot.Handle("/ud", mod.Ud)
 	bot.Bot.Handle("/newfed", mod.New_fed)
+	bot.Bot.Handle("/ban", mod.Ban)
 	bot.Bot.Start()
 }

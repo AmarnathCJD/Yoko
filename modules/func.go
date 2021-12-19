@@ -3,7 +3,9 @@ package modules
 import (
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
+	"unicode"
 
 	"github.com/amarnathcjd/yoko/bot"
 	"go.mongodb.org/mongo-driver/bson"
@@ -156,4 +158,83 @@ func Change_info(next tb.HandlerFunc) tb.HandlerFunc {
 		}
 		return nil
 	}
+}
+
+func Add_admins(next tb.HandlerFunc) tb.HandlerFunc {
+	return func(c tb.Context) error {
+		if c.Message().Private() {
+			return next(c)
+		}
+		p, _ := c.Bot().ChatMemberOf(c.Chat(), c.Sender())
+		if p.Role == "member" {
+			c.Reply("You need to be an admin to do this!")
+			return nil
+		} else if p.Role == "creator" {
+			return next(c)
+		} else if p.Role == "administrator" {
+			if p.Rights.CanPromoteMembers {
+				return next(c)
+			} else {
+				c.Reply("You are missing the following rights to use this command: CanPromoteUsers")
+				return nil
+			}
+		}
+		return nil
+	}
+}
+
+func Ban_users(next tb.HandlerFunc) tb.HandlerFunc {
+	return func(c tb.Context) error {
+		if c.Message().Private() {
+			return next(c)
+		}
+		p, _ := c.Bot().ChatMemberOf(c.Chat(), c.Sender())
+		if p.Role == "member" {
+			c.Reply("You need to be an admin to do this!")
+			return nil
+		} else if p.Role == "creator" {
+			return next(c)
+		} else if p.Role == "administrator" {
+			if p.Rights.CanRestrictMembers {
+				return next(c)
+			} else {
+				c.Reply("You are missing the following rights to use this command: CanRestrictMembers")
+				return nil
+			}
+		}
+		return nil
+	}
+}
+
+func Extract_time(c tb.Context, time_val string) int64 {
+	has_suffix := false
+	for _, arg := range []string{"m", "h", "d", "w"} {
+		if strings.HasSuffix(time_val, arg) {
+			has_suffix = true
+		}
+	}
+	if !has_suffix {
+		c.Reply(fmt.Sprintf("Invalid time type specified. Expected m,h,d or w, got: %s", string(time_val)))
+		return 0
+	}
+	if !unicode.IsDigit(rune(time_val[0])) {
+		c.Reply("Invalid time amount specified.")
+	}
+	unit := string(time_val[len(time_val)-1])
+	time_num, _ := strconv.Atoi(string(time_val[0]))
+	bantime := 0
+	if unit == "m" {
+		bantime = time_num * 60
+	} else if unit == "h" {
+		bantime = time_num * 60 * 60
+	} else if unit == "d" {
+		bantime = time_num * 60 * 60 * 24
+	} else if unit == "w" {
+		bantime = time_num * 60 * 60 * 24 * 7
+	}
+	if bantime > 31622400 {
+		c.Reply("Invalid time specified, temporary actions have to be in between 1 minute and 366 days.")
+		return 0
+	}
+	return int64(bantime)
 }
