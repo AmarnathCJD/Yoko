@@ -8,7 +8,7 @@ import (
 )
 
 var (
- database = main.db.Database("go")
+ database = modules.db.Database("go")
  opts     = options.Update().SetUpsert(true)
  notes_db = database.Collection("notde")
 )
