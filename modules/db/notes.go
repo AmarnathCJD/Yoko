@@ -10,7 +10,9 @@ import (
 	"context"
 
 	"go.mongodb.org/mongo-driver/bson"
+     "go.mongodb.org/mongo-driver/mongo/options"
 )
+
 
 func deduplicate_note(s bson.A, x string) bson.A {
 	for i, v := range s {
