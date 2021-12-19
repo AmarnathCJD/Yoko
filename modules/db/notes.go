@@ -1,17 +1,19 @@
 package db
 
+import (
+	"context"
+
+	"go.mongodb.org/mongo-driver/bson"
+        "go.mongodb.org/mongo-driver/mongo/options"
+)
+
 var (
  database = main.db.Database("go")
  opts     = options.Update().SetUpsert(true)
  notes_db = database.Collection("notde")
 )
 
-import (
-	"context"
 
-	"go.mongodb.org/mongo-driver/bson"
-     "go.mongodb.org/mongo-driver/mongo/options"
-)
 
 
 func deduplicate_note(s bson.A, x string) bson.A {
