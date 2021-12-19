@@ -9,9 +9,9 @@ import (
 
 func add_admins(next tb.HandlerFunc) tb.HandlerFunc {
 	return func(c tb.Context) error {
-		p, _ := b.ChatMemberOf(c.Chat(), c.Sender())
+		p, _ := c.Bot().ChatMemberOf(c.Chat(), c.Sender())
 		if p.Role == "member" {
-			b.Reply(c.Message(), "You need to be an admin to do this!")
+			c.Reply("You need to be an admin to do this!")
 			return nil
 		} else if p.Role == "creator" {
 			return next(c)
@@ -19,7 +19,7 @@ func add_admins(next tb.HandlerFunc) tb.HandlerFunc {
 			if p.Rights.CanPromoteMembers {
 				return next(c)
 			} else {
-				b.Reply(c.Message(), "You are missing the following rights to use this command: CanPromoteUsers")
+				c.Reply("You are missing the following rights to use this command: CanPromoteUsers")
 				return nil
 			}
 		}
@@ -32,51 +32,51 @@ func promote(c tb.Context) error {
 	if user == nil {
 		return nil
 	} else if user.ID == 5050904599 {
-		b.Reply(c.Message(), "Pffff, I wish I could just promote myself.")
+		c.Reply("Pffff, I wish I could just promote myself.")
 		return nil
 	}
 	arg := strings.SplitN(c.Message().Text, " ", 2)[0]
 	if arg == "/promote" {
-		err := b.Promote(c.Chat(), &tb.ChatMember{
+		err := c.Bot().Promote(c.Chat(), &tb.ChatMember{
 			Rights: tb.Rights{CanRestrictMembers: true, CanPinMessages: true, CanChangeInfo: false, CanDeleteMessages: true, CanInviteUsers: true},
 			User:   user,
 		})
 		if err == nil {
-			b.Reply(c.Message(), "✨ Successfully superpromoted! ~")
+			c.Reply("✨ Successfully superpromoted! ~")
 			if xtra != string("") {
-				b.SetAdminTitle(c.Chat(), user, xtra)
+				c.Bot().SetAdminTitle(c.Chat(), user, xtra)
 			}
 		} else if err.Error() == string("telegram: can't remove chat owner (400)") {
-			b.Reply(c.Message(), "I would love to promote the chat creator, but... well, they already have all the power.")
+			c.Reply("I would love to promote the chat creator, but... well, they already have all the power.")
 		} else if err.Error() == "telegram unknown: Bad Request: not enough rights (400)" {
-			b.Reply(c.Message(), "Failed to promote, "+"Make sure I'm admin and can appoint new admins.")
+			c.Reply("Failed to promote, "+"Make sure I'm admin and can appoint new admins.")
 		} else if err.Error() == "telegram unknown: Bad Request: CHAT_ADMIN_REQUIRED (400)" {
-			b.Reply(c.Message(), "This user has been already promoted by someone otherthan me; I can't change their permissions!")
+			c.Reply("This user has been already promoted by someone otherthan me; I can't change their permissions!")
 		} else if err.Error() == "telegram unknown: Bad Request: USER_PRIVACY_RESTRICTED (400)" {
-			b.Reply(c.Message(), "Failed to promote, use was not found in this chat.")
+			c.Reply("Failed to promote, use was not found in this chat.")
 		} else {
-			b.Reply(c.Message(), "Failed to promote, "+fmt.Sprint(err.Error()))
+			c.Reply("Failed to promote, "+fmt.Sprint(err.Error()))
 		}
 	} else if arg == "/superpromote" {
-		err := b.Promote(c.Chat(), &tb.ChatMember{
+		err := c.Bot().Promote(c.Chat(), &tb.ChatMember{
 			Rights: tb.Rights{CanRestrictMembers: true, CanPinMessages: true, CanChangeInfo: true, CanDeleteMessages: true, CanInviteUsers: true, CanPromoteMembers: true, CanManageVoiceChats: true},
 			User:   user,
 		})
 		if err == nil {
-			b.Reply(c.Message(), "✨ Successfully superpromoted! ~")
+			c.Reply(c.Message(), "✨ Successfully superpromoted! ~")
 			if xtra != string("") {
-				b.SetAdminTitle(c.Chat(), user, xtra)
+				c.Bot().SetAdminTitle(c.Chat(), user, xtra)
 			}
 		} else if err.Error() == string("telegram: can't remove chat owner (400)") {
-			b.Reply(c.Message(), "I would love to promote the chat creator, but... well, they already have all the power.")
+			c.Reply("I would love to promote the chat creator, but... well, they already have all the power.")
 		} else if err.Error() == "telegram unknown: Bad Request: not enough rights (400)" {
-			b.Reply(c.Message(), "Failed to promote, "+"Make sure I'm admin and can appoint new admins.")
+			c.Reply("Failed to promote, "+"Make sure I'm admin and can appoint new admins.")
 		} else if err.Error() == "telegram unknown: Bad Request: CHAT_ADMIN_REQUIRED (400)" {
-			b.Reply(c.Message(), "This user has been already promoted by someone otherthan me; I can't change their permissions!")
+			c.Reply("This user has been already promoted by someone otherthan me; I can't change their permissions!")
 		} else if err.Error() == "telegram unknown: Bad Request: USER_PRIVACY_RESTRICTED (400)" {
-			b.Reply(c.Message(), "Failed to promote, user was not found in this chat.")
+			c.Reply("Failed to promote, user was not found in this chat.")
 		} else {
-			b.Reply(c.Message(), "Failed to promote, "+fmt.Sprint(err.Error()))
+			c.Reply("Failed to promote, "+fmt.Sprint(err.Error()))
 		}
 	}
 	return nil
@@ -87,30 +87,30 @@ func demote(c tb.Context) error {
 	if user == nil {
 		return nil
 	} else if user.ID == 5050904599 {
-		b.Reply(c.Message(), "I am not going to demote myself.")
+		c.Reply("I am not going to demote myself.")
 		return nil
 	}
-	err := b.Promote(c.Chat(), &tb.ChatMember{
+	err := c.Bot().Promote(c.Chat(), &tb.ChatMember{
 		Rights: tb.NoRestrictions(),
 		User:   user,
 	})
 	if err == nil {
-		b.Reply(c.Message(), "✨ Successfully demoted! ~")
+		c.Reply("✨ Successfully demoted! ~")
 	} else if err.Error() == "telegram: can't remove chat owner (400)" {
-		b.Reply(c.Message(), "I don't really feel like staging a mutiny today, I think the chat owner deserves to stay an admin.")
+		c.Reply("I don't really feel like staging a mutiny today, I think the chat owner deserves to stay an admin.")
 	} else if err.Error() == "telegram unknown: Bad Request: not enough rights (400)" {
-		b.Reply(c.Message(), "Failed to demote, "+"Make sure I'm admin and can appoint new admins.")
+		c.Reply("Failed to demote, "+"Make sure I'm admin and can appoint new admins.")
 	} else if err.Error() == "telegram unknown: Bad Request: CHAT_ADMIN_REQUIRED (400)" {
-		b.Reply(c.Message(), "This user has been already promoted by someone otherthan me; I can't change their permissions!")
+		c.Reply("This user has been already promoted by someone otherthan me; I can't change their permissions!")
 	} else {
-		b.Reply(c.Message(), "Failed to demote, "+fmt.Sprint(err.Error()))
+		c.Reply("Failed to demote, "+fmt.Sprint(err.Error()))
 	}
 	return nil
 }
 
 func adminlist(c tb.Context) error {
 	admins := fmt.Sprintf("<b>✨ Admins</b> in <b>%s</b>", c.Chat().Title)
-	adminsOf, _ := b.AdminsOf(c.Chat())
+	adminsOf, _ := c.Bot().AdminsOf(c.Chat())
 	var creator = []string{}
 	var admin = [][]string{}
 	for _, ad := range adminsOf {
@@ -126,6 +126,6 @@ func adminlist(c tb.Context) error {
 		admins += fmt.Sprintf("\n<b>-</b> <a href='tg://user?id=%s'>%s</a>", ad[1], ad[0])
 	}
 	admins += fmt.Sprintf("\n\n<b>Admins Count:</b> %s", fmt.Sprint(len(admin)+1))
-	b.Reply(c.Message(), admins)
+	c.Reply(admins)
 	return nil
 }
