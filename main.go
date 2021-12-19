@@ -31,5 +31,8 @@ func main() {
 	bot.Bot.Handle("/ud", mod.Ud)
 	bot.Bot.Handle("/newfed", mod.New_fed)
 	bot.Bot.Handle("/ban", mod.Ban)
+	bot.Bot.Handle("/tban", mod.Ban)
+	bot.Bot.Handle("/sban", mod.Ban)
+	bot.Bot.Handle("/dban", mod.Ban)
 	bot.Bot.Start()
 }
