@@ -30,6 +30,7 @@ func main() {
 	bot.Bot.Handle(tb.OnText, mod.Hash_note, mod.Hash_regex)
 	bot.Bot.Handle("/ud", mod.Ud)
 	bot.Bot.Handle("/newfed", mod.New_fed)
+        bot.Bot.Handle("/delfed", mod.Delete_fed)
 	bot.Bot.Handle("/ban", mod.Ban)
 	bot.Bot.Handle("/tban", mod.Ban)
 	bot.Bot.Handle("/sban", mod.Ban)
