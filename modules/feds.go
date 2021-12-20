@@ -50,7 +50,7 @@ func Delete_fed(c tb.Context) error {
 
 func Rename_fed(c tb.Context) error {
 	m := c.Message()
-	if m.Private() {
+	if !m.Private() {
 		c.Reply("You can only rename your fed in PM.")
 		return nil
 	}
