@@ -195,8 +195,8 @@ func Bin_check(c tb.Context) error {
         if scheme, f := v["scheme"] ; f{
            out_str += fmt.Sprintf("\n<b>Card Brand:</b> %s", scheme) 
         }
-        if type, f := v["type"] ; f{
-           out_str += fmt.Sprintf("\n<b>Card Type:</b> %s", type) 
+        if ctype, f := v["type"] ; f{
+           out_str += fmt.Sprintf("\n<b>Card Type:</b> %s", ctype) 
         }
         if brand, f := v["brand"] ; f{
            out_str += fmt.Sprintf("\n<b>Card Level:</b> %s", brand) 
