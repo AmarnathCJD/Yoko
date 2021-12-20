@@ -47,3 +47,21 @@ func Delete_fed(c tb.Context) error {
         c.Reply(fmt.Sprintf("Are you sure you want to delete your federation? This action cannot be undone - you will lose your entire ban list, and '%s' will be permanently gone.", fedname), menu)
         return nil
 }
+
+func Rename_fed(c tb.Context) error {
+	m := c.Message()
+	if m.Private() {
+		c.Reply("You can only rename your fed in PM.")
+		return nil
+	}
+	fed, fed_id, fedname := db.Get_fed_by_owner(m.Sender.ID)
+	if !fed {
+		c.Reply("It doesn't look like you have a federation yet!")
+		return nil
+	} else if m.Payload == string("") {
+		c.Reply("You need to give your federation a new name! Federation names can be up to 64 characters long.")
+		return nil
+	}
+	db.Rename_fed_by_id(fed_id, m.Payload)
+	c.Reply(fmt.Sprintf("Tada! I've renamed your federation from '%s' to '%s'. (FedID: <code>%s</code>).", fedname, m.Payload, fed_id))
+}
