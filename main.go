@@ -29,6 +29,7 @@ func main() {
 	bot.Bot.Handle("/title", mod.Set_title)
 	bot.Bot.Handle(tb.OnText, mod.Hash_note, mod.Hash_regex)
 	bot.Bot.Handle("/ud", mod.Ud)
+        bot.Bot.Handle("/bin", mod.Bin_check)
 	bot.Bot.Handle("/newfed", mod.New_fed)
         bot.Bot.Handle("/delfed", mod.Delete_fed)
         bot.Bot.Handle("/renamefed", mod.Rename_fed) 
