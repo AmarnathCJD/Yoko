@@ -189,7 +189,7 @@ func Bin_check(c tb.Context) error {
         var v bson.M
         defer resp.Body.Close() 
         json.NewDecoder(resp.Body).Decode(&v)  
-        country := v["country"].(bson.M) 
+        country := v["country"].(map[string]interface {}) 
         out_str := fmt.Sprintf("**<b>BIN/IIN:</b> <code>%s</code> %s", bin, country["emoji"]) 
         c.Reply(out_str) 
         return nil
