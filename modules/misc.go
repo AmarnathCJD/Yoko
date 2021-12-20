@@ -193,22 +193,22 @@ func Bin_check(c tb.Context) error {
 	bank := v["bank"].(map[string]interface{})
 	out_str := fmt.Sprintf("<b>BIN/IIN:</b> <code>%s</code> %s", bin, country["emoji"])
 	if scheme, f := v["scheme"]; f {
-		out_str += fmt.Sprintf("\n<b>Card Brand:</b> %s", strings.Title(scheme))
+		out_str += fmt.Sprintf("\n<b>Card Brand:</b> %s", strings.Title(scheme.(string)))
 	}
 	if ctype, f := v["type"]; f {
-		out_str += fmt.Sprintf("\n<b>Card Type:</b> %s", strings.Title(ctype))
+		out_str += fmt.Sprintf("\n<b>Card Type:</b> %s", strings.Title(ctype.(string)))
 	}
 	if brand, f := v["brand"]; f {
-		out_str += fmt.Sprintf("\n<b>Card Level:</b> %s", strings.Title(brand))
+		out_str += fmt.Sprintf("\n<b>Card Level:</b> %s", strings.Title(brand.(string)))
 	}
 	if prepaid, f := v["prepaid"]; f {
-		out_str += fmt.Sprintf("\nPrepaid:</b> %s", strings.Title(prepaid))
+		out_str += fmt.Sprintf("\nPrepaid:</b> %s", strings.Title(prepaid.(string)))
 	}
 	if name, f := bank["name"]; f {
-		out_str += fmt.Sprintf("\n<b>Bank:</b> %s", strings.Title(name))
+		out_str += fmt.Sprintf("\n<b>Bank:</b> %s", strings.Title(name.(string)))
 	}
 	if ctry, f := country["name"]; f {
-		out_str += fmt.Sprintf("\n<b>Country:</b> %s - %s - $%s", strings.Title(ctry), country["alpha2"], country["currency"])
+		out_str += fmt.Sprintf("\n<b>Country:</b> %s - %s - $%s", strings.Title(ctry.(string)), country["alpha2"], country["currency"])
 	}
 	if url, f := bank["url"]; f {
 		out_str += fmt.Sprintf("\n<b>Website:</b> <code>%s</code>", url)
