@@ -31,6 +31,7 @@ func main() {
 	bot.Bot.Handle("/ud", mod.Ud)
 	bot.Bot.Handle("/newfed", mod.New_fed)
         bot.Bot.Handle("/delfed", mod.Delete_fed)
+        bot.Bot.Handle("/renamefed", mod.Rename_fed) 
 	bot.Bot.Handle("/ban", mod.Ban)
 	bot.Bot.Handle("/tban", mod.Ban)
 	bot.Bot.Handle("/sban", mod.Ban)
