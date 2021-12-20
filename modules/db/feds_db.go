@@ -28,7 +28,7 @@ func Get_fed_by_owner(user_id int64) (bool, string, string) {
 }
 
 func Delete_fed(fed_id string) {
-	filter := bson.M{"user_id": user_id}
+	filter := bson.M{"fed_id": fed_id}
 	feds.DeleteOne(context.TODO(), filter)
 }
 
