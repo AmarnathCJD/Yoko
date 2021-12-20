@@ -216,6 +216,8 @@ func Bin_check(c tb.Context) error {
         if phone, f := bank["phone"] ; f{
            out_str += fmt.Sprintf("\n<b>Contact:</b> %s", phone) 
         }
+        out_str += "\n<b>━━━━━━━━━━━━━</b>"
+        out_str += fmt.Sprintf("\nChecked by <a href='tg://user?id=%s'>%s</a>", string(c.Message().Sender.ID), c.Message().Sender.FirstName) 
         c.Reply(out_str) 
         return nil
 }
