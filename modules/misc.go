@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 	"unicode"
-
+        "go.mongodb.org/mongo-driver/bson"
 	"github.com/StalkR/imdb"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
@@ -186,7 +186,7 @@ func Bin_check(c tb.Context) error {
 	bin := c.Message().Payload
 	url := "https://lookup.binlist.net/%s"
 	resp, _ := http.Get(fmt.Sprintf(url, bin))
-        var v mapType
+        var v bson.M
         defer resp.Body.Close() 
         json.NewDecoder(resp.Body).Decode(&v) 
 	fmt.Println(v)
