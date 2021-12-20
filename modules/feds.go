@@ -44,6 +44,6 @@ func Delete_fed(c tb.Context) error {
         }
         menu := &tb.ReplyMarkup{}
         menu.Inline(menu.Row(menu.Data("Delete Federation", fmt.Sprintf("delfed_%s", fed_id))), menu.Row(menu.Data("Cancel", "cancel_fed_delete")))
-        c.Reply(fmt.Sprinf("Are you sure you want to delete your federation? This action cannot be undone - you will lose your entire ban list, and '%s' will be permanently gone.", fed_name), menu)
+        c.Reply(fmt.Sprintf("Are you sure you want to delete your federation? This action cannot be undone - you will lose your entire ban list, and '%s' will be permanently gone.", fedname), menu)
         return nil
 }
