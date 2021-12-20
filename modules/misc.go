@@ -186,38 +186,38 @@ func Bin_check(c tb.Context) error {
 	bin := c.Message().Payload
 	url := "https://lookup.binlist.net/%s"
 	resp, _ := http.Get(fmt.Sprintf(url, bin))
-        var v bson.M
-        defer resp.Body.Close() 
-        json.NewDecoder(resp.Body).Decode(&v)  
-        country := v["country"].(map[string]interface {}) 
-        bank := v["bank"].(map[string]interface {}) 
-        out_str := fmt.Sprintf("<b>BIN/IIN:</b> <code>%s</code> %s", bin, country["emoji"]) 
-        if scheme, f := v["scheme"] ; f{
-           out_str += fmt.Sprintf("\n<b>Card Brand:</b> %s", scheme) 
-        }
-        if ctype, f := v["type"] ; f{
-           out_str += fmt.Sprintf("\n<b>Card Type:</b> %s", ctype) 
-        }
-        if brand, f := v["brand"] ; f{
-           out_str += fmt.Sprintf("\n<b>Card Level:</b> %s", brand) 
-        }
-        if prepaid, f := v["prepaid"] ; f{
-           out_str += fmt.Sprintf("\nPrepaid:</b> %s", prepaid) 
-        }
-        if name, f := bank["name"] ; f{
-           out_str += fmt.Sprintf("\n<b>Bank:</b> %s", name) 
-        }
-        if ctry, f := country["name"] ; f{
-           out_str += fmt.Sprintf("\n<b>Country:</b> %s - %s - $%s", ctry, country["alpha2"], country["currency"]) 
-        }
-        if url, f := bank["url"] ; f{
-           out_str += fmt.Sprintf("\n<b>Website:</b> <code>%s</code>", url) 
-        }
-        if phone, f := bank["phone"] ; f{
-           out_str += fmt.Sprintf("\n<b>Contact:</b> %s", phone) 
-        }
-        out_str += "\n<b>━━━━━━━━━━━━━</b>"
-        out_str += fmt.Sprintf("\nChecked by <a href='tg://user?id=%s'>%s</a>", string(c.Message().Sender.ID), c.Message().Sender.FirstName) 
-        c.Reply(out_str) 
-        return nil
+	var v bson.M
+	defer resp.Body.Close()
+	json.NewDecoder(resp.Body).Decode(&v)
+	country := v["country"].(map[string]interface{})
+	bank := v["bank"].(map[string]interface{})
+	out_str := fmt.Sprintf("<b>BIN/IIN:</b> <code>%s</code> %s", bin, country["emoji"])
+	if scheme, f := v["scheme"]; f {
+		out_str += fmt.Sprintf("\n<b>Card Brand:</b> %s", strings.Title(scheme))
+	}
+	if ctype, f := v["type"]; f {
+		out_str += fmt.Sprintf("\n<b>Card Type:</b> %s", strings.Title(ctype))
+	}
+	if brand, f := v["brand"]; f {
+		out_str += fmt.Sprintf("\n<b>Card Level:</b> %s", strings.Title(brand))
+	}
+	if prepaid, f := v["prepaid"]; f {
+		out_str += fmt.Sprintf("\nPrepaid:</b> %s", strings.Title(prepaid))
+	}
+	if name, f := bank["name"]; f {
+		out_str += fmt.Sprintf("\n<b>Bank:</b> %s", strings.Title(name))
+	}
+	if ctry, f := country["name"]; f {
+		out_str += fmt.Sprintf("\n<b>Country:</b> %s - %s - $%s", strings.Title(ctry), country["alpha2"], country["currency"])
+	}
+	if url, f := bank["url"]; f {
+		out_str += fmt.Sprintf("\n<b>Website:</b> <code>%s</code>", url)
+	}
+	if phone, f := bank["phone"]; f {
+		out_str += fmt.Sprintf("\n<b>Contact:</b> %s", phone)
+	}
+	out_str += "\n<b>━━━━━━━━━━━━━</b>"
+	out_str += fmt.Sprintf("\nChecked by <a href='tg://user?id=%s'>%s</a>", string(c.Message().Sender.ID), c.Message().Sender.FirstName)
+	c.Reply(out_str)
+	return nil
 }
