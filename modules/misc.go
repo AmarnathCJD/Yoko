@@ -190,9 +190,31 @@ func Bin_check(c tb.Context) error {
         defer resp.Body.Close() 
         json.NewDecoder(resp.Body).Decode(&v)  
         country := v["country"].(map[string]interface {}) 
+        bank := v["bank"].(map[string]interface {}) 
         out_str := fmt.Sprintf("<b>BIN/IIN:</b> <code>%s</code> %s", bin, country["emoji"]) 
         if scheme, f := v["scheme"] ; f{
-           out_str += fmt.Sprintf("<b>Card Brand:</b> %s", scheme) 
+           out_str += fmt.Sprintf("\n<b>Card Brand:</b> %s", scheme) 
+        }
+        if type, f := v["type"] ; f{
+           out_str += fmt.Sprintf("\n<b>Card Type:</b> %s", type) 
+        }
+        if brand, f := v["brand"] ; f{
+           out_str += fmt.Sprintf("\n<b>Card Level:</b> %s", brand) 
+        }
+        if prepaid, f := v["prepaid"] ; f{
+           out_str += fmt.Sprintf("\nPrepaid:</b> %s", prepaid) 
+        }
+        if name, f := bank["name"] ; f{
+           out_str += fmt.Sprintf("\n<b>Bank:</b> %s", name) 
+        }
+        if ctry, f := country["name"] ; f{
+           out_str += fmt.Sprintf("\n<b>Country:</b> %s - %s - $%s", ctry, country["alpha2"], country["currency"]) 
+        }
+        if url, f := bank["url"] ; f{
+           out_str += fmt.Sprintf("\n<b>Website:</b> <code>%s</code>", url) 
+        }
+        if phone, f := bank["phone"] ; f{
+           out_str += fmt.Sprintf("\n<b>Contact:</b> %s", phone) 
         }
         c.Reply(out_str) 
         return nil
