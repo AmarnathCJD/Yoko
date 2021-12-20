@@ -188,8 +188,9 @@ func Bin_check(c tb.Context) error {
 	resp, _ := http.Get(fmt.Sprintf(url, bin))
         var v bson.M
         defer resp.Body.Close() 
-        json.NewDecoder(resp.Body).Decode(&v) 
-	c.Reply(fmt.Sprint(v)) 
-        fmt.Println(v["bank"]) 
+        json.NewDecoder(resp.Body).Decode(&v)  
+        country := v["country"]
+        out_str := fmt.Sprintf("**<b>BIN/IIN:</b> <code>%s</code> %s", bin, country["emoji"]) 
+        c.Reply(out_str) 
         return nil
 }
