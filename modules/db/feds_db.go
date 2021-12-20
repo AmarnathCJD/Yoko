@@ -32,3 +32,7 @@ func Delete_fed(fed_id string) {
 	feds.DeleteOne(context.TODO(), filter)
 }
 
+func Rename_fed(fed_id string, name string) {
+        filter := bson.M{"fed_id": fed_id}
+        feds.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"fedname", name}}}}, opts)
+}
