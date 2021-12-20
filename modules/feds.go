@@ -64,4 +64,5 @@ func Rename_fed(c tb.Context) error {
 	}
 	db.Rename_fed_by_id(fed_id, m.Payload)
 	c.Reply(fmt.Sprintf("Tada! I've renamed your federation from '%s' to '%s'. (FedID: <code>%s</code>).", fedname, m.Payload, fed_id))
+        return nil
 }
