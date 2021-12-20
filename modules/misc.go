@@ -189,6 +189,6 @@ func Bin_check(c tb.Context) error {
         var v bson.M
         defer resp.Body.Close() 
         json.NewDecoder(resp.Body).Decode(&v) 
-	fmt.Println(v)
+	c.Reply(fmt.Sprint(v)) 
         return nil
 }
