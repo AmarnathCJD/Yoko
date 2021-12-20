@@ -190,7 +190,10 @@ func Bin_check(c tb.Context) error {
         defer resp.Body.Close() 
         json.NewDecoder(resp.Body).Decode(&v)  
         country := v["country"].(map[string]interface {}) 
-        out_str := fmt.Sprintf("**<b>BIN/IIN:</b> <code>%s</code> %s", bin, country["emoji"]) 
+        out_str := fmt.Sprintf("<b>BIN/IIN:</b> <code>%s</code> %s", bin, country["emoji"]) 
+        if scheme, f := v["scheme"] ; f{
+           out_str += fmt.Sprintf("<b>Card Brand:</b> %s", scheme) 
+        }
         c.Reply(out_str) 
         return nil
 }
