@@ -181,3 +181,13 @@ func Ud(c tb.Context) error {
 	b.Reply(c.Message(), fmt.Sprintf("<b>%s:</b>\n\n%s\n\n<i>%s</i>", c.Message().Payload, res[0].(map[string]interface{})["definition"], res[0].(map[string]interface{})["example"]))
 	return nil
 }
+
+func Bin_check() {
+	bin := "69696969"
+	url := "https://lookup.binlist.net/%s"
+	resp, _ := http.Get(fmt.Sprintf(url, bin))
+        var v mapType
+        defer resp.Body.Close() 
+        json.Newdecoder(resp.Body).Decode(&v) 
+	fmt.Println(resp.Body)
+}
