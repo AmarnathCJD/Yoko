@@ -190,7 +190,7 @@ func Bin_check(c tb.Context) error {
         defer resp.Body.Close() 
         json.NewDecoder(resp.Body).Decode(&v) 
 	c.Reply(fmt.Sprint(v)) 
-        if v["bank"] == nil{
+        if len(v["bank"]) == 0{
            fmt.Println("6")
         }
         return nil
