@@ -215,7 +215,7 @@ func Bin_check(c tb.Context) error {
 	}
 	out_str += "\n<b>━━━━━━━━━━━━━</b>"
 	out_str += fmt.Sprintf("\nChecked by <a href='tg://user?id=%s'>%s</a>", strconv.Itoa(int(c.Message().Sender.ID)), c.Message().Sender.FirstName)
-	x := c.Reply(out_str, &tb.SendOptions{ParseMode: "MarkdownV2"})
+	x := c.Reply(out_str, &tb.SendOptions{ParseMode: "HTML"})
         fmt.Println(out_str, out_str[148], x)
 	return nil
 }
