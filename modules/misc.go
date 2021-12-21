@@ -213,9 +213,6 @@ func Bin_check(c tb.Context) error {
 	if url, f := bank["url"]; f {
 		out_str += fmt.Sprintf("\n<b>Website:</b> <code>%s</code>", url)
 	}
-	if phone, f := bank["phone"]; f {
-		out_str += fmt.Sprintf("\n<b>Contact:</b> %s", phone)
-	}
 	out_str += "\n<b>━━━━━━━━━━━━━</b>"
 	out_str += fmt.Sprintf("\nChecked by <a href='tg://user?id=%s'>%s</a>", strconv.Itoa(int(c.Message().Sender.ID)), c.Message().Sender.FirstName)
 	x := c.Reply(out_str)
