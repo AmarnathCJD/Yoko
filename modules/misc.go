@@ -192,7 +192,6 @@ func Bin_check(c tb.Context) error {
 	country := v["country"].(map[string]interface{})
 	bank := v["bank"].(map[string]interface{})
 	out_str := fmt.Sprintf("<b>BIN/IIN:</b> <code>%s</code> %s", bin, country["emoji"])
-        fmt.Println(3)
 	if scheme, f := v["scheme"]; f {
 		out_str += fmt.Sprintf("\n<b>Card Brand:</b> %s", strings.Title(scheme.(string)))
 	}
@@ -202,7 +201,6 @@ func Bin_check(c tb.Context) error {
 	if brand, f := v["brand"]; f {
 		out_str += fmt.Sprintf("\n<b>Card Level:</b> %s", strings.Title(brand.(string)))
 	}
-        fmt.Println(3)
 	if prepaid, f := v["prepaid"]; f {
 		out_str += fmt.Sprintf("\nPrepaid:</b> %s", strings.Title(strconv.FormatBool(prepaid.(bool))))
 	}
@@ -213,12 +211,14 @@ func Bin_check(c tb.Context) error {
 	if ctry, f := country["name"]; f {
 		out_str += fmt.Sprintf("\n<b>Country:</b> %s - %s - $%s", strings.Title(ctry.(string)), country["alpha2"], country["currency"])
 	}
+        fmt.Println(6)
 	if url, f := bank["url"]; f {
 		out_str += fmt.Sprintf("\n<b>Website:</b> <code>%s</code>", url)
 	}
 	if phone, f := bank["phone"]; f {
 		out_str += fmt.Sprintf("\n<b>Contact:</b> %s", phone)
 	}
+        fmt.Println(5)
 	out_str += "\n<b>━━━━━━━━━━━━━</b>"
 	out_str += fmt.Sprintf("\nChecked by <a href='tg://user?id=%s'>%s</a>", string(c.Message().Sender.ID), c.Message().Sender.FirstName)
 	c.Reply(out_str)
