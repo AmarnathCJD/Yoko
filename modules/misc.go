@@ -210,12 +210,7 @@ func Bin_check(c tb.Context) error {
 	if ctry, f := country["name"]; f {
 		out_str += fmt.Sprintf("\n<b>Country:</b> %s - %s - $%s", strings.Title(ctry.(string)), country["alpha2"], country["currency"])
 	}
-	if url, f := bank["url"]; f {
-		out_str += fmt.Sprintf("\n<b>Website:</b> <code>%s</code>", url)
-	}
-	if phone, f := bank["phone"]; f {
-		out_str += fmt.Sprintf("\n<b>Contact:</b> %s", phone)
-	}
+	
 	out_str += "\n<b>━━━━━━━━━━━━━</b>"
 	out_str += fmt.Sprintf("\nChecked by <a href='tg://user?id=%s'>%s</a>", string(c.Message().Sender.ID), c.Message().Sender.FirstName)
 	c.Reply(out_str)
