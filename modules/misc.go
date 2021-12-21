@@ -221,7 +221,6 @@ func Bin_check(c tb.Context) error {
 	}
 	out_str += "\n<b>━━━━━━━━━━━━━</b>"
 	out_str += fmt.Sprintf("\nChecked by <a href='tg://user?id=%s'>%s</a>", string(c.Message().Sender.ID), c.Message().Sender.FirstName)
-	_, err := c.Reply(out_str)
-        fmt.Println(err)
+	c.Reply(out_str)
 	return nil
 }
