@@ -202,7 +202,7 @@ func Bin_check(c tb.Context) error {
 		out_str += fmt.Sprintf("\n<b>Card Level:</b> %s", strings.Title(brand.(string)))
 	}
 	if prepaid, f := v["prepaid"]; f {
-		out_str += fmt.Sprintf("\nPrepaid:</b> %s", strings.Title(strconv.FormatBool(prepaid)))
+		out_str += fmt.Sprintf("\nPrepaid:</b> %s", strings.Title(strconv.FormatBool(prepaid.(bool))))
 	}
 	if name, f := bank["name"]; f {
 		out_str += fmt.Sprintf("\n<b>Bank:</b> %s", strings.Title(name.(string)))
