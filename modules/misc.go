@@ -207,11 +207,9 @@ func Bin_check(c tb.Context) error {
 	if name, f := bank["name"]; f {
 		out_str += fmt.Sprintf("\n<b>Bank:</b> %s", strings.Title(name.(string)))
 	}
-        fmt.Println(4)
 	if ctry, f := country["name"]; f {
 		out_str += fmt.Sprintf("\n<b>Country:</b> %s - %s - $%s", strings.Title(ctry.(string)), country["alpha2"], country["currency"])
 	}
-        fmt.Println(6)
 	if url, f := bank["url"]; f {
 		out_str += fmt.Sprintf("\n<b>Website:</b> <code>%s</code>", url)
 	}
@@ -220,7 +218,7 @@ func Bin_check(c tb.Context) error {
 	}
 	out_str += "\n<b>━━━━━━━━━━━━━</b>"
 	out_str += fmt.Sprintf("\nChecked by <a href='tg://user?id=%s'>%s</a>", string(c.Message().Sender.ID), c.Message().Sender.FirstName)
-        fmt.Println(out_str)
-	c.Reply(out_str)
+	x := c.Reply(out_str)
+        fmt.Println(x)
 	return nil
 }
