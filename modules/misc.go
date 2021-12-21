@@ -202,7 +202,7 @@ func Bin_check(c tb.Context) error {
 		out_str += fmt.Sprintf("\n<b>Card Level:</b> %s", strings.Title(brand.(string)))
 	}
 	if prepaid, f := v["prepaid"]; f {
-		out_str += fmt.Sprintf("\nPrepaid:</b> %s", strings.Title(strconv.FormatBool(prepaid.(bool))))
+		out_str += fmt.Sprintf("\n<b>Prepaid:</b> %s", strings.Title(strconv.FormatBool(prepaid.(bool))))
 	}
 	if name, f := bank["name"]; f {
 		out_str += fmt.Sprintf("\n<b>Bank:</b> %s", strings.Title(name.(string)))
@@ -215,8 +215,7 @@ func Bin_check(c tb.Context) error {
 	}
 	out_str += "\n<b>━━━━━━━━━━━━━</b>"
 	out_str += fmt.Sprintf("\nChecked by <a href='tg://user?id=%s'>%s</a>", strconv.Itoa(int(c.Message().Sender.ID)), c.Message().Sender.FirstName)
-	x := c.Reply(out_str, &tb.SendOptions{ParseMode: "HTML"})
-        fmt.Println(out_str, out_str[148], x)
+        c.Reply(out_str)
 	return nil
 }
 
