@@ -41,12 +41,12 @@ func Gsearch_inline(c tb.Context) error {
         if !strings.HasPrefix(query, "google"){
          return nil
         }
-        q := strings.SplitN(query, " ", 2)
-        if len(q) == 1{
+        qarg := strings.SplitN(query, " ", 2)
+        if len(qarg) == 1{
             return nil
-        } else {
-           q = q[1]
         }
-        fmt.Println(q)
+        ctx := context.Background()
+	search := googlesearch.Search(ctx, qarg[1]))
+        fmt.Println(search)
 	return nil
 }
