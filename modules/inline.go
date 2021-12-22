@@ -48,7 +48,7 @@ func Gsearch_inline(c tb.Context) error {
 	}
 	ctx := context.Background()
 	search, _ := googlesearch.Search(ctx, qarg[1])
-	results := make(tb.Results, len(urls))
+	results := make(tb.Results, len(search))
 	for i, r := range search {
 		rq := &tb.ArticleResult{Title: r.Title, Text: "smd", Description: r.Description}
 		results[i] = rq
