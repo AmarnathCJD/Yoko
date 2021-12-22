@@ -37,5 +37,6 @@ func main() {
 	bot.Bot.Handle("/tban", mod.Ban)
 	bot.Bot.Handle("/sban", mod.Ban)
 	bot.Bot.Handle("/dban", mod.Ban)
+        bot.Bot.Handle("/test", mod.Gg)
 	bot.Bot.Start()
 }
