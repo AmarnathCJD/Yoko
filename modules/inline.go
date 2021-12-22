@@ -34,7 +34,7 @@ func Test(c tb.Context) error {
 	return nil
 }
 
-func Gsearch_inline(q *tb.Query){
+func Gsearch_inline(c tb.Context){
  fmt.Println("query")
 }
  
