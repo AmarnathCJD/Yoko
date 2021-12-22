@@ -35,6 +35,6 @@ func Test(c tb.Context) error {
 }
 
 func Gsearch_inline(c tb.Context) error {
-	fmt.Println("query")
+	fmt.Println(c.Query().Text)
 	return nil
 }
