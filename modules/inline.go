@@ -37,10 +37,16 @@ func Test(c tb.Context) error {
 
 
 func Gsearch_inline(c tb.Context) error {
-        if !strings.HasPrefix(c.Query().Text, "google"){
+        query := c.Query().Text
+        if !strings.HasPrefix(query, "google"){
          return nil
         }
-        query := strings.SplitN(c.Query().Text, " ", 2)[1]
-        fmt.Println(query)
+        q := strings.SplitN(query, " ", 2)
+        if len(q) == 1{
+            return nil
+        } else {
+           q = q[1]
+        }
+        fmt.Println(q)
 	return nil
 }
