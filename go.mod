@@ -6,6 +6,7 @@ require (
 	github.com/StalkR/imdb v1.0.7
 	go.mongodb.org/mongo-driver v1.8.1
 	gopkg.in/tucnak/telebot.v3 v3.0.0-20211126232936-7f936709f3ee
+        github.com/anaskhan96/soup v1.2.4
 )
 
 require (
