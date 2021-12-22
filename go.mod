@@ -4,10 +4,12 @@ go 1.17
 
 require (
 	github.com/StalkR/imdb v1.0.7
+	github.com/anaskhan96/soup v1.2.4
 	go.mongodb.org/mongo-driver v1.8.1
 	gopkg.in/tucnak/telebot.v3 v3.0.0-20211126232936-7f936709f3ee
-        github.com/anaskhan96/soup v1.2.4
 )
+
+require golang.org/x/net v0.0.0-20200114155413-6afb5195e5aa // indirect
 
 require (
 	github.com/go-stack/stack v1.8.0 // indirect
