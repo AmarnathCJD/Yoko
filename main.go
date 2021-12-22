@@ -38,6 +38,6 @@ func main() {
 	bot.Bot.Handle("/sban", mod.Ban)
 	bot.Bot.Handle("/dban", mod.Ban)
 	bot.Bot.Handle("/test", mod.Test)
-        bot.Bot.Handle(tb.OnQuery, mod.Gsearch)
+        bot.Bot.Handle(tb.OnQuery, mod.Gsearch_inline)
 	bot.Bot.Start()
 }
