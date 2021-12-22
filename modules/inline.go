@@ -38,25 +38,26 @@ func Test(c tb.Context) error {
 
 
 func Gsearch_inline(c tb.Context) error {
-        query := c.Query().Text
-        if !strings.HasPrefix(query, "google"){
-         return nil
-        }
-        qarg := strings.SplitN(query, " ", 2)
-        if len(qarg) == 1{
-            return nil
-        }
-        ctx := context.Background()
+	query := c.Query().Text
+	if !strings.HasPrefix(query, "google") {
+		return nil
+	}
+	qarg := strings.SplitN(query, " ", 2)
+	if len(qarg) == 1 {
+		return nil
+	}
+	ctx := context.Background()
 	search, _ := googlesearch.Search(ctx, qarg[1])
-        results := make(tele.Results, len(urls))
-        for i, r := range search {
-           rq := &tb.ArticleResult{Title: r.Title, Text: "smd", Description: r.Description}
-           results[i] = rq
-           results[i].SetResultID(strconv.Itoa(i))
-        err := c.Bot().Answer(c.Query(), &tb.QueryResponse{
+	results := make(tb.Results, len(urls))
+	for i, r := range search {
+		rq := &tb.ArticleResult{Title: r.Title, Text: "smd", Description: r.Description}
+		results[i] = rq
+		results[i].SetResultID(strconv.Itoa(i))
+	}
+	err := c.Bot().Answer(c.Query(), &tb.QueryResponse{
 		Results:   results,
-		CacheTime: 60
+		CacheTime: 60,
 	})
-        fmt.Println(err)
+	fmt.Println(err)
 	return nil
 }
