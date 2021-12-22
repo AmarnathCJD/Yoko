@@ -20,6 +20,6 @@ func Gg(c tb.Context) error {
 		fmt.Println(err)
 	}
 	doc := soup.HTMLParse(string(b))
-	fmt.Println(doc.Find("div", "class", "g"))
+	fmt.Println(doc.Find("div"))
         return nil
 }
