@@ -33,3 +33,8 @@ func Test(c tb.Context) error {
 	fmt.Println(googlesearch.Search(ctx, "cars for sale in Toronto, Canada"))
 	return nil
 }
+
+func Gsearch_inline(q *tb.Query){
+ fmt.Println("query")
+}
+ 
