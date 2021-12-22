@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-
+        "strings"
 	googlesearch "github.com/rocketlaunchr/google-search"
 
 	"github.com/anaskhan96/soup"
@@ -34,7 +34,11 @@ func Test(c tb.Context) error {
 	return nil
 }
 
+
+
 func Gsearch_inline(c tb.Context) error {
-	fmt.Println(c.Query().Text)
+        if strings.HasPrefix(c.Query().Text, "google"){
+         fmt.Println(c.Query())
+        }
 	return nil
 }
