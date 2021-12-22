@@ -1,11 +1,14 @@
 package modules
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"net/http"
-        tb "gopkg.in/tucnak/telebot.v3"
+
 	"github.com/anaskhan96/soup"
+	googlesearch "github.com/rocketlaunchr/google-search"
+	tb "gopkg.in/tucnak/telebot.v3"
 )
 
 func Gg(c tb.Context) error {
@@ -21,5 +24,11 @@ func Gg(c tb.Context) error {
 	}
 	doc := soup.HTMLParse(string(b))
 	fmt.Println(doc.Find("div", "class", "g"))
-        return nil
+	return nil
+}
+
+func test2(c tb.Context) error {
+	ctx := context.Background()
+	fmt.Println(googlesearch.Search(ctx, "cars for sale in Toronto, Canada"))
+	return nil
 }
