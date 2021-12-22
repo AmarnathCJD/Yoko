@@ -50,7 +50,8 @@ func Gsearch_inline(c tb.Context) error {
 	search, _ := googlesearch.Search(ctx, qarg[1])
 	results := make(tb.Results, len(search))
 	for i, r := range search {
-		rq := &tb.ArticleResult{Title: r.Title, Text: r.Description, Description: r.Description}
+                text := fmt.Sprintf("<b><a href='%s'>%s</a></b>\n%s", r.URL, r.Title, r.Description)
+		rq := &tb.ArticleResult{Title: r.Title, Text: text, Description: r.Description}
 		results[i] = rq
 		results[i].SetResultID(strconv.Itoa(i))
 	}
