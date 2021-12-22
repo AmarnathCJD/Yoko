@@ -46,7 +46,7 @@ func Gsearch_inline(c tb.Context) error {
             return nil
         }
         ctx := context.Background()
-	search := googlesearch.Search(ctx, qarg[1])
+	search, _ := googlesearch.Search(ctx, qarg[1])
         fmt.Println(search)
 	return nil
 }
