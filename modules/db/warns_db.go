@@ -12,7 +12,7 @@ func Warn_user(chat_id int64, user_id int64, reason string) {
  filter := bson.M{"chat_id": chat_id, "user_id": user_id}
  w := warns.FindOne(context.TODO(), filter)
  if w.Err() != nil {
-    warner := bson.M
+    warner := 6
     fmt.Println(warner)
  }
 }
