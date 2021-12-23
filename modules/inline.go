@@ -20,14 +20,24 @@ func inline_markup(query string) *tb.InlineKeyboardMarkup {
 	return btns
 }
 
-func gsearch_inline(c tb.Context) error {
-	query := c.Query().Text
-	if !strings.HasPrefix(query, "google") {
+func InlineQueryHandler(c tb.Context) error {
+        query := c.Query().Text
+	if strings.HasPrefix(query, "google") {
+                gsearch_inline(c)
 		return nil
-	}
-	qarg := strings.SplitN(query, " ", 2)
+	} else if strings.HasPrefix(query, "ud") {
+                ud_inline(c)
+                return nil
+        }
+ return nil
+}	
+ 
+
+func gsearch_inline(c tb.Context) {
+        query := c.Query().Text
+        qarg := strings.SplitN(query, " ", 2)
 	if len(qarg) == 1 {
-		return nil
+		return
 	}
 	ctx := context.Background()
 	search, _ := googlesearch.Search(ctx, qarg[1])
@@ -45,17 +55,14 @@ func gsearch_inline(c tb.Context) error {
 		Results:   results,
 		CacheTime: 60,
 	})
-	return nil
+	return
 }
 
-func ud_inline(c tb.Context) error {
+func ud_inline(c tb.Context) {
 	query := c.Query().Text
-	if !strings.HasPrefix(query, "ud") {
-		return nil
-	}
-	qarg := strings.SplitN(query, " ", 2)
+        qarg := strings.SplitN(query, " ", 2)
 	if len(qarg) == 1 {
-		return nil
+		return
 	}
 	api := fmt.Sprint("http://api.urbandictionary.com/v0/define?term=", qarg[1])
 	resp, _ := myClient.Get(api)
@@ -83,5 +90,5 @@ func ud_inline(c tb.Context) error {
 		Results:   results,
 		CacheTime: 60,
 	})
-	return nil
+ return
 }
