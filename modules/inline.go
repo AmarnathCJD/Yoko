@@ -31,6 +31,7 @@ func gsearch_inline(c tb.Context) error {
 	}
 	ctx := context.Background()
 	search, _ := googlesearch.Search(ctx, qarg[1])
+        fmt.Println(search)
 	results := make(tb.Results, len(search))
 	for i, r := range search {
           if r.Title != ""{
