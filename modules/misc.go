@@ -9,8 +9,9 @@ import (
 	"strings"
 	"time"
 	"unicode"
-        "go.mongodb.org/mongo-driver/bson"
+
 	"github.com/StalkR/imdb"
+	"go.mongodb.org/mongo-driver/bson"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
 
@@ -174,6 +175,7 @@ func Ud(c tb.Context) error {
 	defer resp.Body.Close()
 	json.NewDecoder(resp.Body).Decode(&v)
 	res := v["list"].([]interface{})
+	fmt.Println(res)
 	if len(res) == 0 {
 		b.Reply(c.Message(), "No results found.")
 		return nil
@@ -215,8 +217,6 @@ func Bin_check(c tb.Context) error {
 	}
 	out_str += "\n<b>━━━━━━━━━━━━━</b>"
 	out_str += fmt.Sprintf("\nChecked by <a href='tg://user?id=%s'>%s</a>", strconv.Itoa(int(c.Message().Sender.ID)), c.Message().Sender.FirstName)
-        c.Reply(out_str)
+	c.Reply(out_str)
 	return nil
 }
-
-

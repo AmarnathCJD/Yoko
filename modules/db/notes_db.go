@@ -13,13 +13,22 @@ var (
 	notes_db = database.Collection("notde")
 )
 
-func deduplicate_note(s bson.A, x string) bson.A {
-	for i, v := range s {
-		if v.(bson.M)["name"].(string) == x {
-			return append(s[:i], s[i+1:]...)
+func stringInSlice(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
 		}
 	}
-	return s
+	return false
+}
+
+func deduplicate_note(s bson.A, x string) (bson.A, bool) {
+	for i, v := range s {
+		if v.(bson.M)["name"].(string) == x {
+			return append(s[:i], s[i+1:]...), true
+		}
+	}
+	return s, false
 }
 
 func Save_note(chat_id int64, name string, note string, file []string) bool {
@@ -36,7 +45,7 @@ func Save_note(chat_id int64, name string, note string, file []string) bool {
 		notes.Decode(&dec_note)
 		notez := dec_note["notes"].(bson.A)
 		new_note := bson.M{"name": name, "note": note, "file": file}
-		notez = deduplicate_note(notez, name)
+		notez, _ = deduplicate_note(notez, name)
 		notez = append(notez, new_note)
 		notes_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"notes", notez}}}}, opts)
 	}
@@ -70,4 +79,18 @@ func Get_note(chat_id int64, name string) bson.M {
 		}
 	}
 	return nil
+}
+
+func Del_note(chat_id int64, name string) bool {
+	filter := bson.M{"chat_id": chat_id}
+	f := notes_db.FindOne(context.TODO(), filter)
+	if f.Err() != nil {
+		return false
+	}
+	var notes bson.M
+	f.Decode(&notes)
+	all_notes := notes["notes"].(bson.A)
+	FL, rm := deduplicate_note(all_notes, name)
+	notes_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"notes", FL}}}}, opts)
+	return rm
 }
