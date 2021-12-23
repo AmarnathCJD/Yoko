@@ -79,7 +79,7 @@ func ud_inline(c tb.Context) {
 						break
 					}
 					text := fmt.Sprintf("<b>%s:</b>\n\n%s\n\n<i>%s</i>", strings.Title(qarg[1]), defeniton, example)
-					rq := &tb.ArticleResult{ResultBase: tb.ResultBase{ReplyMarkup: inline_markup("ud")}, Title: "Result " + strconv.Itoa(i), Text: text, Description: defeniton.(string)}
+					rq := &tb.ArticleResult{ResultBase: tb.ResultBase{ReplyMarkup: inline_markup("ud")}, Title: strconv.Itoa(i) + ". " + qarg[1], Text: text, Description: defeniton.(string), ThumbURL: "https://te.legra.ph/file/658c83f2622fb2237fd82.jpg"}
 					results[i] = rq
 					results[i].SetResultID(strconv.Itoa(i))
 				}
