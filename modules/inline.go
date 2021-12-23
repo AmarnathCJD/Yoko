@@ -33,9 +33,9 @@ func gsearch_inline(c tb.Context) error {
 	search, _ := googlesearch.Search(ctx, qarg[1])
 	results := make(tb.Results, len(search))
 	for i, r := range search {
-          if desc, ok := r.Description; ok {
-		text := fmt.Sprintf("<b><a href='%s'>%s</a></b>\n%s", r.URL, r.Title, desc)
-		rq := &tb.ArticleResult{ResultBase: tb.ResultBase{ReplyMarkup: inline_markup("google")}, Title: r.Title, Text: text, Description: desc, HideURL: true, ThumbURL: "https://te.legra.ph/file/be8c347e07867d4547c6c.jpg"}
+          if r.Description != nil{
+		text := fmt.Sprintf("<b><a href='%s'>%s</a></b>\n%s", r.URL, r.Title, r.Description)
+		rq := &tb.ArticleResult{ResultBase: tb.ResultBase{ReplyMarkup: inline_markup("google")}, Title: r.Title, Text: text, Description: r.Description, ThumbURL: "https://te.legra.ph/file/be8c347e07867d4547c6c.jpg"}
 		results[i] = rq
 		results[i].SetResultID(strconv.Itoa(i))
 	}
