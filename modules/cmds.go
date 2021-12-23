@@ -45,6 +45,5 @@ func RegHandlers() {
 	bot.Bot.Handle("/sban", Ban)
 	bot.Bot.Handle("/dban", Ban)
 	// inline.go
-	bot.Bot.Handle(tb.OnQuery, ud_inline)
-	bot.Bot.Handle(tb.OnQuery, gsearch_inline)
+	bot.Bot.Handle(tb.OnQuery, InlineQueryHandler)
 }
