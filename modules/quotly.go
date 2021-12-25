@@ -11,4 +11,5 @@ func Quotly(c tb.Context) error {
     c.Reply("This has to be send while replying to a message.")
     return nil
  }
+ return nil
 }
