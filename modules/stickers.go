@@ -7,7 +7,7 @@ import (
 )
 
 func AddSticker(c tb.Context) error {
-	x := db.Get_user_pack(c.Sender().ID)
-	fmt.Println(x)
+	x, p := db.Get_user_pack(c.Sender().ID)
+	fmt.Println(x, p)
         return nil
 }
