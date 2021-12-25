@@ -3,6 +3,7 @@ package modules
 import (
   tb "gopkg.in/tucnak/telebot.v3"
   "go.mongodb.org/mongo-driver/bson"
+ "fmt"
 )
 var COLORS = bson.M{
     "aliceblue": "#f0f8ff",
@@ -160,7 +161,9 @@ func Quotly(c tb.Context) error {
     c.Reply("This has to be send while replying to a message.")
     return nil
  }
- 
+ for x := range COLORS {
+    fmt.Println(x)
+ }
  return nil
 }
 
