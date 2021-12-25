@@ -10,7 +10,7 @@ func AddSticker(c tb.Context) error {
 	pack, _ := db.Get_user_pack(c.Sender().ID)
         fmt.Println(c.Message().Sticker)
 	if !pack {
-		err := c.Bot().CreateStickerSet(c.Sender(), tb.StickerSet{Name: "smd", Title: "stfu", Stickers: []tb.Sticker{*c.Message().ReplyTo.Sticker}, PNG: &c.Message().ReplyTo.Sticker.File})
+		err := c.Bot().CreateStickerSet(c.Sender(), tb.StickerSet{Name: fmt.Sprintf("%d_%d_by_Yoko_Robot", c.Sender().ID, 1), Title: "stfu", Stickers: []tb.Sticker{*c.Message().ReplyTo.Sticker}, PNG: &c.Message().ReplyTo.Sticker.File})
 		fmt.Println(err)
 	}
 	return nil
