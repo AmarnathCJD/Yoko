@@ -7,7 +7,9 @@ import (
 )
 
 func AddSticker(c tb.Context) error {
-	x, p := db.Get_user_pack(c.Sender().ID)
-	fmt.Println(x, p)
+	pack, count := db.Get_user_pack(c.Sender().ID)
+	if !pack {
+           err := c.Bot().CreateStickerSet(c.Sender(), &tb.StickerSet{Name: "smd", Title: "stfu", Stickers: []tb.Sticker{c.Sticker()}})
+           fmt.Println(err)
         return nil
 }
