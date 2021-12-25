@@ -8,7 +8,7 @@ import (
 
 var stickers = database.Collection("stick")
 
-func add_sticker(user_id int64, name string) {
+func Add_sticker(user_id int64, name string) {
 	filter := bson.M{"user_id": user_id}
 	s := stickers.FindOne(context.TODO(), filter)
 	if s.Err() != nil {
@@ -28,7 +28,7 @@ func add_sticker(user_id int64, name string) {
 
 }
 
-func get_user_pack(user_id int64) (bool, int) {
+func Get_user_pack(user_id int64) (bool, int) {
 	filter := bson.M{"user_id": user_id}
 	s := stickers.FindOne(context.TODO(), filter)
 	if s.Err() != nil {
