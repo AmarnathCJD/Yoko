@@ -46,4 +46,6 @@ func RegHandlers() {
 	bot.Bot.Handle("/dban", Ban)
 	// inline.go
 	bot.Bot.Handle(tb.OnQuery, InlineQueryHandler)
+        // quotly.go
+        bot.Bot.Handle("/qt", Quotly)
 }
