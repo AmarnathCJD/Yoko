@@ -1,5 +1,9 @@
 package modules
 
+import (
+  tb "gopkg.in/tucnak/telebot.v3"
+)
+
 var quote_api = "https://bot.lyo.su/quote/generate"
 
 func Quotly(c tb.Context) error {
