@@ -9,7 +9,7 @@ import (
 func AddSticker(c tb.Context) error {
 	pack, _ := db.Get_user_pack(c.Sender().ID)
 	if !pack {
-		err := c.Bot().CreateStickerSet(c.Sender(), tb.StickerSet{Name: fmt.Sprintf("b%d_%d_by_Yoko_Robot", c.Sender().ID, 1), Title: fmt.Sprintf("%s's kang pack", c.Sender().FirstName) , Stickers: []tb.Sticker{*c.Message().ReplyTo.Sticker}, PNG: &c.Message().ReplyTo.Sticker.File, Emojis: "😙"})
+		err := c.Bot().CreateStickerSet(c.Sender(), tb.StickerSet{Name: fmt.Sprintf("b%d_%d_by_Yoko_Robot", c.Sender().ID, 1), Title: fmt.Sprintf("%s's kang pack", c.Sender().FirstName) , Stickers: []tb.Sticker{*c.Message().ReplyTo.Sticker}, Emojis: "😙", Animated: true})
 		fmt.Println(err)
 	}
 	return nil
