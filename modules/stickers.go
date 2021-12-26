@@ -20,6 +20,7 @@ func AddSticker(c tb.Context) error {
                    c.Reply(fmt.Sprintf("Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji))
                 } else {
                    c.Reply(err.Error())
+                }
 	}
 	return nil
 }
