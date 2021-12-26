@@ -44,7 +44,7 @@ func Update_count(user_id int64, name string) {
 	var stick bson.M
 	s.Decode(&stick)
 	packs := stick["packs"].(bson.A)
-	c := packs[len(packs)-1].(bson.M)["count"].(int)
+	c := packs[len(packs)-1].(bson.M)["count"].(int32)
 	c++
 	packs[len(packs)-1] = bson.M{"name": packs[len(packs)-1].(bson.M)["name"].(string), "count": c}
 	stickers.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"packs", packs}}}}, opts)
