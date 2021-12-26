@@ -105,21 +105,11 @@ func Info(c tb.Context) error {
 	return nil
 }
 
-func gp(m *tb.Message) {
-	u, _ := get_user(m)
-	x, err := b.ChatMemberOf(m.Chat, u)
-	fmt.Println(x.Rights)
-	if err != nil {
-		b.Reply(m, string(err.Error()))
-		return
-	}
-	b.Reply(m, fmt.Sprint(x.Rights))
-}
-
 func IMDb(c tb.Context) error {
 	m := c.Message()
 	client := http.DefaultClient
 	results, _ := imdb.SearchTitle(client, m.Payload)
+	fmt.Println(results)
 	title, _ := imdb.NewTitle(client, results[0].ID)
 	movie := fmt.Sprintf("<b><u>%s</u></b>\n<b>Type:</b> %s\n<b>Year:</b> %s\n<b>AKA:</b> %s\n<b>Duration:</b> %s\n<b>Rating:</b> %s/10\n<b>Genre:</b> %s\n\n<code>%s</code>\n<b>Source ---> IMDb</b>", title.Name, title.Type, strconv.Itoa(title.Year), title.AKA[0], title.Duration, title.Rating, strings.Join(title.Genres, ", "), title.Description)
 	menu.Inline(menu.Row(menu.URL("ImDB", fmt.Sprintf("https://m.imdb.com/title/%s/", title.ID))))
@@ -128,43 +118,49 @@ func IMDb(c tb.Context) error {
 }
 
 func Crypto(c tb.Context) error {
-	m := c.Message()
-	resp, _ := myClient.Get("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Clitecoin%2Cdogecoin%2Cbabydoge%2Cethereum%2Cxrp&vs_currencies=usd%2Cinr")
+	resp, err := myClient.Get("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Clitecoin%2Cdogecoin%2Cbabydoge%2Cethereum%2Cxrp&vs_currencies=usd%2Cinr")
+	if err != nil {
+		c.Reply(err.Error())
+		return nil
+	}
 	defer resp.Body.Close()
 	var r mapType
 	json.NewDecoder(resp.Body).Decode(&r)
 	crypto := fmt.Sprintf("<b>Crypto Prices</b>\n%s: %d$\n%s: %d$\n%s: %f$\n%s: %d$\n%s: %f$", "Bitcoin", int(r["bitcoin"].(map[string]interface{})["usd"].(float64)), "Ethereum", int(r["ethereum"].(map[string]interface{})["usd"].(float64)), "Dogecoin", r["dogecoin"].(map[string]interface{})["usd"].(float64), "Litecoin", int(r["litecoin"].(map[string]interface{})["usd"].(float64)), "Babydoge", r["babydoge"].(map[string]interface{})["usd"].(float64))
-	b.Reply(m, crypto)
+	c.Reply(crypto)
 	return nil
 }
 
 func Translate(c tb.Context) error {
-	m := c.Message()
 	text, lang := "", "en"
-	if !m.IsReply() && m.Payload == string("") {
-		b.Reply(m, "Provide the text to be translated!")
+	if !c.Message().IsReply() && c.Message().Payload == string("") {
+		c.Reply("Provide the text to be translated!")
 		return nil
-	} else if m.IsReply() {
-		text = m.ReplyTo.Text
-		if m.Payload != string("") {
-			lang = strings.SplitN(m.Payload, " ", 2)[0]
+	} else if c.Message().IsReply() {
+		text = c.Message().ReplyTo.Text
+		if c.Message().Payload != string("") {
+			lang = strings.SplitN(c.Message().Payload, " ", 2)[0]
 		}
-	} else if m.Payload != string("") {
-		args := strings.SplitN(m.Payload, " ", 2)
+	} else if c.Message().Payload != string("") {
+		args := strings.SplitN(c.Message().Payload, " ", 2)
 		if len(args) == 2 && len([]rune(args[0])) == 2 {
 			lang, text = args[0], args[1]
 		} else {
-			text = m.Payload
+			text = c.Message().Payload
 		}
 	}
 	url_d := "https://script.google.com/macros/s/AKfycbzFXVfjwX_RB6XkjLpwlMIXl_IVeoqaYnfhRf774xknBAcV00Ef3OPK89uS7TBFppwfVg/exec"
 	data := url.Values{"text": {text}, "source": {""}, "target": {lang}}
-	rq, _ := http.PostForm(url_d, data)
+	rq, err := http.PostForm(url_d, data)
+	if err != nil {
+		c.Reply(err.Error())
+		return nil
+	}
 	defer rq.Body.Close()
 	var r mapType
 	json.NewDecoder(rq.Body).Decode(&r)
 	translated := fmt.Sprintf("<b>translated to %s:</b>\n<code>%s</code>", lang, r["result"].(string))
-	b.Reply(m, translated)
+	c.Reply(translated)
 	return nil
 }
 

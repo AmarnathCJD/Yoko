@@ -28,7 +28,11 @@ func pin_message(c tb.Context) error {
 		}
 	}
 	if !silent {
-		c.Bot().Pin(c.Message().ReplyTo)
+		err := c.Bot().Pin(c.Message().ReplyTo)
+		if err != nil {
+			c.Reply("Failed to pin, " + err.Error())
+			return nil
+		}
 	} else {
 		c.Bot().Pin(c.Message().ReplyTo, tb.Silent)
 	}

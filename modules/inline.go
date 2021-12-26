@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/StalkR/imdb"
 	googlesearch "github.com/rocketlaunchr/google-search"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
@@ -22,14 +23,37 @@ func inline_markup(query string) *tb.InlineKeyboardMarkup {
 
 func InlineQueryHandler(c tb.Context) error {
 	query := c.Query().Text
-	if strings.HasPrefix(query, "google") {
+	if query == string("") {
+		InlineMainMenu(c)
+		return nil
+	} else if strings.HasPrefix(query, "google") {
 		gsearch_inline(c)
 		return nil
 	} else if strings.HasPrefix(query, "ud") {
 		ud_inline(c)
 		return nil
+	} else if strings.HasPrefix(query, "imdb") {
+		imdb_inline(c)
+		return nil
 	}
 	return nil
+}
+
+func InlineMainMenu(c tb.Context) {
+	text := "Inline Query Help Menu"
+	btns := &tb.InlineKeyboardMarkup{}
+	btns.InlineKeyboard = [][]tb.InlineButton{{tb.InlineButton{
+		Text:            "Google Search",
+		InlineQueryChat: "google ",
+	}, tb.InlineButton{Text: "UD Search", InlineQueryChat: "ud "}}}
+	result := &tb.ArticleResult{ResultBase: tb.ResultBase{ReplyMarkup: btns}, Title: text, Description: "Here is the inline help menu", Text: text}
+	results := make(tb.Results, 1)
+	results[0] = result
+	results[0].SetResultID("0")
+	c.Bot().Answer(c.Query(), &tb.QueryResponse{
+		Results:   results,
+		CacheTime: 60,
+	})
 }
 
 func gsearch_inline(c tb.Context) {
@@ -44,7 +68,7 @@ func gsearch_inline(c tb.Context) {
 	for i, r := range search {
 		if r.Title != "" {
 			text := fmt.Sprintf("<b><a href='%s'>%s</a></b>\n%s", r.URL, r.Title, r.Description)
-			rq := &tb.ArticleResult{ResultBase: tb.ResultBase{ReplyMarkup: inline_markup("google")}, Title: r.Title, Text: text, Description: r.Description, ThumbURL: "https://te.legra.ph/file/be8c347e07867d4547c6c.jpg"}
+			rq := &tb.ArticleResult{ResultBase: tb.ResultBase{ReplyMarkup: inline_markup("google"), Content: &tb.InputTextMessageContent{Text: text, DisablePreview: true}}, Title: r.Title, Description: r.Description, ThumbURL: "https://te.legra.ph/file/be8c347e07867d4547c6c.jpg"}
 			results[i] = rq
 			results[i].SetResultID(strconv.Itoa(i))
 		}
@@ -53,7 +77,6 @@ func gsearch_inline(c tb.Context) {
 		Results:   results,
 		CacheTime: 60,
 	})
-	return
 }
 
 func ud_inline(c tb.Context) {
@@ -88,5 +111,27 @@ func ud_inline(c tb.Context) {
 		Results:   results,
 		CacheTime: 60,
 	})
-	return
+}
+
+func imdb_inline(c tb.Context) {
+	query := c.Query().Text
+	qarg := strings.SplitN(query, " ", 2)
+	if len(qarg) == 1 {
+		return
+	}
+	result, _ := imdb.SearchTitle(myClient, qarg[1])
+	results := make(tb.Results, len(result))
+	for i, r := range result {
+		if r.Name != "" {
+			text := fmt.Sprintf("<b><a href='%s'>%s</a></b>\n%s", r.URL, r.Name, r.Description)
+			rq := &tb.ArticleResult{ResultBase: tb.ResultBase{ReplyMarkup: inline_markup("google"), Content: &tb.InputTextMessageContent{Text: text, DisablePreview: true}}, Title: r.Name, Description: r.Description, ThumbURL: "https://te.legra.ph/file/be8c347e07867d4547c6c.jpg"}
+			results[i] = rq
+			results[i].SetResultID(strconv.Itoa(i))
+		}
+	}
+	fmt.Println(results)
+	c.Bot().Answer(c.Query(), &tb.QueryResponse{
+		Results:   results,
+		CacheTime: 60,
+	})
 }

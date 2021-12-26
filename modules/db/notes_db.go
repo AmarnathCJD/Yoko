@@ -11,6 +11,7 @@ var (
 	database = db.Database("go")
 	opts     = options.Update().SetUpsert(true)
 	notes_db = database.Collection("notde")
+	pnote    = database.Collection("pnote")
 )
 
 func stringInSlice(a string, list []string) bool {
@@ -93,4 +94,25 @@ func Del_note(chat_id int64, name string) bool {
 	FL, rm := deduplicate_note(all_notes, name)
 	notes_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"notes", FL}}}}, opts)
 	return rm
+}
+
+func Set_pnote(chat_id int64, mode bool) {
+	filter := bson.M{"chat_id": chat_id}
+	pnote.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"mode", mode}}}}, opts)
+}
+
+func Pnote_settings(chat_id int64) bool {
+	filter := bson.M{"chat_id": chat_id}
+	f := pnote.FindOne(context.TODO(), filter)
+	if f.Err() != nil {
+		return false
+	}
+	var pn bson.M
+	f.Decode(&pn)
+	return pn["mode"].(bool)
+}
+
+func Del_all_notes(chat_id int64) {
+	filter := bson.M{"chat_id": chat_id}
+	notes_db.DeleteOne(context.TODO(), filter)
 }

@@ -206,6 +206,29 @@ func Ban_users(next tb.HandlerFunc) tb.HandlerFunc {
 	}
 }
 
+func Pin_messages(next tb.HandlerFunc) tb.HandlerFunc {
+	return func(c tb.Context) error {
+		if c.Message().Private() {
+			return next(c)
+		}
+		p, _ := c.Bot().ChatMemberOf(c.Chat(), c.Sender())
+		if p.Role == "member" {
+			c.Reply("You need to be an admin to do this!")
+			return nil
+		} else if p.Role == "creator" {
+			return next(c)
+		} else if p.Role == "administrator" {
+			if p.Rights.CanPinMessages {
+				return next(c)
+			} else {
+				c.Reply("You are missing the following rights to use this command: CanPinMessages")
+				return nil
+			}
+		}
+		return nil
+	}
+}
+
 func Extract_time(c tb.Context, time_val string) int64 {
 	has_suffix := false
 	for _, arg := range []string{"m", "h", "d", "w"} {
