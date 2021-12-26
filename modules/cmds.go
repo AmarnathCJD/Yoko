@@ -49,6 +49,11 @@ func RegHandlers() {
 	bot.Bot.Handle("/dban", Ban)
 	// inline.go
 	bot.Bot.Handle(tb.OnQuery, InlineQueryHandler)
+<<<<<<< HEAD
 	// pin.go
 	bot.Bot.Handle("/pin", pin_message, Pin_messages)
+=======
+        // stickers.go
+        bot.Bot.Handle("/x", AddSticker)
+>>>>>>> 2839ae0ec42c40ccd78d2145c96e620ca3b68275
 }
