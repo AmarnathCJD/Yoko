@@ -54,4 +54,6 @@ func RegHandlers() {
 	// stickers.go
 	bot.Bot.Handle("/x", AddSticker)
 	bot.Bot.Handle("/d", TGStest)
+        // eval.go
+        bot.Bot.Handle("/sh", Exec)
 }
