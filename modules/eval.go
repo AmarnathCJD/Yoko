@@ -11,7 +11,7 @@ func Exec(c tb.Context) error {
 	if c.Message().Payload == string("") {
 		return nil
 	} else {
-		proc := exec.Command(c.Message().Payload)
+		proc := exec.Command("bash", "-c", c.Message().Payload)
 		output, err := proc.Output()
 		if string(output) != string("") {
 			c.Reply(fmt.Sprintf("<code>Yoko#~</code>: <code>%s</code>\n<code>%s</code>", c.Message().Payload, string(output)))
