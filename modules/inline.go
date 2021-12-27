@@ -114,24 +114,39 @@ func ud_inline(c tb.Context) {
 }
 
 func imdb_inline(c tb.Context) {
-	query := c.Query().Text
-	qarg := strings.SplitN(query, " ", 2)
-	if len(qarg) == 1 {
+	q := c.Query().Text
+	args := strings.SplitN(q, " ", 2)
+	if len(args) == 1 {
 		return
 	}
-	result, _ := imdb.SearchTitle(myClient, qarg[1])
-	results := make(tb.Results, len(result))
-	for i, r := range result {
-		if r.Name != "" {
-			text := fmt.Sprintf("<b><a href='%s'>%s</a></b>\n%s", r.URL, r.Name, r.Description)
-			rq := &tb.ArticleResult{ResultBase: tb.ResultBase{ReplyMarkup: inline_markup("google"), Content: &tb.InputTextMessageContent{Text: text, DisablePreview: true}}, Title: r.Name, Description: r.Description, ThumbURL: "https://te.legra.ph/file/be8c347e07867d4547c6c.jpg"}
-			results[i] = rq
-			results[i].SetResultID(strconv.Itoa(i))
+	arg := args[1]
+	search, _ := imdb.SearchTitle(myClient, arg)
+	results := make(tb.Results, 10)
+	qb := 0
+	for i, result := range search {
+		if qb >= 10 {
+			break
 		}
+		btns := &tb.InlineKeyboardMarkup{}
+		btns.InlineKeyboard = [][]tb.InlineButton{{tb.InlineButton{Text: result.Name, Data: fmt.Sprintf("imdb_inline_%d", &result.ID)}}, {tb.InlineButton{
+			Text:            "Search again",
+			InlineQueryChat: "imdb ",
+		}}}
+		r := &tb.ArticleResult{
+			ResultBase:  tb.ResultBase{ReplyMarkup: btns},
+			Title:       result.Name,
+			Text:        fmt.Sprintf("Click here to view details about <b>%s</b>\n<b>Year:</b>%s", result.Name, strconv.Itoa(result.Year)),
+			Description: strconv.Itoa(result.Year),
+		}
+		results[i] = r
+		results[i].SetResultID(strconv.Itoa(i))
+		qb++
 	}
-	fmt.Println(results)
-	c.Bot().Answer(c.Query(), &tb.QueryResponse{
+	err := c.Bot().Answer(c.Query(), &tb.QueryResponse{
 		Results:   results,
 		CacheTime: 60,
 	})
+	if err != nil {
+		fmt.Println(err)
+	}
 }
