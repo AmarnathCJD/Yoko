@@ -1,6 +1,7 @@
 package modules
 
 import (
+        "bytes"
 	"fmt"
 	"os/exec"
 
@@ -11,14 +12,18 @@ func Exec(c tb.Context) error {
 	if c.Message().Payload == string("") {
 		return nil
 	} else {
+                var stdout bytes.Buffer
+                var stderr bytes.Buffer
 		proc := exec.Command("bash", "-c", c.Message().Payload)
-		output, err := proc.Output()
-		if string(output) != string("") {
-			c.Reply(fmt.Sprintf("<code>Yoko#~</code>: <code>%s</code>\n<code>%s</code>", c.Message().Payload, string(output)))
-		} else if err.Error() != string("") {
+                proc.Stdout = &stdout
+                proc.Stderr = &stderr
+		err := proc.Run()
+		if stdout.String() != string("") {
+			c.Reply(fmt.Sprintf("<code>Yoko#~</code>: <code>%s</code>\n<code>%s</code>", c.Message().Payload, stdout.String()))
+		} else if stderr.String() != string("") {
+			c.Reply(fmt.Sprintf("<code>Yoko#~</code>: <code>%s</code>\n<code>%s</code>", c.Message().Payload, stderr.String()))
+		} else if err != nil {
 			c.Reply(fmt.Sprintf("<code>Yoko#~</code>: <code>%s</code>\n<code>%s</code>", c.Message().Payload, err.Error()))
-		} else {
-			c.Reply(fmt.Sprintf("<code>Yoko#~</code>: <code>%s</code>\n<code>%s</code>", c.Message().Payload, "No Output/Error"))
 		}
 	}
 	return nil
