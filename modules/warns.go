@@ -25,7 +25,7 @@ func WARN(c tb.Context) error {
 		c.Reply(err.Error())
 		return nil
 	}
-	if p.Role != "member" {
+	if stringInSlice(p.Role, []string{"administrator", "creator"}) {
 		c.Reply("✨ I'm not going to warn an admin!")
 		return nil
 	}
