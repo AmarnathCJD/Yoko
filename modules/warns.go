@@ -35,7 +35,7 @@ func WARN(c tb.Context) error {
 	}
 	if !exceeded {
                 menu.Inline(menu.Row(menu.Data("Remove warn (admin only)", fmt.Sprintf("unwarn_btn_%d", user.ID))))
-		c.Reply(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a> have <b>%d/%d</b> warnings... watch out!\nReason for last warnings: %s", user.ID, user.FirstName, count, limit, extra), menu)
+		c.Reply(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a> has %d/%d warnings; be careful!\n<b>Reason</b>: %s", user.ID, user.FirstName, count, limit, extra), menu)
 		return nil
 	}
 	return nil
