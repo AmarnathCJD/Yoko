@@ -52,7 +52,7 @@ func RegHandlers() {
 	// pin.go
 	bot.Bot.Handle("/pin", pin_message, Pin_messages)
 	// stickers.go
-	bot.Bot.Handle("/x", AddSticker)
+	bot.Bot.Handle("/kang", AddSticker)
 	bot.Bot.Handle("/d", TGStest)
         // eval.go
         bot.Bot.Handle("/sh", Exec)
