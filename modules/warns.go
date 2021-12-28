@@ -1,11 +1,14 @@
 package modules
 
 import (
+	"fmt"
 	"strings"
-        "fmt"
+
 	db "github.com/amarnathcjd/yoko/modules/db"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
+
+var unwarn_btn = menu.Inline(menu.Row(menu.Data("Remove warn (admin only)")))
 
 func WARN(c tb.Context) error {
 	cmd := strings.SplitN(c.Message().Text, " ", 2)[0]
@@ -19,15 +22,21 @@ func WARN(c tb.Context) error {
 		return nil
 	}
 	p, err := c.Bot().ChatMemberOf(c.Chat(), user)
-        if err != nil {
-           c.Reply(err.Error())
-           return nil
-        }
+	if err != nil {
+		c.Reply(err.Error())
+		return nil
+	}
 	if p.Role != "member" {
 		c.Reply("✨ I'm not going to warn an admin!")
 		return nil
 	}
-	exceeded := db.Warn_user(c.Chat().ID, user.ID, extra)
-        fmt.Println(exceeded)
-        return nil
+	exceeded, limit, count := db.Warn_user(c.Chat().ID, user.ID, extra)
+	if extra == string("") {
+		extra = "No reason given."
+	}
+	if !exceeded {
+		c.Reply(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a> have <b>%d/%d</b> warnings... watch out!\nReason for last warnings: %s", user.ID, user.FirstName, count, limit, reason))
+		return nil
+	}
+	return nil
 }
