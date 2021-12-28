@@ -31,13 +31,13 @@ func IndexInSlice(list bson.A, index string, value int64) (bool, int) {
 
 var WARN_SETTINGS = __load_warn_settings()
 
-func Warn_user(chat_id int64, user_id int64, reason string) bool {
+func Warn_user(chat_id int64, user_id int64, reason string) (bool, int32) {
 	filter := bson.M{"chat_id": chat_id, "user_id": user_id}
 	w := warns.FindOne(context.TODO(), filter)
 	if w.Err() != nil {
 		warner := bson.M{"chat_id": chat_id, "user_id": user_id, "reasons": []string{reason}, "count": 1}
 		warns.InsertOne(context.TODO(), warner)
-		return false
+		return false, 3
 	} else {
 		var ww bson.M
 		w.Decode(&ww)
@@ -52,9 +52,9 @@ func Warn_user(chat_id int64, user_id int64, reason string) bool {
 		}
 		if count >= limit {
 			warns.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"count", 0}}}}, opts)
-			return true
+			return true, limit
 		} else {
-			return false
+			return false, limit
 		}
 	}
 }
