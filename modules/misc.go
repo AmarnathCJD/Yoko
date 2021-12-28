@@ -3,14 +3,17 @@ package modules
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 	"time"
 	"unicode"
 
 	"github.com/StalkR/imdb"
+	tg "github.com/TechMinerApps/telegraph"
 	"go.mongodb.org/mongo-driver/bson"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
@@ -214,5 +217,47 @@ func Bin_check(c tb.Context) error {
 	out_str += "\n<b>━━━━━━━━━━━━━</b>"
 	out_str += fmt.Sprintf("\nChecked by <a href='tg://user?id=%s'>%s</a>", strconv.Itoa(int(c.Message().Sender.ID)), c.Message().Sender.FirstName)
 	c.Reply(out_str)
+	return nil
+}
+
+func telegraph(c tb.Context) error {
+	text := c.Message().Payload
+	title := time.Now().Format("01-02-2006 15:04:05 Monday")
+	if c.Message().IsReply() {
+		if c.Message().ReplyTo.Text != string("") {
+			text = c.Message().ReplyTo.Text
+			if c.Message().Payload != string("") {
+				title = c.Message().Payload
+			}
+		} else if c.Message().ReplyTo.Document != nil {
+			c.Bot().Download(&c.Message().ReplyTo.Document.File, "doc.txt")
+			data, err := ioutil.ReadFile("doc.txt")
+			if err != nil {
+				c.Reply(err.Error())
+				return nil
+			} else {
+				text = string(data)
+				if c.Message().Payload != string("") {
+					title = c.Message().Payload
+				}
+			}
+			os.Remove("doc.txt")
+		}
+	}
+	if text == string("") {
+		c.Reply("No text was provided!")
+		return nil
+	}
+	client := tg.NewClient()
+	client.CreateAccount(tg.Account{ShortName: "Yoko", AuthorName: c.Sender().FirstName})
+	content, _ := client.ContentFormat(text)
+	pageData := tg.Page{
+		Title:   title,
+		Content: content,
+	}
+	page, err := client.CreatePage(pageData, true)
+	fmt.Println(err)
+	menu.Inline(menu.Row(menu.URL("Telegraph", page.URL)))
+	c.Reply(fmt.Sprintf("Pasted to <a href='%s'>Tele.graph.org</a>!", page.URL), &tb.SendOptions{DisableWebPagePreview: true, ReplyMarkup: menu})
 	return nil
 }

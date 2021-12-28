@@ -261,3 +261,10 @@ func Extract_time(c tb.Context, time_val string) int64 {
 	}
 	return int64(bantime)
 }
+
+func firstN(s string, n int) string {
+	if len(s) > n {
+		return s[:n]
+	}
+	return s
+}

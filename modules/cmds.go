@@ -13,6 +13,7 @@ func RegHandlers() {
 	bot.Bot.Handle("/tr", Translate)
 	bot.Bot.Handle("/ud", Ud)
 	bot.Bot.Handle("/bin", Bin_check)
+	bot.Bot.Handle("/telegraph", telegraph)
 	// start.go
 	bot.Bot.Handle("/start", Start)
 	// notes.go
@@ -54,6 +55,6 @@ func RegHandlers() {
 	// stickers.go
 	bot.Bot.Handle("/kang", AddSticker)
 	bot.Bot.Handle("/d", TGStest)
-        // eval.go
-        bot.Bot.Handle("/sh", Exec)
+	// eval.go
+	bot.Bot.Handle("/sh", Exec)
 }

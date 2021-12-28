@@ -1,7 +1,7 @@
 package modules
 
 import (
-        "bytes"
+	"bytes"
 	"fmt"
 	"os/exec"
 
@@ -12,11 +12,11 @@ func Exec(c tb.Context) error {
 	if c.Message().Payload == string("") {
 		return nil
 	} else {
-                var stdout bytes.Buffer
-                var stderr bytes.Buffer
+		var stdout bytes.Buffer
+		var stderr bytes.Buffer
 		proc := exec.Command("bash", "-c", c.Message().Payload)
-                proc.Stdout = &stdout
-                proc.Stderr = &stderr
+		proc.Stdout = &stdout
+		proc.Stderr = &stderr
 		err := proc.Run()
 		if stdout.String() != string("") {
 			c.Reply(fmt.Sprintf("<code>Yoko#~</code>: <code>%s</code>\n<code>%s</code>", c.Message().Payload, stdout.String()))
