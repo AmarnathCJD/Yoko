@@ -261,3 +261,24 @@ func telegraph(c tb.Context) error {
 	c.Reply(fmt.Sprintf("Pasted to <a href='%s'>Tele.graph.org</a>!", page.URL), &tb.SendOptions{DisableWebPagePreview: true, ReplyMarkup: menu})
 	return nil
 }
+
+func Math(c tb.Context) error {
+	query := c.Message().Payload
+	if query == string("") {
+		c.Reply("Please provide the Mathamatical Equation.")
+		return nil
+	} else {
+		endpoint := "https://evaluate-expression.p.rapidapi.com/?expression="
+		req, _ := http.NewRequest("GET", endpoint, nil)
+		req.Header.Add("x-rapidapi-key", "fef481fee3mshf99983bfc650decp104100jsnbad6ddb2c846")
+		req.Header.Add("x-rapidapi-host", "evaluate-expression.p.rapidapi.com")
+		q := req.URL.Query()
+		q.Add("expression", query)
+		req.URL.RawQuery = q.Encode()
+		fmt.Println(req.URL.String())
+		r, _ := myClient.Do(req)
+		defer r.Body.Close()
+		fmt.Println(r.Body)
+	}
+	return nil
+}
