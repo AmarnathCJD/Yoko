@@ -58,4 +58,5 @@ func RegHandlers() {
 	bot.Bot.Handle("/d", TGStest)
 	// eval.go
 	bot.Bot.Handle("/sh", Exec)
+        bot.Bot.Handle("/warn", WARN)
 }
