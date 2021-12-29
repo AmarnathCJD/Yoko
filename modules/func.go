@@ -29,7 +29,6 @@ func parse_message(m *tb.Message) (string, string, []string) {
 		} else if len(args) == 2 {
 			if m.ReplyTo.Text != string("") {
 				note, name := m.ReplyTo.Text, args[1]
-                                fmt.Println(m.Entities)
 				note += buttons
 				return name, note, []string{file_id, file_type}
 			} else {
