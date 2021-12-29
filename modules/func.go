@@ -8,6 +8,7 @@ import (
 	"unicode"
 
 	"github.com/amarnathcjd/yoko/bot"
+	"github.com/gomarkdown/markdown"
 	"go.mongodb.org/mongo-driver/bson"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
@@ -73,6 +74,7 @@ func get_file(m *tb.Message) (string, string) {
 
 func unparse_message(file interface{}, note string, m *tb.Message) {
 	text, buttons := button_parser(note)
+	text = markdown.ToHTML([]byte(text), nil, nil)
 	if file != nil && file.(bson.A)[0] != string("") {
 		id, f := file.(bson.A)[0].(string), file.(bson.A)[1].(string)
 		if f == "document" {
