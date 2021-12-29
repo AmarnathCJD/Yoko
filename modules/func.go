@@ -75,6 +75,7 @@ func get_file(m *tb.Message) (string, string) {
 func unparse_message(file interface{}, note string, m *tb.Message) {
 	text, buttons := button_parser(note)
 	text = string(markdown.ToHTML([]byte(text), nil, nil))
+        text = strings.Replace(strings.Replace(text, "<p>", "", -1), "</p>", "", -1)
         fmt.Println(text)
 	if file != nil && file.(bson.A)[0] != string("") {
 		id, f := file.(bson.A)[0].(string), file.(bson.A)[1].(string)
