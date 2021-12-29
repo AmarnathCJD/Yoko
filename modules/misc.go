@@ -276,7 +276,10 @@ func Math(c tb.Context) error {
 		q.Add("expression", query)
 		req.URL.RawQuery = q.Encode()
 		fmt.Println(req.URL.String())
-		r, _ := myClient.Do(req)
+		r, err := myClient.Do(req)
+		if err != nil {
+			c.Reply(err.Error())
+		}
 		defer r.Body.Close()
 		fmt.Println(r.Body)
 	}
