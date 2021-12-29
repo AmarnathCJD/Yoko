@@ -4,7 +4,6 @@ go 1.17
 
 require (
 	github.com/StalkR/imdb v1.0.7
-	github.com/gomarkdown/markdown v0.0.0-20211212230626-5af6ad2f47df
 	go.mongodb.org/mongo-driver v1.8.1
 	gopkg.in/tucnak/telebot.v3 v3.0.0-20211217125808-d053f01c3002
 )
