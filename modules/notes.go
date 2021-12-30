@@ -76,17 +76,6 @@ func Hash_regex(next tb.HandlerFunc) tb.HandlerFunc {
 	}
 }
 
-func EchoPerReg(next tele.HandlerFunc) tele.HandlerFunc {
-         return func(c tele.Context) error {
-              exp := regexp.MustCompile("^اکو.*")
-              if exp.MatchString(c.Message().Text) {
-                        return next(c)
-              }
-              return nil
-       }
-}
-
-
 
 func Hash_note(c tb.Context) error {
 	args := strings.SplitN(c.Message().Text, "#", 2)
