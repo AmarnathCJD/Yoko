@@ -76,6 +76,7 @@ func Hash_regex(next tb.HandlerFunc) tb.HandlerFunc {
 	}
 }
 
+
 func Hash_note(c tb.Context) error {
 	args := strings.SplitN(c.Message().Text, "#", 2)
 	note := db.Get_note(c.Message().Chat.ID, args[1])
@@ -219,9 +220,9 @@ var notes_help = `✨ Here is the help for <b>Notes:<b>
 <b>-></b> <code>/clear notename</code>: clear note with this name
 <b>-></b> <code>/privatenote on/yes/off/no</code>: whether or not to send the note in PM. Write del besides on/off to delete hashtag message on group.
 <b>Note</b>
- <b>-</b> Only admins can use This module
- <b>-</b> To save a document (like photo, audio, etc.), reply to a document or media then type /save
- <b>-</b> Need help for parsing text? Check /markdownhelp
+<b>-</b> Only admins can use This module
+<b>-</b> To save a document (like photo, audio, etc.), reply to a document or media then type /save
+<b>-</b> Need help for parsing text? Check /markdownhelp
 Save data for future users with notes!
 Notes are great to save random tidbits of information; a phone number, a nice gif, a funny picture - anything!
 Also you can save a text/document with buttons, you can even save it in here.`
