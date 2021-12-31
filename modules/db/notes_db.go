@@ -39,7 +39,7 @@ func Save_note(chat_id int64, name string, note string, file []string) bool {
 		var notez bson.A
 		note_s := bson.M{"name": name, "note": note, "file": file}
 		notez = append(notez, note_s)
-		to_insert := bson.D{{"chat_id", chat_id}, {"notes", notez}}
+		to_insert := bson.D{{Key: "chat_id", Value: chat_id}, {Key: "notes", Value: notez}}
 		notes_db.InsertOne(context.TODO(), to_insert)
 	} else {
 		var dec_note bson.M
@@ -48,7 +48,7 @@ func Save_note(chat_id int64, name string, note string, file []string) bool {
 		new_note := bson.M{"name": name, "note": note, "file": file}
 		notez, _ = deduplicate_note(notez, name)
 		notez = append(notez, new_note)
-		notes_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"notes", notez}}}}, opts)
+		notes_db.UpdateOne(context.TODO(), filter, bson.D{{Key: "$set", Value: bson.D{{Key: "notes", Value: notez}}}}, opts)
 	}
 	return true
 }
@@ -92,13 +92,13 @@ func Del_note(chat_id int64, name string) bool {
 	f.Decode(&notes)
 	all_notes := notes["notes"].(bson.A)
 	FL, rm := deduplicate_note(all_notes, name)
-	notes_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"notes", FL}}}}, opts)
+	notes_db.UpdateOne(context.TODO(), filter, bson.D{{Key: "$set", Value: bson.D{{Key: "notes", Value: FL}}}}, opts)
 	return rm
 }
 
 func Set_pnote(chat_id int64, mode bool) {
 	filter := bson.M{"chat_id": chat_id}
-	pnote.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"mode", mode}}}}, opts)
+	pnote.UpdateOne(context.TODO(), filter, bson.D{{Key: "$set", Value: bson.D{{Key: "mode", Value: mode}}}}, opts)
 }
 
 func Pnote_settings(chat_id int64) bool {

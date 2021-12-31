@@ -14,13 +14,13 @@ func Add_sticker(user_id int64, name string) {
 	if s.Err() != nil {
 		var packs bson.A
 		packs = append(packs, bson.M{"name": name, "count": 1})
-		stickers.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"packs", packs}}}}, opts)
+		stickers.UpdateOne(context.TODO(), filter, bson.D{{Key: "$set", Value: bson.D{{Key: "packs", Value: packs}}}}, opts)
 	} else {
 		var stick bson.M
 		s.Decode(&stick)
 		packs := stick["packs"].(bson.A)
 		packs = append(packs, bson.M{"name": name, "count": 1})
-		stickers.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"packs", packs}}}}, opts)
+		stickers.UpdateOne(context.TODO(), filter, bson.D{{Key: "$set", Value: bson.D{{Key: "packs", Value: packs}}}}, opts)
 	}
 
 }
@@ -47,5 +47,5 @@ func Update_count(user_id int64, name string) {
 	c := packs[len(packs)-1].(bson.M)["count"].(int32)
 	c++
 	packs[len(packs)-1] = bson.M{"name": packs[len(packs)-1].(bson.M)["name"].(string), "count": c}
-	stickers.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"packs", packs}}}}, opts)
+	stickers.UpdateOne(context.TODO(), filter, bson.D{{Key: "$set", Value: bson.D{{Key: "packs", Value: packs}}}}, opts)
 }

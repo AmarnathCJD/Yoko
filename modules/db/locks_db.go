@@ -30,7 +30,7 @@ func Lock_item(chat_id int64, items []string) bool {
 	filter := bson.M{"chat_id": chat_id}
 	locked := locks_db.FindOne(context.TODO(), filter)
 	if locked.Err() != nil {
-		lock := bson.D{{"chat_id", chat_id}, {"locks", items}}
+		lock := bson.D{{Key: "chat_id", Value: chat_id}, {Key: "locks", Value: items}}
 		locks_db.InsertOne(context.TODO(), lock)
 	} else {
 		var lock_list bson.M
@@ -39,7 +39,7 @@ func Lock_item(chat_id int64, items []string) bool {
 		for _, lock := range items {
 			new_lock = append(new_lock, lock)
 		}
-		locks_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"locks", new_lock}}}}, opts)
+		locks_db.UpdateOne(context.TODO(), filter, bson.D{{Key: "$set", Value: bson.D{{Key: "locks", Value: new_lock}}}}, opts)
 	}
 	return true
 }
@@ -56,7 +56,7 @@ func Unlock_item(chat_id int64, items []string) bool {
 		for _, lock := range items {
 			new_lock = remove(new_lock, lock)
 		}
-		locks_db.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"locks", new_lock}}}}, opts)
+		locks_db.UpdateOne(context.TODO(), filter, bson.D{{Key: "$set", Value: bson.D{{Key: "locks", Value: new_lock}}}}, opts)
 	}
 	return true
 }

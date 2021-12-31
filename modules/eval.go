@@ -42,14 +42,17 @@ func Eval(c tb.Context) error {
 	q := req.URL.Query()
 	q.Add("code", "package main\n"+cmd[1])
 	req.URL.RawQuery = q.Encode()
-	resp, _ := myClient.Do(req)
+	resp, err := myClient.Do(req)
+	if err != nil {
+		c.Reply(err.Error())
+	}
 	defer resp.Body.Close()
 	var body mapType
 	json.NewDecoder(resp.Body).Decode(&body)
 	if body["errors"].(string) != string("") {
-		c.Reply(fmt.Sprintf("<b>►</b> EvalGO\n<code>%s</code>\n\n<b>►</b> Output\n<code>%s</code>", cmd[1], body["errors"].(string)))
+		c.Reply(fmt.Sprintf("<b>► EvalGo</b>\n<code>%s</code>\n\n<b>►</b> Output\n<code>%s</code>", cmd[1], body["errors"].(string)))
 	} else if body["output"] != string("") {
-		c.Reply(fmt.Sprintf("<b>►</b> EvalGO\n<code>%s</code>\n\n<b></b>► Output\n<code>%s</code>", cmd[1], body["output"].(string)))
+		c.Reply(fmt.Sprintf("<b>► EvalGo</b>\n<code>%s</code>\n\n<b></b>► Output\n<code>%s</code>", cmd[1], body["output"].(string)))
 	}
 	return nil
 }
