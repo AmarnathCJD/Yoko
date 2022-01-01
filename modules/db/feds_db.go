@@ -55,11 +55,11 @@ func Get_fed_by_owner(user_id int64) (bool, string, string) {
 	var fed_info bson.M
         fed_id := ""
 	fed.Decode(&fed_info)
-        if fid, ok := fed_info['fed_id'] ; ok {
-           fed_id = fid.(string)
-        }
-        fmt.Println(fed_id)
-	return true, fed_id, fed_info["fedname"].(string)
+        fed_id := fed_info["fed_id"].(string)
+        fmt.Println(1)
+        fedname := fed_info["fedname"].(string)
+        fmt.Println(2)
+	return true, fed_id, fedname
 }
 
 func Delete_fed(fed_id string) {
