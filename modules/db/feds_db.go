@@ -42,7 +42,10 @@ var fbans = database.Collection("fbani1")
 func Make_new_fed(user_id int64, fedname string) (string, string) {
 	uid := uuid.New().String()
 	filter := bson.M{"user_id": user_id}
-	feds.UpdateOne(context.TODO(), filter, bson.D{{Key: "$set", Value: bson.D{{Key: "fed_id", Value: uid}, {Key: "fedname", Value: fedname}, {Key: "flog", Value: nil}, {Key: "chats", Value: []int64{}}, {Key: "report", Value: true}, {Key: "fadmins", Value: []int64{}}}}}, opts)
+	err := feds.UpdateOne(context.TODO(), filter, bson.D{{Key: "$set", Value: bson.D{{Key: "fed_id", Value: uid}, {Key: "fedname", Value: fedname}, {Key: "flog", Value: nil}, {Key: "chats", Value: []int64{}}, {Key: "report", Value: true}, {Key: "fadmins", Value: []int64{}}}}}, opts)
+        if err != nil {
+           fmt.Println(err)
+        }
 	return uid, fedname
 }
 
@@ -59,12 +62,18 @@ func Get_fed_by_owner(user_id int64) (bool, string, string) {
 
 func Delete_fed(fed_id string) {
 	filter := bson.M{"fed_id": fed_id}
-	feds.DeleteOne(context.TODO(), filter)
+	err := feds.DeleteOne(context.TODO(), filter)
+        if err != nil {
+           fmt.Println(err)
+        }
 }
 
 func Rename_fed_by_id(fed_id string, name string) {
 	filter := bson.M{"fed_id": fed_id}
-	feds.UpdateOne(context.TODO(), filter, bson.D{{Key: "$set", Value: bson.D{{Key: "fedname", Value: name}}}}, opts)
+	err := feds.UpdateOne(context.TODO(), filter, bson.D{{Key: "$set", Value: bson.D{{Key: "fedname", Value: name}}}}, opts)
+        if err != nil {
+           fmt.Println(err)
+        }
 }
 
 func Transfer_fed(fed_id string, user_id int64) {
