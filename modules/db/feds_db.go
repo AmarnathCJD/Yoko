@@ -2,7 +2,7 @@ package db
 
 import (
 	"context"
-
+        "fmt"
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -83,7 +83,9 @@ func Chat_join_fed(fed_id string, chat_id int64) {
 	fed_chats.UpdateOne(context.TODO(), filter, bson.D{{Key: "$set", Value: bson.D{{Key: "fed_id", Value: fed_id}}}})
 	var chats_m bson.M
 	feds.FindOne(context.TODO(), bson.M{"fed_id": fed_id}).Decode(&chats_m)
-	feds.UpdateOne(context.TODO(), bson.M{"fed_id": fed_id}, bson.D{{Key: "$set", Value: bson.D{{Key: "chats", Value: append(chats_m["chats"].(bson.A), chat_id)}}}}, opts)
+        chats = append(chats_m["chats"].(bson.A), chat_id)
+        fmt.Println(chats)
+	feds.UpdateOne(context.TODO(), bson.M{"fed_id": fed_id}, bson.D{{Key: "$set", Value: bson.D{{Key: "chats", Value: chats}}}}, opts)
 }
 
 func Chat_leave_fed(chat_id int64) {
