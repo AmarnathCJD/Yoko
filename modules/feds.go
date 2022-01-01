@@ -272,7 +272,6 @@ func Transfer_fed_user(c tb.Context) error {
 		c.Reply("You can only transfer your fed to others!")
 		return nil
 	}
-        fmt.Println("clear")
 	fed_2, _, _ := db.Get_fed_by_owner(user.ID)
 	if fed_2 {
 		c.Reply(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a> already owns a federation - they can't own another.", user.ID, user.FirstName))
@@ -282,7 +281,6 @@ func Transfer_fed_user(c tb.Context) error {
 		c.Reply(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a> isn't an admin in %s - you can only give your fed to other admins.", user.ID, user.FirstName, fedname))
 		return nil
 	}
-        fmt.Println("clr")
 	accept_ftransfer.Data = strconv.Itoa(int(c.Sender().ID)) + "|" + strconv.Itoa(int(user.ID))
 	deny_ftransfer.Data = strconv.Itoa(int(c.Sender().ID)) + "|" + strconv.Itoa(int(user.ID))
 	sel.Inline(sel.Row(accept_ftransfer, deny_ftransfer))
