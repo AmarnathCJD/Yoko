@@ -53,7 +53,6 @@ func Get_fed_by_owner(user_id int64) (bool, string, string) {
 		return false, "", ""
 	}
 	var fed_info bson.M
-        fed_id := ""
 	fed.Decode(&fed_info)
         fed_id := fed_info["fed_id"].(string)
         fmt.Println(1)
