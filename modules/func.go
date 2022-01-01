@@ -13,6 +13,7 @@ import (
 )
 
 var b = bot.Bot
+var BOT_SUDO = []int{}
 
 func parse_message(m *tb.Message) (string, string, []string) {
 	if m.IsReply() {

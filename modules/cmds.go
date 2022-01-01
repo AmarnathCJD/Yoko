@@ -44,6 +44,12 @@ func RegHandlers() {
 	bot.Bot.Handle("/newfed", New_fed)
 	bot.Bot.Handle("/delfed", Delete_fed)
 	bot.Bot.Handle("/renamefed", Rename_fed)
+	bot.Bot.Handle("/joinfed", Join_fed)
+	bot.Bot.Handle("/leavefed", Leave_fed)
+	bot.Bot.Handle("/chatfed", Chat_fed)
+	bot.Bot.Handle("/fpromote", Fpromote)
+	bot.Bot.Handle(&accept_fpromote, Fpromote_cb)
+	bot.Bot.Handle(&deny_fpromote, Fpromote_deny_cb)
 	// bans.go
 	bot.Bot.Handle("/ban", Ban)
 	bot.Bot.Handle("/tban", Ban)

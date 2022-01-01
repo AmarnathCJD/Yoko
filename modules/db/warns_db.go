@@ -45,13 +45,13 @@ func Warn_user(chat_id int64, user_id int64, reason string) (bool, int32, int32)
 		reasons = append(reasons, reason)
 		count := ww["count"].(int32)
 		count++
-		warns.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"reasons", reasons}, {"count", count}}}}, opts)
+		warns.UpdateOne(context.TODO(), filter, bson.D{{Key: "set", Value: bson.D{{Key: "reasons", Value: reasons}, {Key: "count", Value: count}}}}, opts)
 		limit := int32(3)
 		if a, i := IndexInSlice(WARN_SETTINGS, "chat_id", chat_id); a {
 			limit = WARN_SETTINGS[i].(bson.M)["limit"].(int32)
 		}
 		if count >= limit {
-			warns.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"count", 0}}}}, opts)
+			warns.UpdateOne(context.TODO(), filter, bson.D{{Key: "set", Value: bson.D{{Key: "count", Value: 0}}}}, opts)
 			return true, limit, count
 		} else {
 			return false, limit, count
@@ -74,7 +74,7 @@ func Remove_warn(chat_id int64, user_id int64) bool {
 		count--
 		reasons := ww["reasons"].(bson.A)
 		reasons = reasons[:len(reasons)-1]
-		warns.UpdateOne(context.TODO(), filter, bson.D{{"$set", bson.D{{"reasons", reasons}, {"count", count}}}}, opts)
+		warns.UpdateOne(context.TODO(), filter, bson.D{{Key: "set", Value: bson.D{{Key: "reasons", Value: reasons}, {Key: "count", Value: count}}}}, opts)
 		return true
 	}
 }
@@ -116,7 +116,7 @@ func Set_warn_limit(chat_id int64, limit int) {
 		w.Decode(&warn)
 		mode, time = warn["mode"].(string), warn["time"].(int32)
 	}
-	settings.UpdateOne(context.TODO(), bson.M{"chat_id": chat_id}, bson.D{{"$set", bson.D{{"limit", limit}, {"mode", mode}, {"time", time}}}}, opts)
+	settings.UpdateOne(context.TODO(), bson.M{"chat_id": chat_id}, bson.D{{Key: "set", Value: bson.D{{Key: "limit", Value: limit}, {Key: "mode", Value: mode}, {Key: "time", Value: time}}}}, opts)
 }
 
 func Set_warn_mode(chat_id int64, mode string, time int) {
@@ -128,7 +128,7 @@ func Set_warn_mode(chat_id int64, mode string, time int) {
 		w.Decode(&warn)
 		limit = warn["limit"].(int32)
 	}
-	settings.UpdateOne(context.TODO(), bson.M{"chat_id": chat_id}, bson.D{{"$set", bson.D{{"mode", mode}, {"time", int32(time)}, {"limit", limit}}}}, opts)
+	settings.UpdateOne(context.TODO(), bson.M{"chat_id": chat_id}, bson.D{{Key: "set", Value: bson.D{{Key: "mode", Value: mode}, {Key: "time", Value: int32(time)}, {Key: "limit", Value: limit}}}}, opts)
 }
 
 func Get_warn_settings(chat_id int64) (int32, string, int32) {

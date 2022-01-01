@@ -16,13 +16,13 @@ func removeInt(s bson.A, r int64) bson.A {
 	return s
 }
 
-func deduplicate_fban(s bson.A, x int64) (bson.A, bool) {
+func deduplicate_fban(s bson.A, x int64) (bson.A, bool, int) {
 	for i, v := range s {
 		if v.(bson.M)["user_id"].(int64) == x {
-			return append(s[:i], s[i+1:]...), true
+			return append(s[:i], s[i+1:]...), true, i
 		}
 	}
-	return s, false
+	return s, false, 0
 }
 
 var feds = database.Collection("feda")
@@ -87,6 +87,17 @@ func Chat_leave_fed(chat_id int64) {
 	feds.UpdateOne(context.TODO(), bson.M{"fed_id": fed_id}, bson.D{{Key: "$set", Value: bson.D{{Key: "chats", Value: removeInt(chats_m["chats"].(bson.A), chat_id)}}}}, opts)
 }
 
+func Get_chat_fed(chat_id int64) string {
+	var chats_a bson.M
+	f := fed_chats.FindOne(context.TODO(), bson.M{"chat_id": chat_id})
+	if f.Err() != nil {
+		return ""
+	} else {
+		f.Decode(&chats_a)
+		return chats_a["fed_id"].(string)
+	}
+}
+
 func User_join_fed(fed_id string, user_id int64) bool {
 	feds_list := bson.A{fed_id}
 	fadmins := bson.A{user_id}
@@ -144,22 +155,22 @@ func Is_user_fed_admin(user_id int64, fed_id string) bool {
 	return false
 }
 
-func Fban_user(user_id int64, fed_id string, reason string, name string, time_delta int64) bool {
+func Fban_user(user_id int64, fed_id string, reason string, name string, time_delta int64, banner int64) bool {
 	var fbanned bson.A
 	already_fbanned := false
 	ff := fbans.FindOne(context.TODO(), bson.M{"fed_id": fed_id})
 	if ff.Err() != nil {
-		fbanned = append(fbanned, bson.M{"user_id": user_id, "reason": reason, "name": name, "time": time_delta})
+		fbanned = append(fbanned, bson.M{"user_id": user_id, "reason": reason, "name": name, "time": time_delta, "banner": banner})
 	} else {
 		var document bson.M
 		ff.Decode(&document)
 		fbanned = document["fbans"].(bson.A)
-		fb, IsBanned := deduplicate_fban(fbanned, user_id)
+		fb, IsBanned, _ := deduplicate_fban(fbanned, user_id)
 		fbanned = fb
 		if IsBanned {
 			already_fbanned = true
 		}
-		fbanned = append(fbanned, bson.M{"user_id": user_id, "reason": reason, "name": name, "time": time_delta})
+		fbanned = append(fbanned, bson.M{"user_id": user_id, "reason": reason, "name": name, "time": time_delta, "banner": banner})
 	}
 	fbans.UpdateOne(context.TODO(), bson.M{"fed_id": fed_id}, bson.D{{Key: "$set", Value: bson.D{{Key: "fbans", Value: fbanned}}}}, opts)
 	return already_fbanned
@@ -174,11 +185,38 @@ func Unfban_user(user_id int64, fed_id string) bool {
 		var document bson.M
 		ff.Decode(&document)
 		fbanned = document["fbans"].(bson.A)
-		fbanned, IsBanned := deduplicate_fban(fbanned, user_id)
+		fbanned, IsBanned, _ := deduplicate_fban(fbanned, user_id)
 		if !IsBanned {
 			return false
 		}
 		fbans.UpdateOne(context.TODO(), bson.M{"fed_id": fed_id}, bson.D{{Key: "$set", Value: bson.D{{Key: "fbans", Value: fbanned}}}}, opts)
 		return IsBanned
 	}
+}
+
+func Is_Fbanned(user_id int64, fed_id string) (bool, string) {
+	var fbanned bson.A
+	ff := fbans.FindOne(context.TODO(), bson.M{"fed_id": fed_id})
+	if ff.Err() != nil {
+		return false, ""
+	}
+	var document bson.M
+	ff.Decode(&document)
+	fbanned = document["fbans"].(bson.A)
+	_, IsBanned, i := deduplicate_fban(fbanned, user_id)
+	if IsBanned {
+		return true, fbanned[i].(bson.M)["reason"].(string)
+	} else {
+		return false, ""
+	}
+}
+
+func Search_fed_by_id(fed_id string) bson.M {
+	fed := feds.FindOne(context.TODO(), bson.M{"fed_id": fed_id})
+	if fed.Err() != nil {
+		return nil
+	}
+	var fed_info bson.M
+	fed.Decode(&fed_info)
+	return fed_info
 }
