@@ -15,6 +15,8 @@ var (
 	deny_fpromote   = sel.Data("Decline", "decline_fpromote")
         accept_ftransfer = sel.Data("Accept", "accept_ftransfer")
         deny_ftransfer = sel.Data("Decline", "deny_ftransfer")
+        confirm_ftransfer = sel.Data("Confirm", "confirm_ftransfer")
+        reject_ftransfer = sel.Data("Cancel", "reject_ftransfer")
 )
 
 func New_fed(c tb.Context) error {
@@ -299,7 +301,7 @@ func Accept_Transfer_fed_cb(c tb.Context) error {
 		return nil
 	}
 	_, fed_id, fedname := db.Get_fed_by_owner(c.Sender().ID)
-	owner := c.Bot().ChatByID(owner_id)
+	owner, _ := c.Bot().ChatByID(owner_id)
 	confirm_ftransfer.Data = strconv.Itoa(int(owner_id)) + "|" + strconv.Itoa(int(c.Sender().ID))
 	reject_ftransfer.Data = strconv.Itoa(int(owner_id)) + "|" + strconv.Itoa(int(c.Sender().ID))
 	sel.Inline(sel.Row(confirm_ftransfer, reject_ftransfer))
