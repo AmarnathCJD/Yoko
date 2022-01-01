@@ -72,6 +72,7 @@ func Transfer_fed(fed_id string, user_id int64) {
 }
 
 func Chat_join_fed(fed_id string, chat_id int64) {
+        chats := bson.A{chat_id}
 	filter := bson.M{"chat_id": chat_id}
 	f := fed_chats.FindOne(context.TODO(), filter)
 	if f.Err() == nil {
@@ -80,11 +81,13 @@ func Chat_join_fed(fed_id string, chat_id int64) {
 		feds.FindOne(context.TODO(), bson.M{"fed_id": fed_id}).Decode(&chats_m)
 		feds.UpdateOne(context.TODO(), bson.M{"fed_id": fed_id}, bson.D{{Key: "$set", Value: bson.D{{Key: "chats", Value: removeInt(chats_m["chats"].(bson.A), chat_id)}}}}, opts)
 	}
-	fed_chats.UpdateOne(context.TODO(), filter, bson.D{{Key: "$set", Value: bson.D{{Key: "fed_id", Value: fed_id}}}})
-	var chats_m bson.M
-	feds.FindOne(context.TODO(), bson.M{"fed_id": fed_id}).Decode(&chats_m)
-        chats = append(chats_m["chats"].(bson.A), chat_id)
-        fmt.Println(chats)
+	fed_chats.UpdateOne(context.TODO(), filter, bson.D{{Key: "$set", Value: bson.D{{Key: "fed_id", Value: fed_id}}}}, opts)
+        F := feds.FindOne(context.TODO(), bson.M{"fed_id": fed_id})
+        if F.Err() == nil{
+	 var chats_m bson.M
+	 F.Decode(&chats_m)
+         chats = append(chats_m["chats"].(bson.A), chat_id)
+        }
 	feds.UpdateOne(context.TODO(), bson.M{"fed_id": fed_id}, bson.D{{Key: "$set", Value: bson.D{{Key: "chats", Value: chats}}}}, opts)
 }
 
