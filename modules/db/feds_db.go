@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+        "fmt"
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -91,13 +92,18 @@ func Chat_join_fed(fed_id string, chat_id int64) {
 }
 
 func Chat_leave_fed(chat_id int64) {
-	var chats_a bson.M
-	fed_chats.FindOne(context.TODO(), bson.M{"chat_id": chat_id}).Decode(&chats_a)
-	fed_id := chats_a["fed_id"].(string)
-	fed_chats.DeleteOne(context.TODO(), bson.M{"chat_id": chat_id})
-	var chats_m bson.M
-	feds.FindOne(context.TODO(), bson.M{"fed_id": fed_id}).Decode(&chats_m)
-	feds.UpdateOne(context.TODO(), bson.M{"fed_id": fed_id}, bson.D{{Key: "$set", Value: bson.D{{Key: "chats", Value: removeInt(chats_m["chats"].(bson.A), chat_id)}}}}, opts)
+	F := fed_chats.FindOne(context.TODO(), bson.M{"chat_id": chat_id})
+        if F.Err() == nil{
+         var chats_a bson.M
+         F.Decode(&chats_a)
+	 fed_id := chats_a["fed_id"].(string)
+	 fed_chats.DeleteOne(context.TODO(), bson.M{"chat_id": chat_id})
+	 var chats_m bson.M
+	 feds.FindOne(context.TODO(), bson.M{"fed_id": fed_id}).Decode(&chats_m)
+         chats := removeInt(chats_m["chats"].(bson.A), chat_id)
+         fmt.Println(chats)
+	 feds.UpdateOne(context.TODO(), bson.M{"fed_id": fed_id}, bson.D{{Key: "$set", Value: bson.D{{Key: "chats", Value: chats}}}}, opts)
+        }
 }
 
 func Get_chat_fed(chat_id int64) string {
