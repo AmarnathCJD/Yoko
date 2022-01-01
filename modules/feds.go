@@ -284,6 +284,6 @@ func Transfer_fed_user(c tb.Context) error {
 	accept_ftransfer.Data = strconv.Itoa(int(c.Sender().ID)) + "|" + strconv.Itoa(int(user.ID))
 	deny_ftransfer.Data = strconv.Itoa(int(c.Sender().ID)) + "|" + strconv.Itoa(int(user.ID))
 	sel.Inline(sel.Row(accept_ftransfer, deny_ftransfer))
-	c.Reply(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a>, please confirm you would like to receive fed %s (<code>%s</code>) from <a href='tg://user?id=%d'>s%</a>", user.ID, user.FirstName, fedname, fed_id, c.Sender().ID, c.Sender().FirstName), sel)
+	c.Reply(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a>, please confirm you would like to receive fed %s (<code>%s</code>) from <a href='tg://user?id=%d'>%s</a>", user.ID, user.FirstName, fedname, fed_id, c.Sender().ID, c.Sender().FirstName), sel)
 	return nil
 }
