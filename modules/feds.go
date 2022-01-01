@@ -130,7 +130,7 @@ func Leave_fed(c tb.Context) error {
 		c.Reply("This chat isn't currently in any federations!")
 	} else {
 		fed := db.Search_fed_by_id(chat_fed)
-		c.Reply(fmt.Sprintf("Chat %s has left the '%s'' federation.", c.Chat().Title, fed["fedname"].(string)))
+		c.Reply(fmt.Sprintf("Chat %s has left the '%s' federation.", c.Chat().Title, fed["fedname"].(string)))
                 db.Chat_leave_fed(c.Chat().ID)
 	}
 	return nil
