@@ -262,6 +262,7 @@ func Transfer_fed_user(c tb.Context) error {
 	user, _ := get_user(c.Message())
 	if user == nil {
 		return nil
+                fmt.Println("No user?")
 	}
 	fed, fed_id, fedname := db.Get_fed_by_owner(c.Sender().ID)
 	if !fed {
@@ -283,7 +284,8 @@ func Transfer_fed_user(c tb.Context) error {
 	}
 	accept_ftransfer.Data = strconv.Itoa(int(c.Sender().ID)) + "|" + strconv.Itoa(int(user.ID))
 	deny_ftransfer.Data = strconv.Itoa(int(c.Sender().ID)) + "|" + strconv.Itoa(int(user.ID))
-	sel.Inline(sel.Row(accept_ftransfer, deny_ftransfer))
-	c.Reply(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a>, please confirm you would like to receive fed %s (<code>%s</code>) from <a href='tg://user?id=%d'>%</a>", user.ID, user.FirstName, fedname, fed_id, c.Sender().ID, c.Sender().FirstName), sel)
+	sel.Inline(sel.Row(accept_fpromote, deny_fpromote))
+	_, err := c.Reply(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a>, please confirm you would like to receive fed %s (<code>%s</code>) from <a href='tg://user?id=%d'>%</a>", user.ID, user.FirstName, fedname, fed_id, c.Sender().ID, c.Sender().FirstName), sel)
+        fmt.Println(err)
 	return nil
 }
