@@ -300,12 +300,12 @@ func Accept_Transfer_fed_cb(c tb.Context) error {
 		c.Respond(&tb.CallbackResponse{Text: "This action is not intended for you.", ShowAlert: true})
 		return nil
 	}
-	_, fed_id, fedname := db.Get_fed_by_owner(c.Sender().ID)
+	_, fed_id, fedname := db.Get_fed_by_owner(owner_id)
 	owner, _ := c.Bot().ChatByID(owner_id)
 	confirm_ftransfer.Data = strconv.Itoa(int(owner_id)) + "|" + strconv.Itoa(int(c.Sender().ID))
 	reject_ftransfer.Data = strconv.Itoa(int(owner_id)) + "|" + strconv.Itoa(int(c.Sender().ID))
 	sel.Inline(sel.Row(confirm_ftransfer, reject_ftransfer))
-	c.Reply(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a>, please confirm that you wish to send fed %s (<code>%s</code>) to <a href='tg://user?id=%d'>%s</a> this cannot be undone.", owner_id, owner.FirstName, fedname, fed_id, c.Sender().ID, c.Sender().FirstName), sel)
+	c.Edit(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a>, please confirm that you wish to send fed %s (<code>%s</code>) to <a href='tg://user?id=%d'>%s</a> this cannot be undone.", owner_id, owner.FirstName, fedname, fed_id, c.Sender().ID, c.Sender().FirstName), sel)
 	return nil
 }
 
@@ -320,9 +320,9 @@ func Decline_Transfer_fed_cb(c tb.Context) error {
 		return nil
 	}
 	if c.Sender().ID == user_id {
-		c.Reply(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a> has declined the fed transfer.", c.Sender().ID, c.Sender().FirstName))
+		c.Edit(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a> has declined the fed transfer.", c.Sender().ID, c.Sender().FirstName))
 	} else if c.Sender().ID == owner_id {
-		c.Reply(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a> has cancelled the fed transfer.", c.Sender().ID, c.Sender().FirstName))
+		c.Edit(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a> has cancelled the fed transfer.", c.Sender().ID, c.Sender().FirstName))
 	}
 	return nil
 }
