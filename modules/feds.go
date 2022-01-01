@@ -131,6 +131,7 @@ func Leave_fed(c tb.Context) error {
 	} else {
 		fed := db.Search_fed_by_id(chat_fed)
 		c.Reply(fmt.Sprintf("Chat %s has left the '%s'' federation.", c.Chat().Title, fed["fedname"].(string)))
+                db.Chat_leave_fed(c.Chat().ID)
 	}
 	return nil
 }
