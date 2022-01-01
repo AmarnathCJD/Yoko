@@ -228,7 +228,7 @@ func Fpromote_deny_cb(c tb.Context) error {
 	}
 }
 
-func Fdemote(c tb.context) error {
+func Fdemote(c tb.Context) error {
 	if c.Message().Private() {
 		c.Reply("This command is made to be used in group chats, not in pm!")
 		return nil
