@@ -34,10 +34,10 @@ func deduplicate_fban(s bson.A, x int64) (bson.A, bool, int) {
 	return s, false, 0
 }
 
-var feds = database.Collection("fed1")
-var fed_chats = database.Collection("fedch1")
-var fedadmins = database.Collection("fedadmi1")
-var fbans = database.Collection("fbani1")
+var feds = database.Collection("fedo")
+var fed_chats = database.Collection("fedcha")
+var fedadmins = database.Collection("fedadmip")
+var fbans = database.Collection("fbanip")
 
 func Make_new_fed(user_id int64, fedname string) (string, string) {
 	uid := uuid.New().String()
