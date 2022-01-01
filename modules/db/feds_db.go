@@ -16,6 +16,15 @@ func removeInt(s bson.A, r int64) bson.A {
 	return s
 }
 
+func stringInSliceA(a string, list bson.A) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
+}
+
 func deduplicate_fban(s bson.A, x int64) (bson.A, bool, int) {
 	for i, v := range s {
 		if v.(bson.M)["user_id"].(int64) == x {
@@ -25,10 +34,10 @@ func deduplicate_fban(s bson.A, x int64) (bson.A, bool, int) {
 	return s, false, 0
 }
 
-var feds = database.Collection("feda")
-var fed_chats = database.Collection("fedcha")
-var fedadmins = database.Collection("fedadmi")
-var fbans = database.Collection("fbani")
+var feds = database.Collection("fed1")
+var fed_chats = database.Collection("fedch1")
+var fedadmins = database.Collection("fedadmi1")
+var fbans = database.Collection("fbani1")
 
 func Make_new_fed(user_id int64, fedname string) (string, string) {
 	uid := uuid.New().String()
@@ -148,7 +157,7 @@ func Is_user_fed_admin(user_id int64, fed_id string) bool {
 	} else {
 		var fg bson.M
 		a.Decode(&fg)
-		if stringInSlice(fed_id, fg["feds"].([]string)) {
+		if stringInSliceA(fed_id, fg["feds"].(bson.A)) {
 			return true
 		}
 	}
