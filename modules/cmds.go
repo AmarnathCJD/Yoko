@@ -50,6 +50,8 @@ func RegHandlers() {
 	bot.Bot.Handle("/fpromote", Fpromote)
 	bot.Bot.Handle(&accept_fpromote, Fpromote_cb)
 	bot.Bot.Handle(&deny_fpromote, Fpromote_deny_cb)
+        bot.Bot.Handle("/fdemote", Fdemote)
+        bot.Bot.Handle("/ftransfer", Transfer_fed_user)
 	// bans.go
 	bot.Bot.Handle("/ban", Ban)
 	bot.Bot.Handle("/tban", Ban)
