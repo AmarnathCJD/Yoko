@@ -2,7 +2,7 @@ package db
 
 import (
 	"context"
-        
+        "fmt"
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -53,8 +53,13 @@ func Get_fed_by_owner(user_id int64) (bool, string, string) {
 		return false, "", ""
 	}
 	var fed_info bson.M
+        fed_id := ""
 	fed.Decode(&fed_info)
-	return true, fed_info["fed_id"].(string), fed_info["fedname"].(string)
+        if fid, ok := fed_info['fed_id'] ; ok {
+           fed_id = fid.(string)
+        }
+        fmt.Println(fed_id)
+	return true, fed_id, fed_info["fedname"].(string)
 }
 
 func Delete_fed(fed_id string) {
