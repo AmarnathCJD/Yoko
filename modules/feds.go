@@ -13,6 +13,10 @@ var (
 	sel             = &tb.ReplyMarkup{}
 	accept_fpromote = sel.Data("Accept", "accept_fpromote")
 	deny_fpromote   = sel.Data("Decline", "decline_fpromote")
+        accept_ftransfer = sel.Data("Accept", "accept_ftransfer")
+        deny_ftransfer = sel.Data("Decline", "deny_ftransfer")
+        confirm_ftransfer = sel.Data("Confirm", "confirm_ftransfer")
+        reject_ftransfer = sel.Data("Cancel", "reject_ftransfer")
 )
 
 func New_fed(c tb.Context) error {
@@ -130,7 +134,8 @@ func Leave_fed(c tb.Context) error {
 		c.Reply("This chat isn't currently in any federations!")
 	} else {
 		fed := db.Search_fed_by_id(chat_fed)
-		c.Reply(fmt.Sprintf("Chat %s has left the '%s'' federation.", c.Chat().Title, fed["fedname"].(string)))
+		c.Reply(fmt.Sprintf("Chat %s has left the '%s' federation.", c.Chat().Title, fed["fedname"].(string)))
+                db.Chat_leave_fed(c.Chat().ID)
 	}
 	return nil
 }
@@ -223,4 +228,101 @@ func Fpromote_deny_cb(c tb.Context) error {
 		c.Respond(&tb.CallbackResponse{Text: "You are not the user being fpromoted", ShowAlert: true})
 		return nil
 	}
+}
+
+func Fdemote(c tb.Context) error {
+	if c.Message().Private() {
+		c.Reply("This command is made to be used in group chats, not in pm!")
+		return nil
+	}
+	user, _ := get_user(c.Message())
+	if user == nil {
+		return nil
+	}
+	fed, fed_id, fedname := db.Get_fed_by_owner(c.Sender().ID)
+	if !fed {
+		c.Reply("Only federation creators can demote people, and you don't seem to have a federation to promote to!")
+		return nil
+	} else if user.ID == c.Sender().ID {
+		c.Reply("Yeah well you are the fed owner!")
+		return nil
+	}
+	if !db.Is_user_fed_admin(user.ID, fed_id) {
+		c.Reply(fmt.Sprintf("This person isn't a federation admin for '%s', how could I demote them?", fedname))
+		return nil
+	}
+	db.User_leave_fed(fed_id, user.ID)
+	c.Reply(fmt.Sprintf("User <a href='tg://user?id=%d'>%s</a> is no longer an admin of %s (<code>%s</code>)", user.ID, user.FirstName, fedname, fed_id))
+	return nil
+}
+
+func Transfer_fed_user(c tb.Context) error {
+	if c.Message().Private() {
+		c.Reply("This command is made to be used in group chats, not in pm!")
+		return nil
+	}
+	user, _ := get_user(c.Message())
+	if user == nil {
+		return nil
+	}
+	fed, fed_id, fedname := db.Get_fed_by_owner(c.Sender().ID)
+	if !fed {
+		c.Reply("You don't have a fed to transfer!")
+		return nil
+
+	} else if user.ID == c.Sender().ID {
+		c.Reply("You can only transfer your fed to others!")
+		return nil
+	}
+	fed_2, _, _ := db.Get_fed_by_owner(user.ID)
+	if fed_2 {
+		c.Reply(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a> already owns a federation - they can't own another.", user.ID, user.FirstName))
+		return nil
+	}
+	if !db.Is_user_fed_admin(user.ID, fed_id) {
+		c.Reply(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a> isn't an admin in %s - you can only give your fed to other admins.", user.ID, user.FirstName, fedname))
+		return nil
+	}
+	accept_ftransfer.Data = strconv.Itoa(int(c.Sender().ID)) + "|" + strconv.Itoa(int(user.ID))
+	deny_ftransfer.Data = strconv.Itoa(int(c.Sender().ID)) + "|" + strconv.Itoa(int(user.ID))
+	sel.Inline(sel.Row(accept_ftransfer, deny_ftransfer))
+	c.Reply(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a>, please confirm you would like to receive fed %s (<code>%s</code>) from <a href='tg://user?id=%d'>%s</a>", user.ID, user.FirstName, fedname, fed_id, c.Sender().ID, c.Sender().FirstName), sel)
+	return nil
+}
+
+func Accept_Transfer_fed_cb(c tb.Context) error {
+	data := strings.SplitN(c.Callback().Data, "|", 2)
+	owner_id_int, _ := strconv.Atoi(data[0])
+	user_id_int, _ := strconv.Atoi(data[1])
+	owner_id := int64(owner_id_int)
+	user_id := int64(user_id_int)
+	if c.Sender().ID != user_id {
+		c.Respond(&tb.CallbackResponse{Text: "This action is not intended for you.", ShowAlert: true})
+		return nil
+	}
+	_, fed_id, fedname := db.Get_fed_by_owner(owner_id)
+	owner, _ := c.Bot().ChatByID(owner_id)
+	confirm_ftransfer.Data = strconv.Itoa(int(owner_id)) + "|" + strconv.Itoa(int(c.Sender().ID))
+	reject_ftransfer.Data = strconv.Itoa(int(owner_id)) + "|" + strconv.Itoa(int(c.Sender().ID))
+	sel.Inline(sel.Row(confirm_ftransfer, reject_ftransfer))
+	c.Edit(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a>, please confirm that you wish to send fed %s (<code>%s</code>) to <a href='tg://user?id=%d'>%s</a> this cannot be undone.", owner_id, owner.FirstName, fedname, fed_id, c.Sender().ID, c.Sender().FirstName), sel)
+	return nil
+}
+
+func Decline_Transfer_fed_cb(c tb.Context) error {
+	data := strings.SplitN(c.Callback().Data, "|", 2)
+	owner_id_int, _ := strconv.Atoi(data[0])
+	user_id_int, _ := strconv.Atoi(data[1])
+	owner_id := int64(owner_id_int)
+	user_id := int64(user_id_int)
+	if c.Sender().ID != user_id && c.Sender().ID != owner_id {
+		c.Respond(&tb.CallbackResponse{Text: "This action is not intended for you.", ShowAlert: true})
+		return nil
+	}
+	if c.Sender().ID == user_id {
+		c.Edit(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a> has declined the fed transfer.", c.Sender().ID, c.Sender().FirstName))
+	} else if c.Sender().ID == owner_id {
+		c.Edit(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a> has cancelled the fed transfer.", c.Sender().ID, c.Sender().FirstName))
+	}
+	return nil
 }
