@@ -132,8 +132,8 @@ func ID_info(c tb.Context) error {
 				return nil
 			}
 		}
-		fmt.Println("se")
-		c.Reply(fmt.Sprintf("<b>User %s's ID is <code>%d</code>", user_obj.FirstName, user_obj.ID))
+		err := c.Reply(fmt.Sprintf("<b>User %s's ID is <code>%d</code>", user_obj.FirstName, user_obj.ID))
+		fmt.Println(err)
 		return nil
 	}
 }

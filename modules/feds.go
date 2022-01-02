@@ -10,13 +10,13 @@ import (
 )
 
 var (
-	sel             = &tb.ReplyMarkup{}
-	accept_fpromote = sel.Data("Accept", "accept_fpromote")
-	deny_fpromote   = sel.Data("Decline", "decline_fpromote")
-        accept_ftransfer = sel.Data("Accept", "accept_ftransfer")
-        deny_ftransfer = sel.Data("Decline", "deny_ftransfer")
-        confirm_ftransfer = sel.Data("Confirm", "confirm_ftransfer")
-        reject_ftransfer = sel.Data("Cancel", "reject_ftransfer")
+	sel               = &tb.ReplyMarkup{}
+	accept_fpromote   = sel.Data("Accept", "accept_fpromote")
+	deny_fpromote     = sel.Data("Decline", "decline_fpromote")
+	accept_ftransfer  = sel.Data("Accept", "accept_ftransfer")
+	deny_ftransfer    = sel.Data("Decline", "deny_ftransfer")
+	confirm_ftransfer = sel.Data("Confirm", "confirm_ftransfer")
+	reject_ftransfer  = sel.Data("Cancel", "reject_ftransfer")
 )
 
 func New_fed(c tb.Context) error {
@@ -135,7 +135,7 @@ func Leave_fed(c tb.Context) error {
 	} else {
 		fed := db.Search_fed_by_id(chat_fed)
 		c.Reply(fmt.Sprintf("Chat %s has left the '%s' federation.", c.Chat().Title, fed["fedname"].(string)))
-                db.Chat_leave_fed(c.Chat().ID)
+		db.Chat_leave_fed(c.Chat().ID)
 	}
 	return nil
 }
@@ -324,5 +324,40 @@ func Decline_Transfer_fed_cb(c tb.Context) error {
 	} else if c.Sender().ID == owner_id {
 		c.Edit(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a> has cancelled the fed transfer.", c.Sender().ID, c.Sender().FirstName))
 	}
+	return nil
+}
+
+func Confirm_Transfer_Fed_cb(c tb.Context) error {
+	data := strings.SplitN(c.Callback().Data, "|", 2)
+	owner_id_int, _ := strconv.Atoi(data[0])
+	user_id_int, _ := strconv.Atoi(data[1])
+	owner_id := int64(owner_id_int)
+	user_id := int64(user_id_int)
+	if c.Sender().ID != owner_id {
+		c.Respond(&tb.CallbackResponse{Text: "This action is not intended for you.", ShowAlert: true})
+		return nil
+	}
+	user, _ := c.Bot().ChatByID(user_id)
+	_, fed_id, fedname := db.Get_fed_by_owner(owner_id)
+	c.Edit(fmt.Sprintf("Congratulations! Federation %s (<code>%s</code>) has successfully been transferred from <a href='tg://user?id=%d'>%s</a> to <a href='tg://user?id=%d'>%s</a>.", fedname, fed_id, c.Sender().ID, c.Sender().FirstName, user.ID, user.FirstName))
+	db.Transfer_fed(fed_id, user_id)
+	db.User_leave_fed(fed_id, user_id)
+	c.Send(fmt.Sprintf(`<b>Fed Transfer</b>
+	<b>Fed:</b> %s
+	<b>New Fed Owner:</b> <a href='tg://user?id=%d'>%s</a> - <code>%d</code>
+	<b>Old Fed Owner:</b> <a href='tg://user?id=%d'>%s</a> - <code>%d</code>
+	<a href='tg://user?id=%d'>%s</a> is now the fed owner. They can promote/demote admins as they like.`, fedname, user.ID, user.FirstName, user.ID, c.Sender().ID, c.Sender().FirstName, c.Sender().ID, user.ID, user.FirstName))
+	return nil
+}
+
+func Deny_Transfer_Fed_cb(c tb.Context) error {
+	data := strings.SplitN(c.Callback().Data, "|", 2)
+	owner_id_int, _ := strconv.Atoi(data[0])
+	owner_id := int64(owner_id_int)
+	if c.Sender().ID != owner_id {
+		c.Respond(&tb.CallbackResponse{Text: "This action is not intended for you.", ShowAlert: true})
+		return nil
+	}
+	c.Edit(fmt.Sprintf("Fed transfer has been cancelled by <a href='tg://user?id=%d'>%s</a>.", c.Sender().ID, c.Sender().FirstName))
 	return nil
 }
