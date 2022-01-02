@@ -101,23 +101,3 @@ func Unlock(c tb.Context) error {
 	db.Unlock_item(m.Chat.ID, to_unlock)
 	return nil
 }
-
-func anonchannel(c tb.Context) error {
-	fmt.Println("hii")
-	if c.Chat().Type != "channel" {
-		return nil
-	}
-	m := c.Message()
-	lock_c := db.Get_locks(m.Chat.ID)
-	x := false
-	for _, y := range lock_c {
-		if y == "anonchannel" {
-			x = true
-		}
-	}
-	if !x {
-		return nil
-	}
-	fmt.Println("CHannel Msg", c.Sender())
-	return nil
-}

@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
@@ -103,6 +104,7 @@ func Get_chat_fed(chat_id int64) string {
 		return ""
 	} else {
 		f.Decode(&chats_a)
+		fmt.Println(chats_a)
 		return chats_a["fed_id"].(string)
 	}
 }
