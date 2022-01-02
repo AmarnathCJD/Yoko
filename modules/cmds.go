@@ -15,7 +15,7 @@ func RegHandlers() {
 	bot.Bot.Handle("/bin", Bin_check)
 	bot.Bot.Handle("/telegraph", telegraph)
 	bot.Bot.Handle("/math", Math)
-	bot.Bot.Handle("/id", ID)
+	bot.Bot.Handle("/id", ID_info)
 	// start.go
 	bot.Bot.Handle("/start", Start)
 	// notes.go
@@ -51,10 +51,10 @@ func RegHandlers() {
 	bot.Bot.Handle("/fpromote", Fpromote)
 	bot.Bot.Handle(&accept_fpromote, Fpromote_cb)
 	bot.Bot.Handle(&deny_fpromote, Fpromote_deny_cb)
-        bot.Bot.Handle("/fdemote", Fdemote)
-        bot.Bot.Handle("/ftransfer", Transfer_fed_user)
-        bot.Bot.Handle(&accept_ftransfer, Accept_Transfer_fed_cb)
-        bot.Bot.Handle(&deny_ftransfer, Decline_Transfer_fed_cb)
+	bot.Bot.Handle("/fdemote", Fdemote)
+	bot.Bot.Handle("/ftransfer", Transfer_fed_user)
+	bot.Bot.Handle(&accept_ftransfer, Accept_Transfer_fed_cb)
+	bot.Bot.Handle(&deny_ftransfer, Decline_Transfer_fed_cb)
 	// bans.go
 	bot.Bot.Handle("/ban", Ban)
 	bot.Bot.Handle("/tban", Ban)

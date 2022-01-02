@@ -115,21 +115,24 @@ func Info(c tb.Context) error {
 	return nil
 }
 
-func ID(c tb.Context) error {
-	if !c.Message().IsReply() && c.Message().Payload == string("") {
+func ID_info(c tb.Context) error {
+	if !c.Message().IsReply() && string(c.Message().Payload) == string("") {
 		c.Reply(fmt.Sprintf("This chat's ID is: <code>%d</code>", c.Chat().ID))
 		return nil
 	} else {
+		fmt.Println("se")
 		user_obj, _ := get_user(c.Message())
 		if c.Message().IsForwarded() {
 			if c.Message().FromChannel() {
 				c.Reply(fmt.Sprintf("User %s's ID is <code>%d</code>.\nThe forwarded channel, %s, has an id of <code>%d</code>.", user_obj.FirstName, user_obj.ID, c.Message().OriginalChat.Title, c.Message().OriginalChat.ID))
 				return nil
 			} else if c.Message().OriginalSender.ID != user_obj.ID {
-				c.Reply(fmt.Sprintf("User %s's ID is <code>%d</code>.\nThe forwarded user, %s, has an ID of <code>%d</code>", user_obj.FirstName, user_obj.ID, c.Message().OriginalSenderName, c.Message().OriginalSender.ID))
+				err := c.Reply(fmt.Sprintf("User %s's ID is <code>%d</code>.\nThe forwarded user, %s, has an ID of <code>%d</code>", user_obj.FirstName, user_obj.ID, c.Message().OriginalSenderName, c.Message().OriginalSender.ID))
+				fmt.Println(err)
 				return nil
 			}
 		}
+		fmt.Println("se")
 		c.Reply(fmt.Sprintf("<b>User %s's ID is <code>%d</code>", user_obj.FirstName, user_obj.ID))
 		return nil
 	}
