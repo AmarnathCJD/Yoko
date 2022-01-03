@@ -1,8 +1,6 @@
 package bot
 
 import (
-	"fmt"
-
 	tb "gopkg.in/tucnak/telebot.v3"
 )
 
@@ -14,10 +12,7 @@ func BotInit() tb.Bot {
 		Synchronous: false,
 		Verbose:     false,
 		ParseMode:   "HTML",
-		OnError: func(err error, c tb.Context) {
-			fmt.Println(err)
-		},
-		Offline: false,
+		Offline:     false,
 	})
 	return *b
 }

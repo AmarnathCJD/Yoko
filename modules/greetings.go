@@ -18,6 +18,9 @@ func Welcome_set(c tb.Context) error {
 		fmt.Println(69)
 		c.Reply(fmt.Sprintf("<b>Greetings config in this chat</b>:\n- Should greet new members: <code>%s<code>\n- Delete old welcome message: <code>%s</code>\n- Delete welcome service: <code>%s</code>\n\nWelcome message:", strconv.FormatBool(mode), "True", "True"))
 		if mode {
+			if len(file) == 0 {
+				file = nil
+			}
 			unparse_message(file, text, c.Message())
 		}
 	}
