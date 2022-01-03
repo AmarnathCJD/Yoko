@@ -74,4 +74,6 @@ func RegHandlers() {
 	bot.Bot.Handle("/eval", Eval)
 	// warns.go
 	bot.Bot.Handle("/warn", WARN)
+	// greetings.go
+	bot.Bot.Handle("/welcome", Welcome_set)
 }
