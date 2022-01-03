@@ -13,8 +13,7 @@ func Ban(c tb.Context) error {
 		c.Reply("This command is made to be used in group chats.")
 		return nil
 	}
-	m := c.Message()
-	user, xtra := get_user(m)
+	user, xtra := get_user(c.Message())
 	if user == nil {
 		return nil
 	}
@@ -63,4 +62,12 @@ func Ban(c tb.Context) error {
 	}
 	c.Reply(fmt.Sprintf("Failed to ban, %s", err.Error()))
 	return nil
+}
+
+func Mute(c tb.Context) error {
+if c.Message().Private() {
+		c.Reply("This command is made to be used in group chats.")
+		return nil
+	}
+ return nil
 }
