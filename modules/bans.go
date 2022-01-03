@@ -3,7 +3,6 @@ package modules
 import (
 	"fmt"
 	"strings"
-	"time"
 
 	tb "gopkg.in/tucnak/telebot.v3"
 )
