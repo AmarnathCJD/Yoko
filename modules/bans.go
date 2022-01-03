@@ -39,7 +39,6 @@ func Ban(c tb.Context) error {
 		if until_date == 0 {
 			return nil
 		}
-		until_date = int(time.Now().Unix()) + until_date
 		if len(args) == 2 {
 			reason = args[1]
 		} else {
