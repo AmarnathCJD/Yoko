@@ -342,11 +342,7 @@ func Confirm_Transfer_Fed_cb(c tb.Context) error {
 	c.Edit(fmt.Sprintf("Congratulations! Federation %s (<code>%s</code>) has successfully been transferred from <a href='tg://user?id=%d'>%s</a> to <a href='tg://user?id=%d'>%s</a>.", fedname, fed_id, c.Sender().ID, c.Sender().FirstName, user.ID, user.FirstName))
 	db.Transfer_fed(fed_id, user_id)
 	db.User_leave_fed(fed_id, user_id)
-	c.Send(fmt.Sprintf(`<b>Fed Transfer</b>
-	<b>Fed:</b> %s
-	<b>New Fed Owner:</b> <a href='tg://user?id=%d'>%s</a> - <code>%d</code>
-	<b>Old Fed Owner:</b> <a href='tg://user?id=%d'>%s</a> - <code>%d</code>
-	<a href='tg://user?id=%d'>%s</a> is now the fed owner. They can promote/demote admins as they like.`, fedname, user.ID, user.FirstName, user.ID, c.Sender().ID, c.Sender().FirstName, c.Sender().ID, user.ID, user.FirstName))
+	c.Send(fmt.Sprintf("<b>Fed Transfer</b>\n<b>Fed:</b> %s\n<b>New Fed Owner:</b> <a href='tg://user?id=%d'>%s</a> - <code>%d</code>\n<b>Old Fed Owner:</b> <a href='tg://user?id=%d'>%s</a> - <code>%d</code>\n<a href='tg://user?id=%d'>%s</a> is now the fed owner. They can promote/demote admins as they like.", fedname, user.ID, user.FirstName, user.ID, c.Sender().ID, c.Sender().FirstName, c.Sender().ID, user.ID, user.FirstName))
 	return nil
 }
 

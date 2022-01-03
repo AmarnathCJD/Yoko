@@ -3,7 +3,7 @@ package modules
 import (
 	"fmt"
 	"strings"
-	"time"
+        "time"
 
 	tb "gopkg.in/tucnak/telebot.v3"
 )
@@ -13,12 +13,7 @@ func Ban(c tb.Context) error {
 		c.Reply("This command is made to be used in group chats.")
 		return nil
 	}
-	m := c.Message()
-	if m.Private() {
-		c.Reply("This command is for groups.")
-		return nil
-	}
-	user, xtra := get_user(m)
+	user, xtra := get_user(c.Message())
 	if user == nil {
 		return nil
 	}
@@ -39,12 +34,13 @@ func Ban(c tb.Context) error {
 		if until_date == 0 {
 			return nil
 		}
-		until_date = int(time.Now().Unix()) + until_date
 		if len(args) == 2 {
 			reason = args[1]
 		} else {
 			reason = ""
 		}
+                fmt.Println(until_date)
+                until_date = int(time.Now().Unix()) + until_date
 	} else if arg[0] == "dban" {
 		c.Bot().Delete(c.Message().ReplyTo)
 	}
@@ -66,4 +62,12 @@ func Ban(c tb.Context) error {
 	}
 	c.Reply(fmt.Sprintf("Failed to ban, %s", err.Error()))
 	return nil
+}
+
+func Mute(c tb.Context) error {
+if c.Message().Private() {
+		c.Reply("This command is made to be used in group chats.")
+		return nil
+	}
+ return nil
 }
