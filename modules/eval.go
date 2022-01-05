@@ -37,7 +37,7 @@ func Eval(c tb.Context) error {
 	if len(cmd) == 1 {
 		return nil
 	}
-	api_url := "https://roseflask.herokuapp.com/go"
+	api_url := "https://api.roseloverx.in/go"
 	req, _ := http.NewRequest("GET", api_url, nil)
 	q := req.URL.Query()
 	q.Add("code", "package main\n"+cmd[1])

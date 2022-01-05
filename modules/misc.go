@@ -83,7 +83,7 @@ func get_user(m *tb.Message) (*tb.User, string) {
 type mapType map[string]interface{}
 
 func getJson(url string) (mapType, error) {
-	resp, err := myClient.Get("https://roseflask.herokuapp.com/username?username=" + url)
+	resp, err := myClient.Get("https://api.roseloverx.in/username?username=" + url)
 	if err != nil {
 		fmt.Println("No response from request")
 		return nil, err
