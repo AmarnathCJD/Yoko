@@ -21,7 +21,7 @@ func Chat_bot(c tb.Context) error {
 		return nil
 	}
 	text := strings.ReplaceAll(c.Message().Text, "yoko", "kuki")
-	url_q := "https://icap.iconiq.ai/talk?&botkey=icH-VVd4uNBhjUid30-xM9QhnvAaVS3wVKA3L8w2mmspQ-hoUB3ZK153sEG3MX-Z8bKchASVLAo~&channel=7&sessionid=482070240&client_name=uuiprod-un18e6d73c-user-19433&id=true"
+	url_q := "https://icap.iconiq.ai/talk?&botkey=icH-VVd4uNBhjUid30-xM9QhnvAaVS3wVKA3L8w2mmspQ-hoUB3ZK153sEG3MX-Z8bKchASVLAo~&channel=7&sessionid=482070240&client_name=uuiprod-un18e6d73c-user-1943318188&id=true"
 	req, err := http.PostForm(url_q, url.Values{"input": {text}})
 	if err != nil {
 		c.Reply(err.Error())
