@@ -77,4 +77,6 @@ func RegHandlers() {
 	bot.Bot.Handle("/warn", WARN)
 	// greetings.go
 	bot.Bot.Handle("/welcome", Welcome_set)
+        // chatbot.go
+        bot.Bot.Handle("/chatbot", Chatbot_mode, Change_info)
 }
