@@ -51,6 +51,7 @@ func Chat_bot(c tb.Context) error {
 	} else {
 		message = chat[0]
 	}
+        message = strings.ReplaceAll(message, "kuki", "yoko")
 	c.Reply(message)
 	return nil
 }
