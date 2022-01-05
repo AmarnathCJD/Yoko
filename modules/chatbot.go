@@ -32,10 +32,9 @@ func Chat_bot(c tb.Context) error {
 	msg := resp["responses"].([]interface{})[0].(string)
 	pattern := regexp.MustCompile(`<image>.+</image>`)
 	media := pattern.FindAllStringSubmatch(msg, -1)
-	var file string
 	if media != nil {
 		if len(media) != 0 {
-			file = strings.ReplaceAll(strings.ReplaceAll(media[0][0], "<image>", ""), "</image>", "")
+			file := strings.ReplaceAll(strings.ReplaceAll(media[0][0], "<image>", ""), "</image>", "")
 			c.Reply(&tb.Animation{File: tb.FromURL(file)})
 		}
 	}
