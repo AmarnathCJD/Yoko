@@ -19,6 +19,6 @@ func Get_chatbot_mode(chat_id int64) bool {
 	} else {
 		var s bson.M
 		c.Decode(&s)
-		return c["mode"].(bool)
+		return s["mode"].(bool)
 	}
 }
