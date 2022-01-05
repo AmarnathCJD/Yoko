@@ -36,7 +36,7 @@ func Chat_bot(c tb.Context) error {
 	if media != nil {
 		if len(media) != 0 {
 			file = strings.ReplaceAll(strings.ReplaceAll(media[0][0], "<image>", ""), "</image>", "")
-			c.Send(c.Chat(), &tb.Animation{File: tb.FromURL(file)})
+			c.Reply(&tb.Animation{File: tb.FromURL(file)})
 		}
 	}
 	chat := strings.SplitN(msg, "</image>", 2)
