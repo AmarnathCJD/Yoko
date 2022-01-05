@@ -45,6 +45,7 @@ func Chat_bot(c tb.Context) error {
 	} else {
 		message = chat[0]
 	}
+        message = strings.TrimSpace(message)
 	c.Reply(message)
 	return nil
 }
