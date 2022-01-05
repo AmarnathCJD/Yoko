@@ -9,7 +9,7 @@ import (
 var cb = database.Collection("chatbot")
 
 func Set_chatbot_mode(chat_id int64, mode bool) {
-	cb.UpdateOne(context.TODO(), bson.M{"chat_id": chat_id}, bson.M{"$set": bson.M{"mode": mode}})
+	cb.UpdateOne(context.TODO(), bson.M{"chat_id": chat_id}, bson.M{"$set": bson.M{"mode": mode}}, opts)
 }
 
 func Get_chatbot_mode(chat_id int64) bool {
