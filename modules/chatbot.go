@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"strings"
 
-        db "github.com/amarnathcjd/yoko/modules/db"
+        "github.com/amarnathcjd/yoko/modules/db"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
 
