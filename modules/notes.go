@@ -66,16 +66,15 @@ func Gnote(c tb.Context) error {
 	return nil
 }
 
-func Hash_regex(next tb.HandlerFunc) tb.HandlerFunc {
-	return func(c tb.Context) error {
-		match, _ := regexp.MatchString("\\#(\\S+)", c.Message().Text)
-		if match {
-			return next(c)
-		}
+func OnTextHandler(c tb.Context) error {
+	match, _ := regexp.MatchString("\\#(\\S+)", c.Message().Text)
+	if match {
+		Hash_note(c)
 		return nil
 	}
+	Chat_bot(c)
+	return nil
 }
-
 
 func Hash_note(c tb.Context) error {
 	args := strings.SplitN(c.Message().Text, "#", 2)

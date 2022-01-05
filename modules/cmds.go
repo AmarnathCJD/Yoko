@@ -16,6 +16,7 @@ func RegHandlers() {
 	bot.Bot.Handle("/telegraph", telegraph)
 	bot.Bot.Handle("/math", Math)
 	bot.Bot.Handle("/id", ID_info)
+	bot.Bot.Handle("/email", Tmm)
 	// start.go
 	bot.Bot.Handle("/start", Start)
 	// notes.go
@@ -23,7 +24,6 @@ func RegHandlers() {
 	bot.Bot.Handle("/saved", All_notes)
 	bot.Bot.Handle("/notes", All_notes)
 	bot.Bot.Handle("/get", Gnote)
-	bot.Bot.Handle(tb.OnText, Hash_note, Hash_regex)
 	bot.Bot.Handle("/clear", clear_note, Change_info)
 	bot.Bot.Handle("/clearall", clear_all)
 	bot.Bot.Handle("/privatenotes", private_notes, Change_info)
@@ -64,6 +64,7 @@ func RegHandlers() {
 	bot.Bot.Handle("/dban", Ban)
 	// inline.go
 	bot.Bot.Handle(tb.OnQuery, InlineQueryHandler)
+	bot.Bot.Handle(tb.OnText, OnTextHandler)
 	// pin.go
 	bot.Bot.Handle("/pin", pin_message, Pin_messages)
 	// stickers.go
