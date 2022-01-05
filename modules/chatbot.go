@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"strings"
 
+        db "github.com/amarnathcjd/yoko/modules/db"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
 
@@ -47,7 +48,34 @@ func Chat_bot(c tb.Context) error {
 	} else {
 		message = chat[0]
 	}
-        message = strings.TrimSpace(message)
 	c.Reply(message)
+	return nil
+}
+
+func Chatbot_mode(c tb.Context) error {
+	if c.Message().Private() {
+		c.Reply("This command is made for group chats only.")
+		return nil
+	}
+	args := c.Message().Payload
+	if args == string("") {
+		mode := db.Get_chatbot_mode(c.Chat().ID)
+		if mode {
+			c.Reply("AI chatbot is currently <b>enabled</b> for this chat.")
+			return nil
+		} else {
+			c.Reply("AI chatbot is currently <b>disabled</b> for this chat.")
+			return nil
+		}
+	}
+	if stringInSlice(strings.ToLower(args), []string{"enable", "on", "yes", "y"}) {
+		c.Reply("<b>Enabled</b> AI chatbot for this chat.")
+		db.Set_chatbot_mode(c.Chat().ID, true)
+	} else if stringInSlice(strings.ToLower(args), []string{"disable", "off", "no", "n"}) {
+		c.Reply("<b>Disabled</b> AI chatbot for this chat.")
+		db.Set_chatbot_mode(c.Chat().ID, false)
+	} else {
+		c.Reply("Your input was not recognised as one of: yes/no/y/n/on/off")
+	}
 	return nil
 }
