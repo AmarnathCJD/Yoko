@@ -50,7 +50,10 @@ func Chat_bot(c tb.Context) error {
 			fmt.Println(len(media))
 			file := strings.ReplaceAll(strings.ReplaceAll(media[0][0], "<image>", ""), "</image>", "")
 			if strings.Contains(file, "pandorabots") {
-				file = strings.ReplaceAll(strings.ReplaceAll(media[0][1], "<image>", ""), "</image>", "")
+                                f := strings.SplitN(media[0][0], "</image><image>", -1)
+                                fl := f[len(f) - 1]
+				file = strings.ReplaceAll(fl, "</image>", "")
+                                fmt.Println(file)
 			}
 			if strings.HasSuffix(file, "jpg") || strings.HasSuffix(file, "png") {
 				c.Reply(&tb.Photo{File: tb.FromURL(file)})
