@@ -2,20 +2,21 @@ package modules
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/url"
 	"regexp"
 	"strings"
-        "fmt"
-        "github.com/amarnathcjd/yoko/modules/db"
+
+	"github.com/amarnathcjd/yoko/modules/db"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
 
 func Chat_bot(c tb.Context) error {
 	is_chat := false
-        if c.Media() != nil {
-           return nil
-        }
+	if c.Media() != nil {
+		return nil
+	}
 	if c.Message().IsReply() && c.Message().ReplyTo.Sender.ID == int64(5050904599) {
 		is_chat = true
 	} else if strings.Contains(strings.ToLower(c.Message().Text), "yoko") {
@@ -24,8 +25,8 @@ func Chat_bot(c tb.Context) error {
 	if !is_chat {
 		return nil
 	} else if strings.HasPrefix(c.Message().Text, "/") {
-                return nil
-        }
+		return nil
+	}
 	text := strings.ReplaceAll(c.Message().Text, "yoko", "kuki")
 	url_q := "https://icap.iconiq.ai/talk?&botkey=icH-VVd4uNBhjUid30-xM9QhnvAaVS3wVKA3L8w2mmspQ-hoUB3ZK153sEG3MX-Z8bKchASVLAo~&channel=7&sessionid=482070240&client_name=uuiprod-un18e6d73c-user-19422&id=true"
 	req, err := http.PostForm(url_q, url.Values{"input": {text}})
@@ -36,26 +37,26 @@ func Chat_bot(c tb.Context) error {
 	var resp mapType
 	json.NewDecoder(req.Body).Decode(&resp)
 	msg := resp["responses"].([]interface{})[0].(string)
-        fmt.Println(msg)
+	fmt.Println(msg)
 	pattern := regexp.MustCompile(`<image>.+</image>`)
 	media := pattern.FindAllStringSubmatch(msg, -1)
-        yt := regexp.MustCompile(`<card>.+</card>`).FindAllStringSubmatch(msg, -1)
-        if yt != nil {
-           Parse_youtube_msg(c, msg)
-           return nil
-        }
+	yt := regexp.MustCompile(`<card>.+</card>`).FindAllStringSubmatch(msg, -1)
+	if yt != nil {
+		Parse_youtube_msg(c, msg)
+		return nil
+	}
 	if media != nil {
 		if len(media) != 0 {
-                        fmt.Println(len(media))
+			fmt.Println(len(media))
 			file := strings.ReplaceAll(strings.ReplaceAll(media[0][0], "<image>", ""), "</image>", "")
-                        if strings.Contains(file, "pandorabots"){
-                             file = strings.ReplaceAll(strings.ReplaceAll(media[0][1], "<image>", ""), "</image>", "")
-                        }
-                        if strings.HasSuffix(file, "jpg") || strings.HasSuffix(file, "png") {
-                             c.Reply(&tb.Photo{File: tb.FromURL(file)})
-                        } else {
-			     c.Reply(&tb.Animation{File: tb.FromURL(file)})
-                        }
+			if strings.Contains(file, "pandorabots") {
+				file = strings.ReplaceAll(strings.ReplaceAll(media[0][1], "<image>", ""), "</image>", "")
+			}
+			if strings.HasSuffix(file, "jpg") || strings.HasSuffix(file, "png") {
+				c.Reply(&tb.Photo{File: tb.FromURL(file)})
+			} else {
+				c.Reply(&tb.Animation{File: tb.FromURL(file)})
+			}
 		}
 	}
 	chat := strings.SplitN(msg, "</image>", 2)
@@ -65,7 +66,10 @@ func Chat_bot(c tb.Context) error {
 	} else {
 		message = chat[0]
 	}
-        message = strings.ReplaceAll(message, "kuki", "yoko")
+	if regexp.MustCompile(`<split>.+</split>`).FindAllStringSubmatch(message, -1) != nil {
+		message = strings.ReplaceAll(strings.ReplaceAll(message, "<split>", ""), "</split>", "")
+	}
+	message = strings.ReplaceAll(message, "kuki", "yoko")
 	c.Reply(message)
 	return nil
 }
@@ -113,7 +117,7 @@ func Parse_youtube_msg(c tb.Context, t string) {
 		text := strings.ReplaceAll(strings.ReplaceAll(txt[0][0], "<text>", ""), "</text>", "")
 		btn_url := regexp.MustCompile(`<url>.+</url>`).FindAllStringSubmatch(t, -1)
 		url := strings.ReplaceAll(strings.ReplaceAll(btn_url[0][0], "<url>", ""), "</url>", "")
-                menu.Inline(menu.Row(menu.URL(text, url)))
+		menu.Inline(menu.Row(menu.URL(text, url)))
 	}
 	fl := regexp.MustCompile(`<image>.+</image>`).FindAllStringSubmatch(t, -1)
 	if fl != nil {
