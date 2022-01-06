@@ -41,6 +41,7 @@ func Chat_bot(c tb.Context) error {
 	media := pattern.FindAllStringSubmatch(msg, -1)
 	if media != nil {
 		if len(media) != 0 {
+                        fmt.Println(len(media))
 			file := strings.ReplaceAll(strings.ReplaceAll(media[0][0], "<image>", ""), "</image>", "")
                         if strings.Contains(file, "pandorabots"){
                              file = strings.ReplaceAll(strings.ReplaceAll(media[0][1], "<image>", ""), "</image>", "")
