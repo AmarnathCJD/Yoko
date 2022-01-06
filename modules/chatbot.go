@@ -118,7 +118,7 @@ func Parse_youtube_msg(c tb.Context, t string) {
 	fl := regexp.MustCompile(`<image>.+</image>`).FindAllStringSubmatch(t, -1)
 	if fl != nil {
 		file := strings.ReplaceAll(strings.ReplaceAll(fl[0][0], "<image>", ""), "</image>", "")
-		c.Reply(&tb.Photo{File: tb.FromURL{file}, Caption: msg}, menu)
+		c.Reply(&tb.Photo{File: tb.FromURL(file), Caption: msg}, menu)
 	} else {
 		c.Reply(msg, menu)
 	}
