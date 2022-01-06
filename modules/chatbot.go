@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"regexp"
 	"strings"
-
+        "fmt"
         "github.com/amarnathcjd/yoko/modules/db"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
@@ -36,6 +36,7 @@ func Chat_bot(c tb.Context) error {
 	var resp mapType
 	json.NewDecoder(req.Body).Decode(&resp)
 	msg := resp["responses"].([]interface{})[0].(string)
+        fmt.Println(msg)
 	pattern := regexp.MustCompile(`<image>.+</image>`)
 	media := pattern.FindAllStringSubmatch(msg, -1)
 	if media != nil {
