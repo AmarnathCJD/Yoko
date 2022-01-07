@@ -16,9 +16,9 @@ func RegHandlers() {
 	bot.Bot.Handle("/telegraph", telegraph)
 	bot.Bot.Handle("/math", Math)
 	bot.Bot.Handle("/id", ID_info)
-	bot.Bot.Handle("/email", Tmm)
 	// start.go
 	bot.Bot.Handle("/start", Start)
+	bot.Bot.Handle("/help", Help_Menu)
 	// notes.go
 	bot.Bot.Handle("/save", Save, Change_info)
 	bot.Bot.Handle("/saved", All_notes)
@@ -62,7 +62,7 @@ func RegHandlers() {
 	bot.Bot.Handle("/tban", Ban)
 	bot.Bot.Handle("/sban", Ban)
 	bot.Bot.Handle("/dban", Ban)
-	// inline.go
+	// common handlers
 	bot.Bot.Handle(tb.OnQuery, InlineQueryHandler)
 	bot.Bot.Handle(tb.OnText, OnTextHandler)
 	// pin.go
@@ -74,9 +74,12 @@ func RegHandlers() {
 	bot.Bot.Handle("/sh", Exec)
 	bot.Bot.Handle("/eval", Eval)
 	// warns.go
-	bot.Bot.Handle("/warn", WARN)
+	bot.Bot.Handle("/warn", WARN, Ban_users)
+	bot.Bot.Handle("/setwarnmode", Set_warn_mode_hn, Ban_users)
+	bot.Bot.Handle("/warnmode", Set_warn_mode_hn, Ban_users)
+	bot.Bot.Handle("/warnings", Warnings_info)
 	// greetings.go
 	bot.Bot.Handle("/welcome", Welcome_set)
-        // chatbot.go
-        bot.Bot.Handle("/chatbot", Chatbot_mode, Change_info)
+	// chatbot.go
+	bot.Bot.Handle("/chatbot", Chatbot_mode, Change_info)
 }

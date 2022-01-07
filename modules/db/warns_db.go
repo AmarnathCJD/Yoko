@@ -6,8 +6,10 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-var warns = database.Collection("warns")
-var settings = database.Collection("warn_settings")
+var (
+	warns    = database.Collection("warns")
+	settings = database.Collection("warn_settings")
+)
 
 func __load_warn_settings() bson.A {
 	var files []bson.M

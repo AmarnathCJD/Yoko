@@ -28,3 +28,18 @@ func Start(c tb.Context) error {
 	b.Reply(m, "Hey I'm Alive.")
 	return nil
 }
+
+func Help_Menu(c tb.Context) error {
+	if !c.Message().Private() {
+		sel.Inline(sel.Row(sel.URL("Click here", "https://t.me/Yoko_Robot?start=help")))
+		c.Reply("Contact me at PM to get help.", sel)
+	} else {
+		gen_help_buttons(c, help_caption, true)
+	}
+	return nil
+}
+
+func gen_help_buttons(c tb.Context, text string, Reply bool) {
+	sel.Inline(sel.Row(sel.Data("AFK", "help_button", "afk"), sel.Data("Admin", "help_button", "admin"), sel.Data("Bans", "help_button", "bans")), sel.Row(sel.Data("Chatbot", "help_button", "chatbot"), sel.Data("Feds", "help_button", "feds"), sel.Data("Greetings", "help_button", "greetings")), sel.Row(sel.Data("Inline", "help_button", "inline"), sel.Data("Locks", "help_button", "locks"), sel.Data("misc", "help_button", "misc")), sel.Row(sel.Data("Notes", "help_button", "notes"), sel.Data("Pin", "help_button", "pin"), sel.Data("Stickers", "help_button", "stickers")), sel.Row(sel.Data("Warns", "help_button", "warns")))
+	c.Reply(text, sel)
+}

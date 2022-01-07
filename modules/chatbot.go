@@ -49,8 +49,8 @@ func Chat_bot(c tb.Context) error {
 		if len(media) != 0 {
 			file := strings.ReplaceAll(strings.ReplaceAll(media[0][0], "<image>", ""), "</image>", "")
 			if strings.Contains(file, "pandorabots") {
-                                f := strings.SplitN(media[0][0], "<image>", -1)
-                                fl := f[len(f) - 1]
+				f := strings.SplitN(media[0][0], "<image>", -1)
+				fl := f[len(f)-1]
 				file = strings.ReplaceAll(strings.ReplaceAll(fl, "</image>", ""), "</image>", "")
 			}
 			if strings.HasSuffix(file, "jpg") || strings.HasSuffix(file, "png") {
@@ -129,6 +129,6 @@ func Parse_youtube_msg(c tb.Context, t string) {
 	}
 	final_msg := strings.SplitN(t, "</card>", -1)
 	final_msg_to_send := final_msg[len(final_msg)-1]
-        final_msg_to_send = strings.ReplaceAll(strings.ReplaceAll(final_msg_to_send, "kuki", "yoko"), "Kuki", "Yoko")
+	final_msg_to_send = strings.ReplaceAll(strings.ReplaceAll(final_msg_to_send, "kuki", "yoko"), "Kuki", "Yoko")
 	c.Reply(final_msg_to_send)
 }

@@ -14,7 +14,6 @@ import (
 
 	"github.com/StalkR/imdb"
 	tg "github.com/TechMinerApps/telegraph"
-	mail "github.com/felixstrobel/mailtm"
 	"go.mongodb.org/mongo-driver/bson"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
@@ -121,7 +120,6 @@ func ID_info(c tb.Context) error {
 		c.Reply(fmt.Sprintf("This chat's ID is: <code>%d</code>", c.Chat().ID))
 		return nil
 	} else {
-		fmt.Println("se")
 		user_obj, _ := get_user(c.Message())
 		if c.Message().IsForwarded() {
 			if c.Message().FromChannel() {
@@ -314,15 +312,5 @@ func Math(c tb.Context) error {
 		defer r.Body.Close()
 		fmt.Println(r.Body)
 	}
-	return nil
-}
-
-func Tmm(c tb.Context) error {
-	client := mail.NewMailClient()
-	var domains []mail.Domain = client.GetAvailableDomains()
-	client.Register(c.Sender().FirstName, domains[0].Name, strconv.Itoa(int(c.Sender().ID)))
-	fmt.Println(client.BearerToken)
-	client.Login()
-	c.Reply(fmt.Sprintf("Here is yor email Address: <code>%s</code>", client.Email))
 	return nil
 }

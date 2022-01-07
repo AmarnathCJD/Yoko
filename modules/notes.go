@@ -208,20 +208,3 @@ func private_startallnotes(c tb.Context) {
 	}
 	c.Reply(out)
 }
-
-var notes_help = `✨ Here is the help for <b>Notes:<b>
-<b>Command for Members</b>
-<b>-></b> <code>/get notename</code>: get the note with this notename
-<b>-</b> <code>#notename</code>: same as /get
-<b>-></b> <code>/notes<code>: list all saved notes in this chat
-<b>Command for Admins</b>
-<b>-></b> <code>/save notename notedata</code>: saves notedata as a note with name notename, reply to a message or document to save it
-<b>-></b> <code>/clear notename</code>: clear note with this name
-<b>-></b> <code>/privatenote on/yes/off/no</code>: whether or not to send the note in PM. Write del besides on/off to delete hashtag message on group.
-<b>Note</b>
-<b>-</b> Only admins can use This module
-<b>-</b> To save a document (like photo, audio, etc.), reply to a document or media then type /save
-<b>-</b> Need help for parsing text? Check /markdownhelp
-Save data for future users with notes!
-Notes are great to save random tidbits of information; a phone number, a nice gif, a funny picture - anything!
-Also you can save a text/document with buttons, you can even save it in here.`
