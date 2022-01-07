@@ -27,9 +27,6 @@ func Promote(c tb.Context) error {
 			User:   user,
 		})
 		if err == nil {
-			if xtra != string("") {
-				edit_title(c, user, xtra, true)
-			}
 			c.Reply("✨ Successfully promoted! ~")
 		} else if err.Error() == string("telegram: can't remove chat owner (400)") {
 			c.Reply("I would love to promote the chat creator, but... well, they already have all the power.")
@@ -48,9 +45,6 @@ func Promote(c tb.Context) error {
 			User:   user,
 		})
 		if err == nil {
-			if xtra != string("") {
-			       edit_title(c, user, xtra, true)
-			}
 			c.Reply(c.Message(), "✨ Successfully superpromoted! ~")
 		} else if err.Error() == string("telegram: can't remove chat owner (400)") {
 			c.Reply("I would love to promote the chat creator, but... well, they already have all the power.")
@@ -63,6 +57,9 @@ func Promote(c tb.Context) error {
 		} else {
 			c.Reply("Failed to promote, " + fmt.Sprint(err.Error()))
 		}
+	}
+        if xtra != string("") {
+             edit_title(c, user, xtra, true)
 	}
 	return nil
 }
@@ -137,7 +134,7 @@ func Set_title(c tb.Context) error {
 
 func edit_title(c tb.Context, user *tb.User, title string, promote bool) {
         if promote {
-            time.Sleep(30 * time.Second)
+            time.Sleep(3 * time.Second)
         }
 	err := c.Bot().SetAdminTitle(c.Chat(), user, title)
 	if err == nil {
