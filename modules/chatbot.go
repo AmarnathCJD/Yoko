@@ -47,13 +47,11 @@ func Chat_bot(c tb.Context) error {
 	}
 	if media != nil {
 		if len(media) != 0 {
-			fmt.Println(len(media))
 			file := strings.ReplaceAll(strings.ReplaceAll(media[0][0], "<image>", ""), "</image>", "")
 			if strings.Contains(file, "pandorabots") {
                                 f := strings.SplitN(media[0][0], "<image>", -1)
                                 fl := f[len(f) - 1]
 				file = strings.ReplaceAll(strings.ReplaceAll(fl, "</image>", ""), "</image>", "")
-                                fmt.Println(file)
 			}
 			if strings.HasSuffix(file, "jpg") || strings.HasSuffix(file, "png") {
 				c.Reply(&tb.Photo{File: tb.FromURL(file)})
@@ -72,7 +70,7 @@ func Chat_bot(c tb.Context) error {
 	if strings.Contains(message, "<split>") {
 		message = strings.ReplaceAll(strings.ReplaceAll(message, "<split>", ""), "</split>", "")
 	}
-	message = strings.ReplaceAll(message, "kuki", "yoko")
+	message = strings.ReplaceAll(strings.ReplaceAll(message, "kuki", "yoko"), "Kuki", "Yoko")
 	c.Reply(message)
 	return nil
 }
@@ -131,5 +129,6 @@ func Parse_youtube_msg(c tb.Context, t string) {
 	}
 	final_msg := strings.SplitN(t, "</card>", -1)
 	final_msg_to_send := final_msg[len(final_msg)-1]
+        final_msg_to_send = strings.ReplaceAll(strings.ReplaceAll(final_msg_to_send, "kuki", "yoko"), "Kuki", "Yoko")
 	c.Reply(final_msg_to_send)
 }
