@@ -69,7 +69,7 @@ func Chat_bot(c tb.Context) error {
 	} else {
 		message = chat[0]
 	}
-	if regexp.MustCompile(`<split>.+</split>`).FindAllStringSubmatch(message, -1) != nil {
+	if strings.Contains(message, "<split>") {
 		message = strings.ReplaceAll(strings.ReplaceAll(message, "<split>", ""), "</split>", "")
 	}
 	message = strings.ReplaceAll(message, "kuki", "yoko")
