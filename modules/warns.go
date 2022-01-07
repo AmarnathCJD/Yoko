@@ -38,7 +38,7 @@ func WARN(c tb.Context) error {
 	if !exceeded {
 		unwarn_btn.Data = strconv.Itoa(int(user.ID))
                 sel.Inline(sel.Row(unwarn_btn))
-		c.Reply(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a> has %d/%d warnings; be careful!\n<b>Reason</b>: %s", user.ID, user.FirstName, count, limit, extra), sel)
+		c.Reply(fmt.Sprintf("User <a href='tg://user?id=%d'>%s</a> has %d/%d warnings; be careful!\n<b>Reason</b>: %s", user.ID, user.FirstName, count, limit, extra), sel)
 		return nil
 	}
 	return nil
