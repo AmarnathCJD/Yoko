@@ -49,10 +49,7 @@ func Promote(c tb.Context) error {
 		})
 		if err == nil {
 			if xtra != string("") {
-				res := edit_title(c, user, xtra, true)
-				if !res {
-					return nil
-				}
+			       edit_title(c, user, xtra, true)
 			}
 			c.Reply(c.Message(), "✨ Successfully superpromoted! ~")
 		} else if err.Error() == string("telegram: can't remove chat owner (400)") {
