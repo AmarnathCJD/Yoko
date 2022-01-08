@@ -146,7 +146,7 @@ func Parse_ai_msg(c tb.Context, t string, mode string) {
 		}
 		btn_url := regexp.MustCompile(`<url>.+</url>`).FindAllStringSubmatch(t, -1)
 		url := strings.ReplaceAll(strings.ReplaceAll(btn_url[0][0], "<url>", ""), "</url>", "")
-		menu.Inline(menu.Row(menu.URL(text, url)))
+		menu.Inline(menu.Row(menu.URL(button_text, url)))
 		c.Reply(text, menu)
 	}
 
