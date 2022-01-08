@@ -321,13 +321,12 @@ func Paste(c tb.Context) error {
 	q := req.URL.Query()
 	req.URL.RawQuery = q.Encode()
 	resp, err := myClient.Do(req)
-        fmt.Println(req.URL.String())
 	if err != nil {
 		c.Reply(err.Error())
 		return nil
 	}
 	var body mapType
 	json.NewDecoder(resp.Body).Decode(&body)
-	c.Reply(fmt.Sprint(body))
+	fmt.Println(body)
 	return nil
 }
