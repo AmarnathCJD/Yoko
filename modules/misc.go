@@ -297,19 +297,18 @@ func Math(c tb.Context) error {
 		c.Reply("Please provide the Mathamatical Equation.")
 		return nil
 	} else {
-		endpoint := "https://evaluate-expression.p.rapidapi.com/?expression=%24950%20-%2010%25%20discount"
-		req, _ := http.NewRequest("GET", endpoint, nil)
-		req.Header.Add("x-rapidapi-key", "fef481fee3mshf99983bfc650decp104100jsnbad6ddb2c846")
+		url := "https://evaluate-expression.p.rapidapi.com/?expression=%24950%20-%2010%25%20discount"
+                req, _ := http.NewRequest("GET", url, nil)
 		req.Header.Add("x-rapidapi-host", "evaluate-expression.p.rapidapi.com")
+	        req.Header.Add("x-rapidapi-key", "cf9e67ea99mshecc7e1ddb8e93d1p1b9e04jsn3f1bb9103c3f")
 		fmt.Println(req.URL.String())
-		r, err := myClient.Do(req)
+		res, err := http.DefaultClient.Do(req)
 		if err != nil {
 			c.Reply(err.Error())
 		}
 		defer r.Body.Close()
-                var body mapType
-                json.NewDecoder(r.Body).Decode(&body)
-		fmt.Println(body)
+                body, _ := ioutil.ReadAll(res.Body)
+                fmt.Println(string(body))
 	}
 	return nil
 }
