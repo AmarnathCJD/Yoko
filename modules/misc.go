@@ -321,7 +321,6 @@ func Paste(c tb.Context) error {
 	text := c.Message().Payload
 	req, _ := http.NewRequest("GET", uri, nil)
 	q := req.URL.Query()
-
 	req.URL.RawQuery = q.Encode()
 	resp, err := myClient.Do(req)
         fmt.Println(req.URL.String())
