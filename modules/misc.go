@@ -1,7 +1,6 @@
 package modules
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
