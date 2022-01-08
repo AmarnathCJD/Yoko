@@ -310,7 +310,9 @@ func Math(c tb.Context) error {
 			c.Reply(err.Error())
 		}
 		defer r.Body.Close()
-		fmt.Println(r.Body)
+                var body mapType
+                json.NewDecoder(r.Body).Decode(&body)
+		fmt.Println(body)
 	}
 	return nil
 }
