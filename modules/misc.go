@@ -311,7 +311,9 @@ func Math(c tb.Context) error {
 		}
 		defer res.Body.Close()
                 body, _ := ioutil.ReadAll(res.Body)
-                fmt.Println(string(body))
+                if string(body) != string(""){
+                   c.Reply(string(body))
+                }
 	}
 	return nil
 }
