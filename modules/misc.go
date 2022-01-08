@@ -339,11 +339,10 @@ func Paste(c tb.Context) error {
 		c.Reply("Give some text to paste it!")
 		return nil
 	}
-        fmt.Println(text)
 	uri := "https://api.roseloverx.in/paste"
 	req, _ := http.NewRequest("GET", uri, nil)
 	q := req.URL.Query()
-	q.Add("text", c.Message().Payload)
+	q.Add("text", text)
 	req.URL.RawQuery = q.Encode()
 	fmt.Println(req.URL.String())
 	resp, err := myClient.Do(req)
