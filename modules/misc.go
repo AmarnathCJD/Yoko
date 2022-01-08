@@ -317,7 +317,6 @@ func Math(c tb.Context) error {
 
 func Paste(c tb.Context) error {
 	uri := "https://api.roseloverx.in/paste"
-	text := c.Message().Payload
 	req, _ := http.NewRequest("GET", uri, nil)
 	q := req.URL.Query()
 	req.URL.RawQuery = q.Encode()
