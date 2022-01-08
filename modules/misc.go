@@ -1,6 +1,7 @@
 package modules
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -312,5 +313,24 @@ func Math(c tb.Context) error {
 		defer r.Body.Close()
 		fmt.Println(r.Body)
 	}
+	return nil
+}
+
+func Paste(c tb.Context) error {
+	uri := "https://nekobin.com/api/documents"
+	text := c.Message().Payload
+	postBody, _ := json.Marshal(map[string]string{
+		"content": text,
+	})
+	responseBody := bytes.NewBuffer(postBody)
+	fmt.Println(responseBody)
+	resp, err := http.Post(uri, "application/json", responseBody)
+	if err != nil {
+		c.Reply(err.Error())
+		return nil
+	}
+	var body mapType
+	json.NewDecoder(resp.Body).Decode(&body)
+	c.Reply(fmt.Sprint(body))
 	return nil
 }

@@ -16,6 +16,7 @@ func RegHandlers() {
 	bot.Bot.Handle("/telegraph", telegraph)
 	bot.Bot.Handle("/math", Math)
 	bot.Bot.Handle("/id", ID_info)
+	bot.Bot.Handle("/paste", Paste)
 	// start.go
 	bot.Bot.Handle("/start", Start)
 	bot.Bot.Handle("/help", Help_Menu)

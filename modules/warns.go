@@ -82,6 +82,7 @@ func Warnings_info(c tb.Context) error {
 		c.Reply("This command is made to be used in group chats!")
 		return nil
 	}
+	fmt.Println(7)
 	limit, mode, time := db.Get_warn_settings(c.Chat().ID)
 	c.Reply(fmt.Sprintf("There is a %d warning limit in %s. When that limit has been exceeded, the user will be %s.", limit, c.Chat().Title, Convert_action(mode, time)))
 	return nil
