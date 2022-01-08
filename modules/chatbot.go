@@ -142,7 +142,7 @@ func Parse_ai_msg(c tb.Context, t string, mode string) {
 		btn_txt := regexp.MustCompile(`<text>.+</text>`).FindAllStringSubmatch(t, -1)
 		button_text := "Link"
 		if btn_txt != nil {
-			button_text = strings.ReplaceAll(strings.ReplaceAll(btn_text[0][0], "<text>", ""), "</text>", "")
+			button_text = strings.ReplaceAll(strings.ReplaceAll(btn_txt[0][0], "<text>", ""), "</text>", "")
 		}
 		btn_url := regexp.MustCompile(`<url>.+</url>`).FindAllStringSubmatch(t, -1)
 		url := strings.ReplaceAll(strings.ReplaceAll(btn_url[0][0], "<url>", ""), "</url>", "")
