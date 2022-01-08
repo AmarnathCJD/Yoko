@@ -3,6 +3,7 @@ package modules
 import (
 	"fmt"
 	"strings"
+        "time"
 
 	tb "gopkg.in/tucnak/telebot.v3"
 )
@@ -26,12 +27,6 @@ func Promote(c tb.Context) error {
 			User:   user,
 		})
 		if err == nil {
-			if xtra != string("") {
-				res := edit_title(c, user, xtra, true)
-				if !res {
-					return nil
-				}
-			}
 			c.Reply("✨ Successfully promoted! ~")
 		} else if err.Error() == string("telegram: can't remove chat owner (400)") {
 			c.Reply("I would love to promote the chat creator, but... well, they already have all the power.")
@@ -50,12 +45,6 @@ func Promote(c tb.Context) error {
 			User:   user,
 		})
 		if err == nil {
-			if xtra != string("") {
-				res := edit_title(c, user, xtra, true)
-				if !res {
-					return nil
-				}
-			}
 			c.Reply(c.Message(), "✨ Successfully superpromoted! ~")
 		} else if err.Error() == string("telegram: can't remove chat owner (400)") {
 			c.Reply("I would love to promote the chat creator, but... well, they already have all the power.")
@@ -68,6 +57,9 @@ func Promote(c tb.Context) error {
 		} else {
 			c.Reply("Failed to promote, " + fmt.Sprint(err.Error()))
 		}
+	}
+        if xtra != string("") {
+             edit_title(c, user, xtra, true)
 	}
 	return nil
 }
@@ -140,14 +132,17 @@ func Set_title(c tb.Context) error {
 	return nil
 }
 
-func edit_title(c tb.Context, user *tb.User, title string, promote bool) bool {
+func edit_title(c tb.Context, user *tb.User, title string, promote bool) {
+        if promote {
+            time.Sleep(3 * time.Second)
+        }
 	err := c.Bot().SetAdminTitle(c.Chat(), user, title)
 	if err == nil {
 		if promote {
-			return true
+			return
 		}
 		c.Reply(fmt.Sprintf("<b>%s</b>'s Admin title was changed to <b>%s</b>.", user.FirstName, title))
-		return true
+		return
 	} else if err.Error() == "telegram unknown: Bad Request: user is not an administrator (400)" {
 		c.Reply("This user is not an admin!")
 	} else if err.Error() == "telegram unknown: Bad Request: not enough rights to change custom title of the user (400)" {
@@ -161,5 +156,5 @@ func edit_title(c tb.Context, user *tb.User, title string, promote bool) bool {
 	} else {
 		c.Reply(err.Error())
 	}
-	return false
+	return
 }

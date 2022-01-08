@@ -264,6 +264,7 @@ func Extract_time(c tb.Context, time_val string) int64 {
 }
 
 func Convert_action(action string, time int32) string {
+        fmt.Println("smd")
 	if action == "ban" {
 		return "banned"
 	} else if action == "mute" {
@@ -279,6 +280,7 @@ func Convert_action(action string, time int32) string {
 }
 
 func get_time_value(x int32) string {
+        fmt.Println("smd2")
 	if x >= 604800 {
 		return strconv.Itoa(int(x)/(60*60*24*7)) + " weeks"
 	} else if x >= 86400 && x < 604800 {
