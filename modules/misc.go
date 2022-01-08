@@ -314,14 +314,6 @@ func Math(c tb.Context) error {
 	return nil
 }
 
-package main
-
-import (
-	"fmt"
-	"net/http"
-	"io/ioutil"
-)
-
 func mainly() {
 
 	url := "https://evaluate-expression.p.rapidapi.com/?expression=%24950%20-%2010%25%20discount"
