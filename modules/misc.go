@@ -306,7 +306,7 @@ func Math(c tb.Context) error {
 		if err != nil {
 			c.Reply(err.Error())
 		}
-		defer r.Body.Close()
+		defer res.Body.Close()
                 body, _ := ioutil.ReadAll(res.Body)
                 fmt.Println(string(body))
 	}
