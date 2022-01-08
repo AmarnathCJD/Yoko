@@ -316,9 +316,10 @@ func Math(c tb.Context) error {
 }
 
 func Paste(c tb.Context) error {
-	uri := "https://api.roseloverx.in/paste?text=lwda"
+	uri := "https://api.roseloverx.in/paste"
 	req, _ := http.NewRequest("GET", uri, nil)
 	q := req.URL.Query()
+	q.Add("text", c.Message().Payload)
 	req.URL.RawQuery = q.Encode()
 	resp, err := myClient.Do(req)
 	if err != nil {
@@ -327,6 +328,7 @@ func Paste(c tb.Context) error {
 	}
 	var body mapType
 	json.NewDecoder(resp.Body).Decode(&body)
-	fmt.Println(body)
+        sel.Inline(sel.Row(sel.URL("View Paste", fmt.Sprintf("https://nekobin.com/%s", body["key"].(string)))))
+	c.Reply(fmt.Sprintf("Pasted to <b><a href='https://nekobin.com/%s'>NekoBin</a></b>.", body["key"].(string), sel)
 	return nil
 }
