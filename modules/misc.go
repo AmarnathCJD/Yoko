@@ -317,14 +317,13 @@ func Math(c tb.Context) error {
 }
 
 func Paste(c tb.Context) error {
-	uri := "https://nekobin.com/api/documents"
+	uri := "https://api.roseloverx.in/paste"
 	text := c.Message().Payload
-	postBody, _ := json.Marshal(map[string]string{
-		"content": text,
-	})
-	responseBody := bytes.NewBuffer(postBody)
-	fmt.Println(responseBody)
-	resp, err := http.Post(uri, "application/json", responseBody)
+	req, _ := http.NewRequest("GET", uri, nil)
+	q := req.URL.Query()
+	q.Add("text", text)
+	req.URL.RawQuery = q.Encode()
+	resp, err := myClient.Do(req)
 	if err != nil {
 		c.Reply(err.Error())
 		return nil
