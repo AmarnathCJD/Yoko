@@ -297,7 +297,7 @@ func Math(c tb.Context) error {
 		c.Reply("Please provide the Mathamatical Equation.")
 		return nil
 	} else {
-		endpoint := "https://evaluate-expression.p.rapidapi.com/expression"
+		endpoint := "https://evaluate-expression.p.rapidapi.com"
 		req, _ := http.NewRequest("GET", endpoint, nil)
 		req.Header.Add("x-rapidapi-key", "fef481fee3mshf99983bfc650decp104100jsnbad6ddb2c846")
 		req.Header.Add("x-rapidapi-host", "evaluate-expression.p.rapidapi.com")
