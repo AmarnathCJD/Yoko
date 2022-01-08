@@ -329,6 +329,6 @@ func Paste(c tb.Context) error {
 	var body mapType
 	json.NewDecoder(resp.Body).Decode(&body)
         sel.Inline(sel.Row(sel.URL("View Paste", fmt.Sprintf("https://nekobin.com/%s", body["key"].(string)))))
-	c.Reply(fmt.Sprintf("Pasted to <b><a href='https://nekobin.com/%s'>NekoBin</a></b>.", body["key"].(string), sel)
+	c.Reply(fmt.Sprintf("Pasted to <b><a href='https://nekobin.com/%s'>NekoBin</a></b>.", body["key"].(string)), sel)
 	return nil
 }
