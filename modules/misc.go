@@ -323,9 +323,6 @@ func Paste(c tb.Context) error {
 	if c.Message().IsReply() {
 		if c.Message().ReplyTo.Text != string("") {
 			text = c.Message().ReplyTo.Text
-			if c.Message().Payload != string("") {
-				title = c.Message().Payload
-			}
 		} else if c.Message().ReplyTo.Document != nil {
 			c.Bot().Download(&c.Message().ReplyTo.Document.File, "doc.txt")
 			data, err := ioutil.ReadFile("doc.txt")
@@ -334,9 +331,6 @@ func Paste(c tb.Context) error {
 				return nil
 			} else {
 				text = string(data)
-				if c.Message().Payload != string("") {
-					title = c.Message().Payload
-				}
 			}
 			os.Remove("doc.txt")
 		}
