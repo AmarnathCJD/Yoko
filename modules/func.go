@@ -264,7 +264,7 @@ func Extract_time(c tb.Context, time_val string) int64 {
 }
 
 func Convert_action(action string, time int32) string {
-        fmt.Println("smd")
+	fmt.Println("smd")
 	if action == "ban" {
 		return "banned"
 	} else if action == "mute" {
@@ -280,7 +280,7 @@ func Convert_action(action string, time int32) string {
 }
 
 func get_time_value(x int32) string {
-        fmt.Println("smd2")
+	fmt.Println("smd2")
 	if x >= 604800 {
 		return strconv.Itoa(int(x)/(60*60*24*7)) + " weeks"
 	} else if x >= 86400 && x < 604800 {
@@ -291,4 +291,32 @@ func get_time_value(x int32) string {
 		return strconv.Itoa(int(x)/60) + " minutes"
 	}
 	return ""
+}
+
+func Parse_country(t string) string {
+	tp := t
+	if t == string("") {
+		return "us"
+	}
+	t = strings.ToLower(t)
+	if len(t) == 2 {
+		if stringInSlice(t, CODE_C) {
+			return t
+		} else {
+			return "us"
+		}
+	} else {
+		c, ok := COUNTRY_CODES[tp]
+		if ok {
+			return c.(string)
+		} else {
+			return "us"
+		}
+	}
+}
+
+func check(err error) {
+	if err != nil {
+		fmt.Println(err)
+	}
 }

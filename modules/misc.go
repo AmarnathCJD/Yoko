@@ -15,6 +15,7 @@ import (
 
 	"github.com/StalkR/imdb"
 	tg "github.com/TechMinerApps/telegraph"
+	"github.com/anaskhan96/soup"
 	"go.mongodb.org/mongo-driver/bson"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
@@ -332,5 +333,47 @@ func Paste(c tb.Context) error {
 	var body mapType
 	json.NewDecoder(resp.Body).Decode(&body)
 	c.Reply(fmt.Sprint(body))
+	return nil
+}
+
+func Fake_gen(c tb.Context) error {
+	cq := Parse_country(strings.TrimSpace(c.Message().Payload))
+	if cq == string("") {
+		return nil
+	}
+	url := "https://www.fakexy.com/fake-address-generator-" + cq
+	resp, err := soup.Get(url)
+	if err != nil {
+		return nil
+	}
+	doc := soup.HTMLParse(resp)
+	tbody := doc.FindAll("tbody")
+	fname, bday, street, city, country, state, zip, num, gen := "", "", "", "", "", "", "", "", ""
+	for _, x := range tbody {
+		for _, y := range x.FindAll("tr") {
+			d := y.FindAll("td")
+			if d[0].Text() == "Street" {
+				street = d[1].Text()
+			} else if d[0].Text() == "City/Town" {
+				city = d[1].Text()
+			} else if d[0].Text() == "State/Province/Region" {
+				state = d[1].Text()
+			} else if d[0].Text() == "Zip/Postal Code" {
+				zip = d[1].Text()
+			} else if d[0].Text() == "Phone Number" {
+				num = d[1].Text()
+			} else if d[0].Text() == "Birthday" {
+				bday = d[1].Text()
+			} else if d[0].Text() == "Gender" {
+				gen = d[1].Text()
+			} else if d[0].Text() == "Full Name" {
+				fname = d[1].Text()
+			} else if d[0].Text() == "Country" {
+				country = d[1].Text()
+			}
+		}
+	}
+	msg := fmt.Sprintf("<b>Fake Address Gen</b>\n<b>Full Name:</b> %s\n<b>Gender:</b> %s\n<b>DOB:</b> %s\n<b>Street:</b> %s\n<b>City/Town:</b> %s\n<b>State:</b> %s\n<b>Zip:</b> %s\n<b>Country:</b> %s\n<b>Phone Number:</b> %s", fname, gen, bday, street, city, state, zip, country, num)
+	c.Reply(msg)
 	return nil
 }

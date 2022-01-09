@@ -134,13 +134,23 @@ func Set_warn_mode(chat_id int64, mode string, time int) {
 }
 
 func Get_warn_settings(chat_id int64) (int32, string, int32) {
+	mode, limit, time := "ban", int32(3), int32(0)
 	filter := bson.M{"chat_id": chat_id}
 	w := warns.FindOne(context.TODO(), filter)
 	if w.Err() != nil {
-		return 3, "ban", 0
+		return limit, mode, time
 	} else {
 		var warn bson.M
 		w.Decode(&warn)
-		return warn["limit"].(int32), warn["mode"].(string), warn["time"].(int32)
+		if lt, ok := warn["limit"]; ok {
+			limit = lt.(int32)
+		}
+		if md, ok := warn["mode"]; ok {
+			mode = md.(string)
+		}
+		if tm, ok := warn["time"]; ok {
+			time = tm.(int32)
+		}
+		return limit, mode, time
 	}
 }
