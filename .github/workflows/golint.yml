@@ -1,4 +1,4 @@
-name: Lint Go Q
+name: Lint Go QQ
 
 on:
   push:
