@@ -18,7 +18,7 @@ func Ban(c tb.Context) error {
 		return nil
 	}
 	if user.ID == 5050904599 {
-		c.Reply("You know what I'm not going to do? Ban myself.")
+		c.Reply("You know what I'm not going to do? Ban myself!")
 		return nil
 	}
 	arg := strings.SplitN(c.Message().Text, " ", 2)
