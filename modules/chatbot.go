@@ -41,10 +41,14 @@ func Chat_bot(c tb.Context) error {
 	pattern := regexp.MustCompile(`<image>.+</image>`)
 	media := pattern.FindAllStringSubmatch(msg, -1)
 	yt := regexp.MustCompile(`<card>.+</card>`).FindAllStringSubmatch(msg, -1)
+        btn := regexp.MustCompile(`<button>.+</button>`).FindAllStringSubmatch(msg, -1)
 	if yt != nil {
-		Parse_youtube_msg(c, msg)
+		Parse_ai_msg(c, msg, "youtube")
 		return nil
-	}
+	} else if btn != nil {
+                Parse_ai_msg(c, msg, "button")
+		return nil
+        }
 	if media != nil {
 		if len(media) != 0 {
 			file := strings.ReplaceAll(strings.ReplaceAll(media[0][0], "<image>", ""), "</image>", "")
@@ -103,32 +107,47 @@ func Chatbot_mode(c tb.Context) error {
 	return nil
 }
 
-func Parse_youtube_msg(c tb.Context, t string) {
-	title := regexp.MustCompile(`<title>.+</title>`).FindAllStringSubmatch(t, -1)
-	subtitle := regexp.MustCompile(`<subtitle>.+</subtitle>`).FindAllStringSubmatch(t, -1)
-	msg := ""
-	if subtitle != nil {
-		msg = strings.ReplaceAll(strings.ReplaceAll(subtitle[0][0], "<subtitle>", ""), "</subtitle>", "")
-	} else if title != nil {
-		msg = strings.ReplaceAll(strings.ReplaceAll(title[0][0], "<title>", ""), "</title>", "")
-	}
-	buttons := regexp.MustCompile(`<button>.+</button>`).FindAllStringSubmatch(t, -1)
-	if buttons != nil {
-		txt := regexp.MustCompile(`<text>.+</text>`).FindAllStringSubmatch(t, -1)
-		text := strings.ReplaceAll(strings.ReplaceAll(txt[0][0], "<text>", ""), "</text>", "")
+
+func Parse_ai_msg(c tb.Context, t string, mode string) {
+	if mode == "youtube" {
+		title := regexp.MustCompile(`<title>.+</title>`).FindAllStringSubmatch(t, -1)
+		subtitle := regexp.MustCompile(`<subtitle>.+</subtitle>`).FindAllStringSubmatch(t, -1)
+		msg := ""
+		if subtitle != nil {
+			msg = strings.ReplaceAll(strings.ReplaceAll(subtitle[0][0], "<subtitle>", ""), "</subtitle>", "")
+		} else if title != nil {
+			msg = strings.ReplaceAll(strings.ReplaceAll(title[0][0], "<title>", ""), "</title>", "")
+		}
+		buttons := regexp.MustCompile(`<button>.+</button>`).FindAllStringSubmatch(t, -1)
+		if buttons != nil {
+			txt := regexp.MustCompile(`<text>.+</text>`).FindAllStringSubmatch(t, -1)
+			text := strings.ReplaceAll(strings.ReplaceAll(txt[0][0], "<text>", ""), "</text>", "")
+			btn_url := regexp.MustCompile(`<url>.+</url>`).FindAllStringSubmatch(t, -1)
+			url := strings.ReplaceAll(strings.ReplaceAll(btn_url[0][0], "<url>", ""), "</url>", "")
+			menu.Inline(menu.Row(menu.URL(text, url)))
+		}
+		fl := regexp.MustCompile(`<image>.+</image>`).FindAllStringSubmatch(t, -1)
+		if fl != nil {
+			file := strings.ReplaceAll(strings.ReplaceAll(fl[0][0], "<image>", ""), "</image>", "")
+			c.Reply(&tb.Photo{File: tb.FromURL(file), Caption: msg}, menu)
+		} else {
+			c.Reply(msg, menu)
+		}
+		final_msg := strings.SplitN(t, "</card>", -1)
+		final_msg_to_send := final_msg[len(final_msg)-1]
+		final_msg_to_send = strings.ReplaceAll(strings.ReplaceAll(final_msg_to_send, "kuki", "yoko"), "Kuki", "Yoko")
+		c.Reply(final_msg_to_send)
+	} else if mode == "button" {
+		text := strings.SplitN(t, "<", 2)[0]
+		btn_txt := regexp.MustCompile(`<text>.+</text>`).FindAllStringSubmatch(t, -1)
+		button_text := "Link"
+		if btn_txt != nil {
+			button_text = strings.ReplaceAll(strings.ReplaceAll(btn_txt[0][0], "<text>", ""), "</text>", "")
+		}
 		btn_url := regexp.MustCompile(`<url>.+</url>`).FindAllStringSubmatch(t, -1)
 		url := strings.ReplaceAll(strings.ReplaceAll(btn_url[0][0], "<url>", ""), "</url>", "")
-		menu.Inline(menu.Row(menu.URL(text, url)))
+		menu.Inline(menu.Row(menu.URL(button_text, url)))
+		c.Reply(text, menu)
 	}
-	fl := regexp.MustCompile(`<image>.+</image>`).FindAllStringSubmatch(t, -1)
-	if fl != nil {
-		file := strings.ReplaceAll(strings.ReplaceAll(fl[0][0], "<image>", ""), "</image>", "")
-		c.Reply(&tb.Photo{File: tb.FromURL(file), Caption: msg}, menu)
-	} else {
-		c.Reply(msg, menu)
-	}
-	final_msg := strings.SplitN(t, "</card>", -1)
-	final_msg_to_send := final_msg[len(final_msg)-1]
-	final_msg_to_send = strings.ReplaceAll(strings.ReplaceAll(final_msg_to_send, "kuki", "yoko"), "Kuki", "Yoko")
-	c.Reply(final_msg_to_send)
+
 }

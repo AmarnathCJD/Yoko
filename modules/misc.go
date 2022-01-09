@@ -1,7 +1,6 @@
 package modules
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -299,40 +298,63 @@ func Math(c tb.Context) error {
 		c.Reply("Please provide the Mathamatical Equation.")
 		return nil
 	} else {
-		endpoint := "https://evaluate-expression.p.rapidapi.com/?expression="
-		req, _ := http.NewRequest("GET", endpoint, nil)
-		req.Header.Add("x-rapidapi-key", "fef481fee3mshf99983bfc650decp104100jsnbad6ddb2c846")
+		url := "https://evaluate-expression.p.rapidapi.com"
+		req, _ := http.NewRequest("GET", url, nil)
 		req.Header.Add("x-rapidapi-host", "evaluate-expression.p.rapidapi.com")
+		req.Header.Add("x-rapidapi-key", "cf9e67ea99mshecc7e1ddb8e93d1p1b9e04jsn3f1bb9103c3f")
 		q := req.URL.Query()
-		q.Add("expression", query)
+		q.Add("expression", c.Message().Payload)
 		req.URL.RawQuery = q.Encode()
 		fmt.Println(req.URL.String())
-		r, err := myClient.Do(req)
+		res, err := http.DefaultClient.Do(req)
 		if err != nil {
 			c.Reply(err.Error())
 		}
-		defer r.Body.Close()
-		fmt.Println(r.Body)
+		defer res.Body.Close()
+		body, _ := ioutil.ReadAll(res.Body)
+		if string(body) != string("") {
+			c.Reply(string(body))
+		}
 	}
 	return nil
 }
 
 func Paste(c tb.Context) error {
-	uri := "https://nekobin.com/api/documents"
 	text := c.Message().Payload
-	postBody, _ := json.Marshal(map[string]string{
-		"content": text,
-	})
-	responseBody := bytes.NewBuffer(postBody)
-	fmt.Println(responseBody)
-	resp, err := http.Post(uri, "application/json", responseBody)
+	if c.Message().IsReply() {
+		if c.Message().ReplyTo.Text != string("") {
+			text = c.Message().ReplyTo.Text
+		} else if c.Message().ReplyTo.Document != nil {
+			c.Bot().Download(&c.Message().ReplyTo.Document.File, "doc.txt")
+			data, err := ioutil.ReadFile("doc.txt")
+			if err != nil {
+				c.Reply(err.Error())
+				return nil
+			} else {
+				text = string(data)
+			}
+			os.Remove("doc.txt")
+		}
+	}
+	if text == string("") {
+		c.Reply("Give some text to paste it!")
+		return nil
+	}
+	uri := "https://api.roseloverx.in/paste"
+	req, _ := http.NewRequest("GET", uri, nil)
+	q := req.URL.Query()
+	q.Add("text", text)
+	req.URL.RawQuery = q.Encode()
+	fmt.Println(req.URL.String())
+	resp, err := myClient.Do(req)
 	if err != nil {
 		c.Reply(err.Error())
 		return nil
 	}
 	var body mapType
 	json.NewDecoder(resp.Body).Decode(&body)
-	c.Reply(fmt.Sprint(body))
+	sel.Inline(sel.Row(sel.URL("View Paste", fmt.Sprintf("https://nekobin.com/%s", body["result"].(map[string]interface{})["key"].(string)))))
+	c.Reply(fmt.Sprintf("Pasted to <b><a href='https://nekobin.com/%s'>NekoBin</a></b>.", body["result"].(map[string]interface{})["key"].(string)), &tb.SendOptions{DisableWebPagePreview: true, ReplyMarkup: sel})
 	return nil
 }
 
