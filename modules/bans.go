@@ -27,6 +27,10 @@ func Ban(c tb.Context) error {
         if arg[0] == "/unban" {
            err := c.Bot().Unban(c.Chat(), user, true)
            check(err)
+           if err.Error() == "telegram: not enough rights to restrict/unrestrict chat member (400)"{
+              c.Reply("I haven't got the rights to do this.")
+              return nil
+           }
            if xtra == string(""){
             c.Reply(fmt.Sprintf("✨ %s Permitted to Join the Chat <b>~</b>", user.FirstName))
            } else {
@@ -68,7 +72,10 @@ func Ban(c tb.Context) error {
 			c.Reply(fmt.Sprintf("<b>%s</b> was banned. ~", user.FirstName))
 		}
 		return nil
-	}
+	} else if err.Error() == "telegram: not enough rights to restrict/unrestrict chat member (400)"{
+         c.Reply("I haven't got the rights to do this.")
+         return nil
+        }
 	c.Reply(fmt.Sprintf("Failed to ban, %s", err.Error()))
 	return nil
 }
@@ -124,7 +131,10 @@ func Mute(c tb.Context) error {
 			c.Reply(fmt.Sprintf("<b>%s</b> was muted. ~", user.FirstName))
 		}
 		return nil
-	}
+	} else if err.Error() == "telegram: not enough rights to restrict/unrestrict chat member (400)"{
+         c.Reply("I haven't got the rights to do this.")
+         return nil
+        }
 	c.Reply(fmt.Sprintf("Failed to mute, %s", err.Error()))
 	return nil
 }
