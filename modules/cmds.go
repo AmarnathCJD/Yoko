@@ -69,6 +69,7 @@ func RegHandlers() {
         bot.Bot.Handle("/dmute", Mute)
         bot.Bot.Handle("/smute", Mute)
         bot.Bot.Handle("/tmute", Mute)
+        bot.Bot.Handle("/unmute", Mute)
 	// common handlers
 	bot.Bot.Handle(tb.OnQuery, InlineQueryHandler)
 	bot.Bot.Handle(tb.OnText, OnTextHandler)
