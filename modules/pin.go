@@ -41,8 +41,9 @@ func pin_message(c tb.Context) error {
 }
 
 func pinned_msg(c tb.Context) error {
- fmt.Println(c.Chat().PinnedMessage())
+ fmt.Println(c.Chat().PinnedMessage)
+ fmt.Println("mm")
  chat, _ := c.Bot().ChatByID(c.Chat().ID)
- fmt.Println(chat.PinnedMessage())
+ fmt.Println(chat.PinnedMessage)
  return nil
 }
