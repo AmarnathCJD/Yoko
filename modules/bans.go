@@ -24,6 +24,16 @@ func Ban(c tb.Context) error {
 	arg := strings.SplitN(c.Message().Text, " ", 2)
 	until_date := 0
 	reason := xtra
+        if arg[0] == "/unban" {
+           err := c.Bot().Unban(c.Chat(), user, true)
+           check(err)
+           if xtra == string(""){
+            c.Reply(fmt.Sprintf("✨ %s Permitted to Join the Chat <b>~</b>", user.FirstName))
+           } else {
+            c.Reply(fmt.Sprintf("✨ %s Permitted to Join the Chat <b>~</b>\n<b>Reason:</b> %s", user.FirstName, reason))
+           }
+           return nil
+        }
 	if arg[0] == "/tban" {
                 if xtra == string("") {
 			c.Reply("You haven't specified a time to ban this user for!")
