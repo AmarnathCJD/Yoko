@@ -76,6 +76,7 @@ func Mute(c tb.Context) error {
 		c.Reply("You know what I'm not going to do? Mute myself.")
 		return nil
 	}
+        arg := strings.SplitN(c.Message().Text, " ", 2)
 	until_date := 0
 	reason := xtra
 	if arg[0] == "/tmute" {
