@@ -99,7 +99,7 @@ func Mute(c tb.Context) error {
 		c.Bot().Delete(c.Message().ReplyTo)
 	}
 	err := b.Restrict(c.Message().Chat, &tb.ChatMember{
-		Rights:          tb.Rights{CanSendMessages: true},
+		Rights:          tb.Rights{CanSendMessages: false},
 		User:            user,
 		RestrictedUntil: int64(until_date),
 	})
