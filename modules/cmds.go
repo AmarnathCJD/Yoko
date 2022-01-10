@@ -73,6 +73,7 @@ func RegHandlers() {
 	bot.Bot.Handle(tb.OnText, OnTextHandler)
 	// pin.go
 	bot.Bot.Handle("/pin", pin_message, Pin_messages)
+        bot.Bot.Handle("/pinned", pinned_msg)
 	// stickers.go
 	bot.Bot.Handle("/kang", AddSticker)
 	bot.Bot.Handle("/d", TGStest)
