@@ -40,7 +40,7 @@ func Ban(c tb.Context) error {
 			reason = ""
 		}
 		until_date = int(time.Now().Unix()) + until_date
-	} else if arg[0] == "dban" {
+	} else if arg[0] == "/dban" {
 		c.Bot().Delete(c.Message().ReplyTo)
 	}
 	err := b.Ban(c.Message().Chat, &tb.ChatMember{
@@ -68,5 +68,53 @@ func Mute(c tb.Context) error {
 		c.Reply("This command is made to be used in group chats.")
 		return nil
 	}
+	user, xtra := get_user(c.Message())
+	if user == nil {
+		return nil
+	}
+	if user.ID == 5050904599 {
+		c.Reply("You know what I'm not going to do? Mute myself.")
+		return nil
+	}
+	until_date := 0
+	reason := xtra
+	if arg[0] == "/tmute" {
+		if xtra == string("") {
+			c.Reply("You haven't specified a time to mute this user for!")
+			return nil
+		}
+		args := strings.SplitN(xtra, " ", 2)
+		until_date = int(Extract_time(c, args[0]))
+		if until_date == 0 {
+			return nil
+		}
+		if len(args) == 2 {
+			reason = args[1]
+		} else {
+			reason = ""
+		}
+		until_date = int(time.Now().Unix()) + until_date
+	} else if arg[0] == "/dmute" {
+		c.Bot().Delete(c.Message().ReplyTo)
+	}
+	err := b.Restrict(c.Message().Chat, &tb.ChatMember{
+		Rights:          tb.Rights{CanSendMessages: true},
+		User:            user,
+		RestrictedUntil: int64(until_date),
+	})
+	if err == nil {
+		if string(reason) != string("") {
+			if arg[0] != "/smute" {
+				c.Reply(fmt.Sprintf("<b>%s</b> was muted. ~\n<b>Reason:</b> %s", user.FirstName, reason))
+			}
+			return nil
+		}
+		if arg[0] != "/sban" {
+			c.Reply(fmt.Sprintf("<b>%s</b> was muted. ~", user.FirstName))
+		}
+		return nil
+	}
+	c.Reply(fmt.Sprintf("Failed to mute, %s", err.Error()))
 	return nil
 }
+/
