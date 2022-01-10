@@ -26,8 +26,7 @@ func Ban(c tb.Context) error {
 	reason := xtra
         if arg[0] == "/unban" {
            err := c.Bot().Unban(c.Chat(), user, true)
-           check(err)
-           if err.Error() == "telegram: not enough rights to restrict/unrestrict chat member (400)"{
+           if err != nil && err.Error() == "telegram: not enough rights to restrict/unrestrict chat member (400)"{
               c.Reply("I haven't got the rights to do this.")
               return nil
            }
@@ -96,6 +95,22 @@ func Mute(c tb.Context) error {
         arg := strings.SplitN(c.Message().Text, " ", 2)
 	until_date := 0
 	reason := xtra
+        if arg[0] == "/unmute" {
+           err := c.Bot().Restrict(c.Chat(), user, &tb.ChatMember{
+		Rights:          tb.NoRestrictions(),
+		User:            user,
+	})
+           if err != nil && err.Error() == "telegram: not enough rights to restrict/unrestrict chat member (400)"{
+              c.Reply("I haven't got the rights to do this.")
+              return nil
+           }
+           if xtra == string(""){
+            c.Reply(fmt.Sprintf("✨ %s was unmuted. <b>~</b>", user.FirstName))
+           } else {
+            c.Reply(fmt.Sprintf("✨ %s was unmuted. <b>~</b>\n<b>Reason:</b> %s", user.FirstName, reason))
+           }
+           return nil
+        }
 	if arg[0] == "/tmute" {
 		if xtra == string("") {
 			c.Reply("You haven't specified a time to mute this user for!")
