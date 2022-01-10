@@ -39,3 +39,10 @@ func pin_message(c tb.Context) error {
 	c.Reply(fmt.Sprintf("I have pinned <a href='t.me/c/%d/%d'>this message</a>", c.Message().ReplyTo.Chat.ID, c.Message().ReplyTo.ID))
 	return nil
 }
+
+func pinned_msg(c tb.Context) error {
+ fmt.Println(c.Chat().PinnedMessage())
+ chat := c.Bot().ChatByID(c.Chat().ID)
+ fmt.Println(chat.PinnedMessage())
+ return nil
+}
