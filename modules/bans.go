@@ -14,6 +14,7 @@ func Ban(c tb.Context) error {
 		return nil
 	}
 	user, xtra := get_user(c.Message())
+        fmt.Println(xtra)
 	if user == nil {
 		return nil
 	}
