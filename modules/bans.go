@@ -96,7 +96,7 @@ func Mute(c tb.Context) error {
 	until_date := 0
 	reason := xtra
         if arg[0] == "/unmute" {
-           err := c.Bot().Restrict(c.Chat(), user, &tb.ChatMember{
+           err := c.Bot().Restrict(c.Chat(), &tb.ChatMember{
 		Rights:          tb.NoRestrictions(),
 		User:            user,
 	})
