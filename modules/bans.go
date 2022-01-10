@@ -14,7 +14,6 @@ func Ban(c tb.Context) error {
 		return nil
 	}
 	user, xtra := get_user(c.Message())
-        fmt.Println(xtra)
 	if user == nil {
 		return nil
 	}
@@ -26,11 +25,11 @@ func Ban(c tb.Context) error {
 	until_date := 0
 	reason := xtra
 	if arg[0] == "/tban" {
-		args := strings.SplitN(xtra, " ", 2)
-		if len(args) == 0 {
+                if xtra == string("") {
 			c.Reply("You haven't specified a time to ban this user for!")
 			return nil
 		}
+		args := strings.SplitN(xtra, " ", 2)
 		until_date = int(Extract_time(c, args[0]))
 		if until_date == 0 {
 			return nil
@@ -40,7 +39,7 @@ func Ban(c tb.Context) error {
 		} else {
 			reason = ""
 		}
-		fmt.Println(until_date)
+		fmt.Println(until_date)L
 		until_date = int(time.Now().Unix()) + until_date
 	} else if arg[0] == "dban" {
 		c.Bot().Delete(c.Message().ReplyTo)
