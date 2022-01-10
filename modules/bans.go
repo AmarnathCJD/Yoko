@@ -117,4 +117,3 @@ func Mute(c tb.Context) error {
 	c.Reply(fmt.Sprintf("Failed to mute, %s", err.Error()))
 	return nil
 }
-/
