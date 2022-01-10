@@ -39,7 +39,6 @@ func Ban(c tb.Context) error {
 		} else {
 			reason = ""
 		}
-		fmt.Println(until_date)L
 		until_date = int(time.Now().Unix()) + until_date
 	} else if arg[0] == "dban" {
 		c.Bot().Delete(c.Message().ReplyTo)
