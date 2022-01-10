@@ -2,6 +2,8 @@ package modules
 
 import (
 	"fmt"
+        "strings"
+        "strconv"
 
 	tb "gopkg.in/tucnak/telebot.v3"
 )
@@ -41,8 +43,9 @@ func pin_message(c tb.Context) error {
 }
 
 func pinned_msg(c tb.Context) error {
- chat, _ := c.Bot().ChatByID(c.Chat().ID)
- pinned = chat.PinnedMessage
+ chat, err := c.Bot().ChatByID(c.Chat().ID)
+ check(err)
+ pinned := chat.PinnedMessage
  if pinned == nil {
     c.Reply("There are no pinned messages in this chat.")
     return nil
