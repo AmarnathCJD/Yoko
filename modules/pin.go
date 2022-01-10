@@ -41,9 +41,14 @@ func pin_message(c tb.Context) error {
 }
 
 func pinned_msg(c tb.Context) error {
- fmt.Println(c.Chat().PinnedMessage)
- fmt.Println("mm")
  chat, _ := c.Bot().ChatByID(c.Chat().ID)
- fmt.Println(chat.PinnedMessage)
- return nil
+ pinned = chat.PinnedMessage
+ if pinned == nil {
+    c.Reply("There are no pinned messages in this chat.")
+    return nil
+ } else {
+    chat_id := strings.ReplaceAll(strconv.Itoa(c.Chat().ID), "-100", "")
+    c.Reply(fmt.Sprintf("The pinned message in %s is <b><a href='https://t.me/%s/%s'>Here</a></b>.", c.Chat().Title, chat_id, strconv.Itoa(pinned.ID)))
+    return nil
+ }
 }
