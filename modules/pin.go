@@ -38,7 +38,7 @@ func pin_message(c tb.Context) error {
 	} else {
 		c.Bot().Pin(c.Message().ReplyTo, tb.Silent)
 	}
-	c.Reply(fmt.Sprintf("I have pinned <a href='t.me/c/%d/%d'>this message</a>", strings.ReplaceAll(strconv.Itoa(int(c.Message().ReplyTo.Chat.ID)), "-100", ""), c.Message().ReplyTo.ID))
+	c.Reply(fmt.Sprintf("I have pinned <a href='t.me/c/%s/%d'>this message</a>", strings.ReplaceAll(strconv.Itoa(int(c.Message().ReplyTo.Chat.ID)), "-100", ""), c.Message().ReplyTo.ID))
 	return nil
 }
 

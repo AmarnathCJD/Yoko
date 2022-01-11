@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 
 	db "github.com/amarnathcjd/yoko/modules/db"
+	"go.mongodb.org/mongo-driver/bson"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
 
@@ -17,6 +19,7 @@ var (
 	deny_ftransfer    = sel.Data("Decline", "deny_ftransfer")
 	confirm_ftransfer = sel.Data("Confirm", "confirm_ftransfer")
 	reject_ftransfer  = sel.Data("Cancel", "reject_ftransfer")
+	check_fed_admins  = sel.Data("Check Fed Admins", "check_fed_admins")
 )
 
 func New_fed(c tb.Context) error {
@@ -357,3 +360,320 @@ func Deny_Transfer_Fed_cb(c tb.Context) error {
 	c.Edit(fmt.Sprintf("Fed transfer has been cancelled by <a href='tg://user?id=%d'>%s</a>.", c.Sender().ID, c.Sender().FirstName))
 	return nil
 }
+
+func Fban(c tb.Context) error {
+	fed_id, have_fed, fban_msg := "", false, ""
+	if !c.Message().Private() {
+		fed_id = db.Get_chat_fed(c.Chat().ID)
+		if fed_id == string("") {
+			c.Reply("This chat isn't in any federations.")
+			return nil
+		}
+		if !db.Is_user_fed_admin(c.Sender().ID, fed_id) {
+			fed := db.Search_fed_by_id(fed_id)
+			c.Reply(fmt.Sprintf("You aren't a federation admin for %s!", fed["fedname"].(string)))
+			return nil
+		}
+	} else {
+		have_fed, fed_id, _ = db.Get_fed_by_owner(c.Sender().ID)
+		if !have_fed {
+			c.Reply("You aren't the creator of any feds to act in.")
+			return nil
+		}
+	}
+	u, x := get_user(c.Message())
+	if u == nil {
+		return nil
+	}
+	if len(x) > 1024 {
+		x = x[:1024] + "\n\nNote: The fban reason was over 1024 characters, so has been truncated."
+	}
+	fed := db.Search_fed_by_id(fed_id)
+	fedname := fed["fedname"].(string)
+	if u.ID == BOT_ID {
+		c.Reply("Oh you're a funny one aren't you! I am not going to fedban myself.")
+		return nil
+	} else if IS_SUDO(u.ID) {
+		c.Reply("I'm not banning one of my sudo users.")
+		return nil
+	} else if db.Is_user_fed_admin(u.ID, fed_id) {
+		c.Reply(fmt.Sprintf("I'm not banning a fed admin/owner from their own fed! (%s)", fedname))
+		return nil
+	}
+	is_banned, r := db.Is_Fbanned(u.ID, fed_id)
+	if is_banned && x == string("") && r == string("") {
+		c.Reply(fmt.Sprintf("User <a href='tg://user?id=%d'>%s</a> is already banned in %s. There is no reason set for their fedban yet, so feel free to set one.", u.ID, u.FirstName, fedname))
+		return nil
+	} else if is_banned && x == r {
+		c.Reply(fmt.Sprintf("User <a href='tg://user?id=%d'>%s</a> has already been fbanned, with the exact same reason.", u.ID, u.FirstName))
+		return nil
+	} else if is_banned && x == string("") {
+		if r == string("") {
+			c.Reply(fmt.Sprintf("User <a href='tg://user?id=%d'>%s</a> is already banned in %s.", u.ID, u.FirstName, fedname))
+		} else {
+			c.Reply(fmt.Sprintf("User <a href='tg://user?id=%d'>%s</a> is already banned in %s, with reason:\n<code>%s</code>.", u.ID, u.FirstName, fedname, r))
+		}
+		return nil
+	}
+	db.Fban_user(u.ID, fed_id, x, u.FirstName, time.Now().Unix(), c.Sender().ID)
+	if !is_banned {
+		fban_msg = fmt.Sprintf("<b>New FedBan</b>\n<b>Fed:</b> %s\n<b>FedAdmin:</b> <a href='tg://user?id=%d'>%s</a>\n<b>User:</b> <a href='tg://user?id=%d'>%s</a>\n<b>User ID:</b> <code>%d</code>", fedname, c.Sender().ID, c.Sender().FirstName, u.ID, u.FirstName, u.ID)
+		if x != string("") {
+			fban_msg += fmt.Sprintf("\n<b>Reason:</b> %s", x)
+		}
+	} else {
+		fban_msg = fmt.Sprintf("<b>FedBan Reason Update</b>\n<b>Fed:</b> %s\n<b>FedAdmin:</b> <a href='tg://user?id=%d'>%s</a>\n<b>User:</b> <a href='tg://user?id=%d'>%s</a>\n<b>User ID:</b> <code>%d</code>", fedname, c.Sender().ID, c.Sender().FirstName, u.ID, u.FirstName, u.ID)
+		if r != string("") {
+			fban_msg += fmt.Sprintf("\n<b>Previous Reason:</b> %s", r)
+		}
+		if x != string("") {
+			fban_msg += fmt.Sprintf("\n<b>Reason:</b> %s", x)
+		}
+	}
+	c.Send(fban_msg)
+	getfednotif := db.Get_FEdnotif(fed_id)
+	if getfednotif {
+		if c.Chat().ID != fed["user_id"].(int64) {
+			c.Bot().Send(&tb.User{ID: fed["user_id"].(int64)}, fban_msg)
+		}
+	}
+	fedchats := fed["chats"].(bson.A)
+	if len(fedchats) != 0 {
+		for _, x := range fedchats {
+			c.Bot().Ban(&tb.Chat{ID: x.(int64)}, &tb.ChatMember{User: u})
+		}
+	}
+	subs := db.Get_fed_subs(fed_id)
+	if len(subs) != 0 {
+		for _, xd := range subs {
+			db.Fban_user(u.ID, xd.(string), x, u.FirstName, time.Now().Unix(), c.Sender().ID)
+		}
+	}
+	return nil
+}
+
+func Unfban(c tb.Context) error {
+	fed_id, have_fed := "", false
+	if !c.Message().Private() {
+		fed_id = db.Get_chat_fed(c.Chat().ID)
+		if fed_id == string("") {
+			c.Reply("This chat isn't in any federations.")
+			return nil
+		}
+		if !db.Is_user_fed_admin(c.Sender().ID, fed_id) {
+			fed := db.Search_fed_by_id(fed_id)
+			c.Reply(fmt.Sprintf("You aren't a federation admin for %s!", fed["fedname"].(string)))
+			return nil
+		}
+	} else {
+		have_fed, fed_id, _ = db.Get_fed_by_owner(c.Sender().ID)
+		if !have_fed {
+			c.Reply("You aren't the creator of any feds to act in.")
+			return nil
+		}
+	}
+	u, x := get_user(c.Message())
+	if u == nil {
+		return nil
+	}
+	if len(x) > 1024 {
+		x = x[:1024] + "\n\nNote: The unfban reason was over 1024 characters, so has been truncated."
+	}
+	fed := db.Search_fed_by_id(fed_id)
+	fedname := fed["fedname"].(string)
+	if u.ID == BOT_ID {
+		c.Reply("Oh you're a funny one aren't you! How do you think I would have fbanned myself hm?.")
+		return nil
+	} else if IS_SUDO(u.ID) {
+		c.Reply("I'm not banning one of my sudo users.")
+		return nil
+	} else if db.Is_user_fed_admin(u.ID, fed_id) {
+		c.Reply("fed admin/owner cant be banned!")
+		return nil
+	}
+	is_banned, _ := db.Is_Fbanned(u.ID, fed_id)
+	if !is_banned {
+		c.Reply(fmt.Sprintf("This user isn't banned in the current federation, %s. (<code>%s</code>)", fed_id, fedname))
+		return nil
+	}
+	unfban_msg := fmt.Sprintf("<b>New un-FedBan</b>\n<b>Fed:</b> %s\n<b>FedAdmin:</b> <a href='tg://user?id=%d'>%s</a>\n<b>User:</b> <a href='tg://user?id=%d'>%s</a>\n<b>User ID:</b> <code>%d</code>", fedname, c.Sender().ID, c.Sender().FirstName, u.ID, u.FirstName, u.ID)
+	if x != string("") {
+		unfban_msg += fmt.Sprintf("\n<b>Reason:</b> %s", x)
+	}
+	c.Send(unfban_msg)
+	getfednotif := db.Get_FEdnotif(fed_id)
+	if getfednotif {
+		if c.Chat().ID != fed["user_id"].(int64) {
+			c.Bot().Send(&tb.User{ID: fed["user_id"].(int64)}, unfban_msg)
+		}
+	}
+	return nil
+}
+
+func sub_fed(c tb.Context) error {
+	f, fed_id, fedname := db.Get_fed_by_owner(c.Sender().ID)
+	if !f {
+		c.Reply("Only federation creators can subscribe to a fed. But you don't have a federation!")
+		return nil
+	}
+	if c.Message().Payload == string("") {
+		c.Reply("You need to specify which federation you're asking about by giving me a FedID!")
+		return nil
+	} else if len(c.Message().Payload) < 10 {
+		c.Reply("This isn't a valid FedID format!")
+		return nil
+	}
+	fed := db.Search_fed_by_id(c.Message().Payload)
+	if fed == nil {
+		c.Reply("This FedID does not refer to an existing federation.")
+		return nil
+	}
+	if c.Message().Payload == fed_id {
+		c.Reply("... What's the point in subscribing a fed to itself?")
+		return nil
+	}
+	if len(db.Get_my_subs(fed_id)) >= 5 {
+		c.Reply("You can subscribe to at most 5 federations. Please unsubscribe from other federations before adding more.")
+		return nil
+	}
+	c.Reply(fmt.Sprintf("Federation <code>%s</code> has now subscribed to <code>%s</code>. All fedbans in <code>%s</code> will now take effect in both feds.", fedname, fed["fedname"].(string), fed["fedname"].(string)))
+	db.SUB_fed(fed["fed_id"].(string), fed_id)
+	return nil
+}
+
+func unsub_fed(c tb.Context) error {
+	f, fed_id, fedname := db.Get_fed_by_owner(c.Sender().ID)
+	if !f {
+		c.Reply("Only federation creators can unsubscribe to a fed. But you don't have a federation!")
+		return nil
+	}
+	if c.Message().Payload == string("") {
+		c.Reply("You need to specify which federation you're asking about by giving me a FedID!")
+		return nil
+	} else if len(c.Message().Payload) < 10 {
+		c.Reply("This isn't a valid FedID format!")
+		return nil
+	}
+	fed := db.Search_fed_by_id(c.Message().Payload)
+	if fed == nil {
+		c.Reply("This FedID does not refer to an existing federation.")
+		return nil
+	}
+	c.Reply(fmt.Sprintf("Federation <code>%s</code> is no longer subscribed to <code>%s</code>. Bans in <code>%s</code> will no longer be applied. Please note that any bans that happened because the user was banned from the subfed will need to be removed manually.", fedname, fed["fedname"].(string), fed["fedname"].(string)))
+	db.UNSUB_fed(fed["fed_id"].(string), fed_id)
+	return nil
+}
+
+func fed_info(c tb.Context) error {
+	if !c.Message().Private() {
+		b, err := c.Bot().ChatMemberOf(c.Chat(), c.Sender())
+		check(err)
+		if b.Role == tb.Member {
+			c.Reply("This command can only be used in private.")
+			return nil
+		}
+	}
+	input := c.Message().Payload
+	var fed_id string
+	if input != string("") {
+		if len(input) < 10 {
+			c.Reply("This isn't a valid FedID format!")
+			return nil
+		}
+		getfed := db.Search_fed_by_id(input)
+		if getfed == nil {
+			c.Reply("This FedID does not refer to an existing federation.")
+			return nil
+		}
+		fed_id = getfed["fed_id"].(string)
+	} else {
+		f, fedid, _ := db.Get_fed_by_owner(c.Sender().ID)
+		if !f {
+			c.Reply("You need to give me a FedID to check, or be a federation creator to use this command!")
+			return nil
+		}
+		fed_id = fedid
+	}
+	info := db.Search_fed_by_id(fed_id)
+	fadmins, fbans, fchats, subbed, mysubs := len(info["fadmins"].(bson.A)), db.Get_len_fbans(fed_id), len(info["chats"].(bson.A)), db.Get_fed_subs(fed_id), db.Get_my_subs(fed_id)
+	F_MSG := fmt.Sprintf("Fed info:\nFedID: <code>%s</code>\nName: %s\nCreator: <a href='tg://user?id=%d'>this person</a> (<code>%d</code>)\nNumber of admins: <code>%d</code>\nNumber of bans: <code>%d</code>\nNumber of connected chats: <code>%d</code>\nNumber of subscribed feds: <code>%d</code>", fed_id, info["fedname"].(string), info["user_id"].(int64), info["user_id"].(int64), fadmins, fbans, fchats, len(subbed))
+	if len(mysubs) == 0 {
+		F_MSG += "\n\nThis federation is not subscribed to any other feds."
+	} else {
+		F_MSG += "\n\nSubscribed to the following feds:"
+		for _, f := range mysubs {
+			fd := db.Search_fed_by_id(f.(string))
+			if fd != nil {
+				F_MSG += fmt.Sprintf("\n- %s (<code>%s</code>)", fd["fedname"].(string), f)
+			}
+
+		}
+	}
+	check_fed_admins.Data = fed_id
+	sel.Inline(sel.Row(check_fed_admins))
+	c.Reply(F_MSG, sel)
+	return nil
+}
+
+func Check_f_admins_cb(c tb.Context) error {
+	if !c.Message().Private() {
+		b, err := c.Bot().ChatMemberOf(c.Chat(), c.Sender())
+		check(err)
+		if b.Role == tb.Member {
+			c.Respond(&tb.CallbackResponse{Text: "This command can only be used in private.", ShowAlert: true})
+			return nil
+		}
+	}
+	fed_id := c.Callback().Data
+	fed := db.Search_fed_by_id(fed_id)
+	fadmins := db.Get_all_fed_admins(fed_id)
+	out_str := fmt.Sprintf("Admins in federation '%s':", fed["fedname"].(string))
+	fadmins = append(fadmins, fed["user_id"].(int64))
+	for _, x := range fadmins {
+		u, err := c.Bot().ChatByID(x.(int64))
+		name := "User"
+		if err == nil {
+			name = u.FirstName
+		}
+		out_str += fmt.Sprintf("\n- <a href='tg://user?id=%d'>%s</a> (<code>%d</code>)", x.(int64), name, x.(int64))
+	}
+	c.Bot().EditReplyMarkup(c.Message(), nil)
+	c.Reply(out_str)
+	return nil
+}
+
+func Fednotif(c tb.Context) error {
+	if !c.Message().Private() {
+		c.Reply("This command is made to be used in PM.")
+		return nil
+	}
+	f, fed_id, fname := db.Get_fed_by_owner(c.Sender().ID)
+	if !f {
+		c.Reply("You aren't the creator of any feds to act in.")
+		return nil
+	}
+	args := c.Message().Payload
+	if args == string("") {
+		mode := db.Get_FEdnotif(fed_id)
+		if mode {
+			c.Reply(fmt.Sprintf("The <code>%s</code> fed is currently sending notifications to it's creator when a fed action is performed.", fname))
+			return nil
+		} else {
+			c.Reply(fmt.Sprintf("The <code>%s</code> fed is currently <b>NOT</b> sending notifications to it's creator when a fed action is performed.", fname))
+			return nil
+		}
+	} else if stringInSlice(args, []string{"on", "yes", "enable"}) {
+		c.Reply(fmt.Sprintf("The fed silence setting for <code>%s</code> has been updated to: <code>true</code>", fname))
+		db.FEdnotif(fed_id, true)
+		return nil
+	} else if stringInSlice(args, []string{"off", "no", "disable"}) {
+		c.Reply(fmt.Sprintf("The fed silence setting for <code>%s</code> has been updated to: <code>false</code>", fname))
+		db.FEdnotif(fed_id, false)
+		return nil
+	} else {
+		c.Reply("Your input was not recognised as one of: yes/no/on/off")
+		return nil
+	}
+}
+
+// soon

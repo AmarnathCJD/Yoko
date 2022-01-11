@@ -38,6 +38,7 @@ var feds = database.Collection("fedo")
 var fed_chats = database.Collection("fedcha")
 var fedadmins = database.Collection("fedadmip")
 var fbans = database.Collection("fbanip")
+var mysubs = database.Collection("mysubs")
 
 func Make_new_fed(user_id int64, fedname string) (string, string) {
 	uid := uuid.New().String()
@@ -160,6 +161,9 @@ func User_leave_fed(fed_id string, user_id int64) {
 }
 
 func Is_user_fed_admin(user_id int64, fed_id string) bool {
+	if Is_user_fed_owner(fed_id, user_id) {
+		return true
+	}
 	a := fedadmins.FindOne(context.TODO(), bson.M{"user_id": user_id})
 	if a.Err() != nil {
 		return false
@@ -237,4 +241,137 @@ func Search_fed_by_id(fed_id string) bson.M {
 	var fed_info bson.M
 	fed.Decode(&fed_info)
 	return fed_info
+}
+
+func Is_user_fed_owner(fed_id string, user_id int64) bool {
+	f := feds.FindOne(context.TODO(), bson.M{"fed_id": fed_id})
+	if f.Err() != nil {
+		return false
+	} else {
+		var fed bson.M
+		f.Decode(&fed)
+		return fed["user_id"].(int64) == user_id
+	}
+}
+
+func SUB_fed(fed_id string, my_fed string) {
+	my_subs := bson.A{}
+	x_mysubs := mysubs.FindOne(context.TODO(), bson.M{"fed_id": my_fed})
+	if x_mysubs.Err() == nil {
+		var ms bson.M
+		x_mysubs.Decode(&ms)
+		my_subs_v, b := ms["my_subs"].(bson.A)
+		if b {
+			my_subs = my_subs_v
+		}
+	}
+	if !stringInSliceA(fed_id, my_subs) {
+		my_subs = append(my_subs, fed_id)
+	}
+	x_subs := bson.A{}
+	x_fedsubs := mysubs.FindOne(context.TODO(), bson.M{"fed_id": fed_id})
+	if x_fedsubs.Err() == nil {
+		var xs bson.M
+		x_fedsubs.Decode(&xs)
+		x_subs_v, b := xs["fed_subs"].(bson.A)
+		if b {
+			x_subs = x_subs_v
+		}
+	}
+	if !stringInSliceA(my_fed, x_subs) {
+		x_subs = append(x_subs, my_fed)
+	}
+	mysubs.UpdateOne(context.TODO(), bson.M{"fed_id": my_fed}, bson.D{{Key: "$set", Value: bson.D{{Key: "my_subs", Value: my_subs}}}}, opts)
+	mysubs.UpdateOne(context.TODO(), bson.M{"fed_id": fed_id}, bson.D{{Key: "$set", Value: bson.D{{Key: "fed_subs", Value: x_subs}}}}, opts)
+}
+
+func UNSUB_fed(fed_id string, my_fed string) {
+	x_mysubs := mysubs.FindOne(context.TODO(), bson.M{"fed_id": my_fed})
+	if x_mysubs.Err() == nil {
+		var subs_m bson.M
+		x_mysubs.Decode(&subs_m)
+		subst, ok := subs_m["my_subs"]
+		if ok {
+			subs := subst.(bson.A)
+			if stringInSliceA(fed_id, subs) {
+				subs = remove(subs, fed_id)
+			}
+			mysubs.UpdateOne(context.TODO(), bson.M{"fed_id": my_fed}, bson.D{{Key: "$set", Value: bson.D{{Key: "my_subs", Value: subs}}}}, opts)
+		}
+	}
+	x_fedsubs := mysubs.FindOne(context.TODO(), bson.M{"fed_id": fed_id})
+	if x_fedsubs.Err() == nil {
+		var s bson.M
+		x_fedsubs.Decode(&s)
+		subst, ok := s["fed_subs"]
+		if ok {
+			subs := subst.(bson.A)
+			if stringInSliceA(my_fed, subs) {
+				subs = remove(subs, my_fed)
+			}
+			mysubs.UpdateOne(context.TODO(), bson.M{"fed_id": fed_id}, bson.D{{Key: "$set", Value: bson.D{{Key: "fed_subs", Value: subs}}}}, opts)
+		}
+	}
+}
+
+func Get_my_subs(fed_id string) bson.A {
+	f := mysubs.FindOne(context.TODO(), bson.M{"fed_id": fed_id})
+	if f.Err() != nil {
+		return bson.A{}
+	} else {
+		var s bson.M
+		f.Decode(&s)
+		sb, ok := s["my_subs"]
+		if ok {
+			return sb.(bson.A)
+		}
+	}
+	return bson.A{}
+}
+
+func Get_fed_subs(fed_id string) bson.A {
+	f := mysubs.FindOne(context.TODO(), bson.M{"fed_id": fed_id})
+	if f.Err() != nil {
+		return bson.A{}
+	} else {
+		var s bson.M
+		f.Decode(&s)
+		sb, ok := s["fed_subs"]
+		if ok {
+			return sb.(bson.A)
+		}
+	}
+	return bson.A{}
+}
+
+func Get_len_fbans(fed_id string) int {
+	fban := fbans.FindOne(context.TODO(), bson.M{"fed_id": fed_id})
+	if fban.Err() == nil {
+		var b bson.M
+		fban.Decode(&b)
+		return len(b["fbans"].(bson.A))
+	}
+	return 0
+}
+
+func Get_all_fed_admins(fed_id string) bson.A {
+	f := feds.FindOne(context.TODO(), bson.M{"fed_id": fed_id})
+	var fd bson.M
+	f.Decode(&fd)
+	return fd["fadmins"].(bson.A)
+}
+
+func FEdnotif(fed_id string, mode bool) {
+	mysubs.UpdateOne(context.TODO(), bson.M{"fed_id": fed_id}, bson.D{{Key: "$set", Value: bson.D{{Key: "report", Value: mode}}}}, opts)
+}
+
+func Get_FEdnotif(fed_id string) bool {
+	f := feds.FindOne(context.TODO(), bson.M{"fed_id": fed_id})
+	if f.Err() != nil {
+		return true
+	} else {
+		var fed bson.M
+		f.Decode(&fed)
+		return fed["report"].(bool)
+	}
 }

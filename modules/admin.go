@@ -3,7 +3,7 @@ package modules
 import (
 	"fmt"
 	"strings"
-        "time"
+	"time"
 
 	tb "gopkg.in/tucnak/telebot.v3"
 )
@@ -58,8 +58,8 @@ func Promote(c tb.Context) error {
 			c.Reply("Failed to promote, " + fmt.Sprint(err.Error()))
 		}
 	}
-        if xtra != string("") {
-             edit_title(c, user, xtra, true)
+	if xtra != string("") {
+		edit_title(c, user, xtra, true)
 	}
 	return nil
 }
@@ -133,9 +133,9 @@ func Set_title(c tb.Context) error {
 }
 
 func edit_title(c tb.Context, user *tb.User, title string, promote bool) {
-        if promote {
-            time.Sleep(3 * time.Second)
-        }
+	if promote {
+		time.Sleep(3 * time.Second)
+	}
 	err := c.Bot().SetAdminTitle(c.Chat(), user, title)
 	if err == nil {
 		if promote {
@@ -156,5 +156,4 @@ func edit_title(c tb.Context, user *tb.User, title string, promote bool) {
 	} else {
 		c.Reply(err.Error())
 	}
-	return
 }

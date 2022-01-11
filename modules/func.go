@@ -315,6 +315,15 @@ func Parse_country(t string) string {
 	}
 }
 
+func IS_SUDO(user_id int64) bool {
+	for _, x := range BOT_SUDO {
+		if int64(x) == user_id {
+			return true
+		}
+	}
+	return false
+}
+
 func check(err error) {
 	if err != nil {
 		fmt.Println(err)
