@@ -167,8 +167,6 @@ if c.Message().Private() {
 		c.Reply("You know what I'm not going to do? Kick myself.")
 		return nil
 	}
-        arg := strings.SplitN(c.Message().Text, " ", 2)
-	until_date := 0
 	reason := xtra
  err := c.Bot().Unban(c.Chat(), user, false)
  check(err)
