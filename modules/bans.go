@@ -153,3 +153,35 @@ func Mute(c tb.Context) error {
 	c.Reply(fmt.Sprintf("Failed to mute, %s", err.Error()))
 	return nil
 }
+
+func Kick(c tb.Context) error {
+if c.Message().Private() {
+		c.Reply("This command is made to be used in group chats.")
+		return nil
+	}
+	user, xtra := get_user(c.Message())
+	if user == nil {
+		return nil
+	}
+	if user.ID == 5050904599 {
+		c.Reply("You know what I'm not going to do? Kick myself.")
+		return nil
+	}
+        arg := strings.SplitN(c.Message().Text, " ", 2)
+	until_date := 0
+	reason := xtra
+ err := c.Bot().Unban(c.Chat(), user, false)
+ check(err)
+ if err == nil {
+ if reason == string(""){
+  c.Reply(fmt.Sprintf("I've kicked <a href='tg://user?id=%d'>%s</a> <b>~</b>", user.ID, user.FirstName))
+  return nil
+ } else {
+  c.Reply(fmt.Sprintf("I've kicked <a href='tg://user?id=%d'>%s</a> <b>~</b>\n<b>Reason:</b> %s", user.ID, user.FirstName, reason))
+  return nil
+ }
+} else {
+ c.Reply("Failed to kick, make sure I'm admin and can RestrictMembers.")
+ return nil
+}
+}
