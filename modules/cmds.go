@@ -91,7 +91,7 @@ func RegHandlers() {
 	bot.Bot.Handle("/d", TGStest)
 	// eval.go
 	bot.Bot.Handle("/sh", Exec)
-	bot.Bot.Handle("!eval", Eval)
+	bot.Bot.Handle("/eval", Eval)
 	// warns.go
 	bot.Bot.Handle("/warn", WARN, Ban_users)
 	bot.Bot.Handle("/setwarnmode", Set_warn_mode_hn, Ban_users)
