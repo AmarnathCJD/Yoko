@@ -14,7 +14,7 @@ func AddSticker(c tb.Context) error {
 		Emoji = c.Message().Payload
 	}
 	if c.Message().ReplyTo == nil {
-                return nil
+		return nil
 	}
 	if c.Message().ReplyTo.Photo != nil {
 		c.Reply("sticker file can only be valid wepb files.")

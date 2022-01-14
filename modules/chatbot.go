@@ -41,14 +41,14 @@ func Chat_bot(c tb.Context) error {
 	pattern := regexp.MustCompile(`<image>.+</image>`)
 	media := pattern.FindAllStringSubmatch(msg, -1)
 	yt := regexp.MustCompile(`<card>.+</card>`).FindAllStringSubmatch(msg, -1)
-        btn := regexp.MustCompile(`<button>.+</button>`).FindAllStringSubmatch(msg, -1)
+	btn := regexp.MustCompile(`<button>.+</button>`).FindAllStringSubmatch(msg, -1)
 	if yt != nil {
 		Parse_ai_msg(c, msg, "youtube")
 		return nil
 	} else if btn != nil {
-                Parse_ai_msg(c, msg, "button")
+		Parse_ai_msg(c, msg, "button")
 		return nil
-        }
+	}
 	if media != nil {
 		if len(media) != 0 {
 			file := strings.ReplaceAll(strings.ReplaceAll(media[0][0], "<image>", ""), "</image>", "")
@@ -106,7 +106,6 @@ func Chatbot_mode(c tb.Context) error {
 	}
 	return nil
 }
-
 
 func Parse_ai_msg(c tb.Context, t string, mode string) {
 	if mode == "youtube" {
