@@ -4,7 +4,7 @@ import (
 	bot "github.com/amarnathcjd/yoko/bot"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
-\\\m gsy
+\\\m gsyR
 func RegHandlers() {
 	// misc.go
 	bot.Bot.Handle("/info", Info)
