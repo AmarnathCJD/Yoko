@@ -86,7 +86,7 @@ func RegHandlers() {
 	// pin.go
 	bot.Bot.Handle("/pin", pin_message, Pin_messages)
 	bot.Bot.Handle("/pinned", pinned_msg)
-        bot.Bot.Handle("/unpin", unpin_msg, Pin_messages)
+	bot.Bot.Handle("/unpin", unpin_msg, Pin_messages)
 	// stickers.go
 	bot.Bot.Handle("/kang", AddSticker)
 	bot.Bot.Handle("/d", TGStest)
