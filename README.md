@@ -1,4 +1,3 @@
 # Yoko
-go-learn-bot
+<h4>go-learn-bot</h4>
 
-[![Lint Status](https://github.com/AmarnathCJD/yoko/workflows/golint/badge.svg)](https://github.com/AmarnathCJD/yoko/actions)
