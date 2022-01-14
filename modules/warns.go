@@ -89,7 +89,3 @@ func Warnings_info(c tb.Context) error {
 	return nil
 }
 
-func Win() {
-	fmt.Println("Hi")
-
-}
