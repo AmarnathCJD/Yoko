@@ -57,7 +57,7 @@ func pinned_msg(c tb.Context) error {
 
 func unpin_msg(c tb.Context) error {
 pinned_id := 0
-if c.Message().Is reply(){
+if c.Message().IsReply(){
 pinned_id = c.Message().ReplyTo.ID
 chat_id := strings.ReplaceAll(strconv.Itoa(int(c.Chat().ID)), "-100", "")
 text = fmt.Sprintf("I have unpinned <a href='https://t.me/c/%s/%s'>this message</a>.", chat_id, strconv.Itoa(pinned_id))
