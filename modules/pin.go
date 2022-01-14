@@ -19,7 +19,6 @@ func pin_message(c tb.Context) error {
 		sup := false
 		if stringInSlice(args, []string{"loud", "violent", "notify"}) {
 			sup = true
-			silent = false
 		} else if stringInSlice(args, []string{"quiet", "silent"}) {
 			sup = true
 			silent = true
@@ -54,4 +53,25 @@ func pinned_msg(c tb.Context) error {
 		c.Reply(fmt.Sprintf("The pinned message in %s is <b><a href='https://t.me/c/%s/%s'>Here</a></b>.", c.Chat().Title, chat_id, strconv.Itoa(pinned.ID)))
 		return nil
 	}
+}
+
+func unpin_msg(c tb.Context) error {
+pinned_id := 0
+if c.Message().Is reply(){
+pinned_id = c.Message().ReplyTo.ID
+chat_id := strings.ReplaceAll(strconv.Itoa(int(c.Chat().ID)), "-100", "")
+text = fmt.Sprintf("I have unpinned <a href='https://t.me/c/%s/%s'>this message</a>.", chat_id, strconv.Itoa(pinned_id))
+} else {
+chat, err := c.Bot().ChatByID(c.Chat().ID)
+check(err)
+pinned_id = chat.PinnedMessage.ID
+text = "I have unpinned the last pinned message."
+}
+if pinned_id != 0{
+err := c.Bot().UnPin(c.Chat(), pinned_id)
+check(err)
+if err == nil{
+c.Reply(text)
+}
+}
 }
