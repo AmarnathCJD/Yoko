@@ -1,7 +1,7 @@
-name: Lint Go QQhqq
+name: Lint Go
 
 on:
-  pull:
+  push:
     branches:
       - master
 
