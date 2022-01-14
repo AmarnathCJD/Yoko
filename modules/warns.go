@@ -90,6 +90,6 @@ func Warnings_info(c tb.Context) error {
 }
 
 func Win() {
-fmt.Println("Hi")
+	fmt.Println("Hi")
 
 }
