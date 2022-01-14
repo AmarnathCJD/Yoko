@@ -352,7 +352,7 @@ func Paste(c tb.Context) error {
 	}
 	var body mapType
 	json.NewDecoder(resp.Body).Decode(&body)
-        fmt.Println(body)
+	fmt.Println(body)
 	sel.Inline(sel.Row(sel.URL("View Paste", fmt.Sprintf("https://nekobin.com/%s", body["result"].(map[string]interface{})["key"].(string)))))
 	c.Reply(fmt.Sprintf("Pasted to <b><a href='https://nekobin.com/%s'>NekoBin</a></b>.", body["result"].(map[string]interface{})["key"].(string)), &tb.SendOptions{DisableWebPagePreview: true, ReplyMarkup: sel})
 	return nil
