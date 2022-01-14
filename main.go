@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-        "strconv"
 	mod "github.com/amarnathcjd/yoko/modules"
 
 	bot "github.com/amarnathcjd/yoko/bot"
