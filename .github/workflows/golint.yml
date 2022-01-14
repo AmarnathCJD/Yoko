@@ -18,6 +18,7 @@ jobs:
       - name: Lint
         run: |
           gofmt -l -s -w .
+          go vet main.go
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: 'RoseLoverX: auto fixes'
