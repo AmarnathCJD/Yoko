@@ -56,23 +56,23 @@ func pinned_msg(c tb.Context) error {
 }
 
 func unpin_msg(c tb.Context) error {
-pinned_id, text := 0, ""
-if c.Message().IsReply(){
-pinned_id = c.Message().ReplyTo.ID
-chat_id := strings.ReplaceAll(strconv.Itoa(int(c.Chat().ID)), "-100", "")
-text = fmt.Sprintf("I have unpinned <a href='https://t.me/c/%s/%s'>this message</a>.", chat_id, strconv.Itoa(pinned_id))
-} else {
-chat, err := c.Bot().ChatByID(c.Chat().ID)
-check(err)
-pinned_id = chat.PinnedMessage.ID
-text = "I have unpinned the last pinned message."
-}
-if pinned_id != 0{
-err := c.Bot().Unpin(c.Chat(), pinned_id)
-check(err)
-if err == nil{
-c.Reply(text)
-}
-}
-return nil
+	pinned_id, text := 0, ""
+	if c.Message().IsReply() {
+		pinned_id = c.Message().ReplyTo.ID
+		chat_id := strings.ReplaceAll(strconv.Itoa(int(c.Chat().ID)), "-100", "")
+		text = fmt.Sprintf("I have unpinned <a href='https://t.me/c/%s/%s'>this message</a>.", chat_id, strconv.Itoa(pinned_id))
+	} else {
+		chat, err := c.Bot().ChatByID(c.Chat().ID)
+		check(err)
+		pinned_id = chat.PinnedMessage.ID
+		text = "I have unpinned the last pinned message."
+	}
+	if pinned_id != 0 {
+		err := c.Bot().Unpin(c.Chat(), pinned_id)
+		check(err)
+		if err == nil {
+			c.Reply(text)
+		}
+	}
+	return nil
 }
