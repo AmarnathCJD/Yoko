@@ -45,7 +45,7 @@ func InlineMainMenu(c tb.Context) {
 	btns.InlineKeyboard = [][]tb.InlineButton{{tb.InlineButton{
 		Text:            "Google Search",
 		InlineQueryChat: "google ",
-	}, tb.InlineButton{Text: "UD Search", InlineQueryChat: "ud "}}}
+	}, tb.InlineButton{Text: "UD Search", InlineQueryChat: "ud "}, tb.InlineButton{Text: "IMDb Search", InlineQueryChat: "imdb "}}}
 	result := &tb.ArticleResult{ResultBase: tb.ResultBase{ReplyMarkup: btns}, Title: text, Description: "Here is the inline help menu", Text: text}
 	results := make(tb.Results, 1)
 	results[0] = result
@@ -135,7 +135,7 @@ func imdb_inline(c tb.Context) {
 		r := &tb.ArticleResult{
 			ResultBase:  tb.ResultBase{ReplyMarkup: btns},
 			Title:       result.Name,
-			Text:        fmt.Sprintf("Click here to view details about <b>%s</b>\n<b>Year:</b>%s", result.Name, strconv.Itoa(result.Year)),
+			Text:        fmt.Sprintf("Click here to view about <b>%s</b>\n<b>Year:</b>%s", result.Name, strconv.Itoa(result.Year)),
 			Description: strconv.Itoa(result.Year),
 		}
 		results[i] = r
