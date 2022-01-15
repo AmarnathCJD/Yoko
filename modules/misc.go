@@ -399,3 +399,7 @@ func Fake_gen(c tb.Context) error {
 	c.Reply(msg)
 	return nil
 }
+
+func YT_search(c tb.Context) error {
+	return nil
+}

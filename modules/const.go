@@ -21,3 +21,15 @@ Add me in your groups and give me full rights to make me function well.`
 
 var COUNTRY_CODES = bson.M{"Argentina": "ar", "Australia": "au", "Bangladesh": "bd", "Belgium": "be", "Brazil": "br", "Canada": "ca", "China": "cn", "Czech Republic": "cz", "France": "fr", "Germany": "de", "Greece": "gr", "Hungary": "hu", "India": "in", "Indonesia": "id", "Iran": "ir", "Italy": "it", "Japan": "jp", "Malaysia": "my", "Mexico": "mx", "Netherlands": "nl", "Nigeria": "ng", "Peru": "pe", "Philippines": "ph", "Poland": "pl", "Portugal": "pt", "Romania": "ro", "Russia": "ru", "Saudi Arabia": "sa", "Singapore": "sg", "South Africa": "za", "South Korea": "kr", "Spain": "es", "Sweden": "se", "Thailand": "th", "Turkey": "tr", "Uganda": "ug", "Ukraine": "ua", "United Kingdom": "uk", "United States": "us", "Vietnam": "vn"}
 var CODE_C = []string{"ar", "au", "bd", "be", "br", "ca", "cn", "cz", "fr", "de", "gr", "hu", "in", "id", "ir", "it", "jp", "my", "mx", "nl", "ng", "pe", "ph", "pl", "pt", "ro", "ru", "sa", "sg", "za", "kr", "es", "se", "th", "tr", "ug", "ua", "uk", "us", "vn"}
+
+var AFK_STR = []string{
+	"<b>%s</b> is here!",
+	"<b>%s</b> is back!",
+	"<b>%s</b> is now in the chat!",
+	"<b>%s</b> is awake!",
+	"<b>%s</b> is back online!",
+	"<b>%s</b> is finally here!",
+	"Welcome back! <b>%s</b>",
+	"Where is <b>%s</b>?\nIn the chat!",
+	"Pro <b>%s</b>, is back alive!",
+}

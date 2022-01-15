@@ -329,3 +329,7 @@ func check(err error) {
 		fmt.Println(err)
 	}
 }
+
+func Get_entity(u interface{}) {
+	fmt.Println(u)
+}

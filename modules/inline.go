@@ -9,8 +9,12 @@ import (
 
 	"github.com/StalkR/imdb"
 	googlesearch "github.com/rocketlaunchr/google-search"
+	"google.golang.org/api/option"
+	"google.golang.org/api/youtube/v3"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
+
+const YOUTUBE_API_KEY = "AIzaSyAEz0eRkbsEE7TrHGKmd_iXh4AmYJlMKDs"
 
 func inline_markup(query string) *tb.InlineKeyboardMarkup {
 	btns := &tb.InlineKeyboardMarkup{}
@@ -35,6 +39,9 @@ func InlineQueryHandler(c tb.Context) error {
 	} else if strings.HasPrefix(query, "imdb") {
 		imdb_inline(c)
 		return nil
+	} else if strings.HasPrefix(query, "yt") {
+		yt_search(c)
+		return nil
 	}
 	return nil
 }
@@ -45,7 +52,7 @@ func InlineMainMenu(c tb.Context) {
 	btns.InlineKeyboard = [][]tb.InlineButton{{tb.InlineButton{
 		Text:            "Google Search",
 		InlineQueryChat: "google ",
-	}, tb.InlineButton{Text: "UD Search", InlineQueryChat: "ud "}, tb.InlineButton{Text: "IMDb Search", InlineQueryChat: "imdb "}}}
+	}, tb.InlineButton{Text: "UD Search", InlineQueryChat: "ud "}}, {tb.InlineButton{Text: "IMDb Search", InlineQueryChat: "imdb "}, tb.InlineButton{Text: "Youtube Search", InlineQueryChat: "yt "}}}
 	result := &tb.ArticleResult{ResultBase: tb.ResultBase{ReplyMarkup: btns}, Title: text, Description: "Here is the inline help menu", Text: text}
 	results := make(tb.Results, 1)
 	results[0] = result
@@ -149,4 +156,29 @@ func imdb_inline(c tb.Context) {
 	if err != nil {
 		fmt.Println(err)
 	}
+}
+
+func yt_search(c tb.Context) {
+	q := c.Query().Text
+	args := strings.SplitN(q, " ", 2)
+	if len(args) == 1 {
+		return
+	}
+	arg := args[1]
+	client, _ := youtube.NewService(context.TODO(), option.WithAPIKey(YOUTUBE_API_KEY))
+	call := client.Search.List([]string{"snippet"}).Q(arg).MaxResults(10)
+	resp, err := call.Do()
+	check(err)
+	results := make(tb.Results, 10)
+	for i, x := range resp.Items {
+		text := fmt.Sprintf("<b><a href='https://www.youtube.com/watch?v=%s'>%s</a></b>\n<b>%s</b>\n<b>Published:</b> %s\n\n <i>%s</i>", x.Id.VideoId, x.Snippet.Title, x.Snippet.ChannelTitle, x.Snippet.PublishedAt, x.Snippet.Description)
+		r := &tb.ArticleResult{ResultBase: tb.ResultBase{ReplyMarkup: inline_markup("yt"), Content: &tb.InputTextMessageContent{Text: text, DisablePreview: false}}, Title: x.Snippet.Title, Description: x.Snippet.ChannelTitle, ThumbURL: x.Snippet.Thumbnails.Medium.Url}
+		results[i] = r
+		results[i].SetResultID(strconv.Itoa(i))
+	}
+	err = c.Bot().Answer(c.Query(), &tb.QueryResponse{
+		Results:   results,
+		CacheTime: 60,
+	})
+	check(err)
 }
