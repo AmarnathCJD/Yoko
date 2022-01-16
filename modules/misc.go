@@ -357,6 +357,7 @@ func Paste(c tb.Context) error {
 			key = key.(string)
 		}
 		URL := fmt.Sprintf("https://www.toptal.com/developers/hastebin/%s")
+                fmt.Println(bd, URL)
 		sel.Inline(sel.Row(sel.URL("View Paste", URL)))
 		c.Reply(fmt.Sprintf("<b>Pasted to <a href='%s'>Haste bin</a></b>", URL), sel)
 		return nil
