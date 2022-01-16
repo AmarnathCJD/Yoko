@@ -341,6 +341,7 @@ func Paste(c tb.Context) error {
 		return nil
 	}
 	if strings.Contains(c.Message().Payload, "-h") {
+                fmt.Println("Hui")
 		uri := "https://www.toptal.com/developers/hastebin/documents"
 		values := url.Values{}
 		values.Set("data", text)
