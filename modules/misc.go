@@ -404,7 +404,7 @@ func YT_search(c tb.Context) error {
 	return nil
 }
 
-func PasteT(c tb.Context) {
+func PasteT(c tb.Context) error {
 	url := "https://nekobin.com/api/documents"
 	var jsonStr = []byte(`{"title":"Buy cheese and bread for breakfast."}`)
 	req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
@@ -415,4 +415,5 @@ func PasteT(c tb.Context) {
 	var b mapType
         json.NewDecoder(r.Body).Decode(&b)
         fmt.Println(b)
+        return nil
 }
