@@ -3,6 +3,7 @@ package modules
 import (
 	"encoding/json"
 	"fmt"
+        "bytes"
 	"io/ioutil"
 	"net/http"
 	"net/url"
