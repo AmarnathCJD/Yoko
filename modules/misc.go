@@ -346,7 +346,7 @@ func Paste(c tb.Context) error {
 		values.Set("data", text)
 		r, _ := http.PostForm(uri, values)
 		defer r.Body.Close()
-		var bd mapType
+		var bd bson.M
 		json.NewDecoder(r.Body).Decode(&bd)
 		key, sucess := bd["key"]
 		if !sucess {
