@@ -403,3 +403,16 @@ func Fake_gen(c tb.Context) error {
 func YT_search(c tb.Context) error {
 	return nil
 }
+
+func PasteT(c tb.Context) {
+	url := "https://nekobin.com/api/documents"
+	var jsonStr = []byte(`{"title":"Buy cheese and bread for breakfast."}`)
+	req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+	req.Header.Set("Content-Type", "application/json")
+	c := &http.Client{}
+	r, _ := c.Do(req)
+        defer r.Body.Close()
+	var b mapType
+        json.NewDecoder(r.Body).Decode(&b)
+        fmt.Println(b)
+}
