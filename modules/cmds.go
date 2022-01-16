@@ -18,7 +18,6 @@ func RegHandlers() {
 	bot.Bot.Handle("/id", ID_info)
 	bot.Bot.Handle("/paste", Paste)
 	bot.Bot.Handle("/fake", Fake_gen)
-	bot.Bot.Handle("/pp", PasteT)
 	// start.go
 	bot.Bot.Handle("/start", Start)
 	bot.Bot.Handle("/help", Help_Menu)
