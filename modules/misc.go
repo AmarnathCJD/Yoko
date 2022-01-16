@@ -340,6 +340,26 @@ func Paste(c tb.Context) error {
 		c.Reply("Give some text to paste it!")
 		return nil
 	}
+        if strings.Contains(c.Message().Payload, "-h"){
+           uri := "https://www.toptal.com/developers/hastebin/documents"
+           values := url.Values{}
+	   values.Set("data", text)
+	   r, _ := http.PostForm(uri, values)
+           defer r.Body.Close()
+           var bd mapType
+           json.NewDecoder(r.Body).Decode(&bd)
+           key, sucess := bd["key"]
+           if !sucess {
+               c.Reply("HasteBin Down.")
+               return nil
+           } else {
+               key = key.(string)
+           }
+           URL := fmt.Sprintf("https://www.toptal.com/developers/hastebin/%s")
+           sel.Inline(sel.Row(sel.URL("View Paste", URL)))
+           c.Reply(fmt.Sprintf("<b>Pasted to <a href'%s'>Haste bin</a></b>", URL), sel)
+           return nil
+        }
 	uri := "https://api.roseloverx.in/paste"
 	req, _ := http.NewRequest("GET", uri, nil)
 	q := req.URL.Query()
@@ -401,21 +421,5 @@ func Fake_gen(c tb.Context) error {
 }
 
 func YT_search(c tb.Context) error {
-	return nil
-}
-
-type NekoData struct {
-	text string
-}
-
-func PasteT(c tb.Context) error {
-	uri := "https://nekobin.com/api/documents"
-	values := url.Values{}
-	values.Set("content", "Hello")
-	r, _ := http.PostForm(uri, values)
-	defer r.Body.Close()
-	var b mapType
-	json.NewDecoder(r.Body).Decode(&b)
-	fmt.Println(b)
 	return nil
 }
