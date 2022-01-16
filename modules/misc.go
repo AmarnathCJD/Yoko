@@ -405,16 +405,16 @@ func YT_search(c tb.Context) error {
 }
 
 type NekoData struct {
- text string
+	text string
 }
 
 func PasteT(c tb.Context) error {
 	uri := "https://nekobin.com/api/documents"
 	dt := NekoData{"Hello"}
-        data, _ := json.Marshal(dt)
-        fmt.Println(string(data))
-values := url.Values{}
-    values.Set("text", string(data))
+	data, _ := json.Marshal(dt)
+	fmt.Println(string(data))
+	values := url.Values{}
+	values.Set("text", string(data))
 
 	r, _ := http.PostForm(uri, values)
 
