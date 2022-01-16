@@ -356,10 +356,9 @@ func Paste(c tb.Context) error {
 		} else {
 			key = key.(string)
 		}
-		URL := fmt.Sprintf("https://www.toptal.com/developers/hastebin/%s")
-		fmt.Println(bd, URL)
+		URL := fmt.Sprintf("https://www.toptal.com/developers/hastebin/%s", key)
 		sel.Inline(sel.Row(sel.URL("View Paste", URL)))
-		c.Reply(fmt.Sprintf("<b>Pasted to <a href='%s'>Haste bin</a></b>", URL), sel)
+		c.Reply(fmt.Sprintf("<b>Pasted to <a href='%s'>HasteBin</a></b>", URL), sel)
 		return nil
 	}
 	uri := "https://api.roseloverx.in/paste"
