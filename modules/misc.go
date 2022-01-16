@@ -409,14 +409,14 @@ type NekoData struct {
 }
 
 func PasteT(c tb.Context) error {
-	url := "https://nekobin.com/api/documents"
+	uri := "https://nekobin.com/api/documents"
 	dt := NekoData{"Hello"}
         data, _ := json.Marshal(dt)
         fmt.Println(string(data))
 values := url.Values{}
     values.Set("text", string(data))
 
-	r, _ := http.PostForm(url, values)
+	r, _ := http.PostForm(uri, values)
 
 	defer r.Body.Close()
 	var b mapType
