@@ -406,11 +406,11 @@ func YT_search(c tb.Context) error {
 
 func PasteT(c tb.Context) error {
 	url := "https://nekobin.com/api/documents"
-	var jsonStr = []byte(`{"title":"Buy cheese and bread for breakfast."}`)
+	var jsonStr = []byte(`{"text":"Buy cheese and bread for breakfast."}`)
 	req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
 	req.Header.Set("Content-Type", "application/json")
-	c := &http.Client{}
-	r, _ := c.Do(req)
+	cd := &http.Client{}
+	r, _ := cd.Do(req)
         defer r.Body.Close()
 	var b mapType
         json.NewDecoder(r.Body).Decode(&b)
