@@ -1,9 +1,9 @@
 package modules
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
-        "bytes"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -412,9 +412,9 @@ func PasteT(c tb.Context) error {
 	req.Header.Set("Content-Type", "application/json")
 	cd := &http.Client{}
 	r, _ := cd.Do(req)
-        defer r.Body.Close()
+	defer r.Body.Close()
 	var b mapType
-        json.NewDecoder(r.Body).Decode(&b)
-        fmt.Println(b)
-        return nil
+	json.NewDecoder(r.Body).Decode(&b)
+	fmt.Println(b)
+	return nil
 }
