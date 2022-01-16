@@ -1,9 +1,9 @@
 package modules
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
-        "bytes"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -344,7 +344,7 @@ func Paste(c tb.Context) error {
 	if strings.Contains(c.Message().Payload, "-h") {
 		uri := "https://www.toptal.com/developers/hastebin/documents"
 		req, _ := http.NewRequest("POST", uri, bytes.NewBufferString(text))
-                r, _ := myClient.Do(req)
+		r, _ := myClient.Do(req)
 		defer r.Body.Close()
 		var bd bson.M
 		json.NewDecoder(r.Body).Decode(&bd)
