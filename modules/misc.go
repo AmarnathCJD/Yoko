@@ -1,7 +1,6 @@
 package modules
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -405,13 +404,20 @@ func YT_search(c tb.Context) error {
 	return nil
 }
 
+type NekoData struct {
+ text string
+}
+
 func PasteT(c tb.Context) error {
 	url := "https://nekobin.com/api/documents"
-	var jsonStr = []byte(`{"text":"Buy cheese and bread for breakfast."}`)
-	req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
-	req.Header.Set("Content-Type", "application/json")
-	cd := &http.Client{}
-	r, _ := cd.Do(req)
+	dt := NekoData{"Hello"}
+        data, _ := json.Marshal(dt)
+        fmt.Println(string(data))
+values := url.Values{}
+    values.Set("text", string(data))
+
+	r, _ := http.PostForm(url, values)
+
 	defer r.Body.Close()
 	var b mapType
 	json.NewDecoder(r.Body).Decode(&b)
