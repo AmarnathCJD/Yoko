@@ -2,6 +2,8 @@ package modules
 
 import (
 	"fmt"
+"strings"
+"strconv"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
 
