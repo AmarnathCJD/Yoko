@@ -102,5 +102,5 @@ func RegHandlers() {
 	bot.Bot.Handle("/welcome", Welcome_set)
 	// chatbot.go
 	bot.Bot.Handle("/chatbot", Chatbot_mode, Change_info)
-        bot.Bot.Handle("/connect", Connect_chat)
+	bot.Bot.Handle("/connect", Connect_chat)
 }
