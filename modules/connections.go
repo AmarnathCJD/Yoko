@@ -1,7 +1,7 @@
 package modules
 
 import (
-tb "gopkg.in/tucnak/telebot.v3
+tb "gopkg.in/tucnak/telebot.v3"
 )
 
 func Connect_chat(c tb.Context) error {
