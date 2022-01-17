@@ -8,7 +8,7 @@ import (
 )
 
 func Connect_chat(c tb.Context) error {
-        fmt.Println(c.Get("Chat"))
+	fmt.Println(c.Get("Chat"))
 	if !c.Message().Private() {
 		sel.Inline(sel.Row(sel.URL("Connect to chat", fmt.Sprintf("t.me/yoko_robot?start=connect_%d", c.Chat().ID))))
 		c.Reply("Tap the following button to connect to this chat in PM", sel)
