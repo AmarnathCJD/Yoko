@@ -343,7 +343,7 @@ func Paste(c tb.Context) error {
 	}
 	if strings.Contains(c.Message().Payload, "-h") {
 		uri := "https://www.toptal.com/developers/hastebin/documents"
-		req, _ := http.NewRequest("POST", uri, bytes.NewBufferString(text))
+		req, _ := http.NewRequest("POST", uri, bytes.NewBufferString(strings.ReplaceAll(text, "-h", "")))
 		r, _ := myClient.Do(req)
 		defer r.Body.Close()
 		var bd bson.M
