@@ -24,7 +24,8 @@ return nil
 func private_connect(c tb.Context) error {
 args := strings.SplitN(c.Message().Payload, "_", 2)
 	chat_id, _ := strconv.Atoi(args[1])
-chat, err := c.Bot().ChatByID(chat_id)
+chat, err := c.Bot().ChatByID(int64(chat_id))
+check(err)
 sel.Inline(sel.Row(sel.Data("Admin Commands", "connect_ad_cmd")), sel.Row(sel.Data("User commands", "connect_us_cmd")))
 c.Reply(fmt.Sprintf("You have been connected to %s!", chat.Title))
 return nil
