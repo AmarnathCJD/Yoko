@@ -22,9 +22,9 @@ func Start(c tb.Context) error {
 		private_startallnotes(c)
 		return nil
 	} else if strings.HasPrefix(m.Payload, "connect") {
-           private_connect(c)
-           return nil
-        }
+		private_connect(c)
+		return nil
+	}
 	if m.Private() {
 		menu.Inline(
 			menu.Row(menu.URL("Support", "t.me/roseloverx_support"), menu.URL("Updates", "t.me/roseloverx_support")),
