@@ -426,7 +426,7 @@ func YT_search(c tb.Context) error {
 
 func testf(c tb.Context) error {
 	postBody, _ := json.Marshal(map[string]string{
-		"content":  "HannTu Madarchod",
+		"content": "HannTu Madarchod",
 	})
 	responseBody := bytes.NewBuffer(postBody)
 	resp, err := http.Post("https://nekobin.com/api/documents", "application/json", responseBody)
