@@ -434,8 +434,7 @@ func testf(c tb.Context) error {
    resp, err := http.Post("https://postman-echo.com/post", "application/json", responseBody)
    check (err)
    defer resp.Body.Close()
-   body, err = ioutil.ReadAll(resp.Body)
-   check(err)
+   body, _ := ioutil.ReadAll(resp.Body)
    sb := string(body)
    fmt.Println(sb)
    return nil
