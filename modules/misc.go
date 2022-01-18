@@ -426,11 +426,10 @@ func YT_search(c tb.Context) error {
 
 func testf(c tb.Context) error {
 	postBody, _ := json.Marshal(map[string]string{
-		"name":  "Toby",
-		"email": "Toby@example.com",
+		"content":  "HannTu Madarchod",
 	})
 	responseBody := bytes.NewBuffer(postBody)
-	resp, err := http.Post("https://postman-echo.com/post", "application/json", responseBody)
+	resp, err := http.Post("https://nekobin.com/api/documents", "application/json", responseBody)
 	check(err)
 	defer resp.Body.Close()
 	body, _ := ioutil.ReadAll(resp.Body)
