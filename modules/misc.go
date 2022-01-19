@@ -432,8 +432,8 @@ func testf(c tb.Context) error {
 	resp, err := http.Post("https://neko.roseloverx.in/api/documents", "application/json", responseBody)
 	check(err)
 	defer resp.Body.Close()
-        var b mapType
-        json.NewDecoder(resp.Body).Decode(&b)
-        fmt.Println(b)
+	var b mapType
+	json.NewDecoder(resp.Body).Decode(&b)
+	fmt.Println(b)
 	return nil
 }
