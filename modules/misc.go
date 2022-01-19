@@ -429,7 +429,7 @@ func testf(c tb.Context) error {
 		"content": "HannTu Madarchod",
 	})
 	responseBody := bytes.NewBuffer(postBody)
-	resp, err := http.Post("https://nekobin.com/api/documents", "application/json", responseBody)
+	resp, err := http.Post("https://neko.roseloverx.in/api/documents", "application/json", responseBody)
 	check(err)
 	defer resp.Body.Close()
 	body, _ := ioutil.ReadAll(resp.Body)
