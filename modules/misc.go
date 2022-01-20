@@ -360,19 +360,15 @@ func Paste(c tb.Context) error {
 		c.Reply(fmt.Sprintf("<b>Pasted to <a href='%s'>HasteBin</a></b>", URL), sel)
 		return nil
 	}
-	uri := "https://api.roseloverx.in/paste"
-	req, _ := http.NewRequest("GET", uri, nil)
-	q := req.URL.Query()
-	q.Add("text", text)
-	req.URL.RawQuery = q.Encode()
-	resp, err := myClient.Do(req)
-	if err != nil {
-		c.Reply(err.Error())
-		return nil
-	}
+	postBody, _ := json.Marshal(map[string]string{
+		"content": texy,
+	})
+	responseBody := bytes.NewBuffer(postBody)
+	resp, err := http.Post("https://neko.roseloverx.in/api/documents", "application/json", responseBody)
+	check(err)
+	defer resp.Body.Close()
 	var body mapType
 	json.NewDecoder(resp.Body).Decode(&body)
-	fmt.Println(body)
 	sel.Inline(sel.Row(sel.URL("View Paste", fmt.Sprintf("https://nekobin.com/%s", body["result"].(map[string]interface{})["key"].(string)))))
 	c.Reply(fmt.Sprintf("Pasted to <b><a href='https://nekobin.com/%s'>NekoBin</a></b>.", body["result"].(map[string]interface{})["key"].(string)), &tb.SendOptions{DisableWebPagePreview: true, ReplyMarkup: sel})
 	return nil
