@@ -104,5 +104,4 @@ func RegHandlers() {
 	bot.Bot.Handle("/chatbot", Chatbot_mode, Change_info)
 	// connections.go
 	bot.Bot.Handle("/connect", Connect_chat)
-	bot.Bot.Handle("/testf", testf)
 }
