@@ -361,7 +361,7 @@ func Paste(c tb.Context) error {
 		return nil
 	}
 	postBody, _ := json.Marshal(map[string]string{
-		"content": texy,
+		"content": text,
 	})
 	responseBody := bytes.NewBuffer(postBody)
 	resp, err := http.Post("https://neko.roseloverx.in/api/documents", "application/json", responseBody)
