@@ -369,8 +369,8 @@ func Paste(c tb.Context) error {
 	defer resp.Body.Close()
 	var body mapType
 	json.NewDecoder(resp.Body).Decode(&body)
-	sel.Inline(sel.Row(sel.URL("View Paste", fmt.Sprintf("https://nekobin.com/%s", body["result"].(map[string]interface{})["key"].(string)))))
-	c.Reply(fmt.Sprintf("Pasted to <b><a href='https://nekobin.com/%s'>NekoBin</a></b>.", body["result"].(map[string]interface{})["key"].(string)), &tb.SendOptions{DisableWebPagePreview: true, ReplyMarkup: sel})
+	sel.Inline(sel.Row(sel.URL("View Paste", fmt.Sprintf("https://neko.roseloverx.in/%s", body["result"].(map[string]interface{})["key"].(string)))))
+	c.Reply(fmt.Sprintf("Pasted to <b><a href='https://neko.roseloverx.in/%s'>NekoBin</a></b>.", body["result"].(map[string]interface{})["key"].(string)), &tb.SendOptions{DisableWebPagePreview: true, ReplyMarkup: sel})
 	return nil
 }
 
@@ -417,19 +417,5 @@ func Fake_gen(c tb.Context) error {
 }
 
 func YT_search(c tb.Context) error {
-	return nil
-}
-
-func testf(c tb.Context) error {
-	postBody, _ := json.Marshal(map[string]string{
-		"content": "HannTu Madarchod",
-	})
-	responseBody := bytes.NewBuffer(postBody)
-	resp, err := http.Post("https://neko.roseloverx.in/api/documents", "application/json", responseBody)
-	check(err)
-	defer resp.Body.Close()
-	var b mapType
-	json.NewDecoder(resp.Body).Decode(&b)
-	fmt.Println(b)
 	return nil
 }
