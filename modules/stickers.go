@@ -2,7 +2,8 @@ package modules
 
 import (
 	"fmt"
-
+"encoding/json"
+"net/http"
 	db "github.com/amarnathcjd/yoko/modules/db"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
@@ -55,13 +56,20 @@ func AddSticker(c tb.Context) error {
 	return nil
 }
 
-func TGStest(c tb.Context) error {
-	x := fmt.Sprintf("cj%d_%d_by_Yoko_Robot", c.Sender().ID, 1)
-	file, _ := b.FileByID(c.Message().ReplyTo.Sticker.FileID)
-	c.Reply(file)
-	err := c.Bot().CreateStickerSet(c.Sender(), tb.StickerSet{Name: x, Title: "smd kang tgs test", Stickers: []tb.Sticker{*c.Message().ReplyTo.Sticker}, TGS: &c.Message().Sticker.File, Emojis: "😭", Animated: true})
-	if err != nil {
-		c.Reply(err.Error())
-	}
-	return nil
+func CombotSticker(c tb.Context) error {
+query:= c.Message.Payload
+req, _ := http.NewRequest("GET", "https://combot.org/telegram/stickers", nil)
+q := req.URL.Query()
+q.Add("q", query)
+req.URL.RawQuery = q.Encode()
+resp, err:= myClient.Do(req)
+check(err)
+defer resp.Body.Close()
+if response.StatusCode != http.StatusOK{
+c.Reply("Search Service is Down!")
+}
+var body mapType
+json.NewDecoder(resp.Body).Decode(&body)
+fmt.Println(body)
+return nil
 }
