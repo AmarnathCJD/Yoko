@@ -89,7 +89,7 @@ func RegHandlers() {
 	bot.Bot.Handle("/unpin", unpin_msg, Pin_messages)
 	// stickers.go
 	bot.Bot.Handle("/kang", AddSticker)
-	bot.Bot.Handle("/d", TGStest)
+	bot.Bot.Handle("/stickers", CombotSticker)
 	// eval.go
 	bot.Bot.Handle("/sh", Exec)
 	bot.Bot.Handle("/eval", Eval)
