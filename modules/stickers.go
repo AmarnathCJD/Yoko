@@ -74,11 +74,11 @@ func CombotSticker(c tb.Context) error {
 	x := doc.FindAll("a", "class", "sticker-pack__btn")
 	y := doc.FindAll("div", "class", "sticker-pack__title")
 	duc, msg := []string{}, ""
-        if query == string(""){
-msg = "<b>Trending Packs.</b>"
-} else {
-	msg = fmt.Sprintf("Search results for <b>%s</b>", query)
-}
+	if query == string("") {
+		msg = "<b>Trending Packs.</b>"
+	} else {
+		msg = fmt.Sprintf("Search results for <b>%s</b>", query)
+	}
 	qt := 0
 	for i, b := range x {
 		if !stringInSlice(b.Attrs()["href"], duc) {
