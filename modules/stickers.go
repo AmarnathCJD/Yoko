@@ -75,11 +75,19 @@ func CombotSticker(c tb.Context) error {
 	x := doc.FindAll("a", "class", "sticker-pack__btn")
 	y := doc.FindAll("div", "class", "sticker-pack__title")
 	duc := []string{}
+        msg := fmt.Sprintf("Search results for <b>%s</b>", query)
+        qt := 0
 	for i, b := range x {
 		if !stringInSlice(b.Attrs()["href"], duc) {
-			fmt.Println(b.Attrs()["href"], y[i].Text())
+                        qt++
+                        msg+= fmt.Sprintf("\n<b>%d. ~</b> <a href='%s'>%s</a>", qt, b.Attrs()["href"], y[i].Text())
 			duc = append(duc, b.Attrs()["href"])
 		}
 	}
+        if qt == 0{
+c.Reply("No Results found for your query!")
+return nil
+}
+        c.Reply(msg)
 	return nil
 }
