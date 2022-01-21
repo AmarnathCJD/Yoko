@@ -1,6 +1,7 @@
 package modules
 
 import (
+"io"
 	"fmt"
 	db "github.com/amarnathcjd/yoko/modules/db"
 	tb "gopkg.in/tucnak/telebot.v3"
@@ -68,7 +69,8 @@ func CombotSticker(c tb.Context) error {
 	if resp.StatusCode != http.StatusOK {
 		c.Reply("Search Service is Down!")
 	}
-doc := soup.HTMLParse(string(resp.Body))
+body, _ := io.ReadAll(resp.Body)
+doc := soup.HTMLParse(string(body))
 x := doc.FindAll("a", "class", "sticker-pack__btn")
 y := doc.FindAll("div", "sticker-pack__title")
 fmt.Println(x, y)
