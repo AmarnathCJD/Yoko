@@ -1,11 +1,11 @@
 package modules
 
 import (
+	"encoding/json"
 	"fmt"
-"encoding/json"
-"net/http"
 	db "github.com/amarnathcjd/yoko/modules/db"
 	tb "gopkg.in/tucnak/telebot.v3"
+	"net/http"
 )
 
 func AddSticker(c tb.Context) error {
@@ -57,19 +57,19 @@ func AddSticker(c tb.Context) error {
 }
 
 func CombotSticker(c tb.Context) error {
-query:= c.Message().Payload
-req, _ := http.NewRequest("GET", "https://combot.org/telegram/stickers", nil)
-q := req.URL.Query()
-q.Add("q", query)
-req.URL.RawQuery = q.Encode()
-resp, err:= myClient.Do(req)
-check(err)
-defer resp.Body.Close()
-if resp.StatusCode != http.StatusOK{
-c.Reply("Search Service is Down!")
-}
-var body mapType
-json.NewDecoder(resp.Body).Decode(&body)
-fmt.Println(body)
-return nil
+	query := c.Message().Payload
+	req, _ := http.NewRequest("GET", "https://combot.org/telegram/stickers", nil)
+	q := req.URL.Query()
+	q.Add("q", query)
+	req.URL.RawQuery = q.Encode()
+	resp, err := myClient.Do(req)
+	check(err)
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		c.Reply("Search Service is Down!")
+	}
+	var body mapType
+	json.NewDecoder(resp.Body).Decode(&body)
+	fmt.Println(body)
+	return nil
 }
