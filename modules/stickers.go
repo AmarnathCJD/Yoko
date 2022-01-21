@@ -57,7 +57,7 @@ func AddSticker(c tb.Context) error {
 }
 
 func CombotSticker(c tb.Context) error {
-query:= c.Message.Payload
+query:= c.Message().Payload
 req, _ := http.NewRequest("GET", "https://combot.org/telegram/stickers", nil)
 q := req.URL.Query()
 q.Add("q", query)
