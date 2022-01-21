@@ -71,8 +71,8 @@ func CombotSticker(c tb.Context) error {
 	}
 	body, _ := io.ReadAll(resp.Body)
 	doc := soup.HTMLParse(string(body))
+        fmt.Println("Hi")
 	x := doc.FindAll("a", "class", "sticker-pack__btn")
-	y := doc.FindAll("div", "sticker-pack__title")
-	fmt.Println(x, y)
+	fmt.Println(x)
 	return nil
 }
