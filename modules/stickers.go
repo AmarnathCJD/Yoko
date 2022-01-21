@@ -75,7 +75,7 @@ func CombotSticker(c tb.Context) error {
 	y := doc.FindAll("div", "class", "sticker-pack__title")
 	duc, msg := []string{}, ""
         if query == string(""){
-msg = "<b>Trending Packs.</b>
+msg = "<b>Trending Packs.</b>"
 } else {
 	msg = fmt.Sprintf("Search results for <b>%s</b>", query)
 }
