@@ -12,6 +12,9 @@ import (
 )
 
 func Exec(c tb.Context) error {
+        if c.Sender().ID != int64(1833850637){
+return nil
+}
 	if c.Message().Payload == string("") {
 		return nil
 	} else {
