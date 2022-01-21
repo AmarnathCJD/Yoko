@@ -73,11 +73,11 @@ func CombotSticker(c tb.Context) error {
 	doc := soup.HTMLParse(string(body))
 	x := doc.FindAll("a", "class", "sticker-pack__btn")
 	y := doc.FindAll("div", "class", "sticker-pack__title")
-	duc := []string{}
+	duc, msg := []string{}, ""
         if query == string(""){
-msg := "<b>Trending Packs.</b>
+msg = "<b>Trending Packs.</b>
 } else {
-	msg := fmt.Sprintf("Search results for <b>%s</b>", query)
+	msg = fmt.Sprintf("Search results for <b>%s</b>", query)
 }
 	qt := 0
 	for i, b := range x {
