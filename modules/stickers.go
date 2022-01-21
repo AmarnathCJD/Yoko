@@ -96,11 +96,11 @@ func CombotSticker(c tb.Context) error {
 }
 
 func MyPacks(c tb.Context) error {
-pack, _, _ := db.Get_user_pack(c.Sender().ID)
-if !pack{
-c.Reply("You have not created any sticker packs, use /kang to save stickers!")
-return nil
-} 
-// soon need to add all pack return function
-return nil
+	pack, _, _ := db.Get_user_pack(c.Sender().ID)
+	if !pack {
+		c.Reply("You have not created any sticker packs, use /kang to save stickers!")
+		return nil
+	}
+	// soon need to add all pack return function
+	return nil
 }
