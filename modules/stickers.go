@@ -96,7 +96,7 @@ func CombotSticker(c tb.Context) error {
 }
 
 func MyPacks(c tb.Context) error {
-pack, count, _ := db.Get_user_pack(c.Sender().ID)
+pack, _, _ := db.Get_user_pack(c.Sender().ID)
 if !pack{
 c.Reply("You have not created any sticker packs, use /kang to save stickers!")
 return nil
