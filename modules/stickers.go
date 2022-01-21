@@ -74,8 +74,11 @@ func CombotSticker(c tb.Context) error {
 	fmt.Println("Hi")
 	x := doc.FindAll("a", "class", "sticker-pack__btn")
 	y := doc.FindAll("div", "class", "sticker-pack__title")
+        duc := []string{}
 	for i, b := range x {
+                if !stringInSlice (b.Attrs()["href"] , duc){
 		fmt.Println(b.Attrs()["href"], y[i].Text())
-	}
+                duc = append(duc, b.Attrs()["href"])
+	}}
 	return nil
 }
