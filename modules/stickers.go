@@ -1,11 +1,11 @@
 package modules
 
 import (
-	"encoding/json"
 	"fmt"
 	db "github.com/amarnathcjd/yoko/modules/db"
 	tb "gopkg.in/tucnak/telebot.v3"
 	"net/http"
+"github.com/anaskhan96/soup"
 )
 
 func AddSticker(c tb.Context) error {
@@ -68,8 +68,9 @@ func CombotSticker(c tb.Context) error {
 	if resp.StatusCode != http.StatusOK {
 		c.Reply("Search Service is Down!")
 	}
-	var body mapType
-	json.NewDecoder(resp.Body).Decode(&body)
-	fmt.Println(body)
+doc := soup.HTMLParse(resp.Body)
+x := doc.FindAll("a", "class", "sticker-pack__btn")
+y := doc.FindAll("div", "sticker-pack__title")
+fmt.Println(x, y)
 	return nil
 }
