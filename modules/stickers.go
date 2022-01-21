@@ -65,7 +65,7 @@ req.URL.RawQuery = q.Encode()
 resp, err:= myClient.Do(req)
 check(err)
 defer resp.Body.Close()
-if response.StatusCode != http.StatusOK{
+if resp.StatusCode != http.StatusOK{
 c.Reply("Search Service is Down!")
 }
 var body mapType
