@@ -68,7 +68,7 @@ func CombotSticker(c tb.Context) error {
 	if resp.StatusCode != http.StatusOK {
 		c.Reply("Search Service is Down!")
 	}
-doc := soup.HTMLParse(resp.Body)
+doc := soup.HTMLParse(string(resp.Body))
 x := doc.FindAll("a", "class", "sticker-pack__btn")
 y := doc.FindAll("div", "sticker-pack__title")
 fmt.Println(x, y)
