@@ -9,8 +9,6 @@ import (
 	"google.golang.org/api/option"
 	"google.golang.org/api/youtube/v3"
 	tb "gopkg.in/tucnak/telebot.v3"
-	"io"
-	"net/http"
 	"strconv"
 	"strings"
 )
@@ -43,10 +41,6 @@ func InlineQueryHandler(c tb.Context) error {
 	} else if strings.HasPrefix(query, "yt") {
 		yt_search(c)
 		return nil
-	} else if strings.HasPrefix(query, "insta") {
-		insta_search(c)
-		return nil
-	}
 	return nil
 }
 
