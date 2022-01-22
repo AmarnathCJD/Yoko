@@ -435,7 +435,7 @@ func StripeCharge(c tb.Context) error {
 			cvc = x
 		}
 	}
-	for i, x := range []string{cc, year, month, cvc} {
+	for _, x := range []string{cc, year, month, cvc} {
 		if x == string("") {
 			c.Reply("Invalid format, please send as <code>/st cc|mm|yy|cvv</code>")
                         return nil
