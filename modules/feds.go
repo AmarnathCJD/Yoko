@@ -676,4 +676,44 @@ func Fednotif(c tb.Context) error {
 	}
 }
 
+func FedExport(c tb.Context) error {
+	fed_id := ""
+	if !c.Message().Private() {
+		p, _ := c.Bot().ChatMemberOf(c.Chat(), c.Sender())
+		if p.Role != tb.Creator && p.Role != tb.Administrator {
+			c.Reply("You need to be an admin to do this.")
+			return nil
+		}
+		fed_id = db.Get_chat_fed(c.Chat().ID)
+		if fed_id == string("") {
+			c.Reply("This chat isn't in any federations.")
+			return nil
+		}
+
+	} else {
+		fed, fedid, _ := db.Get_fed_by_owner(m.Sender.ID)
+		if !fed {
+			c.Reply("You aren't the creator of any feds to act in.")
+			return nil
+		}
+		fed_id = fedid
+	}
+	fed := db.Search_fed_by_id(fed_id)
+        if fed["user_id"].(int64) != c.Sender().ID{
+          c.Reply("Only the fed creator can export the ban list.")
+        return nil
+}
+	mode := "csv"
+	if c.Message().Payload != string("") && stringInSlice(c.Message().Payload, []string{"csv", "json", "xml"}) {
+		mode = c.Message().Payload
+	}
+	if mode == "json" {
+           c.Reply("Json" + fmt.Sprint(fed))
+	}
+	return nil
+}
+
+
+
+
 // soon
