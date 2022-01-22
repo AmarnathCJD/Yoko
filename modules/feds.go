@@ -699,21 +699,18 @@ func FedExport(c tb.Context) error {
 		fed_id = fedid
 	}
 	fed := db.Search_fed_by_id(fed_id)
-        if fed["user_id"].(int64) != c.Sender().ID{
-          c.Reply("Only the fed creator can export the ban list.")
-        return nil
-}
+	if fed["user_id"].(int64) != c.Sender().ID {
+		c.Reply("Only the fed creator can export the ban list.")
+		return nil
+	}
 	mode := "csv"
 	if c.Message().Payload != string("") && stringInSlice(c.Message().Payload, []string{"csv", "json", "xml"}) {
 		mode = c.Message().Payload
 	}
 	if mode == "json" {
-           c.Reply("Json" + fmt.Sprint(fed))
+		c.Reply("Json" + fmt.Sprint(fed))
 	}
 	return nil
 }
-
-
-
 
 // soon
