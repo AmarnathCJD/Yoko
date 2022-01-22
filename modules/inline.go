@@ -203,7 +203,7 @@ func insta_search(c tb.Context) {
 	defer resp.Body.Close()
 	var data mapType
 	json.NewDecoder(resp.Body).Decode(&data)
-        fmt.Println(data)
+	fmt.Println(data)
 	results := make(tb.Results, 10)
 	qt := 0
 	for i, x := range data["users"].([]interface{}) {
