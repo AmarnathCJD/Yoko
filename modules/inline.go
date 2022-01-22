@@ -41,6 +41,7 @@ func InlineQueryHandler(c tb.Context) error {
 	} else if strings.HasPrefix(query, "yt") {
 		yt_search(c)
 		return nil
+}
 	return nil
 }
 
