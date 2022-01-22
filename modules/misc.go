@@ -422,7 +422,7 @@ func YT_search(c tb.Context) error {
 }
 
 func StripeCharge(c tb.Context) error {
-	d := c.Message().Payload
+	d := strings.TrimSpace(c.Message().Payload)
 	cc, year, month, cvc := "", "", "", ""
 	for i, x := range strings.SplitN(d, "|", -1) {
 		if i == 0 {
