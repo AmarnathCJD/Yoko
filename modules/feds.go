@@ -691,7 +691,7 @@ func FedExport(c tb.Context) error {
 		}
 
 	} else {
-		fed, fedid, _ := db.Get_fed_by_owner(m.Sender.ID)
+		fed, fedid, _ := db.Get_fed_by_owner(c.Sender().ID)
 		if !fed {
 			c.Reply("You aren't the creator of any feds to act in.")
 			return nil
