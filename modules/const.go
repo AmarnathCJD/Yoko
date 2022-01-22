@@ -33,3 +33,27 @@ var AFK_STR = []string{
 	"Where is <b>%s</b>?\nIn the chat!",
 	"Pro <b>%s</b>, is back alive!",
 }
+
+var dead_cc = `
+<b>❌ Stripe/15$ - DEAD</b>
+<b>CC:</b> <code>%s|%s|%s|%s</code>
+<u>Result:</u> <b>%s</b>
+%s
+<U>Time:</u> <b>%d's</b>
+<b>Checked By <a href='tg://user?id=%d'>%s</a> [%s]</b>`
+
+var ccn_cc = `
+<b>✅ Stripe/15$ - CCN Live</b>
+<b>CC:</b> <code>%s|%s|%s|%s</code>
+<u>Result:</u> <b>%s</b>
+%s
+<U>Time:</u> <b>%d's</b>
+<b>Checked By <a href='tg://user?id=%d'>%s</a> [%s]</b>`
+
+var insuf_funds = `
+<b>✅ Stripe/15$ - Insuffient Funds</b>
+<b>CC:</b> <code>%s|%s|%s|%s</code>
+<u>Result:</u> <b>%s</b>
+%s
+<U>Time:</u> <b>%d's</b>
+<b>Checked By <a href='tg://user?id=%d'>%s</a> [%s]</b>`

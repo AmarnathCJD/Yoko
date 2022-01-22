@@ -133,7 +133,7 @@ func ID_info(c tb.Context) error {
 				return nil
 			}
 		}
-		err := c.Reply(fmt.Sprintf("<b>User %s's ID is <code>%d</code>", user_obj.FirstName, user_obj.ID))
+		err := c.Reply(fmt.Sprintf("User %s's ID is <code>%d</code>", user_obj.FirstName, user_obj.ID))
 		fmt.Println(err)
 		return nil
 	}
@@ -441,6 +441,7 @@ func StripeCharge(c tb.Context) error {
 		}
 	}
 	client := &http.Client{}
+	current_time := time.Now()
 	var postdata = strings.NewReader(fmt.Sprintf(`card[number]=%s&card[cvc]=%s&card[exp_month]=%s&card[exp_year]=%s`, cc, cvc, month, year) + `&guid=73f5a9dc-4f9d-4102-9f39-112d2bc87189f08893&muid=48d7d431-4532-4771-ad19-b3c4f6f9a71fb97291&sid=d61644dc-b7f0-456b-8669-e4aeff5cae0f629bec&payment_user_agent=stripe.js%2F558e252d7%3B+stripe-js-v3%2F558e252d7&time_on_page=1319401&key=pk_live_O98c9ngrjsN9aCgHLae6hqHU&pasted_fields=number`)
 	requ, _ := http.NewRequest("POST", "https://api.stripe.com/v1/tokens", postdata)
 	requ.Header.Set("authority", "api.stripe.com")
@@ -486,8 +487,26 @@ func StripeCharge(c tb.Context) error {
 	resp, err := client.Do(req)
 	check(err)
 	defer resp.Body.Close()
-	bodyText, err := ioutil.ReadAll(resp.Body)
-	check(err)
-	c.Reply(string(bodyText))
+	var r bson.M
+	json.NewDecoder(resp.Body).Decode(&r)
+	bin := GetBin(cc)
+	total_time := time.Now().Unix() - current_time.Unix()
+	status := "Free User"
+	if c.Sender().ID == int64(1833850637) {
+		status = "Master"
+	}
+	if r["error"] != nil {
+		if r["error"].(map[string]interface{})["message"].(string) == "Your card has insufficient funds." {
+			c.Reply(fmt.Sprintf(insuf_funds, cc, month, year, cvc, r["error"].(map[string]interface{})["code"].(string), bin, total_time, c.Sender().ID, c.Sender().FirstName, status))
+		} else if r["error"].(map[string]interface{})["code"].(string) == "card_declined" || r["error"].(map[string]interface{})["code"].(string) == "incorrect_cvc" {
+			c.Reply(fmt.Sprintf(dead_cc, cc, month, year, cvc, r["error"].(map[string]interface{})["message"].(string), bin, total_time, c.Sender().ID, c.Sender().FirstName, status))
+		} else if r["error"].(map[string]interface{})["code"].(string) == "incorrect_cvc" {
+			c.Reply(fmt.Sprintf(ccn_cc, cc, month, year, cvc, r["error"].(map[string]interface{})["message"].(string), bin, total_time, c.Sender().ID, c.Sender().FirstName, status))
+		} else {
+			c.Reply(fmt.Sprint(r))
+		}
+	} else {
+		c.Reply(fmt.Sprint(r))
+	}
 	return nil
 }

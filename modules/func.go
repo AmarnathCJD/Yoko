@@ -1,7 +1,9 @@
 package modules
 
 import (
+	"encoding/json"
 	"fmt"
+	"net/http"
 	"regexp"
 	"strconv"
 	"strings"
@@ -332,4 +334,33 @@ func check(err error) {
 
 func Get_entity(u interface{}) {
 	fmt.Println(u)
+}
+
+func GetBin(bin string) string {
+	resp, _ := http.Get(fmt.Sprintf("https://lookup.binlist.net/%s", bin))
+	var v bson.M
+	defer resp.Body.Close()
+	json.NewDecoder(resp.Body).Decode(&v)
+	bankd := v["bank"].(map[string]interface{})
+	ct := v["country"].(map[string]interface{})
+	bank, scheme, btype, brand, country := "-", "-", "-", "-", "-"
+	if bankd != nil {
+		if _, ok := bankd["name"]; ok {
+			bank = bankd["name"].(string)
+		}
+	}
+	if sc, f := v["scheme"]; f {
+		scheme = sc.(string)
+	}
+	if ctype, f := v["type"]; f {
+		btype = ctype.(string)
+	}
+	if brandd, f := v["brand"]; f {
+		brand = brandd.(string)
+	}
+	if ctry, f := ct["name"]; f {
+		country = fmt.Sprintf("(%s - %s - %s - $%s)", ct["emoji"].(string), strings.Title(ctry.(string)), ct["alpha2"].(string), ct["currency"].(string))
+	}
+	bin_details := fmt.Sprintf("<u>Bank Info:</u> <b>%s</b>\n<u>Card Type:</u> <b>%s - %s - %s</b>\n<u>Country:</u> <b>%s</b>", bank, scheme, btype, brand, country)
+	return bin_details
 }
