@@ -69,15 +69,15 @@ func Sed_reg(c tb.Context) bool {
 	msg := c.Message().ReplyTo.Text
 	if msg == string("") {
 		return false
-	} else if to_parse := c.Message().Text; to_parse == string("") {
+	} else if c.Message().Text == string("") {
 		return false
 	}
 	to_parse := c.Message().Text
 	api_url := "https://polar-refuge-17864.herokuapp.com/sed"
 	req, _ := http.NewRequest("GET", api_url, nil)
 	q := req.URL.Query()
-	q.Add("text", to_parse)
-	q.Add("sed", msg)
+	q.Add("sed", to_parse)
+	q.Add("text", msg)
 	req.URL.RawQuery = q.Encode()
 	resp, err := myClient.Do(req)
 	check(err)
@@ -86,7 +86,7 @@ func Sed_reg(c tb.Context) bool {
 	json.NewDecoder(resp.Body).Decode(&body)
 	if text, ok := body["text"]; ok {
 		text = text.(string)
-		c.Send(text, tb.SendOptions{ReplyTo: c.Message().ReplyTo})
+		c.Reply(text, &tb.SendOptions{ReplyTo: c.Message().ReplyTo})
 	}
 	return true
 }

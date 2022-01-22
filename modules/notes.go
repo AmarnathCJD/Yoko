@@ -68,16 +68,16 @@ func Gnote(c tb.Context) error {
 
 func OnTextHandler(c tb.Context) error {
 	match, _ := regexp.MatchString("\\#(\\S+)", c.Message().Text)
-	sed_match, _ := regexp.MatchString("^s([/:|_]).*?\\1.*", c.Message().Text)
+	sed_match, _ := regexp.MatchString(`s/.*`, c.Message().Text)
 	if match {
 		Hash_note(c)
 		return nil
 	}
-	if afk := AFK(c); afk {
-		return nil
-	}
 	if sed_match {
 		Sed_reg(c)
+		return nil
+	}
+	if afk := AFK(c); afk {
 		return nil
 	}
 	Chat_bot(c)
