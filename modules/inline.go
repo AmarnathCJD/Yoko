@@ -4,15 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/http"
-	"strconv"
-	"strings"
-"io"
 	"github.com/StalkR/imdb"
 	googlesearch "github.com/rocketlaunchr/google-search"
 	"google.golang.org/api/option"
 	"google.golang.org/api/youtube/v3"
 	tb "gopkg.in/tucnak/telebot.v3"
+	"io"
+	"net/http"
+	"strconv"
+	"strings"
 )
 
 const YOUTUBE_API_KEY = "AIzaSyAEz0eRkbsEE7TrHGKmd_iXh4AmYJlMKDs"
@@ -204,7 +204,7 @@ func insta_search(c tb.Context) {
 	var data mapType
 	json.NewDecoder(resp.Body).Decode(&data)
 	r, _ := io.ReadAll(resp.Body)
-        fmt.Println(string(r))
+	fmt.Println(string(r))
 	results := make(tb.Results, 10)
 	qt := 0
 	for i, x := range data["users"].([]interface{}) {
