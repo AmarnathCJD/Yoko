@@ -36,7 +36,7 @@ func New_fed(c tb.Context) error {
 	if c.Message().Payload == string("") {
 		c.Reply("You need to give your federation a name! Federation names can be up to 64 characters long.")
 		return nil
-	} else if len(c.Message(.Payload) > 64 {
+	} else if len(c.Message().Payload) > 64 {
 		c.Reply("Federation names can only be upto 64 charactors long.")
 		return nil
 	}
