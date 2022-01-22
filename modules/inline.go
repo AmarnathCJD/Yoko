@@ -211,7 +211,7 @@ func insta_search(c tb.Context) {
 		if qt == 10 {
 			break
 		}
-		r := &tb.ArticleResult{ResultBase: tb.ResultBase{ReplyMarkup: inline_markup("insta"), Content: &tb.InputTextMessageContent{Text: "Soon", DisablePreview: false}}, Title: x.(map[string]interface{})["full_name"].(string), Description: "@" + x.(map[string]interface{})["username"].(string)}
+		r := &tb.ArticleResult{ResultBase: tb.ResultBase{ReplyMarkup: inline_markup("insta"), Content: &tb.InputTextMessageContent{Text: "Soon", DisablePreview: false}}, Title: x.(map[string]interface{})["user"].(map[string]interface{})["full_name"].(string), Description: "@" + x.(map[string]interface{})["user"].(map[string]interface{})["username"].(string)}
 		results[i] = r
 		results[i].SetResultID(strconv.Itoa(i))
 	}
