@@ -368,7 +368,7 @@ return nil
 }
 var d bson.M
 f.Decode(&d)
-return f["fbans"].(bson.A)
+return d["fbans"].(bson.A)
 }
 
 func FEdnotif(fed_id string, mode bool) {
