@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-
+"io"
 	"github.com/StalkR/imdb"
 	googlesearch "github.com/rocketlaunchr/google-search"
 	"google.golang.org/api/option"
@@ -203,7 +203,8 @@ func insta_search(c tb.Context) {
 	defer resp.Body.Close()
 	var data mapType
 	json.NewDecoder(resp.Body).Decode(&data)
-	fmt.Println(data)
+	r, _ := io.ReadAll(resp.Body)
+        fmt.Println(string(r))
 	results := make(tb.Results, 10)
 	qt := 0
 	for i, x := range data["users"].([]interface{}) {
