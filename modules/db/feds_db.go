@@ -361,14 +361,14 @@ func Get_all_fed_admins(fed_id string) bson.A {
 	return fd["fadmins"].(bson.A)
 }
 
-func Get_all_fbans(fed_id string)bson.A {
-f := fbans.FindOne(context.TODO(), bson.M{"fed_id": fed_id})
-if f.Err() != nil{
-return nil
-}
-var d bson.M
-f.Decode(&d)
-return d["fbans"].(bson.A)
+func Get_all_fbans(fed_id string) bson.A {
+	f := fbans.FindOne(context.TODO(), bson.M{"fed_id": fed_id})
+	if f.Err() != nil {
+		return nil
+	}
+	var d bson.M
+	f.Decode(&d)
+	return d["fbans"].(bson.A)
 }
 
 func FEdnotif(fed_id string, mode bool) {
