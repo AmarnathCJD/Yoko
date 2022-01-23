@@ -1,7 +1,11 @@
 package modules
 
 import (
+	"encoding/json"
+	"encoding/xml"
 	"fmt"
+	"io/ioutil"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -644,23 +648,19 @@ func Check_f_admins_cb(c tb.Context) error {
 
 func Fednotif(c tb.Context) error {
 	if !c.Message().Private() {
-		c.Reply("This command is made to be used in PM.")
-		return nil
+		return c.Reply("This command is made to be used in PM.")
 	}
 	f, fed_id, fname := db.Get_fed_by_owner(c.Sender().ID)
 	if !f {
-		c.Reply("You aren't the creator of any feds to act in.")
-		return nil
+		return c.Reply("You aren't the creator of any feds to act in.")
 	}
 	args := c.Message().Payload
 	if args == string("") {
 		mode := db.Get_FEdnotif(fed_id)
 		if mode {
-			c.Reply(fmt.Sprintf("The <code>%s</code> fed is currently sending notifications to it's creator when a fed action is performed.", fname))
-			return nil
+			return c.Reply(fmt.Sprintf("The <code>%s</code> fed is currently sending notifications to it's creator when a fed action is performed.", fname))
 		} else {
-			c.Reply(fmt.Sprintf("The <code>%s</code> fed is currently <b>NOT</b> sending notifications to it's creator when a fed action is performed.", fname))
-			return nil
+			return c.Reply(fmt.Sprintf("The <code>%s</code> fed is currently <b>NOT</b> sending notifications to it's creator when a fed action is performed.", fname))
 		}
 	} else if stringInSlice(args, []string{"on", "yes", "enable"}) {
 		c.Reply(fmt.Sprintf("The fed silence setting for <code>%s</code> has been updated to: <code>true</code>", fname))
@@ -671,9 +671,15 @@ func Fednotif(c tb.Context) error {
 		db.FEdnotif(fed_id, false)
 		return nil
 	} else {
-		c.Reply("Your input was not recognised as one of: yes/no/on/off")
-		return nil
+		return c.Reply("Your input was not recognised as one of: yes/no/on/off")
 	}
+}
+
+type FedBan struct {
+	UserID int64  `json:"user_id"`
+	Reason string `json:"reason"`
+	Time   int64  `json:"time"`
+	Banner int64  `json:"banner"`
 }
 
 func FedExport(c tb.Context) error {
@@ -707,8 +713,41 @@ func FedExport(c tb.Context) error {
 	if c.Message().Payload != string("") && stringInSlice(c.Message().Payload, []string{"csv", "json", "xml"}) {
 		mode = c.Message().Payload
 	}
+	fbans := db.Get_all_fbans(fed_id)
+	var BANS []FedBan
+	for _, x := range fbans {
+		x := x.(bson.M)
+		FBAN := FedBan{UserID: x["user_id"].(int64), Reason: x["reason"].(string), Time: x["time"].(int64), Banner: x["banner"].(int64)}
+		BANS = append(BANS, FBAN)
+	}
 	if mode == "json" {
-		c.Reply("Json" + fmt.Sprint(fed))
+		file, _ := json.MarshalIndent(BANS, "", " ")
+		ioutil.WriteFile("fbans.json", file, 0644)
+		c.Reply(&tb.Document{
+			File:     tb.File{FileLocal: "fbans.json"},
+			Caption:  fmt.Sprintf("%d fbanned users", len(BANS)),
+			FileName: "fbans.json",
+		})
+		os.Remove("fbans.csv")
+	} else if mode == "csv" {
+		if err := JsonToCsv(BANS, "fbans.csv"); err != nil {
+			return err
+		}
+		c.Reply(&tb.Document{
+			File:     tb.File{FileLocal: "fbans.csv"},
+			Caption:  fmt.Sprintf("%d fbanned users", len(BANS)),
+			FileName: "fbans.csv",
+		})
+		os.Remove("fbans.csv")
+	} else if mode == "xml" {
+		d, _ := xml.Marshal(&BANS)
+		ioutil.WriteFile("fbans.xml", d, 0644)
+		c.Reply(&tb.Document{
+			File:     tb.File{FileLocal: "fbans.xml"},
+			Caption:  fmt.Sprintf("%d fbanned users", len(BANS)),
+			FileName: "fbans.xml",
+		})
+		os.Remove("fbans.xml")
 	}
 	return nil
 }

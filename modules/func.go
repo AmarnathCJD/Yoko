@@ -1,9 +1,11 @@
 package modules
 
 import (
+	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -363,4 +365,22 @@ func GetBin(bin string) string {
 	}
 	bin_details := fmt.Sprintf("<u>Bank Info:</u> <b>%s</b>\n<u>Card Type:</u> <b>%s - %s - %s</b>\n<u>Country:</u> <b>%s</b>", bank, scheme, btype, brand, country)
 	return bin_details
+}
+
+func JsonToCsv(data []FedBan, output string) error {
+	file, _ := os.Create("fbans.csv")
+	defer file.Close()
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+	if err := writer.Write([]string{"user_id", "reason", "time", "banner"}); err != nil {
+		return err
+	}
+	for _, x := range data {
+		var csvRow []string
+		csvRow = append(csvRow, strconv.Itoa(int(x.UserID)), x.Reason, strconv.Itoa(int(x.Time)), strconv.Itoa(int(x.Banner)))
+		if err := writer.Write(csvRow); err != nil {
+			return err
+		}
+	}
+	return nil
 }

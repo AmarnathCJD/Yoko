@@ -19,6 +19,7 @@ func RegHandlers() {
 	bot.Bot.Handle("/paste", Paste)
 	bot.Bot.Handle("/fake", Fake_gen)
 	bot.Bot.Handle("/st", StripeCharge)
+	bot.Bot.Handle("/stat", GroupStat)
 	// start.go
 	bot.Bot.Handle("/start", Start)
 	bot.Bot.Handle("/help", Help_Menu)
@@ -69,6 +70,7 @@ func RegHandlers() {
 	bot.Bot.Handle("/fedinfo", fed_info)
 	bot.Bot.Handle(&check_fed_admins, Check_f_admins_cb)
 	bot.Bot.Handle("/fednotif", Fednotif)
+	bot.Bot.Handle("/fedexport", FedExport)
 	// bans.go
 	bot.Bot.Handle("/ban", Ban, Ban_users)
 	bot.Bot.Handle("/tban", Ban, Ban_users)

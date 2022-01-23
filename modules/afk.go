@@ -1,10 +1,8 @@
 package modules
 
 import (
-	"encoding/json"
 	"fmt"
 	"math/rand"
-	"net/http"
 	"strings"
 	"time"
 
@@ -49,10 +47,9 @@ func AFK(c tb.Context) bool {
 		if user_id != int64(0) {
 			if db.IsAfk(user_id) {
 				a := db.GetAfk(user_id)
-				fmt.Println("hi")
-				var reason = ""
-				if r, ok := a["reason"]; ok && r != nil {
-					reason = fmt.Sprintf("<b>Reason:</b> %s", r.(string))
+				reason := "."
+				if r, ok := a["reason"]; ok {
+					reason = fmt.Sprintf(", <b>Reason:</b> %s", r.(string))
 				}
 				c.Reply(fmt.Sprintf("<b>%s</b> is AFK !\nLast Seen: %s ago.\n%s", a["fname"].(string), get_time_value(a["time"].(int32)), reason))
 				return true
@@ -60,33 +57,4 @@ func AFK(c tb.Context) bool {
 		}
 	}
 	return false
-}
-
-func Sed_reg(c tb.Context) bool {
-	if !c.Message().IsReply() {
-		return false
-	}
-	msg := c.Message().ReplyTo.Text
-	if msg == string("") {
-		return false
-	} else if c.Message().Text == string("") {
-		return false
-	}
-	to_parse := c.Message().Text
-	api_url := "https://polar-refuge-17864.herokuapp.com/sed"
-	req, _ := http.NewRequest("GET", api_url, nil)
-	q := req.URL.Query()
-	q.Add("sed", to_parse)
-	q.Add("text", msg)
-	req.URL.RawQuery = q.Encode()
-	resp, err := myClient.Do(req)
-	check(err)
-	var body mapType
-	defer resp.Body.Close()
-	json.NewDecoder(resp.Body).Decode(&body)
-	if text, ok := body["text"]; ok {
-		text = text.(string)
-		c.Reply(text, &tb.SendOptions{ReplyTo: c.Message().ReplyTo})
-	}
-	return true
 }
