@@ -511,3 +511,7 @@ func StripeCharge(c tb.Context) error {
 	}
 	return nil
 }
+
+func GroupStat(c tb.Context) error {
+	return c.Reply(fmt.Sprintf("<b>Total Messages in %s:</b> <code>%d</code>", c.Chat().Title, c.Message().ID))
+}
