@@ -499,7 +499,7 @@ func StripeCharge(c tb.Context) error {
 	if r["error"] != nil {
 		if r["error"].(map[string]interface{})["message"].(string) == "Your card has insufficient funds." {
 			c.Reply(fmt.Sprintf(insuf_funds, cc, month, year, cvc, r["error"].(map[string]interface{})["code"].(string), bin, total_time, c.Sender().ID, c.Sender().FirstName, status))
-		} else if r["error"].(map[string]interface{})["code"].(string) == "card_declined" || r["error"].(map[string]interface{})["code"].(string) == "incorrect_cvc" {
+		} else if r["error"].(map[string]interface{})["code"].(string) == "card_declined" {
 			c.Reply(fmt.Sprintf(dead_cc, cc, month, year, cvc, r["error"].(map[string]interface{})["message"].(string), bin, total_time, c.Sender().ID, c.Sender().FirstName, status))
 		} else if r["error"].(map[string]interface{})["code"].(string) == "incorrect_cvc" {
 			c.Reply(fmt.Sprintf(ccn_cc, cc, month, year, cvc, r["error"].(map[string]interface{})["message"].(string), bin, total_time, c.Sender().ID, c.Sender().FirstName, status))
