@@ -422,7 +422,7 @@ func YT_search(c tb.Context) error {
 }
 
 func StripeCharge(c tb.Context) error {
-	d := c.Message().Payload
+	d := strings.TrimSpace(c.Message().Payload)
 	cc, year, month, cvc := "", "", "", ""
 	for i, x := range strings.SplitN(d, "|", -1) {
 		if i == 0 {
@@ -435,9 +435,10 @@ func StripeCharge(c tb.Context) error {
 			cvc = x
 		}
 	}
-	for i, x := range []string{cc, year, month, cvc} {
+	for _, x := range []string{cc, year, month, cvc} {
 		if x == string("") {
-			c.Reply(fmt.Sprintf("%d is empty", i))
+			c.Reply("Invalid format, please send as <code>/st cc|mm|yy|cvv</code>")
+			return nil
 		}
 	}
 	client := &http.Client{}
@@ -498,7 +499,7 @@ func StripeCharge(c tb.Context) error {
 	if r["error"] != nil {
 		if r["error"].(map[string]interface{})["message"].(string) == "Your card has insufficient funds." {
 			c.Reply(fmt.Sprintf(insuf_funds, cc, month, year, cvc, r["error"].(map[string]interface{})["code"].(string), bin, total_time, c.Sender().ID, c.Sender().FirstName, status))
-		} else if r["error"].(map[string]interface{})["code"].(string) == "card_declined" || r["error"].(map[string]interface{})["code"].(string) == "incorrect_cvc" {
+		} else if r["error"].(map[string]interface{})["code"].(string) == "card_declined" {
 			c.Reply(fmt.Sprintf(dead_cc, cc, month, year, cvc, r["error"].(map[string]interface{})["message"].(string), bin, total_time, c.Sender().ID, c.Sender().FirstName, status))
 		} else if r["error"].(map[string]interface{})["code"].(string) == "incorrect_cvc" {
 			c.Reply(fmt.Sprintf(ccn_cc, cc, month, year, cvc, r["error"].(map[string]interface{})["message"].(string), bin, total_time, c.Sender().ID, c.Sender().FirstName, status))

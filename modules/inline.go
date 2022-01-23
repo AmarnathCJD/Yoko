@@ -4,15 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/http"
-	"strconv"
-	"strings"
-
 	"github.com/StalkR/imdb"
 	googlesearch "github.com/rocketlaunchr/google-search"
 	"google.golang.org/api/option"
 	"google.golang.org/api/youtube/v3"
 	tb "gopkg.in/tucnak/telebot.v3"
+	"strconv"
+	"strings"
 )
 
 const YOUTUBE_API_KEY = "AIzaSyAEz0eRkbsEE7TrHGKmd_iXh4AmYJlMKDs"
@@ -42,9 +40,6 @@ func InlineQueryHandler(c tb.Context) error {
 		return nil
 	} else if strings.HasPrefix(query, "yt") {
 		yt_search(c)
-		return nil
-	} else if strings.HasPrefix(query, "insta") {
-		insta_search(c)
 		return nil
 	}
 	return nil
@@ -177,41 +172,6 @@ func yt_search(c tb.Context) {
 	for i, x := range resp.Items {
 		text := fmt.Sprintf("<b><a href='https://www.youtube.com/watch?v=%s'>%s</a></b>\n<b>%s</b>\n<b>Published:</b> %s\n\n <i>%s</i>", x.Id.VideoId, x.Snippet.Title, x.Snippet.ChannelTitle, x.Snippet.PublishedAt, x.Snippet.Description)
 		r := &tb.ArticleResult{ResultBase: tb.ResultBase{ReplyMarkup: inline_markup("yt"), Content: &tb.InputTextMessageContent{Text: text, DisablePreview: false}}, Title: x.Snippet.Title, Description: x.Snippet.ChannelTitle, ThumbURL: x.Snippet.Thumbnails.Medium.Url}
-		results[i] = r
-		results[i].SetResultID(strconv.Itoa(i))
-	}
-	err = c.Bot().Answer(c.Query(), &tb.QueryResponse{
-		Results:   results,
-		CacheTime: 60,
-	})
-	check(err)
-}
-
-func insta_search(c tb.Context) {
-	query := c.Query().Text
-	args := strings.SplitN(query, " ", 2)
-	if len(args) == 1 {
-		return
-	}
-	arg := args[1]
-	url := "https://www.instagram.com/web/search/topsearch/?context=blended&rank_token=0.4601693011570325&include_reel=true"
-	req, _ := http.NewRequest("GET", url, nil)
-	q := req.URL.Query()
-	q.Add("query", arg)
-	resp, err := myClient.Do(req)
-	check(err)
-	defer resp.Body.Close()
-	var data mapType
-	json.NewDecoder(resp.Body).Decode(&data)
-	results := make(tb.Results, 10)
-	qt := 0
-	for i, x := range data["users"].([]interface{}) {
-		qt++
-		fmt.Println(qt)
-		if qt == 10 {
-			break
-		}
-		r := &tb.ArticleResult{ResultBase: tb.ResultBase{ReplyMarkup: inline_markup("insta"), Content: &tb.InputTextMessageContent{Text: "Soon", DisablePreview: false}}, Title: x.(map[string]interface{})["full_name"].(string), Description: "@" + x.(map[string]interface{})["username"].(string)}
 		results[i] = r
 		results[i].SetResultID(strconv.Itoa(i))
 	}
