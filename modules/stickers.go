@@ -2,11 +2,12 @@ package modules
 
 import (
 	"fmt"
+	"io"
+	"net/http"
+
 	db "github.com/amarnathcjd/yoko/modules/db"
 	"github.com/anaskhan96/soup"
 	tb "gopkg.in/tucnak/telebot.v3"
-	"io"
-	"net/http"
 )
 
 func AddSticker(c tb.Context) error {
@@ -98,9 +99,16 @@ func CombotSticker(c tb.Context) error {
 func MyPacks(c tb.Context) error {
 	pack, _, _ := db.Get_user_pack(c.Sender().ID)
 	if !pack {
-		c.Reply("You have not created any sticker packs, use /kang to save stickers!")
+		c.Reply("You have not created any sticker packs, use <code>/kang</code> to save stickers!")
 		return nil
+	} else {
+		packs := db.Get_user_packs(c.Sender().ID)
+		msg := "<b>Here are your kang packs.</b>"
+		for i, x := range packs {
+			stickerset, _ := c.Bot().StickerSet(x)
+			msg += fmt.Sprintf("\n<b>%d. ~</b> <a href='http://t.me/addstickers/%s'>%s</a>", i+1, x, stickerset.Title)
+		}
+		c.Reply(msg)
 	}
-	// soon need to add all pack return function
 	return nil
 }

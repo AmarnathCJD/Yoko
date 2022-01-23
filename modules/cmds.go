@@ -91,6 +91,7 @@ func RegHandlers() {
 	// stickers.go
 	bot.Bot.Handle("/kang", AddSticker)
 	bot.Bot.Handle("/stickers", CombotSticker)
+	bot.Bot.Handle("/packs", MyPacks)
 	// eval.go
 	bot.Bot.Handle("/sh", Exec)
 	bot.Bot.Handle("/eval", Eval)

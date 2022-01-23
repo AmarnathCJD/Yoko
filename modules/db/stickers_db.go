@@ -38,6 +38,23 @@ func Get_user_pack(user_id int64) (bool, int32, string) {
 	}
 }
 
+func Get_user_packs(user_id int64) []string {
+	filter := bson.M{"user_id": user_id}
+	s := stickers.FindOne(context.TODO(), filter)
+	if s.Err() != nil {
+		return nil
+	} else {
+		var stick bson.M
+		s.Decode(&stick)
+		packs := stick["packs"].(bson.A)
+		pack_names := []string{}
+		for _, x := range packs {
+			pack_names = append(pack_names, x.(bson.M)["name"].(string))
+		}
+		return pack_names
+	}
+}
+
 func Update_count(user_id int64, name string) {
 	filter := bson.M{"user_id": user_id}
 	s := stickers.FindOne(context.TODO(), filter)
