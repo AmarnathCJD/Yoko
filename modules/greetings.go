@@ -28,7 +28,7 @@ func Welcome_set(c tb.Context) error {
 }
 
 func OnChatMemberHandler(c tb.Context) error {
-fmt.Println("Hui")
+	fmt.Println("Hui")
 	upd := c.ChatMember()
 	fmt.Println(upd.Chat, upd.Sender, upd.NewChatMember, upd.OldChatMember)
 	return nil
