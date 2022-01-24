@@ -34,4 +34,5 @@ func OnChatMemberHandler(c tb.Context) error {
 	if upd.OldChatMember == nil && upd.NewChatMember != nil{
 c.Bot().Send(&tb.Chat{ID: upd.Chat.ID}, fmt.Sprintf("Hey %s, how are you?", upd.Sender.FirstName))
 }
+return nil
 }
