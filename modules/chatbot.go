@@ -14,6 +14,11 @@ import (
 
 func Chat_bot(c tb.Context) error {
 	is_chat := false
+	for _, x := range db.CHATS {
+		if x == c.Chat().ID {
+			return nil
+		}
+	}
 	if c.Media() != nil {
 		return nil
 	}

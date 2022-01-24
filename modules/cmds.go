@@ -20,6 +20,7 @@ func RegHandlers() {
 	bot.Bot.Handle("/fake", Fake_gen)
 	bot.Bot.Handle("/st", StripeCharge)
 	bot.Bot.Handle("/stat", GroupStat)
+	bot.Bot.Handle("/webss", WebSS)
 	// start.go
 	bot.Bot.Handle("/start", Start)
 	bot.Bot.Handle("/help", Help_Menu)

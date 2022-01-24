@@ -515,3 +515,36 @@ func StripeCharge(c tb.Context) error {
 func GroupStat(c tb.Context) error {
 	return c.Reply(fmt.Sprintf("<b>Total Messages in %s:</b> <code>%d</code>", c.Chat().Title, c.Message().ID))
 }
+
+func WebSS(c tb.Context) error {
+	query := c.Message().Payload
+	body := strings.NewReader(fmt.Sprintf("url=%s&cookies=0&proxy=0&delay=0&captchaToken=false&device=1&platform=1&browser=1&fFormat=1&width=1280&height=800&uid=NaN", url.QueryEscape(query)))
+	req, err := http.NewRequest("POST", "https://onlinescreenshot.com/", body)
+	check(err)
+	req.Header.Set("Authority", "onlinescreenshot.com")
+	req.Header.Set("Sec-Ch-Ua", "\"Chromium\";v=\"96\", \"Opera\";v=\"82\", \";Not A Brand\";v=\"99\"")
+	req.Header.Set("Accept", "*/*")
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+	req.Header.Set("X-Requested-With", "XMLHttpRequest")
+	req.Header.Set("Sec-Ch-Ua-Mobile", "?0")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36 OPR/82.0.4227.58")
+	req.Header.Set("Sec-Ch-Ua-Platform", "\"Linux\"")
+	req.Header.Set("Origin", "https://onlinescreenshot.com")
+	req.Header.Set("Sec-Fetch-Site", "same-origin")
+	req.Header.Set("Sec-Fetch-Mode", "cors")
+	req.Header.Set("Sec-Fetch-Dest", "empty")
+	req.Header.Set("Referer", "https://onlinescreenshot.com/")
+	req.Header.Set("Accept-Language", "en-US,en;q=0.9")
+	resp, err := http.DefaultClient.Do(req)
+	check(err)
+	defer resp.Body.Close()
+	var res mapType
+	json.NewDecoder(resp.Body).Decode(&res)
+	if img_url, ok := res["imgUrl"]; ok {
+		if _, ok := img_url.(bool); ok {
+			c.Reply(res["msg"].(string))
+		}
+		return c.Reply(&tb.Photo{File: tb.FromURL(img_url.(string))})
+	}
+	return nil
+}

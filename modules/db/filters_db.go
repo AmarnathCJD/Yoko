@@ -8,7 +8,9 @@ import (
 
 var filters = database.Collection("filters")
 
-var FILTERS = func() []bson.A {
+var FILTERS = _load_filters()
+
+func _load_filters() []bson.A {
 	var files []bson.M
 	r, _ := filters.Find(context.TODO(), bson.M{})
 	r.All(context.TODO(), &files)
