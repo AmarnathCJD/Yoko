@@ -87,6 +87,7 @@ func RegHandlers() {
 	// common handlers
 	bot.Bot.Handle(tb.OnQuery, InlineQueryHandler)
 	bot.Bot.Handle(tb.OnText, OnTextHandler)
+        bot.Bot.Handle(tb.OnChatMember, OnChatMemberHandler)
 	// pin.go
 	bot.Bot.Handle("/pin", pin_message, Pin_messages)
 	bot.Bot.Handle("/pinned", pinned_msg)
