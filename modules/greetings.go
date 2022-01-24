@@ -26,3 +26,9 @@ func Welcome_set(c tb.Context) error {
 	}
 	return nil
 }
+
+func OnChatMemberHandler(c tb.Context) error {
+upd := c.ChatMember()
+fmt.Sprint(upd.Chat, upd.Sender, upd.NewChatMember, upd.OldChatMember)
+return nil
+}
