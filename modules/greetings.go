@@ -31,8 +31,9 @@ func OnChatMemberHandler(c tb.Context) error {
 	fmt.Println("Hui")
 	upd := c.ChatMember()
 	fmt.Println(upd.Chat, upd.Sender, upd.NewChatMember, upd.OldChatMember)
-	if upd.NewChatMember != nil {
+        if upd.NewChatMember != nil && upd.OldChatMember != nil{
+	if upd.NewChatMember.Role == tb.Member && upd.OldChatMember.Role == tb.Left{
 		c.Bot().Send(&tb.Chat{ID: upd.Chat.ID}, fmt.Sprintf("Hey %s, how are you?", upd.Sender.FirstName))
-	}
+	}}
 	return nil
 }
