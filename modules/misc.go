@@ -327,6 +327,7 @@ func Paste(c tb.Context) error {
 			text = c.Message().ReplyTo.Text
 		} else if c.Message().ReplyTo.Document != nil {
 			c.Bot().Download(&c.Message().ReplyTo.Document.File, "doc.txt")
+                        fmt.Println(c.Message().ReplyTo.Document.File.FilePath)
 			data, err := ioutil.ReadFile("doc.txt")
 			if err != nil {
 				c.Reply(err.Error())
