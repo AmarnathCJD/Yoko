@@ -588,7 +588,7 @@ func Tr2(c tb.Context) error {
 	resp, _ := client.Do(req)
 	defer resp.Body.Close()
 	bodyText, _ := ioutil.ReadAll(resp.Body)
-        fmt.Println(string(bodyText))
+	fmt.Println(string(bodyText))
 	x := soup.HTMLParse(string(bodyText))
 	g := x.Find("span", "id", "tw-answ-target-text")
 	c.Reply(fmt.Sprint(g.Text()))
