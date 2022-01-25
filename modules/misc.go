@@ -547,9 +547,25 @@ func WebSS(c tb.Context) error {
 }
 
 func Tr2(c tb.Context) error {
-	cb := strings.SplitN(c.Message().Text, " ", -1)
-	lang := cb[1]
-	text := cb[2]
+	text, lang := "", "en"
+	if !c.Message().IsReply() && c.Message().Payload == string("") {
+		c.Reply("Provide the text to be translated!")
+		return nil
+	} else if c.Message().IsReply() {
+		text = c.Message().ReplyTo.Text
+		if c.Message().Payload != string("") {
+			lang = strings.SplitN(c.Message().Payload, " ", 2)[0]
+		}
+	} else if c.Message().Payload != string("") {
+		args := strings.SplitN(c.Message().Text, " ", 3)
+                if len([]rune(args[1])) == 2{
+  lang = args[1]
+  text = args[2]
+}
+                text = args[1] + " " + args[2]
+                
+	}
+        fmt.Println(text, lang)
 	client := &http.Client{}
 	var data = strings.NewReader(fmt.Sprintf(`async=translate,sl:en,tl:%s,st:%s,id:1643102010421,qc:true,ac:true,_id:tw-async-translate,_pms:s,_fmt:pc`, lang, text))
 	req, _ := http.NewRequest("POST", "https://www.google.com/async/translate?vet=12ahUKEwiM3pvpx8z1AhV_SmwGHRb5C5MQqDh6BAgDECY..i&ei=EL_vYYyWFP-UseMPlvKvmAk&client=opera&yv=3", data)
@@ -574,7 +590,7 @@ func Tr2(c tb.Context) error {
 	resp, _ := client.Do(req)
 	defer resp.Body.Close()
 	bodyText, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println(string(bodyText))
+	
 	x := soup.HTMLParse(string(bodyText))
 	g := x.Find("span", "id", "tw-answ-target-text")
 	c.Reply(fmt.Sprint(g.Text()))
