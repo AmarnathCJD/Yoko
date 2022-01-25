@@ -545,3 +545,33 @@ func WebSS(c tb.Context) error {
 	}
 	return nil
 }
+
+func Tr2(c tb.Context) error {
+	client := &http.Client{}
+	var data = strings.NewReader(fmt.Sprintf(`async=translate,sl:en,tl:%s,st:%s,id:1643102010421,qc:true,ac:true,_id:tw-async-translate,_pms:s,_fmt:pc`, "en", c.Message().Payload))
+	req, _ := http.NewRequest("POST", "https://www.google.com/async/translate?vet=12ahUKEwiM3pvpx8z1AhV_SmwGHRb5C5MQqDh6BAgDECY..i&ei=EL_vYYyWFP-UseMPlvKvmAk&client=opera&yv=3", data)
+	req.Header.Set("authority", "www.google.com")
+	req.Header.Set("sec-ch-ua", `"Opera";v="83", "Chromium";v="97", ";Not A Brand";v="99"`)
+	req.Header.Set("content-type", "application/x-www-form-urlencoded;charset=UTF-8")
+	req.Header.Set("sec-ch-ua-mobile", "?0")
+	req.Header.Set("user-agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36 OPR/83.0.4254.19")
+	req.Header.Set("sec-ch-ua-arch", `"x86"`)
+	req.Header.Set("sec-ch-ua-full-version", `"97.0.4692.71"`)
+	req.Header.Set("sec-ch-ua-platform-version", `"5.13.0"`)
+	req.Header.Set("sec-ch-ua-bitness", `"64"`)
+	req.Header.Set("sec-ch-ua-platform", `"Linux"`)
+	req.Header.Set("accept", "*/*")
+	req.Header.Set("origin", "https://www.google.com")
+	req.Header.Set("sec-fetch-site", "same-origin")
+	req.Header.Set("sec-fetch-mode", "cors")
+	req.Header.Set("sec-fetch-dest", "empty")
+	req.Header.Set("referer", "https://www.google.com/")
+	req.Header.Set("accept-language", "en-US,en;q=0.9")
+	req.Header.Set("cookie", "SEARCH_SAMESITE=CgQIuJQB; OTZ=6326456_34_34__34_; HSID=ATa13Uw3JpMJmWA3t; SSID=AOEkIbxbQxhvi1FY3; APISID=rdsFU1YTbgq0B3E-/AjkLEBu-qaec_yvgN; SAPISID=-fU4gGX9wHh-Plxb/A_gvZWiONzjK_xLc6; __Secure-1PAPISID=-fU4gGX9wHh-Plxb/A_gvZWiONzjK_xLc6; __Secure-3PAPISID=-fU4gGX9wHh-Plxb/A_gvZWiONzjK_xLc6; SID=GAjUGBrrRyEllUAh04TJFwG4UKCvWjg7c9IZNv-jwJUf6MGArEHHWkJnI71PGYs6d60-Tg.; __Secure-1PSID=GAjUGBrrRyEllUAh04TJFwG4UKCvWjg7c9IZNv-jwJUf6MGAfVw1akWNyBXiDczCq91ttQ.; __Secure-3PSID=GAjUGBrrRyEllUAh04TJFwG4UKCvWjg7c9IZNv-jwJUf6MGAvc-8vuvdO7JYDf0vkP95zg.; 1P_JAR=2022-01-25-09; DV=Y7jy1785Mz1PUOUcLYCoi47rniUI6RcvSfGgakoo6QAAAGCqGssnH9E8zQAAAPg2dSf3vHJGVwAAAA; NID=511=m_HvcK6BB_kHXAzPUuyjqfb0UwSZwalTj5paM9hr2P2EkonwyUIGZSQA7ConYzeH9J4YFCI-nkCZgSMnwv7XTUrcnI8Y4yRx8L65nX7vtL-1fGk_6xl5s5iTgWABhH45EDx42PKUBT1WkL3MeYqcx45-KOMff3brrvu2aYVr3litCGralFYl6lL12MepW9Rd-o-vgGZc_991llxxl3T9Nfs1iteD2w1vg8Ccaha9e2I8Sw7DVGSfuis2YyOact5jD9kf3kvGvjSlT6bMkM7s1s_QvGMeMePiVXvGxzmYoYd5IFhhdHTiJV4PLUxW2K-Nw7Bd-6Il; SIDCC=AJi4QfGW8KIy7dxF647EtoaG4uvUHqFYuyzg1zxB5tueO2ecYsmURGkxgMx6-AOBAUY8WZ8dWw; __Secure-3PSIDCC=AJi4QfFBdEFXcQFlKqAhaj5Ev2D0su31YpK9y1sJRYAiDUkZhsAy6GJ4IQYaz9aSQQMzEDT4R7o")
+	resp, _ := client.Do(req)
+	defer resp.Body.Close()
+	bodyText, _ := ioutil.ReadAll(resp.Body)
+	x := soup.HTMLParse(string(bodyText))
+	g := x.Find("span", "id", "tw-answ-target-text")
+	return c.Reply(fmt.Sprint(g.Text()))
+}
