@@ -137,10 +137,11 @@ func edit_title(c tb.Context, user *tb.User, title string, promote bool) {
 		time.Sleep(3 * time.Second)
 	}
 	err := c.Bot().SetAdminTitle(c.Chat(), user, title)
-	if err == nil {
-		if promote {
+        if promote {
 			return
 		}
+	if err == nil {
+		
 		c.Reply(fmt.Sprintf("<b>%s</b>'s Admin title was changed to <b>%s</b>.", user.FirstName, title))
 		return
 	} else if err.Error() == "telegram unknown: Bad Request: user is not an administrator (400)" {
