@@ -574,6 +574,6 @@ func Tr2(c tb.Context) error {
 	x := soup.HTMLParse(string(bodyText))
 	g := x.Find("span", "id", "tw-answ-target-text")
 	c.Reply(fmt.Sprint(g.Text()))
-        fmt.Println(string(bodyText))
-        return nil
+	fmt.Println(string(bodyText))
+	return nil
 }
