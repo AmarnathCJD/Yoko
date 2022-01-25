@@ -547,8 +547,25 @@ func WebSS(c tb.Context) error {
 }
 
 func Tr2(c tb.Context) error {
+        text, lang := "", "en"
+        if !c.Message().IsReply() && c.Message().Payload == string("") {
+		c.Reply("Provide the text to be translated!")
+		return nil
+	} else if c.Message().IsReply() {
+		text = c.Message().ReplyTo.Text
+		if c.Message().Payload != string("") {
+			lang = strings.SplitN(c.Message().Payload, " ", 2)[0]
+		}
+	} else if c.Message().Payload != string("") {
+		args := strings.SplitN(c.Message().Payload, " ", 2)
+		if len(args) == 2 && len([]rune(args[0])) == 2 {
+			lang, text = args[0], args[1]
+		} else {
+			text = c.Message().Payload
+		}
+	}
 	client := &http.Client{}
-	var data = strings.NewReader(fmt.Sprintf(`async=translate,sl:en,tl:%s,st:%s,id:1643102010421,qc:true,ac:true,_id:tw-async-translate,_pms:s,_fmt:pc`, "en", c.Message().Payload))
+	var data = strings.NewReader(fmt.Sprintf(`async=translate,sl:auto,tl:%s,st:%s,id:1643102010421,qc:true,ac:true,_id:tw-async-translate,_pms:s,_fmt:pc`, lang, text))
 	req, _ := http.NewRequest("POST", "https://www.google.com/async/translate?vet=12ahUKEwiM3pvpx8z1AhV_SmwGHRb5C5MQqDh6BAgDECY..i&ei=EL_vYYyWFP-UseMPlvKvmAk&client=opera&yv=3", data)
 	req.Header.Set("authority", "www.google.com")
 	req.Header.Set("sec-ch-ua", `"Opera";v="83", "Chromium";v="97", ";Not A Brand";v="99"`)
