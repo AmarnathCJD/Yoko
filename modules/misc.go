@@ -562,8 +562,8 @@ func Tr2(c tb.Context) error {
 			lang = args[1]
 			text = args[2]
 		} else {
-		text = args[1] + " " + args[2]
-}
+			text = args[1] + " " + args[2]
+		}
 	}
 	fmt.Println(text, lang)
 	client := &http.Client{}
