@@ -548,8 +548,8 @@ func WebSS(c tb.Context) error {
 
 func Tr2(c tb.Context) error {
 	cb := strings.SplitN(c.Message().Text, " ", -1)
-        lang := cb[1]
-        text := cb[2]
+	lang := cb[1]
+	text := cb[2]
 	client := &http.Client{}
 	var data = strings.NewReader(fmt.Sprintf(`async=translate,sl:en,tl:%s,st:%s,id:1643102010421,qc:true,ac:true,_id:tw-async-translate,_pms:s,_fmt:pc`, lang, text))
 	req, _ := http.NewRequest("POST", "https://www.google.com/async/translate?vet=12ahUKEwiM3pvpx8z1AhV_SmwGHRb5C5MQqDh6BAgDECY..i&ei=EL_vYYyWFP-UseMPlvKvmAk&client=opera&yv=3", data)
