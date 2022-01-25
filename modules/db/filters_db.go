@@ -10,15 +10,23 @@ var filters = database.Collection("filters")
 
 var FILTERS = _load_filters()
 
-func _load_filters() []bson.A {
+func deduplicate_filters(s []string, x string) ([]string, bool, int) {
+	for i, v := range s {
+		if v == x {
+			return append(s[:i], s[i+1:]...), true, i
+		}
+	}
+	return s, false, 0
+}
+
+func _load_filters() map[int64][]string {
 	var files []bson.M
 	r, _ := filters.Find(context.TODO(), bson.M{})
 	r.All(context.TODO(), &files)
-	array := []bson.A{}
+	array := map[int64][]string{}
 	for _, x := range files {
-		array[x["chat_id"].(int64)] = bson.A{}
-		for _, b := range x["filters"].(bson.A) {
-			array[x["chat_id"].(int64)] = append(array[x["chat_id"].(int64)], b)
+		for _, y := range x["filters"].(bson.A) {
+			array[x["chat_id"].(int64)] = append(array[x["chat_id"].(int64)], y.(bson.M)["name"].(string))
 		}
 	}
 	return array
@@ -42,20 +50,17 @@ func Save_filter(chat_id int64, name string, note string, file []string) bool {
 		f = append(f, new_filter)
 		filters.UpdateOne(context.TODO(), filter, bson.D{{Key: "$set", Value: bson.D{{Key: "filters", Value: f}}}}, opts)
 	}
+	FILTERS[chat_id] = append(FILTERS[chat_id], name)
 
 	return true
 }
 
-func Get_filters(chat_id int64) bson.A {
-	filter := bson.M{"chat_id": chat_id}
-	f := filters.FindOne(context.TODO(), filter)
-	var fil bson.M
-	f.Decode(&fil)
-	if fil == nil {
-		return nil
+func Get_filters(chat_id int64) []string {
+	a, b := FILTERS[chat_id]
+	if b {
+		return a
 	}
-	fill := fil["filters"].(bson.A)
-	return fill
+	return nil
 }
 
 func Get_filter(chat_id int64, name string) bson.M {
@@ -86,6 +91,9 @@ func Del_filter(chat_id int64, name string) bool {
 	all_f := f["filters"].(bson.A)
 	FL, rm := deduplicate_note(all_f, name)
 	filters.UpdateOne(context.TODO(), filter, bson.D{{Key: "$set", Value: bson.D{{Key: "filters", Value: FL}}}}, opts)
+	if rm {
+		FILTERS[chat_id], _, _ = deduplicate_filters(FILTERS[chat_id], name)
+	}
 	return rm
 }
 

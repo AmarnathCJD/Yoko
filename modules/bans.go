@@ -21,10 +21,10 @@ func Ban(c tb.Context) error {
 		c.Reply("You know what I'm not going to do? Ban myself!")
 		return nil
 	}
-	arg := strings.SplitN(c.Message().Text, " ", 2)
+	arg := strings.SplitN(c.Message().Text, " ", 2)[0][1:]
 	until_date := 0
 	reason := xtra
-	if arg[0] == "/unban" {
+	if arg == "unban" {
 		err := c.Bot().Unban(c.Chat(), user, true)
 		if err != nil && err.Error() == "telegram: not enough rights to restrict/unrestrict chat member (400)" {
 			c.Reply("I haven't got the rights to do this.")
@@ -37,7 +37,7 @@ func Ban(c tb.Context) error {
 		}
 		return nil
 	}
-	if arg[0] == "/tban" {
+	if arg == "tban" {
 		if xtra == string("") {
 			c.Reply("You haven't specified a time to ban this user for!")
 			return nil
@@ -53,8 +53,12 @@ func Ban(c tb.Context) error {
 			reason = ""
 		}
 		until_date = int(time.Now().Unix()) + until_date
-	} else if arg[0] == "/dban" {
+	} else if arg == "dban" && c.Message().IsReply() {
 		c.Bot().Delete(c.Message().ReplyTo)
+	} else if arg == "dban" && !c.Message().IsReply() {
+		return c.Reply("Reply to a message to delete it and ban the user!")
+	} else if arg == "sban" {
+		c.Bot().Delete(c.Message())
 	}
 	err := b.Ban(c.Message().Chat, &tb.ChatMember{
 		User:            user,
@@ -62,12 +66,12 @@ func Ban(c tb.Context) error {
 	})
 	if err == nil {
 		if string(reason) != string("") {
-			if arg[0] != "/sban" {
+			if arg != "sban" {
 				c.Reply(fmt.Sprintf("<b>%s</b> was banned. ~\n<b>Reason:</b> %s", user.FirstName, reason))
 			}
 			return nil
 		}
-		if arg[0] != "/sban" {
+		if arg != "sban" {
 			c.Reply(fmt.Sprintf("<b>%s</b> was banned. ~", user.FirstName))
 		}
 		return nil
@@ -92,10 +96,10 @@ func Mute(c tb.Context) error {
 		c.Reply("You know what I'm not going to do? Mute myself.")
 		return nil
 	}
-	arg := strings.SplitN(c.Message().Text, " ", 2)
+	arg := strings.SplitN(c.Message().Text, " ", 2)[0][1:]
 	until_date := 0
 	reason := xtra
-	if arg[0] == "/unmute" {
+	if arg == "unmute" {
 		err := c.Bot().Restrict(c.Chat(), &tb.ChatMember{
 			Rights: tb.NoRestrictions(),
 			User:   user,
@@ -111,7 +115,7 @@ func Mute(c tb.Context) error {
 		}
 		return nil
 	}
-	if arg[0] == "/tmute" {
+	if arg == "tmute" {
 		if xtra == string("") {
 			c.Reply("You haven't specified a time to mute this user for!")
 			return nil
@@ -127,8 +131,12 @@ func Mute(c tb.Context) error {
 			reason = ""
 		}
 		until_date = int(time.Now().Unix()) + until_date
-	} else if arg[0] == "/dmute" {
+	} else if arg == "dmute" && c.Message().IsReply() {
 		c.Bot().Delete(c.Message().ReplyTo)
+	} else if arg == "dmute" && !c.Message().IsReply() {
+		return c.Reply("Reply to a message to delete it and mute the user!")
+	} else if arg == "smute" {
+		c.Bot().Delete(c.Message())
 	}
 	err := b.Restrict(c.Message().Chat, &tb.ChatMember{
 		Rights:          tb.Rights{CanSendMessages: false},
@@ -137,12 +145,12 @@ func Mute(c tb.Context) error {
 	})
 	if err == nil {
 		if string(reason) != string("") {
-			if arg[0] != "/smute" {
+			if arg != "smute" {
 				c.Reply(fmt.Sprintf("<b>%s</b> was muted. ~\n<b>Reason:</b> %s", user.FirstName, reason))
 			}
 			return nil
 		}
-		if arg[0] != "/sban" {
+		if arg != "smute" {
 			c.Reply(fmt.Sprintf("<b>%s</b> was muted. ~", user.FirstName))
 		}
 		return nil
@@ -150,7 +158,9 @@ func Mute(c tb.Context) error {
 		c.Reply("I haven't got the rights to do this.")
 		return nil
 	}
-	c.Reply(fmt.Sprintf("Failed to mute, %s", err.Error()))
+	if arg != "smute" {
+		c.Reply(fmt.Sprintf("Failed to mute, %s", err.Error()))
+	}
 	return nil
 }
 
@@ -163,23 +173,35 @@ func Kick(c tb.Context) error {
 	if user == nil {
 		return nil
 	}
-	if user.ID == 5050904599 {
+	if user.ID == BOT_ID {
 		c.Reply("You know what I'm not going to do? Kick myself.")
 		return nil
 	}
 	reason := xtra
+	arg := strings.SplitN(c.Message().Text, " ", 2)[0][1:]
 	err := c.Bot().Unban(c.Chat(), user, false)
 	check(err)
+	if arg == "skick" {
+		c.Bot().Delete(c.Message())
+	} else if arg == "dkick" && c.Message().IsReply() {
+		c.Bot().Delete(c.Message().ReplyTo)
+	} else if arg == "dkick" && !c.Message().IsReply() {
+		return c.Reply("Reply to message to delete it and ban the user!")
+	}
 	if err == nil {
 		if reason == string("") {
-			c.Reply(fmt.Sprintf("I've kicked <a href='tg://user?id=%d'>%s</a> <b>~</b>", user.ID, user.FirstName))
-			return nil
+			if arg != "skick" {
+				return c.Reply(fmt.Sprintf("I've kicked <a href='tg://user?id=%d'>%s</a> <b>~</b>", user.ID, user.FirstName))
+			}
 		} else {
-			c.Reply(fmt.Sprintf("I've kicked <a href='tg://user?id=%d'>%s</a> <b>~</b>\n<b>Reason:</b> %s", user.ID, user.FirstName, reason))
-			return nil
+			if arg != "skick" {
+				return c.Reply(fmt.Sprintf("I've kicked <a href='tg://user?id=%d'>%s</a> <b>~</b>\n<b>Reason:</b> %s", user.ID, user.FirstName, reason))
+			}
 		}
 	} else {
-		c.Reply("Failed to kick, make sure I'm admin and can RestrictMembers.")
-		return nil
+		if arg != "skick" {
+			return c.Reply("Failed to kick, make sure I'm admin and can RestrictMembers.")
+		}
 	}
+	return nil
 }

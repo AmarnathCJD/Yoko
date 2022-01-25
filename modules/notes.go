@@ -42,7 +42,7 @@ func All_notes(c tb.Context) error {
 	}
 	note := fmt.Sprintf("Notes in <b>%s</b>", c.Chat().Title)
 	for _, x := range notes {
-		note += fmt.Sprintf("\n<b>-&gt;</b> <code>%s</code>", x.(bson.M)["name"].(string))
+		note += fmt.Sprintf("\n<b>-</b> <code>#%s</code>", x.(bson.M)["name"].(string))
 	}
 	b.Reply(m, note+"\nYou can retrieve these notes by using <code>/get notename</code>")
 	return nil
@@ -67,6 +67,12 @@ func Gnote(c tb.Context) error {
 }
 
 func OnTextHandler(c tb.Context) error {
+	if FLOOD_EV(c) {
+		return nil
+	}
+	if FilterEvent(c) {
+		return nil
+	}
 	match, _ := regexp.MatchString("\\#(\\S+)", c.Message().Text)
 	if match {
 		Hash_note(c)

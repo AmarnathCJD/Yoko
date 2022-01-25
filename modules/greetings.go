@@ -3,6 +3,7 @@ package modules
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/amarnathcjd/yoko/modules/db"
 	tb "gopkg.in/tucnak/telebot.v3"
@@ -15,25 +16,60 @@ func Welcome_set(c tb.Context) error {
 	}
 	if c.Message().Payload == string("") {
 		text, file, mode := db.Get_welcome(c.Chat().ID)
-		fmt.Println(69)
-		c.Reply(fmt.Sprintf("<b>Greetings config in this chat</b>:\n- Should greet new members: <code>%s<code>\n- Delete old welcome message: <code>%s</code>\n- Delete welcome service: <code>%s</code>\n\nWelcome message:", strconv.FormatBool(mode), "True", "True"))
+		msg, err := c.Bot().Send(c.Chat(), fmt.Sprintf("<b>Greetings config in this chat</b>:\n- Should greet new members: <code>%s</code>\n- Delete old welcome message: <code>%s</code>\n- Delete welcome service: <code>%s</code>\n\nWelcome message:", strings.ToUpper(strconv.FormatBool(mode)), "True", "True"), &tb.SendOptions{ReplyTo: c.Message()})
+		check((err))
 		if mode {
 			if len(file) == 0 {
 				file = nil
 			}
-			unparse_message(file, text, c.Message())
+			unparse_message(file, fmt.Sprintf(text, c.Sender().FirstName, c.Chat().Title), msg)
 		}
+	} else if strings.ToLower(c.Message().Payload) == "raw" {
+		text, _, _ := db.Get_welcome(c.Chat().ID)
+		if text != string("") {
+			c.Reply(fmt.Sprint(text))
+		}
+	} else if stringInSlice(strings.ToLower(c.Message().Payload), []string{"yes", "on", "enable", "y"}) {
+		c.Reply("I'll be welcoming all new members from now on!")
+		db.Set_welcome_mode(c.Chat().ID, true)
+	} else if stringInSlice(strings.ToLower(c.Message().Payload), []string{"no", "off", "disable", "n"}) {
+		c.Reply("I'll stay quiet when new members join.")
+		db.Set_welcome_mode(c.Chat().ID, false)
+		return nil
+	} else {
+		c.Reply("Your input was not recognised as one of: yes/no/on/off")
+		return nil
 	}
 	return nil
 }
 
+func Set_welcome(c tb.Context) error {
+	Text, Text2, File := parse_message(c.Message())
+	if c.Message().IsReply() {
+		Text += Text2
+	}
+	if Text == string("") && File == nil {
+		c.Reply("You need to give the welcome message some content!")
+		return nil
+	}
+	c.Reply("The new welcome message has been saved!")
+	db.Set_welcome(c.Chat().ID, Text, File)
+	return nil
+}
+
+func ResetWelcome(c tb.Context) error {
+	c.Reply("The welcome message has been reset!")
+	db.Reset_welcome(c.Chat().ID)
+	return nil
+}
+
 func OnChatMemberHandler(c tb.Context) error {
-	fmt.Println("Hui")
 	upd := c.ChatMember()
 	fmt.Println(upd.Chat, upd.Sender, upd.NewChatMember, upd.OldChatMember)
 	if upd.NewChatMember != nil && upd.OldChatMember != nil {
 		if upd.NewChatMember.Role == tb.Member && upd.OldChatMember.Role == tb.Left {
-			c.Bot().Send(&tb.Chat{ID: upd.Chat.ID}, fmt.Sprintf("Hey %s, how are you?", upd.Sender.FirstName))
+			text, file, _ := db.Get_welcome(c.Chat().ID)
+			SendMsg(file, text, &tb.Chat{ID: upd.Chat.ID})
 		}
 	}
 	return nil

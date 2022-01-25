@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"regexp"
@@ -268,7 +269,6 @@ func Extract_time(c tb.Context, time_val string) int64 {
 }
 
 func Convert_action(action string, time int32) string {
-	fmt.Println("smd")
 	if action == "ban" {
 		return "banned"
 	} else if action == "mute" {
@@ -284,7 +284,6 @@ func Convert_action(action string, time int32) string {
 }
 
 func get_time_value(x int32) string {
-	fmt.Println("smd2")
 	if x >= 604800 {
 		return strconv.Itoa(int(x)/(60*60*24*7)) + " weeks"
 	} else if x >= 86400 && x < 604800 {
@@ -330,7 +329,7 @@ func IS_SUDO(user_id int64) bool {
 
 func check(err error) {
 	if err != nil {
-		fmt.Println(err)
+		log.Print(err)
 	}
 }
 
@@ -383,4 +382,40 @@ func JsonToCsv(data []FedBan, output string) error {
 		}
 	}
 	return nil
+}
+
+func SendMsg(file interface{}, text string, chat *tb.Chat) {
+	text, buttons := button_parser(text)
+	if file != nil {
+		file := file.(bson.A)
+		file_id, file_type := file[0].(string), file[1].(string)
+		switch file_type {
+		case "document":
+			f := &tb.Document{File: tb.File{FileID: file_id}, Caption: text}
+			b.Send(chat, f, buttons)
+		case "sticker":
+			f := &tb.Sticker{File: tb.File{FileID: file_id}}
+			b.Send(chat, f, buttons)
+		case "audio":
+			f := &tb.Audio{File: tb.File{FileID: file_id}, Caption: text}
+			b.Send(chat, f, buttons)
+		case "photo":
+			f := &tb.Photo{File: tb.File{FileID: file_id}, Caption: text}
+			b.Send(chat, f, buttons)
+		case "video":
+			f := &tb.Video{File: tb.File{FileID: file_id}, Caption: text}
+			b.Send(chat, f, buttons)
+		case "voice":
+			f := &tb.Voice{File: tb.File{FileID: file_id}, Caption: text}
+			b.Send(chat, f, buttons)
+		case "animation":
+			f := &tb.Animation{File: tb.File{FileID: file_id}, Caption: text}
+			b.Send(chat, f, buttons)
+		case "videonote":
+			f := &tb.VideoNote{File: tb.File{FileID: file_id}}
+			b.Send(chat, f, buttons)
+		}
+	} else {
+		b.Send(chat, text)
+	}
 }

@@ -143,7 +143,6 @@ func IMDb(c tb.Context) error {
 	m := c.Message()
 	client := http.DefaultClient
 	results, _ := imdb.SearchTitle(client, m.Payload)
-	fmt.Println(results)
 	title, _ := imdb.NewTitle(client, results[0].ID)
 	movie := fmt.Sprintf("<b><u>%s</u></b>\n<b>Type:</b> %s\n<b>Year:</b> %s\n<b>AKA:</b> %s\n<b>Duration:</b> %s\n<b>Rating:</b> %s/10\n<b>Genre:</b> %s\n\n<code>%s</code>\n<b>Source ---> IMDb</b>", title.Name, title.Type, strconv.Itoa(title.Year), title.AKA[0], title.Duration, title.Rating, strings.Join(title.Genres, ", "), title.Description)
 	menu.Inline(menu.Row(menu.URL("ImDB", fmt.Sprintf("https://m.imdb.com/title/%s/", title.ID))))
@@ -205,7 +204,6 @@ func Ud(c tb.Context) error {
 	defer resp.Body.Close()
 	json.NewDecoder(resp.Body).Decode(&v)
 	res := v["list"].([]interface{})
-	fmt.Println(res)
 	if len(res) == 0 {
 		b.Reply(c.Message(), "No results found.")
 		return nil
@@ -306,7 +304,6 @@ func Math(c tb.Context) error {
 		q := req.URL.Query()
 		q.Add("expression", c.Message().Payload)
 		req.URL.RawQuery = q.Encode()
-		fmt.Println(req.URL.String())
 		res, err := http.DefaultClient.Do(req)
 		if err != nil {
 			c.Reply(err.Error())
@@ -327,7 +324,6 @@ func Paste(c tb.Context) error {
 			text = c.Message().ReplyTo.Text
 		} else if c.Message().ReplyTo.Document != nil {
 			c.Bot().Download(&c.Message().ReplyTo.Document.File, "doc.txt")
-			fmt.Println(c.Message().ReplyTo.Document.File.FilePath)
 			data, err := ioutil.ReadFile("doc.txt")
 			if err != nil {
 				c.Reply(err.Error())

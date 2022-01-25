@@ -1,7 +1,6 @@
 package modules
 
 import (
-	"fmt"
 	"strings"
 
 	tb "gopkg.in/tucnak/telebot.v3"
@@ -56,7 +55,6 @@ func gen_help_buttons(c tb.Context, text string, Reply bool) {
 func HelpCB(c tb.Context) error {
 	arg := c.Callback().Data
 	text, ok := help[arg]
-	fmt.Println(ok, arg)
 	sel.Inline(sel.Row(back_button))
 	if ok {
 		err := c.Edit(text.(string), &tb.SendOptions{ParseMode: "Markdown", ReplyMarkup: sel})

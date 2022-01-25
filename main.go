@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	mod.RegHandlers()
+	mod.RegisterHandlers()
 	log.Print("Bot started")
 	bot.Bot.Start()
 }
