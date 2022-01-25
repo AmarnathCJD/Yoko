@@ -547,8 +547,8 @@ func WebSS(c tb.Context) error {
 }
 
 func Tr2(c tb.Context) error {
-        text, lang := "", "en"
-        if !c.Message().IsReply() && c.Message().Payload == string("") {
+	text, lang := "", "en"
+	if !c.Message().IsReply() && c.Message().Payload == string("") {
 		c.Reply("Provide the text to be translated!")
 		return nil
 	} else if c.Message().IsReply() {
