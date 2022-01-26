@@ -126,10 +126,10 @@ func Set_title(c tb.Context) error {
 		return nil
 	} else if title == string("") {
 		return c.Reply("You need to give me a title name")
-	
-	} else if user.ID == BOT_ID{
-          return c.Reply("I cannot edit my own Title!")
-        }
+
+	} else if user.ID == BOT_ID {
+		return c.Reply("I cannot edit my own Title!")
+	}
 	edit_title(c, user, title, false)
 	return nil
 }
