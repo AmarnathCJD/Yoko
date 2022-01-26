@@ -140,14 +140,15 @@ func ID_info(c tb.Context) error {
 }
 
 func IMDb(c tb.Context) error {
-	m := c.Message()
 	client := http.DefaultClient
-	results, _ := imdb.SearchTitle(client, m.Payload)
+	results, _ := imdb.SearchTitle(client, c.Message().Payload)
+        if len(results) == 0{
+return c.Reply("No results found!")
+}
 	title, _ := imdb.NewTitle(client, results[0].ID)
 	movie := fmt.Sprintf("<b><u>%s</u></b>\n<b>Type:</b> %s\n<b>Year:</b> %s\n<b>AKA:</b> %s\n<b>Duration:</b> %s\n<b>Rating:</b> %s/10\n<b>Genre:</b> %s\n\n<code>%s</code>\n<b>Source ---> IMDb</b>", title.Name, title.Type, strconv.Itoa(title.Year), title.AKA[0], title.Duration, title.Rating, strings.Join(title.Genres, ", "), title.Description)
 	menu.Inline(menu.Row(menu.URL("ImDB", fmt.Sprintf("https://m.imdb.com/title/%s/", title.ID))))
-	b.Reply(m, &tb.Photo{File: tb.FromURL(title.Poster.URL), Caption: movie}, menu)
-	return nil
+	return c.Reply(&tb.Photo{File: tb.FromURL(title.Poster.URL), Caption: movie}, menu)
 }
 
 func Crypto(c tb.Context) error {
