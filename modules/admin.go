@@ -16,7 +16,7 @@ func Promote(c tb.Context) error {
 	user, xtra := get_user(c.Message())
 	if user == nil {
 		return nil
-	} else if user.ID == 5050904599 {
+	} else if user.ID == BOT_ID {
 		c.Reply("Pffff, I wish I could just promote myself.")
 		return nil
 	}
@@ -72,7 +72,7 @@ func Demote(c tb.Context) error {
 	user, _ := get_user(c.Message())
 	if user == nil {
 		return nil
-	} else if user.ID == 5050904599 {
+	} else if user.ID == BOT_ID {
 		c.Reply("I am not going to demote myself.")
 		return nil
 	}
@@ -125,9 +125,11 @@ func Set_title(c tb.Context) error {
 	if user == nil {
 		return nil
 	} else if title == string("") {
-		c.Reply("You need to give me a title name")
-		return nil
-	}
+		return c.Reply("You need to give me a title name")
+	
+	} else if user.ID == BOT_ID{
+          return c.Reply("I cannot edit my own Title!")
+        }
 	edit_title(c, user, title, false)
 	return nil
 }
