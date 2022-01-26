@@ -148,7 +148,7 @@ func button_parser(text string) (string, *tb.ReplyMarkup) {
 
 func Change_info(next tb.HandlerFunc) tb.HandlerFunc {
 	return func(c tb.Context) error {
-                if c.Message().Private() {
+		if c.Message().Private() {
 			return next(c)
 		}
 		p, _ := b.ChatMemberOf(c.Chat(), c.Sender())
