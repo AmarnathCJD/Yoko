@@ -17,7 +17,7 @@ func Ban(c tb.Context) error {
 	if user == nil {
 		return nil
 	}
-	if user.ID == 5050904599 {
+	if user.ID == BOT_ID {
 		c.Reply("You know what I'm not going to do? Ban myself!")
 		return nil
 	}
@@ -92,7 +92,7 @@ func Mute(c tb.Context) error {
 	if user == nil {
 		return nil
 	}
-	if user.ID == 5050904599 {
+	if user.ID == BOT_ID {
 		c.Reply("You know what I'm not going to do? Mute myself.")
 		return nil
 	}
