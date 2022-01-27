@@ -4,8 +4,8 @@ import (
 	"log"
 	"os"
 
-        mod "github.com/amarnathcjd/yoko/modules"
 	bot "github.com/amarnathcjd/yoko/bot"
+	mod "github.com/amarnathcjd/yoko/modules"
 )
 
 func main() {
