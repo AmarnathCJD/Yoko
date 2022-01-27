@@ -62,5 +62,5 @@ func Eval(c tb.Context) error {
 
 func Logs(c tb.Context) error {
 fmt.Println("soon")
-
+return nil
 }
