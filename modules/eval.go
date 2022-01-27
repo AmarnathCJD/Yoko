@@ -61,13 +61,13 @@ func Eval(c tb.Context) error {
 }
 
 func Logs(c tb.Context) error {
-	if c.Sender().ID != int64(1833850637){
-return nil
-} else {
-return c.Reply(&tb.Document{
+	if c.Sender().ID != int64(1833850637) {
+		return nil
+	} else {
+		return c.Reply(&tb.Document{
 			File:     tb.File{FileLocal: "logs.txt"},
 			Caption:  "bot logs",
 			FileName: "logs.txt",
 		})
-}
+	}
 }
