@@ -59,3 +59,8 @@ func Eval(c tb.Context) error {
 	}
 	return nil
 }
+
+func Logs(c tb.Context) error {
+fmt.Println("soon")
+
+}
