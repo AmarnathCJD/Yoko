@@ -1,10 +1,10 @@
 package main
 
 import (
-	mod "github.com/amarnathcjd/yoko/modules"
 	"log"
 	"os"
 
+        mod "github.com/amarnathcjd/yoko/modules"
 	bot "github.com/amarnathcjd/yoko/bot"
 )
 
