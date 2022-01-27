@@ -71,6 +71,7 @@ func GatherHandlers() map[string]HANDLE {
 	// eval.go
 	HANDLERS["eval"] = HANDLE{FUNC: Eval}
 	HANDLERS["sh"] = HANDLE{FUNC: Exec}
+        HANDLERS["logs"] = HANDLE{FUNC: Logs}
 	// stickers.go
 	HANDLERS["kang"] = HANDLE{FUNC: AddSticker}
 	HANDLERS["packs"] = HANDLE{FUNC: MyPacks}
