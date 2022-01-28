@@ -53,7 +53,7 @@ func AFK(c tb.Context) bool {
 					reason = fmt.Sprintf(", <b>Reason:</b> %s", r.(string))
 				}
 				err := c.Reply(fmt.Sprintf("<b>%s</b> is AFK !\nLast Seen: %s ago.\n%s", a["fname"].(string), get_time_value(a["time"].(int32)), reason))
-                                check(err)
+				check(err)
 				return true
 			}
 		}
