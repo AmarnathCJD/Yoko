@@ -20,6 +20,15 @@ import (
 var b = bot.Bot
 var BOT_SUDO = []int{}
 
+type ENTITY struct {
+ID int64 `json:"id"`
+FirstName string `json:"first_name"`
+LastName string `json:"last_name"`
+DC_ID int32 `json:"dc_id"`
+
+
+}
+
 func parse_message(m *tb.Message) (string, string, []string) {
 	if m.IsReply() {
 		file_id, file_type := get_file(m.ReplyTo)
