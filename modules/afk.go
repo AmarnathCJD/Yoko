@@ -47,8 +47,8 @@ func AFK(c tb.Context) bool {
 		if user_id != int64(0) {
 			if db.IsAfk(user_id) {
 				a := db.GetAfk(user_id)
-		                c.Reply(fmt.Sprint(a))
-       fmt.Println(get_time_value(a["time"].(int32)))
+				c.Reply(fmt.Sprint(a))
+				fmt.Println(get_time_value(a["time"].(int32)))
 				reason := "."
 				if r, ok := a["reason"]; ok {
 					reason = fmt.Sprintf(", <b>Reason:</b> %s", r.(string))
