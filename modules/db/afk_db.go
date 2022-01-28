@@ -10,7 +10,7 @@ import (
 var afk = database.Collection("afk")
 
 func Set_afk(user_id int64, fname string, reason string) {
-	afk.UpdateOne(context.TODO(), bson.M{"user_id": user_id}, bson.M{"$set": {"fname": fname, "reason": reason, "time": time.Now().Unix()}}, opts)
+	afk.UpdateOne(context.TODO(), bson.M{"user_id": user_id}, bson.M{"$set": bson.M{"fname": fname, "reason": reason, "time": time.Now().Unix()}}, opts)
 	AFK = append(AFK, user_id)
 }
 
