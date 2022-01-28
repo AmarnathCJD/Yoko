@@ -4,17 +4,17 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
+	"github.com/amarnathcjd/yoko/bot"
+	"go.mongodb.org/mongo-driver/bson"
+	tb "gopkg.in/tucnak/telebot.v3"
 	"log"
 	"net/http"
 	"os"
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 	"unicode"
-"time"
-	"github.com/amarnathcjd/yoko/bot"
-	"go.mongodb.org/mongo-driver/bson"
-	tb "gopkg.in/tucnak/telebot.v3"
 )
 
 var b = bot.Bot
@@ -278,8 +278,6 @@ func Extract_time(c tb.Context, time_val string) int64 {
 	return int64(bantime)
 }
 
-
-
 func Parse_country(t string) string {
 	tp := t
 	if t == string("") {
@@ -403,7 +401,6 @@ func SendMsg(file interface{}, text string, chat *tb.Chat) {
 		b.Send(chat, text)
 	}
 }
-
 
 func get_readable_time(t1 time.Time, t2 time.Time) time.Duration {
 	return t2.Sub(t1)
