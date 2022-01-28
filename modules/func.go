@@ -409,3 +409,31 @@ func get_readable_time(t1 time.Time, t2 time.Time) time.Duration {
 	return t2.Sub(t1)
 
 }
+
+func Convert_action(action string, time int32) string {
+	if action == "ban" {
+		return "banned"
+	} else if action == "mute" {
+		return "muted"
+	} else if action == "kick" {
+		return "kicked"
+	} else if action == "tban" {
+		return fmt.Sprintf("temporarily banned for %s", get_time_value(time))
+	} else if action == "tmute" {
+		return fmt.Sprintf("temporarily muted for %s", get_time_value(time))
+	}
+	return ""
+}
+
+func get_time_value(x int32) string {
+	if x >= 604800 {
+		return strconv.Itoa(int(x)/(60*60*24*7)) + " weeks"
+	} else if x >= 86400 && x < 604800 {
+		return strconv.Itoa(int(x)/(60*60*24)) + " days"
+	} else if x >= 3600 && x < 86400 {
+		return strconv.Itoa(int(x)/(60*60)) + " hours"
+	} else if x < 3600 {
+		return strconv.Itoa(int(x)/60) + " minutes"
+	}
+	return ""
+}
