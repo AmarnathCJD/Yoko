@@ -48,12 +48,12 @@ func AFK(c tb.Context) bool {
 			if db.IsAfk(user_id) {
 				a := db.GetAfk(user_id)
 				c.Reply(fmt.Sprint(a))
-				fmt.Println(time.Now().Unix() - int64(a["time"].(int32)))
 				reason := "."
 				if r, ok := a["reason"]; ok {
 					reason = fmt.Sprintf(", <b>Reason:</b> %s", r.(string))
 				}
-				err := c.Reply(fmt.Sprintf("<b>%s</b> is AFK !\nLast Seen: %s ago.\n%s", a["fname"].(string), get_time_value(a["time"].(int32)), reason))
+                                since := get_readable_time(time.Unix(int64(a["time"].(int32))), time.Now())
+				err := c.Reply(fmt.Sprintf("<b>%s</b> is AFK !\nLast Seen: %s ago.\n%s", a["fname"].(string), since, reason))
 				check(err)
 				return true
 			}
