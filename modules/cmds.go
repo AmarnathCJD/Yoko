@@ -134,7 +134,7 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["setfloodmode"] = HANDLE{SetFloodMode, Ban_users}
 	// gbans.go
 	HANDLERS["gban"] = HANDLE{FUNC: Gban}
-        HANDLERS["parse"] = HANDLE{FUNC: PP}
+	HANDLERS["parse"] = HANDLE{FUNC: PP}
 	return HANDLERS
 
 }
@@ -180,6 +180,6 @@ func CallBackHandlers() {
 }
 
 func PP(c tb.Context) error {
-return c.Reply(ParseString(c.Message().Payload))
+	return c.Reply(ParseString(c.Message().Payload))
 
 }
