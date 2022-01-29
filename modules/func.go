@@ -28,6 +28,12 @@ type ENTITY struct {
 	Username  string `json:"username"`
 	DC_ID     int32  `json:"dc_id"`
 }
+type FF struct {
+F string
+INDEX int
+
+
+}
 
 func parse_message(m *tb.Message) (string, string, []string) {
 	if m.IsReply() {
@@ -478,4 +484,19 @@ func GetFile(file bson.A, caption string) tb.Sendable {
 	} else {
 		return nil
 	}
+}
+var FILLINGS = []FF{FF{"{first}", 1}, FF{"last", 2}, FF{"username", 3}}
+func ParseString(t string) string {
+for _, f := range FILLINGS{
+if strings.Contains(t, f.F){
+ t = strings.ReplaceAll(t, f.F, "%[" + strconv.Itoa(f.INDEX) + "]s")
+
+}
+
+
+}
+
+
+return t
+
 }
