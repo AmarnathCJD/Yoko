@@ -7,12 +7,12 @@ import (
 	"net/http"
 	"os/exec"
 	"strings"
-
+"time"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
 
 func Exec(c tb.Context) error {
-	if c.Sender().ID != int64(1833850637) {
+	if c.Sender().ID != OWNER_ID {
 		return nil
 	}
 	if c.Message().Payload == string("") {
