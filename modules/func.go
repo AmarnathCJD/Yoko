@@ -484,7 +484,7 @@ func GetFile(file bson.A, caption string) tb.Sendable {
 	}
 }
 
-var FILLINGS = []FF{{"{first}", 1}, {"{last}", 2}, {"{username}", 3}}
+var FILLINGS = []FF{{"{first}", 1}, {"{last}", 2}, {"{username}", 3}, {"{fullname}", 5}, {"{id}", 4}, {"{chatname}", 6}, {"{mention}", 7}}
 
 func ParseString(t string, c tb.Context) string {
 	for _, f := range FILLINGS {
@@ -494,8 +494,17 @@ func ParseString(t string, c tb.Context) string {
 		}
 
 	}
-	t = fmt.Sprintf(t, c.Sender().FirstName, c.Sender().LastName, c.Sender().Username)
-
+        first := c.Sender().FirstName
+        last := c.Sender().LastName
+        fullname := first + last
+        username := c.Sender().Username
+        id := c.Sender().ID
+        mention := fmt.Sprintf("<a href='tg://user?id=%d'>%s</a>", id, first)
+        if username == string(""){
+             username = mention
+        }
+        chatname := c.Chat().Title
+	t = fmt.Sprintf(t, first, last, username, id, fullname, chatname, mention)
 	return t
 
 }
