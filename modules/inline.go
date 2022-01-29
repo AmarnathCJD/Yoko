@@ -4,16 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strconv"
+	"strings"
+
 	"github.com/StalkR/imdb"
 	googlesearch "github.com/rocketlaunchr/google-search"
 	"google.golang.org/api/option"
 	"google.golang.org/api/youtube/v3"
 	tb "gopkg.in/tucnak/telebot.v3"
-	"strconv"
-	"strings"
 )
-
-const YOUTUBE_API_KEY = "AIzaSyAEz0eRkbsEE7TrHGKmd_iXh4AmYJlMKDs"
 
 func inline_markup(query string) *tb.InlineKeyboardMarkup {
 	btns := &tb.InlineKeyboardMarkup{}

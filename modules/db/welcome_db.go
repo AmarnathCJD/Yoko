@@ -33,7 +33,7 @@ func Get_welcome(chat_id int64) (string, bson.A, bool) {
 		if txt, ok := welcome_settings["text"]; ok {
 			text = txt.(string)
 		}
-		if fl, ok := welcome_settings["file"]; ok {
+		if fl, ok := welcome_settings["file"]; ok && fl != nil {
 			file = fl.(bson.A)
 		}
 	}

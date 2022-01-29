@@ -65,6 +65,10 @@ func get_user(m *tb.Message) (*tb.User, string) {
 			}
 		} else {
 			u, err := getJson(strings.TrimPrefix(x[0], "@"))
+			if e, ok := u["error"]; ok {
+				b.Reply(m, e.(string))
+				return nil, ""
+			}
 			if err != nil {
 				b.Reply(m, fmt.Sprint(err.Error()))
 				return nil, ""
@@ -135,6 +139,44 @@ func ID_info(c tb.Context) error {
 		}
 		err := c.Reply(fmt.Sprintf("User %s's ID is <code>%d</code>", user_obj.FirstName, user_obj.ID))
 		fmt.Println(err)
+		return nil
+	}
+}
+
+func ChatInfo(c tb.Context) error {
+	var chat *tb.Chat
+	if c.Message().IsReply() && c.Message().ReplyTo.FromChannel() {
+		chat_id := c.Message().ReplyTo.SenderChat.ID
+		chat, _ = c.Bot().ChatByID(chat_id)
+	} else if c.Message().Payload != string("") {
+		if isInt(c.Message().Payload) {
+			chat_, _ := strconv.Atoi(c.Message().Payload)
+			chat, _ = c.Bot().ChatByID(int64(chat_))
+		} else {
+			chat, _ = c.Bot().ChatByUsername(c.Message().Payload)
+		}
+	} else {
+		chat, _ = c.Bot().ChatByID(c.Chat().ID)
+	}
+	if chat != nil {
+		msg := fmt.Sprintf("<b>Chat info</b>\n<b>ID:</b> <code>%d</code>\n<b>Title:</b> %s", chat.ID, chat.Title)
+		if chat.Username != "" {
+			msg += fmt.Sprintf("\n<b>Username:</b> @%s", chat.Username)
+		}
+		msg += fmt.Sprintf("\n<b>Link:</b> <a href='tg://resolve?domain=%s'>%s</a>", chat.Username, "link")
+		if chat.Description != "" {
+			msg += fmt.Sprintf("\n<b>Description:</b> %s", chat.Description)
+		}
+		if chat.LinkedChatID != 0 {
+			msg += fmt.Sprintf("\n<b>Linked Chat ID:</b> %d", chat.LinkedChatID)
+		}
+		if chat.InviteLink != "" {
+			msg += fmt.Sprintf("\n<b>Invite Link:</b> <a href='%s'>%s</a>", chat.InviteLink, "link")
+		}
+		c.Reply(msg, &tb.SendOptions{DisableWebPagePreview: true})
+		return nil
+	} else {
+		c.Reply("Invalid chat")
 		return nil
 	}
 }
@@ -279,7 +321,7 @@ func telegraph(c tb.Context) error {
 		return nil
 	}
 	client := tg.NewClient()
-	client.CreateAccount(tg.Account{ShortName: "Yoko", AuthorName: c.Sender().FirstName})
+	client.CreateAccount(tg.Account{ShortName: "mika", AuthorName: c.Sender().FirstName})
 	content, _ := client.ContentFormat(text)
 	pageData := tg.Page{
 		Title:   title,
@@ -566,7 +608,6 @@ func Tr2(c tb.Context) error {
 			text = args[1] + " " + args[2]
 		}
 	}
-	fmt.Println(text, lang)
 	client := &http.Client{}
 	var data = strings.NewReader(fmt.Sprintf(`async=translate,sl:auto,tl:%s,st:%s,id:1643102010421,qc:true,ac:true,_id:tw-async-translate,_pms:s,_fmt:pc`, lang, url.QueryEscape(text)))
 	req, _ := http.NewRequest("POST", "https://www.google.com/async/translate?vet=12ahUKEwiM3pvpx8z1AhV_SmwGHRb5C5MQqDh6BAgDECY..i&ei=EL_vYYyWFP-UseMPlvKvmAk&client=opera&yv=3", data)
@@ -588,10 +629,10 @@ func Tr2(c tb.Context) error {
 	req.Header.Set("referer", "https://www.google.com/")
 	req.Header.Set("accept-language", "en-US,en;q=0.9")
 	req.Header.Set("cookie", "SEARCH_SAMESITE=CgQIuJQB; OTZ=6326456_34_34__34_; HSID=ATa13Uw3JpMJmWA3t; SSID=AOEkIbxbQxhvi1FY3; APISID=rdsFU1YTbgq0B3E-/AjkLEBu-qaec_yvgN; SAPISID=-fU4gGX9wHh-Plxb/A_gvZWiONzjK_xLc6; __Secure-1PAPISID=-fU4gGX9wHh-Plxb/A_gvZWiONzjK_xLc6; __Secure-3PAPISID=-fU4gGX9wHh-Plxb/A_gvZWiONzjK_xLc6; SID=GAjUGBrrRyEllUAh04TJFwG4UKCvWjg7c9IZNv-jwJUf6MGArEHHWkJnI71PGYs6d60-Tg.; __Secure-1PSID=GAjUGBrrRyEllUAh04TJFwG4UKCvWjg7c9IZNv-jwJUf6MGAfVw1akWNyBXiDczCq91ttQ.; __Secure-3PSID=GAjUGBrrRyEllUAh04TJFwG4UKCvWjg7c9IZNv-jwJUf6MGAvc-8vuvdO7JYDf0vkP95zg.; 1P_JAR=2022-01-25-09; DV=Y7jy1785Mz1PUOUcLYCoi47rniUI6RcvSfGgakoo6QAAAGCqGssnH9E8zQAAAPg2dSf3vHJGVwAAAA; NID=511=m_HvcK6BB_kHXAzPUuyjqfb0UwSZwalTj5paM9hr2P2EkonwyUIGZSQA7ConYzeH9J4YFCI-nkCZgSMnwv7XTUrcnI8Y4yRx8L65nX7vtL-1fGk_6xl5s5iTgWABhH45EDx42PKUBT1WkL3MeYqcx45-KOMff3brrvu2aYVr3litCGralFYl6lL12MepW9Rd-o-vgGZc_991llxxl3T9Nfs1iteD2w1vg8Ccaha9e2I8Sw7DVGSfuis2YyOact5jD9kf3kvGvjSlT6bMkM7s1s_QvGMeMePiVXvGxzmYoYd5IFhhdHTiJV4PLUxW2K-Nw7Bd-6Il; SIDCC=AJi4QfGW8KIy7dxF647EtoaG4uvUHqFYuyzg1zxB5tueO2ecYsmURGkxgMx6-AOBAUY8WZ8dWw; __Secure-3PSIDCC=AJi4QfFBdEFXcQFlKqAhaj5Ev2D0su31YpK9y1sJRYAiDUkZhsAy6GJ4IQYaz9aSQQMzEDT4R7o")
-	resp, _ := client.Do(req)
+	resp, err := client.Do(req)
+	check(err)
 	defer resp.Body.Close()
 	bodyText, _ := ioutil.ReadAll(resp.Body)
-
 	x := soup.HTMLParse(string(bodyText))
 	g := x.Find("span", "id", "tw-answ-target-text")
 	c.Reply(fmt.Sprint(g.Text()))

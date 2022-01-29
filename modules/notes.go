@@ -175,15 +175,15 @@ func private_notes(c tb.Context) error {
 		if !mode {
 			c.Reply("Your notes are currently being sent in the group.")
 		} else {
-			c.Reply("Your notes are currently being sent in private. Aiko will send a small note with a button which redirects to a private chat.")
+			c.Reply("Your notes are currently being sent in private. Mika will send a small note with a button which redirects to a private chat.")
 		}
 	} else {
 		payload := c.Message().Payload
 		if stringInSlice(payload, []string{"enable", "yes", "on", "y"}) {
-			c.Reply("Aiko will now send a message to your chat with a button redirecting to PM, where the user will receive the note.")
+			c.Reply("Mika will now send a message to your chat with a button redirecting to PM, where the user will receive the note.")
 			db.Set_pnote(c.Chat().ID, true)
 		} else if stringInSlice(payload, []string{"off", "disable", "no"}) {
-			c.Reply("Aiko will now send notes straight to the group.")
+			c.Reply("Mika will now send notes straight to the group.")
 			db.Set_pnote(c.Chat().ID, false)
 		} else {
 			c.Reply(fmt.Sprintf("failed to get boolean value from input: expected one of y/yes/on or n/no/off; got: %s", payload))

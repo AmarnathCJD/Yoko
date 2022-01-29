@@ -37,7 +37,11 @@ func AFK(c tb.Context) bool {
 				if e.Type == tb.EntityMention || e.Type == tb.EntityTMention {
 					if e.User == nil {
 						u, _ := getJson(c.Message().EntityText(e))
-						user_id = int64(u["id"].(float64))
+						if id, ok := u["id"]; ok {
+							user_id = int64(id.(float64))
+						} else {
+							return false
+						}
 					} else {
 						user_id = e.User.ID
 					}
@@ -47,14 +51,12 @@ func AFK(c tb.Context) bool {
 		if user_id != int64(0) {
 			if db.IsAfk(user_id) {
 				a := db.GetAfk(user_id)
-				c.Reply(fmt.Sprint(a))
 				reason := "."
 				if r, ok := a["reason"]; ok {
 					reason = fmt.Sprintf(", <b>Reason:</b> %s", r.(string))
 				}
 				since := get_readable_time(time.Unix(int64(a["time"].(int32)), 0), time.Now())
-				fmt.Println(since)
-				err := c.Reply(fmt.Sprintf("<b>%s</b> is AFK !\nLast Seen: %s ago.\n%s", a["fname"].(string), since, reason))
+				err := c.Reply(fmt.Sprintf("<b>%s</b> is AFK !\nLast Seen: %s ago.\n%s", a["fname"].(string), since.String(), reason))
 				check(err)
 				return true
 			}

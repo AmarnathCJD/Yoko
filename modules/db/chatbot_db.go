@@ -8,7 +8,7 @@ import (
 
 var cb = database.Collection("chatbot")
 
-var CHATS = _load_chats()
+var BL_CHATS = _load_chats()
 
 func removeInt64(s []int64, r int64) []int64 {
 	for i, v := range s {
@@ -33,9 +33,9 @@ func _load_chats() []int64 {
 func Set_chatbot_mode(chat_id int64, mode bool) {
 	cb.UpdateOne(context.TODO(), bson.M{"chat_id": chat_id}, bson.M{"$set": bson.M{"mode": mode}}, opts)
 	if !mode {
-		CHATS = append(CHATS, chat_id)
+		BL_CHATS = append(BL_CHATS, chat_id)
 	} else {
-		CHATS = removeInt64(CHATS, chat_id)
+		BL_CHATS = removeInt64(BL_CHATS, chat_id)
 	}
 }
 
@@ -48,4 +48,13 @@ func Get_chatbot_mode(chat_id int64) bool {
 		c.Decode(&s)
 		return s["mode"].(bool)
 	}
+}
+
+func IsChatbot(chat_id int64) bool {
+	for _, x := range BL_CHATS {
+		if x == chat_id {
+			return true
+		}
+	}
+	return false
 }

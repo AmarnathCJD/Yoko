@@ -30,6 +30,8 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["stat"] = HANDLE{FUNC: GroupStat}
 	HANDLERS["webss"] = HANDLE{FUNC: WebSS}
 	HANDLERS["tr"] = HANDLE{FUNC: Tr2}
+	HANDLERS["chatinfo"] = HANDLE{FUNC: ChatInfo}
+	HANDLERS["test"] = HANDLE{FUNC: Test}
 	// start.go
 	HANDLERS["start"] = HANDLE{FUNC: Start}
 	HANDLERS["help"] = HANDLE{FUNC: Help_Menu}
@@ -86,10 +88,12 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["dban"] = HANDLE{Ban, Ban_users}
 	HANDLERS["sban"] = HANDLE{Ban, Ban_users}
 	HANDLERS["tban"] = HANDLE{Ban, Ban_users}
+	HANDLERS["unban"] = HANDLE{Ban, Ban_users}
 	HANDLERS["mute"] = HANDLE{Mute, Ban_users}
 	HANDLERS["tmute"] = HANDLE{Mute, Ban_users}
 	HANDLERS["dmute"] = HANDLE{Mute, Ban_users}
 	HANDLERS["smute"] = HANDLE{Mute, Ban_users}
+	HANDLERS["unmute"] = HANDLE{Mute, Ban_users}
 	HANDLERS["kick"] = HANDLE{Kick, Ban_users}
 	HANDLERS["skick"] = HANDLE{Kick, Ban_users}
 	HANDLERS["dkick"] = HANDLE{Kick, Ban_users}

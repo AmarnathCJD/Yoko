@@ -76,3 +76,10 @@ func unpin_msg(c tb.Context) error {
 	}
 	return nil
 }
+
+func PermaPin(c tb.Context) error {
+	if c.Message().IsReply() {
+
+	}
+	return nil
+}

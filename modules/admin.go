@@ -20,8 +20,8 @@ func Promote(c tb.Context) error {
 		c.Reply("Pffff, I wish I could just promote myself.")
 		return nil
 	}
-	arg := strings.SplitN(c.Message().Text, " ", 2)[0]
-	if arg == "/promote" {
+	arg := strings.SplitN(c.Message().Text, " ", 2)[0][1:]
+	if arg == "promote" {
 		err := c.Bot().Promote(c.Chat(), &tb.ChatMember{
 			Rights: tb.Rights{CanRestrictMembers: true, CanPinMessages: true, CanChangeInfo: false, CanDeleteMessages: true, CanInviteUsers: true},
 			User:   user,
@@ -39,7 +39,7 @@ func Promote(c tb.Context) error {
 		} else {
 			c.Reply("Failed to promote, " + fmt.Sprint(err.Error()))
 		}
-	} else if arg == "/superpromote" {
+	} else if arg == "superpromote" {
 		err := c.Bot().Promote(c.Chat(), &tb.ChatMember{
 			Rights: tb.Rights{CanRestrictMembers: true, CanPinMessages: true, CanChangeInfo: true, CanDeleteMessages: true, CanInviteUsers: true, CanPromoteMembers: true, CanManageVoiceChats: true},
 			User:   user,

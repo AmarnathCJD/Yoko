@@ -4,9 +4,6 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
-	"github.com/amarnathcjd/yoko/bot"
-	"go.mongodb.org/mongo-driver/bson"
-	tb "gopkg.in/tucnak/telebot.v3"
 	"log"
 	"net/http"
 	"os"
@@ -15,6 +12,10 @@ import (
 	"strings"
 	"time"
 	"unicode"
+
+	"github.com/amarnathcjd/yoko/bot"
+	"go.mongodb.org/mongo-driver/bson"
+	tb "gopkg.in/tucnak/telebot.v3"
 )
 
 var b = bot.Bot
@@ -24,6 +25,7 @@ type ENTITY struct {
 	ID        int64  `json:"id"`
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
+	Username  string `json:"username"`
 	DC_ID     int32  `json:"dc_id"`
 }
 
@@ -431,6 +433,49 @@ func get_time_value(x int32) string {
 		return strconv.Itoa(int(x)/(60*60)) + " hours"
 	} else if x < 3600 {
 		return strconv.Itoa(int(x)/60) + " minutes"
+	} else {
+		return ""
 	}
-	return ""
+}
+
+func take_action(action string, t int32, user tb.User, chat tb.Chat) error {
+	until_date := 0
+	if stringInSlice(action, []string{"ban", "tban"}) {
+		if t != 0 {
+			until_date = int(time.Now().Unix())
+		}
+		return b.Ban(&chat, &tb.ChatMember{User: &user, RestrictedUntil: int64(until_date)})
+
+	} else if stringInSlice(action, []string{"mute", "tmute"}) {
+		if t != 0 {
+			until_date = int(time.Now().Unix())
+		}
+		return b.Restrict(&chat, &tb.ChatMember{User: &user, Rights: tb.Rights{CanSendMessages: false}, RestrictedUntil: int64(until_date)})
+	} else if action == "kick" {
+		return b.Unban(&chat, &user, false)
+	}
+	return nil
+}
+
+func GetFile(file bson.A, caption string) tb.Sendable {
+	id, t := file[0].(string), file[1].(string)
+	if t == "document" {
+		return &tb.Document{File: tb.File{FileID: id}, Caption: caption}
+	} else if t == "sticker" {
+		return &tb.Sticker{File: tb.File{FileID: id}}
+	} else if t == "photo" {
+		return &tb.Photo{File: tb.File{FileID: id}, Caption: caption}
+	} else if t == "audio" {
+		return &tb.Audio{File: tb.File{FileID: id}, Caption: caption}
+	} else if t == "voice" {
+		return &tb.Voice{File: tb.File{FileID: id}, Caption: caption}
+	} else if t == "video" {
+		return &tb.Video{File: tb.File{FileID: id}, Caption: caption}
+	} else if t == "animation" {
+		return &tb.Animation{File: tb.File{FileID: id}, Caption: caption}
+	} else if t == "videonote" {
+		return &tb.VideoNote{File: tb.File{FileID: id}}
+	} else {
+		return nil
+	}
 }

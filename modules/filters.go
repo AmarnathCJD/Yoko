@@ -3,7 +3,6 @@ package modules
 import (
 	"fmt"
 	"regexp"
-	"strings"
 
 	"github.com/amarnathcjd/yoko/modules/db"
 	tb "gopkg.in/tucnak/telebot.v3"
@@ -15,24 +14,22 @@ var (
 )
 
 func SaveFilter(c tb.Context) error {
-	m := c.Message()
-	name, note, file := parse_message(m)
-	fmt.Println("hu")
+	name, note, file := parse_message(c.Message())
 	if name == string("") {
-		b.Reply(m, "You need to give the filter a name!")
+		c.Reply("You need to give the filter a name!")
 		return nil
 	} else if note == string("") && file == nil {
-		b.Reply(m, "You need to give the filter a name!")
+		c.Reply("You need to give the filter a name!")
 		return nil
 	}
-	b.Reply(m, fmt.Sprintf("Saved filter '%s'.", name))
-	db.Save_filter(m.Chat.ID, name, note, file)
+	c.Reply(fmt.Sprintf("Saved filter '%s'.", name))
+	db.Save_filter(c.Chat().ID, name, note, file)
 	return nil
 }
 
 func AllFilters(c tb.Context) error {
 	f := db.Get_filters(c.Chat().ID)
-	if f == nil || len(f) == 0 {
+	if len(f) == 0 {
 		return c.Reply(fmt.Sprintf("No filters in %s!", c.Chat().Title))
 	} else {
 		txt := fmt.Sprintf("<b>Filters in %s:</b>", c.Chat().Title)
@@ -94,11 +91,6 @@ func CancelDALL(c tb.Context) error {
 }
 
 func FilterEvent(c tb.Context) bool {
-	for _, x := range []string{"/", "!", "?"} {
-		if strings.HasPrefix(c.Text(), x) {
-			return false
-		}
-	}
 	f := db.Get_filters(c.Chat().ID)
 	if len(f) == 0 {
 		return false

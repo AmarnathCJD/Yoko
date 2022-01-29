@@ -2,6 +2,7 @@ package modules
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 
@@ -103,16 +104,26 @@ func FLOOD_EV(c tb.Context) bool {
 		if _, ok := DB[chat_id][c.Sender().ID]; !ok {
 			DB[chat_id] = make(map[int64]USER)
 			DB[chat_id][c.Sender().ID] = USER{ID: c.Sender().ID, COUNT: 1}
-			fmt.Println(DB)
 		} else {
 			u := DB[chat_id][c.Sender().ID]
 			DB[chat_id][c.Sender().ID] = USER{ID: c.Sender().ID, COUNT: u.COUNT + 1}
-			fmt.Println(DB)
 		}
-		if DB[chat_id][c.Sender().ID].COUNT > f.COUNT {
-			c.Reply("Flood")
+		if DB[chat_id][c.Sender().ID].COUNT >= f.COUNT {
+			f := db.GetFlood(c.Chat().ID)
+			p, _ := c.Bot().ChatMemberOf(c.Chat(), c.Sender())
+			if p.Role != tb.Member {
+				return false
+			}
 			reset_flood(chat_id, 0)
-			return true
+			err := take_action(f.MODE, f.TIME, *c.Sender(), *c.Chat())
+			if err != nil {
+				log.Print(err)
+				return true
+			} else {
+				c.Bot().Delete(c.Message())
+				c.Send(fmt.Sprintf("Yeah, I don't like yout flooding.\n<a href='tg://user?id=%d'>%s</a> has been %s", c.Sender().ID, c.Sender().FirstName, Convert_action(f.MODE, f.TIME)))
+				return true
+			}
 		}
 
 	}

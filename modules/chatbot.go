@@ -14,12 +14,7 @@ import (
 
 func Chat_bot(c tb.Context) error {
 	is_chat := false
-	for _, x := range db.CHATS {
-		if x == c.Chat().ID {
-			return nil
-		}
-	}
-	if c.Media() != nil {
+	if db.IsChatbot(c.Chat().ID) {
 		return nil
 	}
 	if c.Message().IsReply() && c.Message().ReplyTo.Sender.ID == int64(5050904599) {
@@ -29,14 +24,14 @@ func Chat_bot(c tb.Context) error {
 	}
 	if !is_chat {
 		return nil
-	} else if strings.HasPrefix(c.Message().Text, "/") {
+	} else if strings.HasPrefix(c.Message().Text, "/") || strings.HasPrefix(c.Message().Text, "!") {
 		return nil
 	}
-	text := strings.ReplaceAll(c.Message().Text, "yoko", "kuki")
+	text := strings.ReplaceAll(c.Message().Text, "mika", "kuki")
 	url_q := "https://icap.iconiq.ai/talk?&botkey=icH-VVd4uNBhjUid30-xM9QhnvAaVS3wVKA3L8w2mmspQ-hoUB3ZK153sEG3MX-Z8bKchASVLAo~&channel=7&sessionid=482070240&client_name=uuiprod-un18e6d73c-user-19422&id=true"
 	req, err := http.PostForm(url_q, url.Values{"input": {text}})
 	if err != nil {
-		c.Reply("Host Error")
+		c.Reply("Chatbot API is down!")
 	}
 	defer req.Body.Close()
 	var resp mapType
@@ -79,9 +74,9 @@ func Chat_bot(c tb.Context) error {
 	if strings.Contains(message, "<split>") {
 		message = strings.ReplaceAll(strings.ReplaceAll(message, "<split>", ""), "</split>", "")
 	}
-	message = strings.ReplaceAll(strings.ReplaceAll(message, "kuki", "yoko"), "Kuki", "Yoko")
-	c.Reply(message)
-	return nil
+	message = strings.ReplaceAll(strings.ReplaceAll(message, "kuki", "mika"), "Kuki", "Mika")
+	defer c.Bot().Notify(c.Chat(), tb.Typing)
+	return c.Reply(message)
 }
 
 func Chatbot_mode(c tb.Context) error {

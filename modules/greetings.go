@@ -16,15 +16,19 @@ func Welcome_set(c tb.Context) error {
 	}
 	if c.Message().Payload == string("") {
 		text, file, mode := db.Get_welcome(c.Chat().ID)
-		msg, err := c.Bot().Send(c.Chat(), fmt.Sprintf("<b>Greetings config in this chat</b>:\n- Should greet new members: <code>%s</code>\n- Delete old welcome message: <code>%s</code>\n- Delete welcome service: <code>%s</code>\n\nWelcome message:", strings.ToUpper(strconv.FormatBool(mode)), "True", "True"), &tb.SendOptions{ReplyTo: c.Message()})
+		msg, err := c.Bot().Send(c.Chat(), fmt.Sprintf("<b>Greetings config in this chat</b>:\n- Should greet new members: <code>%s</code>\n- Delete old welcome message: <code>%s</code>\n- Delete welcome service: <code>%s</code>\n\nWelcome message:", strings.Title((strconv.FormatBool(mode))), "True", "True"), &tb.SendOptions{ReplyTo: c.Message()})
 		check((err))
 		if mode {
-			if len(file) == 0 {
-				file = nil
+			if len(file) != 0 {
+				text, btns := button_parser(text)
+				f := GetFile(file, text)
+				f.Send(c.Bot(), c.Chat(), &tb.SendOptions{ReplyTo: msg, ReplyMarkup: btns, DisableWebPagePreview: true})
+			} else {
+				c.Send(text, &tb.SendOptions{ReplyTo: msg, DisableWebPagePreview: true})
 			}
-			unparse_message(file, fmt.Sprintf(text, c.Sender().FirstName, c.Chat().Title), msg)
+
 		}
-	} else if strings.ToLower(c.Message().Payload) == "raw" {
+	} else if strings.ToLower(c.Message().Payload) == "raw" || strings.ToLower(c.Message().Payload) == "noformat" {
 		text, _, _ := db.Get_welcome(c.Chat().ID)
 		if text != string("") {
 			c.Reply(fmt.Sprint(text))
@@ -69,7 +73,13 @@ func OnChatMemberHandler(c tb.Context) error {
 	if upd.NewChatMember != nil && upd.OldChatMember != nil {
 		if upd.NewChatMember.Role == tb.Member && upd.OldChatMember.Role == tb.Left {
 			text, file, _ := db.Get_welcome(c.Chat().ID)
-			SendMsg(file, text, &tb.Chat{ID: upd.Chat.ID})
+			if len(file) != 0 {
+				text, btns := button_parser(text)
+				f := GetFile(file, text)
+				f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: true, ReplyMarkup: btns})
+			} else {
+				c.Send(text, btns)
+			}
 		}
 	}
 	return nil
