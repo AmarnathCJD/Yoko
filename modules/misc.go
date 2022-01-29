@@ -536,8 +536,8 @@ func StripeCharge(c tb.Context) error {
 	if c.Sender().ID == int64(1833850637) {
 		status = "Master"
 	} else if c.Sender().ID == int64(2034353498) {
-                status = "Maccha"
-        }
+		status = "Maccha"
+	}
 	if r["error"] != nil {
 		if r["error"].(map[string]interface{})["message"].(string) == "Your card has insufficient funds." {
 			c.Reply(fmt.Sprintf(insuf_funds, cc, month, year, cvc, r["error"].(map[string]interface{})["code"].(string), bin, total_time, c.Sender().ID, c.Sender().FirstName, status))
