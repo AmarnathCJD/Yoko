@@ -494,16 +494,16 @@ func ParseString(t string, c tb.Context) string {
 		}
 
 	}
-        first := c.Sender().FirstName
-        last := c.Sender().LastName
-        fullname := first + last
-        username := c.Sender().Username
-        id := c.Sender().ID
-        mention := fmt.Sprintf("<a href='tg://user?id=%d'>%s</a>", id, first)
-        if username == string(""){
-             username = mention
-        }
-        chatname := c.Chat().Title
+	first := c.Sender().FirstName
+	last := c.Sender().LastName
+	fullname := first + last
+	username := c.Sender().Username
+	id := c.Sender().ID
+	mention := fmt.Sprintf("<a href='tg://user?id=%d'>%s</a>", id, first)
+	if username == string("") {
+		username = mention
+	}
+	chatname := c.Chat().Title
 	t = fmt.Sprintf(t, first, last, username, id, fullname, chatname, mention)
 	return t
 
