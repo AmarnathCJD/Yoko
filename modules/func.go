@@ -484,9 +484,9 @@ func GetFile(file bson.A, caption string) tb.Sendable {
 	}
 }
 
-var FILLINGS = []FF{{"{first}", 1}, {"last", 2}, {"username", 3}}
+var FILLINGS = []FF{{"{first}", 1}, {"{last}", 2}, {"{username}", 3}}
 
-func ParseString(t string) string {
+func ParseString(t string, c tb.Context) string {
 	for _, f := range FILLINGS {
 		if strings.Contains(t, f.F) {
 			t = strings.ReplaceAll(t, f.F, "%["+strconv.Itoa(f.INDEX)+"]s")
@@ -494,6 +494,7 @@ func ParseString(t string) string {
 		}
 
 	}
+        t = fmt.Sprintf(t, c.Sender().FirstName, c.Sender().LastName, c.Sender().Username)
 
 	return t
 
