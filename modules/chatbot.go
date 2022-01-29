@@ -14,9 +14,6 @@ import (
 
 func Chat_bot(c tb.Context) error {
 	is_chat := false
-	if db.IsChatbot(c.Chat().ID) {
-		return nil
-	}
 	if c.Message().IsReply() && c.Message().ReplyTo.Sender.ID == int64(5050904599) {
 		is_chat = true
 	} else if strings.Contains(strings.ToLower(c.Message().Text), "yoko") {
