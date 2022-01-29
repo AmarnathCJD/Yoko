@@ -498,8 +498,8 @@ func ParseString(t string, c tb.Context) string {
 	last := c.Sender().LastName
 	fullname := first + last
 	username := c.Sender().Username
-	id := c.Sender().ID
-	mention := fmt.Sprintf("<a href='tg://user?id=%d'>%s</a>", id, first)
+	id := strconv.Itoa(int(c.Sender().ID))
+	mention := fmt.Sprintf("<a href='tg://user?id=%d'>%s</a>", int(id), first)
 	if username == string("") {
 		username = mention
 	}
