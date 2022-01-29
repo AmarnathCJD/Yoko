@@ -494,7 +494,7 @@ func ParseString(t string, c tb.Context) string {
 		}
 
 	}
-        t = fmt.Sprintf(t, c.Sender().FirstName, c.Sender().LastName, c.Sender().Username)
+	t = fmt.Sprintf(t, c.Sender().FirstName, c.Sender().LastName, c.Sender().Username)
 
 	return t
 
