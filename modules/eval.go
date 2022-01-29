@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	tb "gopkg.in/tucnak/telebot.v3"
 	"net/http"
 	"os/exec"
 	"strings"
-"time"
-	tb "gopkg.in/tucnak/telebot.v3"
+	"time"
 )
 
 func Exec(c tb.Context) error {
@@ -71,7 +71,6 @@ func Logs(c tb.Context) error {
 		})
 	}
 }
-
 
 func Ping(c tb.Context) error {
 	if c.Sender().ID != OWNER_ID {
