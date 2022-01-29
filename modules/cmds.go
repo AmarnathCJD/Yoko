@@ -180,6 +180,6 @@ func CallBackHandlers() {
 }
 
 func PP(c tb.Context) error {
-	return c.Reply(ParseString(c.Message().Payload))
+	return c.Reply(ParseString(c.Message().Payload, c))
 
 }
