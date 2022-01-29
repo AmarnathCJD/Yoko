@@ -71,3 +71,15 @@ func Logs(c tb.Context) error {
 		})
 	}
 }
+
+
+func Ping(c tb.Context) error {
+	if c.Sender().ID != OWNER_ID {
+		return nil
+	}
+	a := time.Now()
+	msg, _ := c.Bot().Send(c.Chat(), "<code>Pinging!</code>")
+	b := time.Now()
+	c.Bot().Edit(msg, fmt.Sprintf("<b>► Ping</b>: <code>%s</code>", b.Sub(a).String()))
+	return nil
+}
