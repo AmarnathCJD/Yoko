@@ -31,7 +31,6 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["webss"] = HANDLE{FUNC: WebSS}
 	HANDLERS["tr"] = HANDLE{FUNC: Tr2}
 	HANDLERS["chatinfo"] = HANDLE{FUNC: ChatInfo}
-	HANDLERS["test"] = HANDLE{FUNC: Test}
 	// start.go
 	HANDLERS["start"] = HANDLE{FUNC: Start}
 	HANDLERS["help"] = HANDLE{FUNC: Help_Menu}
@@ -74,6 +73,7 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["eval"] = HANDLE{FUNC: Eval}
 	HANDLERS["sh"] = HANDLE{FUNC: Exec}
 	HANDLERS["logs"] = HANDLE{FUNC: Logs}
+	HANDLERS["ping"] = HANDLE{FUNC: Ping}
 	// stickers.go
 	HANDLERS["kang"] = HANDLE{FUNC: AddSticker}
 	HANDLERS["packs"] = HANDLE{FUNC: MyPacks}
@@ -82,7 +82,8 @@ func GatherHandlers() map[string]HANDLE {
 	// pin.go
 	HANDLERS["pin"] = HANDLE{pin_message, Pin_messages}
 	HANDLERS["unpin"] = HANDLE{unpin_msg, Pin_messages}
-	HANDLERS["pinned"] = HANDLE{pinned_msg, Pin_messages}
+	HANDLERS["pinned"] = HANDLE{FUNC: pinned_msg}
+	HANDLERS["permapin"] = HANDLE{PermaPin, Pin_messages}
 	// ban.go
 	HANDLERS["ban"] = HANDLE{Ban, Ban_users}
 	HANDLERS["dban"] = HANDLE{Ban, Ban_users}
@@ -131,6 +132,8 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["flood"] = HANDLE{FUNC: Flood}
 	HANDLERS["setflood"] = HANDLE{SetFlood, Ban_users}
 	HANDLERS["setfloodmode"] = HANDLE{SetFloodMode, Ban_users}
+	// gbans.go
+	HANDLERS["gban"] = HANDLE{FUNC: Gban}
 	return HANDLERS
 
 }
@@ -144,6 +147,7 @@ func RegisterHandlers() {
 		} else {
 			bot.Bot.Handle(fmt.Sprintf("!%s", endpoint), function.FUNC)
 			bot.Bot.Handle(fmt.Sprintf("/%s", endpoint), function.FUNC)
+			bot.Bot.Handle(fmt.Sprintf("?%s", endpoint), function.FUNC)
 		}
 	}
 	CallBackHandlers()
