@@ -2,7 +2,6 @@ package modules
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"log"
 "fmt"
 	"net/http"
