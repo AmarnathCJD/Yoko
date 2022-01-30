@@ -59,3 +59,21 @@ var insuf_funds = `
 %s
 <U>Time:</u> <b>%d's</b>
 <b>Checked By <a href='tg://user?id=%d'>%s</a> [%s]</b>`
+
+var stripe_rs = `
+>. <b>𝐆𝐚𝐭𝐞𝐬/𝐂𝐡𝐚𝐫𝐠𝐞/𝐒𝐭𝐫𝐢𝐩𝐞-$1</b>
+
+| —  <b>𝐑𝐄𝐒𝐔𝐋𝐓</b>
+|- <b>CARD:</b> <code>%s|%s|%s|%s</code>
+|- <b>STATUS:</b> %s %s
+|- <b>RESPONSE:</b> %s
+|- <b>CODE:</b> %s
+| —  <b>𝐁𝐈𝐍-𝐈𝐍𝐅𝐎</b>
+|- <b>BANK/TYPE:</b> .
+|- <b>COUNTRY:</b> . .
+| —  <b>𝐈𝐍𝐅𝐎𝐒</b>
+|- <b>Checked By:</b> @%s[%s]
+|- <b>Time Taken:</b>  "."
+
+| — 𝙱𝚘𝚝 𝙱𝚢 <b>RoseLoverX</b>
+`
