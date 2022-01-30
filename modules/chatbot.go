@@ -147,5 +147,3 @@ func Parse_ai_msg(c tb.Context, t string, mode string) {
 	}
 
 }
-
-

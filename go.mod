@@ -10,7 +10,6 @@ require (
 )
 
 require (
-	cloud.google.com/go v0.100.2 // indirect
 	cloud.google.com/go/compute v0.1.0 // indirect
 	github.com/PuerkitoBio/goquery v1.8.0 // indirect
 	github.com/andybalholm/cascadia v1.3.1 // indirect
