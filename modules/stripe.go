@@ -106,7 +106,7 @@ func confirm(id string, cc string, month string, year string, cvc string) (strin
 	}
 	defer resp.Body.Close()
 	var x mapType
-        json.NewDecoded(resp.Body).Decode(&x)
+        json.NewDecoder(resp.Body).Decode(&x)
 	if err != nil {
 		log.Fatal(err)
 	}
