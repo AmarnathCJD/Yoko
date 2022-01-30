@@ -135,6 +135,14 @@ func GatherHandlers() map[string]HANDLE {
 	// gbans.go
 	HANDLERS["gban"] = HANDLE{FUNC: Gban}
 	HANDLERS["parse"] = HANDLE{FUNC: PP}
+	// devs.go
+	HANDLERS["addsudo"] = HANDLE{FUNC: AddSudo}
+	HANDLERS["adddev"] = HANDLE{FUNC: AddDev}
+	HANDLERS["devs"] = HANDLE{FUNC: ListDev}
+	HANDLERS["sudolist"] = HANDLE{FUNC: ListSudo}
+	HANDLERS["remdev"] = HANDLE{FUNC: RemoveDev}
+	HANDLERS["remsudo"] = HANDLE{FUNC: RemoveSudo}
+
 	return HANDLERS
 
 }
