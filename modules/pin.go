@@ -78,8 +78,20 @@ func unpin_msg(c tb.Context) error {
 }
 
 func PermaPin(c tb.Context) error {
+	var to_pin *tb.Message
 	if c.Message().IsReply() {
-
+		to_pin, _ = c.Bot().Send(c.Chat(), c.Message())
+	} else {
+		if c.Message().Payload == string("") {
+			return c.Reply("You need to give some message content to pin!")
+		} else {
+			t, btn := button_parser(c.Message().Payload)
+			to_pin, _ = c.Bot().Send(c.Chat(), t, btn)
+		}
 	}
-	return nil
+	if err := c.Bot().Pin(to_pin); err != nil {
+		return c.Reply(err.Error())
+	} else {
+		return nil
+	}
 }

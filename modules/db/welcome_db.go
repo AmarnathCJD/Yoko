@@ -8,7 +8,7 @@ import (
 
 var (
 	welcome         = database.Collection("welcum")
-	default_welcome = "Hi %s, welcome to %s!"
+	default_welcome = "Hi {first}, welcome to {chatname}!"
 )
 
 func Set_welcome(chat_id int64, text string, file []string) {

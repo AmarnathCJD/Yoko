@@ -49,20 +49,20 @@ func All_notes(c tb.Context) error {
 }
 
 func Gnote(c tb.Context) error {
-	m := c.Message()
-	note := db.Get_note(m.Chat.ID, m.Payload)
+	note := db.Get_note(c.Chat().ID, c.Message().Payload)
 	if note == nil {
-		b.Reply(m, "No note found!")
+		c.Reply("No note found!")
 		return nil
 	}
 	mode := db.Pnote_settings(c.Chat().ID)
 	if mode {
 		menu := &tb.ReplyMarkup{}
-		menu.Inline(menu.Row(menu.URL("Click me!", fmt.Sprintf("t.me/yoko_robot?start=notes_%d_%s", c.Chat().ID, m.Payload))))
-		c.Reply(fmt.Sprintf("Tap here to view '%s' in your private chat.", m.Payload), menu)
+		menu.Inline(menu.Row(menu.URL("Click me!", fmt.Sprintf("t.me/missmikabot?start=notes_%d_%s", c.Chat().ID, c.Message().Payload))))
+		c.Reply(fmt.Sprintf("Tap here to view '%s' in your private chat.", c.Message().Payload), menu)
 		return nil
 	}
-	unparse_message(note["file"], note["note"].(string), m)
+	n, p := ParseString(note["note"].(string), c)
+	unparse_message(note["file"], n, c.Message(), p)
 	return nil
 }
 
@@ -94,11 +94,12 @@ func Hash_note(c tb.Context) error {
 	mode := db.Pnote_settings(c.Chat().ID)
 	if mode {
 		menu := &tb.ReplyMarkup{}
-		menu.Inline(menu.Row(menu.URL("Click me!", fmt.Sprintf("t.me/yoko_robot?start=notes_%d_%s", c.Chat().ID, args[1]))))
+		menu.Inline(menu.Row(menu.URL("Click me!", fmt.Sprintf("t.me/missmikabot?start=notes_%d_%s", c.Chat().ID, args[1]))))
 		c.Reply(fmt.Sprintf("Tap here to view '%s' in your private chat.", args[1]), menu)
 		return nil
 	}
-	unparse_message(note["file"], note["note"].(string), c.Message())
+	n, p := ParseString(note["note"].(string), c)
+	unparse_message(note["file"], n, c.Message(), p)
 	return nil
 }
 
@@ -200,7 +201,8 @@ func private_start_note(c tb.Context) {
 		c.Reply("This note was not found ~")
 		return
 	}
-	unparse_message(note["file"], note["note"].(string), c.Message())
+	n, p := ParseString(note["note"].(string), c)
+	unparse_message(note["file"], n, c.Message(), p)
 }
 
 func private_startallnotes(c tb.Context) {
@@ -213,7 +215,7 @@ func private_startallnotes(c tb.Context) {
 	}
 	out := fmt.Sprintf("<b>Notes in %s:</b>", args[1])
 	for _, x := range notes {
-		out += fmt.Sprintf("\n<b>-&gt;</b> <a href='t.me/yoko_robot?start=notes_%s_%s'>%s</a>", args[1], x.(bson.M)["name"].(string), x.(bson.M)["name"].(string))
+		out += fmt.Sprintf("\n<b>-&gt;</b> <a href='t.me/missmikabot?start=notes_%s_%s'>%s</a>", args[1], x.(bson.M)["name"].(string), x.(bson.M)["name"].(string))
 	}
 	c.Reply(out)
 }

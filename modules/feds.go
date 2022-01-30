@@ -395,22 +395,19 @@ func Fban(c tb.Context) error {
 	fed := db.Search_fed_by_id(fed_id)
 	fedname := fed["fedname"].(string)
 	if u.ID == BOT_ID {
-		c.Reply("Oh you're a funny one aren't you! I am not going to fedban myself.")
-		return nil
-	} else if IS_SUDO(u.ID) {
-		c.Reply("I'm not banning one of my sudo users.")
-		return nil
+		return c.Reply("Oh you're a funny one aren't you! I am not going to fedban myself.")
+	} else if IsDev(u.ID) {
+		return c.Reply("I'm not banning one of my dev users.")
+	} else if IsSudo(u.ID) {
+		return c.Reply("I'm not banning one of my sudo users.")
 	} else if db.Is_user_fed_admin(u.ID, fed_id) {
-		c.Reply(fmt.Sprintf("I'm not banning a fed admin/owner from their own fed! (%s)", fedname))
-		return nil
+		return c.Reply(fmt.Sprintf("I'm not banning a fed admin/owner from their own fed! (%s)", fedname))
 	}
 	is_banned, r := db.Is_Fbanned(u.ID, fed_id)
 	if is_banned && x == string("") && r == string("") {
-		c.Reply(fmt.Sprintf("User <a href='tg://user?id=%d'>%s</a> is already banned in %s. There is no reason set for their fedban yet, so feel free to set one.", u.ID, u.FirstName, fedname))
-		return nil
+		return c.Reply(fmt.Sprintf("User <a href='tg://user?id=%d'>%s</a> is already banned in %s. There is no reason set for their fedban yet, so feel free to set one.", u.ID, u.FirstName, fedname))
 	} else if is_banned && x == r {
-		c.Reply(fmt.Sprintf("User <a href='tg://user?id=%d'>%s</a> has already been fbanned, with the exact same reason.", u.ID, u.FirstName))
-		return nil
+		return c.Reply(fmt.Sprintf("User <a href='tg://user?id=%d'>%s</a> has already been fbanned, with the exact same reason.", u.ID, u.FirstName))
 	} else if is_banned && x == string("") {
 		if r == string("") {
 			c.Reply(fmt.Sprintf("User <a href='tg://user?id=%d'>%s</a> is already banned in %s.", u.ID, u.FirstName, fedname))
@@ -486,14 +483,13 @@ func Unfban(c tb.Context) error {
 	fed := db.Search_fed_by_id(fed_id)
 	fedname := fed["fedname"].(string)
 	if u.ID == BOT_ID {
-		c.Reply("Oh you're a funny one aren't you! How do you think I would have fbanned myself hm?.")
-		return nil
-	} else if IS_SUDO(u.ID) {
-		c.Reply("I'm not banning one of my sudo users.")
-		return nil
+		return c.Reply("Oh you're a funny one aren't you! How do you think I would have fbanned myself hm?.")
+	} else if IsSudo(u.ID) {
+		return c.Reply("I'm not banning one of my sudo users.")
+	} else if IsDev(u.ID) {
+		return c.Reply("I'm not banning one of my admins.")
 	} else if db.Is_user_fed_admin(u.ID, fed_id) {
-		c.Reply("fed admin/owner cant be banned!")
-		return nil
+		return c.Reply("fed admin/owner cant be banned!")
 	}
 	is_banned, _ := db.Is_Fbanned(u.ID, fed_id)
 	if !is_banned {

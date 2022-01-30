@@ -14,6 +14,7 @@ import (
 	"unicode"
 
 	"github.com/amarnathcjd/yoko/bot"
+	"github.com/amarnathcjd/yoko/modules/db"
 	"go.mongodb.org/mongo-driver/bson"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
@@ -90,37 +91,37 @@ func get_file(m *tb.Message) (string, string) {
 	}
 }
 
-func unparse_message(file interface{}, note string, m *tb.Message) {
+func unparse_message(file interface{}, note string, m *tb.Message, p bool) {
 	text, buttons := button_parser(note)
-	if file != nil && file.(bson.A)[0] != string("") {
+	if file != nil && len(file.(bson.A)) != 0 {
 		id, f := file.(bson.A)[0].(string), file.(bson.A)[1].(string)
 		if f == "document" {
 			file := &tb.Document{File: tb.File{FileID: id}, Caption: text}
-			b.Reply(m, file, buttons)
+			b.Reply(m, file, &tb.SendOptions{ReplyMarkup: buttons, DisableWebPagePreview: p})
 		} else if f == "sticker" {
 			file := &tb.Sticker{File: tb.File{FileID: id}}
-			b.Reply(m, file, buttons)
+			b.Reply(m, file, &tb.SendOptions{ReplyMarkup: buttons, DisableWebPagePreview: p})
 		} else if f == "photo" {
 			file := &tb.Photo{File: tb.File{FileID: id}, Caption: text}
-			b.Reply(m, file, buttons)
+			b.Reply(m, file, &tb.SendOptions{ReplyMarkup: buttons, DisableWebPagePreview: p})
 		} else if f == "audio" {
 			file := &tb.Audio{File: tb.File{FileID: id}, Caption: text}
-			b.Reply(m, file, buttons)
+			b.Reply(m, file, &tb.SendOptions{ReplyMarkup: buttons, DisableWebPagePreview: p})
 		} else if f == "voice" {
 			file := &tb.Voice{File: tb.File{FileID: id}, Caption: text}
-			b.Reply(m, file, buttons)
+			b.Reply(m, file, &tb.SendOptions{ReplyMarkup: buttons, DisableWebPagePreview: p})
 		} else if f == "video" {
 			file := &tb.Video{File: tb.File{FileID: id}, Caption: text}
-			b.Reply(m, file, buttons)
+			b.Reply(m, file, &tb.SendOptions{ReplyMarkup: buttons, DisableWebPagePreview: p})
 		} else if f == "animation" {
 			file := &tb.Animation{File: tb.File{FileID: id}, Caption: text}
-			b.Reply(m, file, buttons)
+			b.Reply(m, file, &tb.SendOptions{ReplyMarkup: buttons, DisableWebPagePreview: p})
 		} else if f == "videonote" {
 			file := &tb.VideoNote{File: tb.File{FileID: id}}
-			b.Reply(m, file, buttons)
+			b.Reply(m, file, &tb.SendOptions{ReplyMarkup: buttons, DisableWebPagePreview: p})
 		}
 	} else {
-		b.Reply(m, text, buttons)
+		b.Reply(m, text, &tb.SendOptions{ReplyMarkup: buttons, DisableWebPagePreview: p})
 	}
 }
 
@@ -306,11 +307,37 @@ func Parse_country(t string) string {
 	}
 }
 
-func IS_SUDO(user_id int64) bool {
-	for _, x := range BOT_SUDO {
-		if int64(x) == user_id {
+func IsSudo(user_id int64) bool {
+	for _, id := range db.Sudos {
+		if id.Id == user_id {
 			return true
 		}
+	}
+	return false
+}
+
+func IsDev(user_id int64) bool {
+	for _, id := range db.Devs {
+		if id.Id == user_id {
+			return true
+		}
+	}
+	return false
+}
+
+func IsBotAdmin(user_id int64) bool {
+	for _, id := range db.Devs {
+		if id.Id == user_id {
+			return true
+		}
+	}
+	for _, id := range db.Sudos {
+		if id.Id == user_id {
+			return true
+		}
+	}
+	if user_id == OWNER_ID {
+		return true
 	}
 	return false
 }
@@ -486,8 +513,12 @@ func GetFile(file bson.A, caption string) tb.Sendable {
 
 var FILLINGS = []FF{{"{first}", 1}, {"{last}", 2}, {"{username}", 3}, {"{fullname}", 5}, {"{id}", 4}, {"{chatname}", 6}, {"{mention}", 7}}
 
-func ParseString(t string, c tb.Context) string {
-	q := 0
+func ParseString(t string, c tb.Context) (string, bool) {
+	q, preview := 0, true
+	if strings.Contains(t, "{preview}") {
+		preview = false
+		t = strings.ReplaceAll(t, "{preview}", "")
+	}
 	for _, f := range FILLINGS {
 		if strings.Contains(t, f.F) {
 			q++
@@ -497,11 +528,14 @@ func ParseString(t string, c tb.Context) string {
 
 	}
 	if strings.Contains(t, "{rules}") {
-		t = strings.ReplaceAll(t, "{rules}", fmt.Sprintf("[Rules](buttonurl://rules|%d)", c.Chat().ID))
+		t = strings.ReplaceAll(t, "{rules}", "[Rules](buttonurl://rules)")
 	}
 	first := c.Sender().FirstName
 	last := c.Sender().LastName
-	fullname := first + " " + last
+	fullname := first
+	if last != string("") {
+		fullname += " " + last
+	}
 	username := c.Sender().Username
 	id := strconv.Itoa(int(c.Sender().ID))
 	mention := fmt.Sprintf("<a href='tg://user?id=%s'>%s</a>", id, first)
@@ -512,6 +546,6 @@ func ParseString(t string, c tb.Context) string {
 	if q != 0 {
 		t = fmt.Sprintf(t, first, last, username, id, fullname, chatname, mention)
 	}
-	return t
+	return t, preview
 
 }

@@ -69,17 +69,26 @@ func ResetWelcome(c tb.Context) error {
 
 func OnChatMemberHandler(c tb.Context) error {
 	upd := c.ChatMember()
-	fmt.Println(upd.Chat, upd.Sender, upd.NewChatMember, upd.OldChatMember)
 	if upd.NewChatMember != nil && upd.OldChatMember != nil {
 		if upd.NewChatMember.Role == tb.Member && upd.OldChatMember.Role == tb.Left {
-			text, file, _ := db.Get_welcome(c.Chat().ID)
+			if upd.Sender.ID == BOT_ID {
+				if !db.IsChat(upd.Chat.ID) {
+					db.AddChat(db.Chat{Id: upd.Chat.ID, Title: upd.Chat.Title})
+				}
+				return nil
+			}
+			text, file, mode := db.Get_welcome(c.Chat().ID)
+			if !mode {
+				return nil
+			}
+			text, btns := button_parser(text)
 			if len(file) != 0 {
-				text, btns := button_parser(text)
-				text = ParseString(text, c)
+				text, p := ParseString(text, c)
 				f := GetFile(file, text)
-				f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: true, ReplyMarkup: btns})
+				f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns})
 			} else {
-				c.Send(text, btns)
+				text, p := ParseString(text, c)
+				c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns})
 			}
 		}
 	}

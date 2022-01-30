@@ -14,6 +14,8 @@ import (
 	tb "gopkg.in/tucnak/telebot.v3"
 )
 
+var imdb_btn = sel.Data("imdb_in", "imdb_inline")
+
 func inline_markup(query string) *tb.InlineKeyboardMarkup {
 	btns := &tb.InlineKeyboardMarkup{}
 	btns.InlineKeyboard = [][]tb.InlineButton{{tb.InlineButton{
@@ -133,7 +135,7 @@ func imdb_inline(c tb.Context) {
 			break
 		}
 		btns := &tb.InlineKeyboardMarkup{}
-		btns.InlineKeyboard = [][]tb.InlineButton{{tb.InlineButton{Text: result.Name, Data: fmt.Sprintf("imdb_inline_%d", &result.ID)}}, {tb.InlineButton{
+		btns.InlineKeyboard = [][]tb.InlineButton{{tb.InlineButton{Text: result.Name, Data: fmt.Sprintf("imdb_inline_%d", &result.ID), Unique: "imdb_inline"}}, {tb.InlineButton{
 			Text:            "Search again",
 			InlineQueryChat: "imdb ",
 		}}}
@@ -154,6 +156,15 @@ func imdb_inline(c tb.Context) {
 	if err != nil {
 		fmt.Println(err)
 	}
+}
+
+func ImdbCB(c tb.Context) error {
+	d := c.Callback().Data
+	title, err := imdb.NewTitle(myClient, d)
+	check(err)
+	movie := fmt.Sprintf("<b><u>%s</u></b>\n<b>Type:</b> %s\n<b>Year:</b> %s\n<b>AKA:</b> %s\n<b>Duration:</b> %s\n<b>Rating:</b> %s/10\n<b>Genre:</b> %s\n\n<code>%s</code>\n<b>Source ---> IMDb</b>", title.Name, title.Type, strconv.Itoa(title.Year), title.AKA[0], title.Duration, title.Rating, strings.Join(title.Genres, ", "), title.Description)
+	sel.Inline(sel.Row(sel.QueryChat("Search again", "imdb ")))
+	return c.Edit(movie, &tb.SendOptions{ParseMode: tb.ModeHTML, ReplyMarkup: sel})
 }
 
 func yt_search(c tb.Context) {
