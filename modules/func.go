@@ -497,7 +497,7 @@ func ParseString(t string, c tb.Context) string {
 
 	}
 	if strings.Contains(t, "{rules}") {
-		strings.ReplaceAll(t, "{rules}", fmt.Sprintf("[Rules](buttonurl://rules|%d)", c.Chat().ID))
+		t = strings.ReplaceAll(t, "{rules}", fmt.Sprintf("[Rules](buttonurl://rules|%d)", c.Chat().ID))
 	}
 	first := c.Sender().FirstName
 	last := c.Sender().LastName
