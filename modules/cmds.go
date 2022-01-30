@@ -2,7 +2,7 @@ package modules
 
 import (
 	"fmt"
-
+"strings"
 	"github.com/amarnathcjd/yoko/bot"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
