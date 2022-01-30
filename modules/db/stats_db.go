@@ -76,12 +76,12 @@ func GetAllUsers() []User {
 
 func AddSudo(user_id int64, name string) {
 	sudo.UpdateOne(context.TODO(), User{Id: user_id}, bson.M{"$set": User{Id: user_id, Name: name, Status: "sudo"}}, opts)
-        Sudos = append(Sudos, User{Id: user_id, Name: name, Status: "sudo"})
+	Sudos = append(Sudos, User{Id: user_id, Name: name, Status: "sudo"})
 }
 
 func AddDev(user_id int64, name string) {
 	sudo.UpdateOne(context.TODO(), User{Id: user_id}, bson.M{"$set": User{Id: user_id, Name: name, Status: "dev"}}, opts)
-        Devs = append(Devs, User{Id: user_id, Name: name, Status: "dev"})
+	Devs = append(Devs, User{Id: user_id, Name: name, Status: "dev"})
 }
 
 func RemSudo(user_id int64) bool {
