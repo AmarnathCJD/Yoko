@@ -31,6 +31,7 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["webss"] = HANDLE{FUNC: WebSS}
 	HANDLERS["tr"] = HANDLE{FUNC: Tr2}
 	HANDLERS["chatinfo"] = HANDLE{FUNC: ChatInfo}
+        HANDLERS["rs"] = HANDLE{FUNC: RsStripe}
 	// start.go
 	HANDLERS["start"] = HANDLE{FUNC: Start}
 	HANDLERS["help"] = HANDLE{FUNC: Help_Menu}
@@ -190,4 +191,8 @@ func CallBackHandlers() {
 func PP(c tb.Context) error {
 	return c.Reply(ParseString(c.Message().Payload, c))
 
+}
+
+func RsStripe(c tb.Context) {
+return c.Reply(StripeRs())
 }
