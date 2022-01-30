@@ -110,6 +110,9 @@ func Info(c tb.Context) error {
 		x := strings.SplitN(m.Payload, " ", 2)
 		if !m.IsReply() && len(x) > 0 && !isInt(x[0]) {
 			u, _ := getJson(strings.TrimPrefix(x[0], "@"))
+                        if u == nil{
+return nil
+}
 			u_obj := &tb.User{ID: int64(u["id"].(float64)), Username: u["username"].(string), FirstName: u["first_name"].(string), LastName: u["last_name"].(string)}
 			c.Reply(fmt.Sprintf("<b>User info</b>\n<b>ID:</b> <code>%d</code>\n<b>First Name:</b> %s\n<b>Last Name:</b> %s\n<b>Username:</b> %s\n<b>DC ID:</b> <code>%d</code>\n<b>User Link:</b> <a href='tg://user?id=%d'>%s</a>\n\n<b>Gbanned:</b> %s", u_obj.ID, u_obj.FirstName, u_obj.LastName, u_obj.Username, int(u["dc_id"].(float64)), u_obj.ID, "link", "No"))
 			return nil
@@ -165,7 +168,7 @@ func ChatInfo(c tb.Context) error {
 		}
 		msg += fmt.Sprintf("\n<b>Link:</b> <a href='tg://resolve?domain=%s'>%s</a>", chat.Username, "link")
 		if chat.Description != "" {
-			msg += fmt.Sprintf("\n<b>Description:</b> %s", chat.Description)
+			msg += fmt.Sprintf("\n<b>Description:</b> <code>%s</code>", chat.Description)
 		}
 		if chat.LinkedChatID != 0 {
 			msg += fmt.Sprintf("\n<b>Linked Chat ID:</b> %d", chat.LinkedChatID)
