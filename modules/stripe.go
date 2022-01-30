@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+"fmt"
 	"net/http"
 	"strings"
 )
@@ -127,7 +128,7 @@ msg = m.(string)
 
 func StripeRs(cc string, month string, year string, cvc string) string {
 	id := get_id()
-	code, dcode, msg := confirm(id)
+	code, dcode, msg := confirm(id, cc, month, year, cvc)
 emoji := "❌"
         if code != "card_declined"{
 emoji = "✅"
