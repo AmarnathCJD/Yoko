@@ -75,7 +75,7 @@ func OnChatMemberHandler(c tb.Context) error {
 			text, file, _ := db.Get_welcome(c.Chat().ID)
 			if len(file) != 0 {
 				text, btns := button_parser(text)
-                                text = ParseString(text, c)
+				text = ParseString(text, c)
 				f := GetFile(file, text)
 				f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: true, ReplyMarkup: btns})
 			} else {
