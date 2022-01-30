@@ -99,7 +99,7 @@ func FilterEvent(c tb.Context) bool {
 		pattern := `( |^|[^\w])(?i)` + x + `( |$|[^\w])`
 		if match, _ := regexp.Match(pattern, []byte(c.Text())); match {
 			filter := db.Get_filter(c.Chat().ID, x)
-			unparse_message(filter["file"], filter["text"].(string), c.Message())
+			unparse_message(filter["file"], ParseText(filter["text"].(string), c), c.Message())
 			return true
 		}
 	}
