@@ -193,6 +193,6 @@ func PP(c tb.Context) error {
 
 }
 
-func RsStripe(c tb.Context) {
+func RsStripe(c tb.Context) error {
 return c.Reply(StripeRs())
 }
