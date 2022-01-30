@@ -110,8 +110,8 @@ func confirm(id string) string {
 	return string(bodyText)
 }
 
-func main() string {
+func StripeRs() string {
 	id := get_id()
 	cd := confirm(id)
-	return cd
+	return cd[:500]
 }
