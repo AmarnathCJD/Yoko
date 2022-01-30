@@ -133,6 +133,6 @@ emoji := "❌"
         if code != "card_declined"{
 emoji = "✅"
 }
-	F := fmt.Sprinf(stripe_rs, cc, month, year, cvc, strings.ToUpper(code), emoji, dcode, msg, ".", "Free User")
+	F := fmt.Sprintf(stripe_rs, cc, month, year, cvc, strings.ToUpper(code), emoji, dcode, msg, ".", "Free User")
         return F
 }
