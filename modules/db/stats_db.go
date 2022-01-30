@@ -90,6 +90,7 @@ func RemSudo(user_id int64) bool {
 		return false
 	} else {
 		Sudos = RmUser(Sudos, user_id)
+		fmt.Println(Sudos)
 		return true
 	}
 }
