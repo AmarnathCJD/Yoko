@@ -158,7 +158,7 @@ func confirm(id string, s string, cc string, year string, month string, cvc stri
 	if strings.Contains(fmt.Sprint(x), "requires_source_action") {
 		fmt.Println("vbv")
 		code = "charge_failed"
-		dcode = "vbv"
+		dcode = "3ds_vbv"
 		msg = "Failed to charge your card."
 
 	}
@@ -189,10 +189,12 @@ func StripeRs(cc string, month string, year string, cvc string) string {
 		emoji = "❌"
 	} else if dcode == "insufficient_funds" {
 		emoji = "✅"
-	}
+	} else if dcode == "3ds_vbv" {
+emoji = "❌"
+}
 	if dcode != string("") {
 		dcode = fmt.Sprintf("\n<b>➤ Dcode:</b> %s", dcode)
 	}
-	F := fmt.Sprintf(stripe_1, cc, month, year, cvc, strings.Title(code), emoji, dcode, msg, ".", "Free User")
+	F := fmt.Sprintf(stripe_1, cc, month, year, cvc, code, emoji, dcode, msg, ".", "Free User")
 	return F
 }
