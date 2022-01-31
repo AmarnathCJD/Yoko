@@ -126,6 +126,7 @@ func confirm(id string, cc string, month string, year string, cvc string) (strin
 }
 
 func StripeRs(cc string, month string, year string, cvc string) string {
+        fmt.Println(year)
 	id := get_id()
 	code, dcode, msg := confirm(id, cc, month, year, cvc)
 	emoji := "❌"
