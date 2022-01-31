@@ -352,14 +352,14 @@ func Get_entity(u interface{}) {
 	fmt.Println(u)
 }
 
-func GetBin(bin string) string {
+func GetBin(bin string, m int) string {
 	resp, _ := http.Get(fmt.Sprintf("https://lookup.binlist.net/%s", bin))
 	var v bson.M
 	defer resp.Body.Close()
 	json.NewDecoder(resp.Body).Decode(&v)
 	bankd := v["bank"].(map[string]interface{})
 	ct := v["country"].(map[string]interface{})
-	bank, scheme, btype, brand, country := "-", "-", "-", "-", "-"
+	bank, scheme, btype, brand, country,  := "-", "-", "-", "-", "-", ""
 	if bankd != nil {
 		if _, ok := bankd["name"]; ok {
 			bank = bankd["name"].(string)
@@ -377,7 +377,12 @@ func GetBin(bin string) string {
 	if ctry, f := ct["name"]; f {
 		country = fmt.Sprintf("(%s - %s - %s - $%s)", ct["emoji"].(string), strings.Title(ctry.(string)), ct["alpha2"].(string), ct["currency"].(string))
 	}
-	bin_details := fmt.Sprintf("<u>Bank Info:</u> <b>%s</b>\n<u>Card Type:</u> <b>%s - %s - %s</b>\n<u>Country:</u> <b>%s</b>", bank, scheme, btype, brand, country)
+        if m == 1{
+	bin_details = fmt.Sprintf("<u>Bank Info:</u> <b>%s</b>\n<u>Card Type:</u> <b>%s - %s - %s</b>\n<u>Country:</u> <b>%s</b>", bank, scheme, btype, brand, country)
+} else if m == 2{
+bin_details = fmt.Sprinf("%s - %s - %s - %s - %s", bankd, scheme, btype, brand, country)
+}
+
 	return bin_details
 }
 
