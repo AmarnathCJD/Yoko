@@ -158,7 +158,7 @@ func confirm(id string, s string, cc string, year string, month string, cvc stri
 	if strings.Contains(fmt.Sprint(x), "requires_source_action") {
 		fmt.Println("vbv")
 		code = "charge_failed"
-		dcode = "3ds_vbv"
+		dcode = "3DS(VBV)"
 		msg = "Failed to charge your card."
 
 	}
@@ -189,7 +189,7 @@ func StripeRs(cc string, month string, year string, cvc string) string {
 		emoji = "❌"
 	} else if dcode == "insufficient_funds" {
 		emoji = "✅"
-	} else if dcode == "3ds_vbv" {
+	} else if dcode == "3DS(VBV)" {
 		emoji = "❌"
 	}
 	if dcode != string("") {
