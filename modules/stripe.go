@@ -52,10 +52,10 @@ func create_intent() string {
 		log.Fatal(err)
 	}
 	req.Header.Set("authority", "yaqeeninstitute.ca")
-	req.Header.Set("sec-ch-ua", "" Not;A Brand";v="99", "Google Chrome";v="97", "Chromium";v="97"")
+	req.Header.Set("sec-ch-ua", `" Not;A Brand";v="99", "Google Chrome";v="97", "Chromium";v="97"`)
 	req.Header.Set("sec-ch-ua-mobile", "?0")
 	req.Header.Set("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36")
-	req.Header.Set("sec-ch-ua-platform", ""Windows"")
+	req.Header.Set("sec-ch-ua-platform", `"Windows"`)
 	req.Header.Set("content-type", "application/json")
 	req.Header.Set("accept", "*/*")
 	req.Header.Set("origin", "https://yaqeeninstitute.ca")
