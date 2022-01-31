@@ -380,7 +380,7 @@ func GetBin(bin string, m int) string {
 	if m == 1 {
 		bin_details = fmt.Sprintf("<u>Bank Info:</u> <b>%s</b>\n<u>Card Type:</u> <b>%s - %s - %s</b>\n<u>Country:</u> <b>%s</b>", bank, scheme, btype, brand, country)
 	} else if m == 2 {
-		bin_details = fmt.Sprintf("%s - %s - %s - %s - %s", bankd, scheme, btype, brand, country)
+		bin_details = fmt.Sprintf("%s - %s - %s - %s - %s", strings.ToUpper(bank), strings.ToUpper(scheme), strings.ToUpper(btype), strings.ToUpper(brand), strings.ToUpper(country))
 	}
 
 	return bin_details
