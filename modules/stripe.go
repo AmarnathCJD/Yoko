@@ -154,14 +154,15 @@ func confirm(id string, s string, cc string, year string, month string, cvc stri
 		if m, ok := e["message"]; ok {
 			msg = m.(string)
 		}
-		if strings.Contains(fmt.Sprint(x), "requires_source_action") {
+}
+	if strings.Contains(fmt.Sprint(x), "requires_source_action") {
 			fmt.Println("vbv")
 			code = "charge_failed"
 			dcode = "vbv"
 			msg = "Failed to charge your card."
 
 		}
-		if s, ok := e["status"]; ok {
+	if s, ok := e["status"]; ok {
 			if s.(string) == "succeeded" {
 				code = "Charged 1$"
 				msg = "Your card has been successfully charged!"
@@ -171,7 +172,7 @@ func confirm(id string, s string, cc string, year string, month string, cvc stri
 			}
 		}
 
-	}
+
 	return code, dcode, msg
 }
 
