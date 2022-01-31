@@ -187,8 +187,9 @@ func StripeRs(cc string, month string, year string, cvc string) string {
 		emoji = "❌"
 	} else if code == "incorrect_number" {
 		emoji = "❌"
-	} else if dcode == "insufficient_funds" {
+	} else if strings.Contains(dcode, "insufficient_funds") {
 		emoji = "✅"
+                status = "CVV Matched"
 	} else if dcode == "3DS(VBV)" {
 		emoji = "❌"
 	}
