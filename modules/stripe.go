@@ -165,6 +165,9 @@ func StripeRs(cc string, month string, year string, cvc string) string {
 	if code != "card_declined" {
 		emoji = "✅"
 	}
-	F := fmt.Sprintf(stripe_1, cc, month, year, cvc, strings.ToUpper(code), emoji, dcode, msg, ".", "Free User")
+        if dcode != string("") {
+         dcode = fmt.Sprintf("\n<b>➤ Dcode:</b> %s", dcode)
+}
+	F := fmt.Sprintf(stripe_1, cc, month, year, cvc, strings.Title(code), emoji, dcode, msg, ".", "Free User")
 	return F
 }
