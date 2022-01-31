@@ -80,13 +80,12 @@ var stripe_rs = `
 
 var stripe_1 = `
 <b>CC:</b> <code>%s|%s|%s|%s</code>
-<b>➤ Status:</b> %s %s %s
+<b>➤ Status:</b> <i><b>%s %s</b></i> %s
 <b>➤ Response:</b> %s
-<b>➤ Gateaway:</b> Stripe 1$
+<b>➤ Gateaway:</b> <b>Stripe 1$</b>
 
 <b>⋙═══════ ⋆★⋆ ═══════ ⋘</b>
 <b>🆇 Card Details:</b> .
 
 <b>🥷🏻|</b> Checked by %s<b>[%s]</b>
-<b>🧑🏻‍💻| BOT BY : @RoseLoverX</b>
 `
