@@ -3,10 +3,10 @@ package modules
 import (
 	"encoding/json"
 	"fmt"
+	tb "gopkg.in/tucnak/telebot.v3"
 	"log"
 	"net/http"
 	"strings"
-tb "gopkg.in/tucnak/telebot.v3"
 )
 
 func get_id() string {
