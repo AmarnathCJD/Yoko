@@ -71,8 +71,8 @@ func create_intent() string {
 	}
 	defer resp.Body.Close()
 	var m map[string]string
-        json.NewDecoder(resp.Body).Decode(&m)
-        return m["id"]
+	json.NewDecoder(resp.Body).Decode(&m)
+	return m["id"]
 }
 
 func update_id(id string) string {
