@@ -183,16 +183,15 @@ func StripeRs(cc string, month string, year string, cvc string) string {
 	id, secret := create_intent()
 	code, dcode, msg := confirm(id, secret, cc, month, year, cvc)
 	emoji := "✅"
-	if code == "card_declined" {
+        if dcode == "insufficient_funds" {
+		emoji = "✅"
+		msg = "CVV Matched"
+	} else if code == "card_declined" {
 		emoji = "❌"
 	} else if code == "incorrect_number" {
 		emoji = "❌"
-	} else if strings.Contains(dcode, "insufficient_funds") {
-		emoji = "✅"
-		msg = "CVV Matched"
 	} else if code == "incorrect_cvc" {
 		msg = "CCN Live"
-
 	} else if dcode == "3DS(VBV)" {
 		emoji = "❌"
 	}
