@@ -198,7 +198,7 @@ func StripeRs(cc string, month string, year string, cvc string) string {
 	if dcode != string("") {
 		dcode = fmt.Sprintf("\n<b>➤ Dcode:</b> %s", dcode)
 	}
-        bin := GetBin(cc, 2)
+	bin := GetBin(cc, 2)
 	F := fmt.Sprintf(stripe_1, cc, month, year, cvc, code, emoji, dcode, msg, bin, ".", "Free User")
 	return F
 }

@@ -359,7 +359,7 @@ func GetBin(bin string, m int) string {
 	json.NewDecoder(resp.Body).Decode(&v)
 	bankd := v["bank"].(map[string]interface{})
 	ct := v["country"].(map[string]interface{})
-	bank, scheme, btype, brand, country, bin_details:= "-", "-", "-", "-", "-", ""
+	bank, scheme, btype, brand, country, bin_details := "-", "-", "-", "-", "-", ""
 	if bankd != nil {
 		if _, ok := bankd["name"]; ok {
 			bank = bankd["name"].(string)
@@ -377,11 +377,11 @@ func GetBin(bin string, m int) string {
 	if ctry, f := ct["name"]; f {
 		country = fmt.Sprintf("(%s - %s - %s - $%s)", ct["emoji"].(string), strings.Title(ctry.(string)), ct["alpha2"].(string), ct["currency"].(string))
 	}
-        if m == 1{
-	bin_details = fmt.Sprintf("<u>Bank Info:</u> <b>%s</b>\n<u>Card Type:</u> <b>%s - %s - %s</b>\n<u>Country:</u> <b>%s</b>", bank, scheme, btype, brand, country)
-} else if m == 2{
-bin_details = fmt.Sprintf("%s - %s - %s - %s - %s", bankd, scheme, btype, brand, country)
-}
+	if m == 1 {
+		bin_details = fmt.Sprintf("<u>Bank Info:</u> <b>%s</b>\n<u>Card Type:</u> <b>%s - %s - %s</b>\n<u>Country:</u> <b>%s</b>", bank, scheme, btype, brand, country)
+	} else if m == 2 {
+		bin_details = fmt.Sprintf("%s - %s - %s - %s - %s", bankd, scheme, btype, brand, country)
+	}
 
 	return bin_details
 }
