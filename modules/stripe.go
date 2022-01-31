@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+tb "gopkg.in/tucnak/telebot.v3"
 )
 
 func get_id() string {
@@ -175,7 +176,7 @@ func confirm(id string, s string, cc string, year string, month string, cvc stri
 	return code, dcode, msg
 }
 
-func StripeRs(cc string, month string, year string, cvc string) string {
+func StripeRs(cc string, month string, year string, cvc string, c tb.Context) string {
 	if strings.HasPrefix(year, "20") {
 		year = strings.ReplaceAll(year, "20", "")
 
