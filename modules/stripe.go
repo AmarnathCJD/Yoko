@@ -39,6 +39,7 @@ func get_id() string {
 	if err != nil {
 		log.Fatal(err)
 	}
+        fmt.Println(m)
 	id := m["data"].([]interface{})[0].(map[string]interface{})["id"].(string)
 	return id
 
