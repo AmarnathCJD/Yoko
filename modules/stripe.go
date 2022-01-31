@@ -76,7 +76,7 @@ func update_id(id string) string {
 		log.Fatal(err)
 	}
 	json.NewDecoder(resp.Body).Decode(&m)
-        fmt.Println(m)
+	fmt.Println(m)
 	return m["clientSecret"]
 }
 
