@@ -533,7 +533,7 @@ func StripeCharge(c tb.Context) error {
 	defer resp.Body.Close()
 	var r bson.M
 	json.NewDecoder(resp.Body).Decode(&r)
-	bin := GetBin(cc)
+	bin := GetBin(cc, 1)
 	total_time := time.Now().Unix() - current_time.Unix()
 	status := "Free User"
 	if c.Sender().ID == int64(1833850637) {
