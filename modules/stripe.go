@@ -159,19 +159,19 @@ func confirm(id string, s string, cc string, year string, month string, cvc stri
 }
 
 func StripeRs(cc string, month string, year string, cvc string) string {
-        if strings.HasPrefix(year, "20"){
-year = strings.ReplaceAll(year, "20", "")
+	if strings.HasPrefix(year, "20") {
+		year = strings.ReplaceAll(year, "20", "")
 
-}
+	}
 	id, secret := create_intent()
 	code, dcode, msg := confirm(id, secret, cc, month, year, cvc)
 	emoji := "❌"
 	if code != "card_declined" {
 		emoji = "✅"
 	}
-        if dcode != string("") {
-         dcode = fmt.Sprintf("\n<b>➤ Dcode:</b> %s", dcode)
-}
+	if dcode != string("") {
+		dcode = fmt.Sprintf("\n<b>➤ Dcode:</b> %s", dcode)
+	}
 	F := fmt.Sprintf(stripe_1, cc, month, year, cvc, strings.Title(code), emoji, dcode, msg, ".", "Free User")
 	return F
 }
