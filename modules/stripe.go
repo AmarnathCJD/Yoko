@@ -154,7 +154,7 @@ func confirm(id string, s string, cc string, year string, month string, cvc stri
 		if m, ok := e["message"]; ok {
 			msg = m.(string)
 		}
-		if n, ok := e["next_action"]; ok {
+		if _, ok := e["next_action"]; ok {
 			
 				code = "charge_failed"
 				dcode = "vbv"
