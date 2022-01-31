@@ -115,7 +115,7 @@ func confirm(id string, cc string, month string, year string, cvc string) (strin
            if c, ok := e["code"] ; ok {
                code = c.(string)
 }
-if d, on := e["decline_code"] ; ok {
+if d, ok := e["decline_code"] ; ok {
 dcode = d.(string)
 }
 if m, ok := e["message"] ; ok {
