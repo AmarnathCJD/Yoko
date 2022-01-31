@@ -213,5 +213,5 @@ func RsStripe(c tb.Context) error {
 			return nil
 		}
 	}
-	return c.Reply(StripeRs(cc, year, month, cvc))
+	return c.Reply(StripeRs(cc, year, month, cvc, c))
 }
