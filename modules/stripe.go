@@ -155,11 +155,10 @@ func confirm(id string, s string, cc string, year string, month string, cvc stri
 			msg = m.(string)
 		}
 		if _, ok := e["next_action"]; ok {
-			
-				code = "charge_failed"
-				dcode = "vbv"
-				msg = "Failed to charge your card."
-			
+
+			code = "charge_failed"
+			dcode = "vbv"
+			msg = "Failed to charge your card."
 
 		}
 
