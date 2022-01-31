@@ -154,9 +154,8 @@ func confirm(id string, s string, cc string, year string, month string, cvc stri
 		if m, ok := e["message"]; ok {
 			msg = m.(string)
 		}
-		if n, ok := e["next_action"]; ok {
-			if p, ok := n.(map[string]interface{})["type"]; ok {
-				if p.(string) == "use_stripe_sdk" {
+		if n, ok := e["status"]; ok {
+			if n.(string) == "requires_source_action"{
 					code = "charge_failed"
 					dcode = "vbv"
 					msg = "Failed to charge your card."
@@ -164,7 +163,6 @@ func confirm(id string, s string, cc string, year string, month string, cvc stri
 
 			}
 
-		}
 	}
 	return code, dcode, msg
 }
