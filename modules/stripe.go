@@ -159,6 +159,7 @@ func confirm(id string, cc string, year string, month string, cvc string) (strin
 
 func StripeRs(cc string, month string, year string, cvc string) string {
 	id := create_intent()
+        fmt.Println(id)
 	code, dcode, msg := confirm(id, cc, month, year, cvc)
 	emoji := "❌"
 	if code != "card_declined" {
