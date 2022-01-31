@@ -185,13 +185,13 @@ func StripeRs(cc string, month string, year string, cvc string) string {
 	emoji := "✅"
 	if dcode == "insufficient_funds" {
 		emoji = "✅"
-		msg = "CVV Matched"
+		code = "CVV Matched"
 	} else if code == "card_declined" {
 		emoji = "❌"
 	} else if code == "incorrect_number" {
 		emoji = "❌"
 	} else if code == "incorrect_cvc" {
-		msg = "CCN Live"
+		code = "CCN Live"
 	} else if dcode == "3DS(VBV)" {
 		emoji = "❌"
 	}
