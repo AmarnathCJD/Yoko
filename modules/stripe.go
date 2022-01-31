@@ -190,8 +190,8 @@ func StripeRs(cc string, month string, year string, cvc string) string {
 	} else if dcode == "insufficient_funds" {
 		emoji = "✅"
 	} else if dcode == "3ds_vbv" {
-emoji = "❌"
-}
+		emoji = "❌"
+	}
 	if dcode != string("") {
 		dcode = fmt.Sprintf("\n<b>➤ Dcode:</b> %s", dcode)
 	}
