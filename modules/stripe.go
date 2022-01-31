@@ -183,7 +183,7 @@ func StripeRs(cc string, month string, year string, cvc string) string {
 	id, secret := create_intent()
 	code, dcode, msg := confirm(id, secret, cc, month, year, cvc)
 	emoji := "✅"
-        if dcode == "insufficient_funds" {
+	if dcode == "insufficient_funds" {
 		emoji = "✅"
 		msg = "CVV Matched"
 	} else if code == "card_declined" {
