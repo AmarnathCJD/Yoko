@@ -162,7 +162,7 @@ func confirm(id string, s string, cc string, year string, month string, cvc stri
 			msg = "Failed to charge your card."
 
 		}
-	if s, ok := e["status"]; ok {
+	if s, ok := x["status"]; ok {
 			if s.(string) == "succeeded" {
 				code = "Charged 1$"
 				msg = "Your card has been successfully charged!"
