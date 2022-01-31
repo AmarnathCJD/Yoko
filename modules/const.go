@@ -82,10 +82,10 @@ var stripe_1 = `
 <b>CC:</b> <code>%s|%s|%s|%s</code>
 <b>➤ Status:</b> <i><b>%s %s</b></i> %s
 <b>➤ Response:</b> %s
-<b>➤ Gateaway:</b> <b>Stripe 1$</b>
+<b>➤ Gateway:</b> <b>Stripe 1$</b>
 
 <b>⋙═══════ ⋆★⋆ ═══════ ⋘</b>
-<b>🆇 Card Details:</b> .
+<b>🆇 Card Details:</b> %s
 
 <b>🥷🏻|</b> Checked by %s<b>[%s]</b>
 `
