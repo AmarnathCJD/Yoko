@@ -155,7 +155,7 @@ func confirm(id string, s string, cc string, year string, month string, cvc stri
 			msg = m.(string)
 		}
 		if _, ok := e["next_action"]; ok {
-
+fmt.Println("vbv")
 			code = "charge_failed"
 			dcode = "vbv"
 			msg = "Failed to charge your card."
@@ -178,7 +178,9 @@ func StripeRs(cc string, month string, year string, cvc string) string {
 		emoji = "❌"
 	} else if code == "incorrect_number" {
 		emoji = "❌"
-	}
+	} else if dcode == "insufficient_funds"{
+emoji = "✅"
+}
 	if dcode != string("") {
 		dcode = fmt.Sprintf("\n<b>➤ Dcode:</b> %s", dcode)
 	}
