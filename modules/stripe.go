@@ -155,13 +155,13 @@ func confirm(id string, s string, cc string, year string, month string, cvc stri
 			msg = m.(string)
 		}
 		if n, ok := e["status"]; ok {
-			if n.(string) == "requires_source_action"{
-					code = "charge_failed"
-					dcode = "vbv"
-					msg = "Failed to charge your card."
-				}
-
+			if n.(string) == "requires_source_action" {
+				code = "charge_failed"
+				dcode = "vbv"
+				msg = "Failed to charge your card."
 			}
+
+		}
 
 	}
 	return code, dcode, msg
