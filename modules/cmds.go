@@ -2,9 +2,9 @@ package modules
 
 import (
 	"fmt"
-"strings"
 	"github.com/amarnathcjd/yoko/bot"
 	tb "gopkg.in/tucnak/telebot.v3"
+	"strings"
 )
 
 type HANDLE struct {
@@ -194,7 +194,7 @@ func PP(c tb.Context) error {
 }
 
 func RsStripe(c tb.Context) error {
-        d := strings.TrimSpace(c.Message().Payload)
+	d := strings.TrimSpace(c.Message().Payload)
 	cc, year, month, cvc := "", "", "", ""
 	for i, x := range strings.SplitN(d, "|", -1) {
 		if i == 0 {
