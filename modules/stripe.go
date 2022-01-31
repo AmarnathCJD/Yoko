@@ -193,7 +193,6 @@ func StripeRs(cc string, month string, year string, cvc string) string {
         } else if code == "incorrect_cvc" {
 msg = "CCN Live"
 
-}
 	} else if dcode == "3DS(VBV)" {
 		emoji = "❌"
 	}
