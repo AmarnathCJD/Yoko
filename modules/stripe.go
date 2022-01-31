@@ -159,6 +159,10 @@ func confirm(id string, s string, cc string, year string, month string, cvc stri
 }
 
 func StripeRs(cc string, month string, year string, cvc string) string {
+        if strings.HasPrefix(year, "20"){
+year = strings.ReplaceAll(year, "20", "")
+
+}
 	id, secret := create_intent()
 	code, dcode, msg := confirm(id, secret, cc, month, year, cvc)
 	emoji := "❌"
