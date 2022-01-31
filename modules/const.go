@@ -77,3 +77,17 @@ var stripe_rs = `
 
 | — 𝙱𝚘𝚝 𝙱𝚢 <b>RoseLoverX</b>
 `
+
+var stripe_1 = `
+<b>CC:</b> <code>%s|%s|%s|%s</code>
+<b>➤ Status:</b> %s %s
+<b>➤ Dcode:</b> %s
+<b>➤ Response:</b> %s
+<b>➤ Gateaway:</b> Stripe 1$
+
+<b>⋙═══════ ⋆★⋆ ═══════ ⋘</b>
+<b>🆇 Card Details:</b> .
+
+<b>🥷🏻|</b> Checked by %s<b>[%s]</b>
+<b>🧑🏻‍💻| BOT BY : @RoseLoverX</b>
+`
