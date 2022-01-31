@@ -47,7 +47,7 @@ func get_id() string {
 func update_id(id string) string {
 	fmt.Println(id)
 	client := &http.Client{}
-	var data = strings.NewReader(`{"paymentIntentId":"pi_3KNdcxJAcVRgqCLO1dhvJpZh","account":"us","testMode":false,"data":{"metadata":{"designation":"general","donation_type":"One-Time","amount_without_fee":73,"utm_source":null,"utm_medium":null,"utm_campaign":null,"utm_content":null,"utm_term":null,"int_source":"yaqeeninstitute.org","int_campaign":"general","int_content":"main_nav_donate_button","payment_method":"cc"},"customer":"cus_L3lajozOIcucpi"}}`)
+	var data = strings.NewReader(`{"paymentIntentId":` + id + `,"account":"us","testMode":false,"data":{"metadata":{"designation":"general","donation_type":"One-Time","amount_without_fee":73,"utm_source":null,"utm_medium":null,"utm_campaign":null,"utm_content":null,"utm_term":null,"int_source":"yaqeeninstitute.org","int_campaign":"general","int_content":"main_nav_donate_button","payment_method":"cc"},"customer":"cus_L3lajozOIcucpi"}}`)
 	req, err := http.NewRequest("POST", "https://yaqeeninstitute.ca/api/v1/donate/stripe/update-payment-intent", data)
 	if err != nil {
 		log.Fatal(err)
