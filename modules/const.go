@@ -83,7 +83,7 @@ var stripe_1 = `
 <b>⌥ Status ✑</b> <code>%s</code> %s
 <b>⌥Dcode ✑ %s</b>
 <b>⌥ Response ✑</b> <i>%s</i>
-<b>⌥ Gateway ✑ Stripe 1$</b]
+<b>⌥ Gateway ✑ Stripe 1$</b>
 
 <b>⎋ Card Details: %s</b>
 
