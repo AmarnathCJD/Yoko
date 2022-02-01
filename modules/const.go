@@ -84,8 +84,7 @@ var stripe_1 = `
 <b>➤ Response:</b> %s
 <b>➤ Gateway:</b> <b>Stripe 1$</b>
 
-<b>⋙═══════ ⋆★⋆ ═══════ ⋘</b>
 <b>🆇 Card Details:</b> <code>%s</code>
 
-<b>🥷🏻|</b> Checked by %s<b>[%s]</b>
+<b>🥷🏻| Checked by %s [%s]</b>
 `
