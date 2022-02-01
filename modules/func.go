@@ -357,6 +357,10 @@ func GetBin(bin string, m int) string {
 	var v bson.M
 	defer resp.Body.Close()
 	json.NewDecoder(resp.Body).Decode(&v)
+        if v == nil {
+return ""
+
+}
 	bankd := v["bank"].(map[string]interface{})
 	ct := v["country"].(map[string]interface{})
 	bank, scheme, btype, brand, country, bin_details := "-", "-", "-", "-", "-", ""
