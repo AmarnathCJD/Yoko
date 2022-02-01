@@ -206,6 +206,6 @@ status = "Master"
 } else if IsBotAdmin(c.Sender().ID) {
 status = "Premium"
 }
-	F := fmt.Sprintf(stripe_1, cc, year, month, cvc, code, emoji, dcode, msg, bin, c.Sender().FirstName, "Free User")
+	F := fmt.Sprintf(stripe_1, cc, year, month, cvc, code, emoji, dcode, msg, bin, c.Sender().FirstName, status)
 	return F
 }
