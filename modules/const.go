@@ -79,12 +79,13 @@ var stripe_rs = `
 `
 
 var stripe_1 = `
-<b>CC:</b> <code>%s|%s|%s|%s</code>
-<b>➤ Status:</b> <i><b>%s %s</b></i> %s
-<b>➤ Response:</b> %s
-<b>➤ Gateway:</b> <b>Stripe 1$</b>
+<b>CC ✑</b> <code>%s|%s|%s|%s</code>
+<b>⌥ Status ✑</b> <code>%s</code> %s
+<b>⌥Dcode ✑ %s</b>
+<b>⌥ Response ✑</b> <i>%s</i>
+<b>⌥ Gateway ✑ Stripe 1$</b]
 
-<b>🆇 Card Details:</b> <code>%s</code>
+<b>⎋ Card Details: %s</b>
 
-<b>🥷🏻| Checked by %s [%s]</b>
+<b>✁Checked by %s [%s]</b>
 `
