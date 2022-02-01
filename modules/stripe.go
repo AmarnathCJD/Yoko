@@ -197,7 +197,7 @@ func StripeRs(cc string, month string, year string, cvc string, c tb.Context) st
 		emoji = "❌"
 	}
 	if dcode != string("") {
-		dcode = fmt.Sprintf("\n<b>➤ Dcode:</b> %s", dcode)
+		dcode = fmt.Sprintf("\n<b>⌥ Dcode ✑ %s</b>", dcode)
 	}
 	bin := GetBin(cc, 2)
 	status := "Free User"
