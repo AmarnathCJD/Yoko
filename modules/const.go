@@ -87,4 +87,5 @@ var stripe_1 = `
 <b>⎋ Card Details: %s</b>
 
 <b>✁Checked by %s [%s]</b>
+<b>✁Bot by 𝙉ᴇρтυиᴇ 🇬🇷[𝙸𝚅𝙰𝚁]</b>
 `
