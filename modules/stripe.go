@@ -200,12 +200,12 @@ func StripeRs(cc string, month string, year string, cvc string, c tb.Context) st
 		dcode = fmt.Sprintf("\n<b>➤ Dcode:</b> %s", dcode)
 	}
 	bin := GetBin(cc, 2)
-        status := "Free User"
-        if c.Sender().ID == OWNER_ID {
-status = "Master"
-} else if IsBotAdmin(c.Sender().ID) {
-status = "Premium"
-}
+	status := "Free User"
+	if c.Sender().ID == OWNER_ID {
+		status = "Master"
+	} else if IsBotAdmin(c.Sender().ID) {
+		status = "Premium"
+	}
 	F := fmt.Sprintf(stripe_1, cc, year, month, cvc, code, emoji, dcode, msg, bin, c.Sender().FirstName, status)
 	return F
 }
