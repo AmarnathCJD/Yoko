@@ -141,8 +141,8 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["sudolist"] = HANDLE{FUNC: ListSudo}
 	HANDLERS["remdev"] = HANDLE{FUNC: RemoveDev}
 	HANDLERS["remsudo"] = HANDLE{FUNC: RemoveSudo}
-        HANDLERS["logs"] = HANDLE{FUNC: Logs}
-        HANDLERS["ping"] = HANDLE{FUNC: Ping}
+	HANDLERS["logs"] = HANDLE{FUNC: Logs}
+	HANDLERS["ping"] = HANDLE{FUNC: Ping}
 	return HANDLERS
 
 }
