@@ -79,13 +79,14 @@ var stripe_rs = `
 `
 
 var stripe_1 = `
+<b>⌥ Gateway ✑ Stripe 1$</b>
+
 <b>CC ✑</b> <code>%s|%s|%s|%s</code>
 <b>⌥ Status ✑ %s</b> %s %s
 <b>⌥ Response ✑</b> <i>%s</i>
-<b>⌥ Gateway ✑ Stripe 1$</b>
 
 <b>⎋ Card Details: %s</b>
-
-<b>✁Checked by %s [%s]</b>
-<b>✁Bot by 𝙉ᴇρтυиᴇ 🇬🇷[𝙸𝚅𝙰𝚁]</b>
+<b>⌥ Time:</b> %s's
+<b>⌥ Bot by</b> <code>@RoseLoverX</code>
+<b>✁Checked by</b> <b>%s</b> [<code>%s</code>]
 `
