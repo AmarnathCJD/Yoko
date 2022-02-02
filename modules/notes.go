@@ -67,9 +67,7 @@ func Gnote(c tb.Context) error {
 }
 
 func OnTextHandler(c tb.Context) error {
-	if FLOOD_EV(c) {
-		return nil
-	}
+	FLOOD_EV(c)
 	if FilterEvent(c) {
 		return nil
 	}
