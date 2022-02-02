@@ -73,8 +73,6 @@ func GatherHandlers() map[string]HANDLE {
 	// eval.go
 	HANDLERS["eval"] = HANDLE{FUNC: Eval}
 	HANDLERS["sh"] = HANDLE{FUNC: Exec}
-	HANDLERS["logs"] = HANDLE{FUNC: Logs}
-	HANDLERS["ping"] = HANDLE{FUNC: Ping}
 	// stickers.go
 	HANDLERS["kang"] = HANDLE{FUNC: AddSticker}
 	HANDLERS["packs"] = HANDLE{FUNC: MyPacks}
@@ -143,7 +141,8 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["sudolist"] = HANDLE{FUNC: ListSudo}
 	HANDLERS["remdev"] = HANDLE{FUNC: RemoveDev}
 	HANDLERS["remsudo"] = HANDLE{FUNC: RemoveSudo}
-
+        HANDLERS["logs"] = HANDLE{FUNC: Logs}
+        HANDLERS["ping"] = HANDLE{FUNC: Ping}
 	return HANDLERS
 
 }
