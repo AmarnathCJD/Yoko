@@ -107,9 +107,9 @@ func confirm(id string, s string, cc string, year string, month string, cvc stri
 }
 
 func StripeRs(cc string, month string, year string, cvc string, c tb.Context) string {
-        if strings.HasPrefix(cc, "533178") {
-return "Bin blocked!"
-}
+	if strings.HasPrefix(cc, "533178") {
+		return "Bin blocked!"
+	}
 	if strings.HasPrefix(year, "20") {
 		year = strings.ReplaceAll(year, "20", "")
 
