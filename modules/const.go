@@ -85,7 +85,7 @@ var stripe_1 = `
 <b>⌥ Response ✑</b> %s
 
 <b>⎋ Card Details: %s</b>
-<b>⎋ Time:</b> %ds
-<b>✁ Bot by</b> <code>@RoseLoverX</code>
+<b>⎋ Time: %ds</b>
+<b>✁ Bot by</b> <code>@RoseLoverX & @NeptunexD</code>
 <b>✁Checked by</b> <b>%s</b> [%s]
 `
