@@ -6,8 +6,8 @@ import (
 	tb "gopkg.in/tucnak/telebot.v3"
 	"log"
 	"net/http"
-"time"
 	"strings"
+	"time"
 )
 
 func create_intent() (string, string) {
@@ -111,26 +111,26 @@ func StripeRs(cc string, month string, year string, cvc string, c tb.Context) st
 		year = strings.ReplaceAll(year, "20", "")
 
 	}
-        current_time := time.Now()
+	current_time := time.Now()
 	id, secret := create_intent()
 	code, dcode, msg := confirm(id, secret, cc, month, year, cvc)
 	emoji := "✅"
 	if dcode == "insufficient_funds" {
 		code = "CVV Matched"
 	} else if code == "card_declined" {
-                code = "Card Declined"
+		code = "Card Declined"
 		emoji = "❌"
 	} else if code == "incorrect_number" {
-                code = "Incorrect Card"
-                dcode = "incorrect_number"
+		code = "Incorrect Card"
+		dcode = "incorrect_number"
 		emoji = "❌"
 	} else if code == "incorrect_cvc" {
-                dcode = "incorrect_cvc"
+		dcode = "incorrect_cvc"
 		code = "CCN Live"
 	} else if dcode == "3DS(VBV)" {
 		emoji = "❌"
 	}
-        total_time := time.Now().Unix() - current_time.Unix()
+	total_time := time.Now().Unix() - current_time.Unix()
 	if dcode != string("") {
 		dcode = fmt.Sprintf("\n<b>⌥ Dcode ✑ %s</b>", dcode)
 	}
