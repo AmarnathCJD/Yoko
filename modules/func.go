@@ -363,7 +363,7 @@ func GetBin(bin string, m int) string {
 	}
 	bankd := v["bank"].(map[string]interface{})
 	ct := v["country"].(map[string]interface{})
-	bank, scheme, btype, brand, country, bin_details := "-", "-", "-", "-", "-", ""
+	bank, scheme, btype, brand, country, bin_details := "null", "null", "null", "null", "null", ""
 	if bankd != nil {
 		if _, ok := bankd["name"]; ok {
 			bank = bankd["name"].(string)
