@@ -80,7 +80,7 @@ var stripe_rs = `
 
 var stripe_1 = `
 <b>CC ✑</b> <code>%s|%s|%s|%s</code>
-<b>⌥ Status ✑</b> <code>%s</code> %s %s
+<b>⌥ Status ✑ %s</b> %s %s
 <b>⌥ Response ✑</b> <i>%s</i>
 <b>⌥ Gateway ✑ Stripe 1$</b>
 
