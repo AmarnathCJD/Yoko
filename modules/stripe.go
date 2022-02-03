@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-SPAM = make(map[int64]int32{})
+var SPAM = make(map[int64]int32{})
 
 func create_intent() (string, string) {
 	client := &http.Client{}
