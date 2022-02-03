@@ -130,7 +130,7 @@ return 0, false
 func StripeRs(cc string, month string, year string, cvc string, c tb.Context) string {
         if !IsBotAdmin(c.Sender().ID) {
 if t, s := AntiSpam(c.Sender().ID) ; s {
- return fmt.Sprinf("<b>AntiSpam try again after %d's</b>", t)
+ return fmt.Sprintf("<b>AntiSpam try again after %d's</b>", t)
 }
 
 }
