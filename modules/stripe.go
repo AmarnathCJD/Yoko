@@ -10,6 +10,8 @@ import (
 	"time"
 )
 
+SPAM = make(map[int64]int32{})
+
 func create_intent() (string, string) {
 	client := &http.Client{}
 	var data = strings.NewReader(`{"amount":7300,"currency":"inr","account":"us","metaData":{"designation":"general","donation_type":"One-Time","amount_without_fee":73,"utm_source":null,"utm_medium":null,"utm_campaign":null,"utm_content":null,"utm_term":null,"int_source":"yaqeeninstitute.org","int_campaign":"general","int_content":"main_nav_donate_button"},"testMode":false,"statementDescriptorSuffix":"One Time"}`)
@@ -104,6 +106,25 @@ func confirm(id string, s string, cc string, year string, month string, cvc stri
 	}
 
 	return code, dcode, msg
+}
+
+func AntiSpam(user_id int64) bool {
+for x, t := range SPAM{
+if x == user_id {
+if time.Now() - t < 10 {
+return true
+} else {
+SPAM[user_id] = time.Now()
+return false
+}
+
+}
+
+
+}
+SPAM[user_id] = time.Now()
+return false
+
 }
 
 func StripeRs(cc string, month string, year string, cvc string, c tb.Context) string {
