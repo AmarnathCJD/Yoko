@@ -109,31 +109,30 @@ func confirm(id string, s string, cc string, year string, month string, cvc stri
 }
 
 func AntiSpam(user_id int64) (int64, bool) {
-for x, t := range SPAM{
-if x == user_id {
-if tim := time.Now().Unix() - t ; tim < 15 {
-return tim, true
-} else {
-SPAM[user_id] = time.Now().Unix()
-return 0, false
-}
+	for x, t := range SPAM {
+		if x == user_id {
+			if tim := time.Now().Unix() - t; tim < 15 {
+				return tim, true
+			} else {
+				SPAM[user_id] = time.Now().Unix()
+				return 0, false
+			}
 
-}
+		}
 
-
-}
-SPAM[user_id] = time.Now().Unix()
-return 0, false
+	}
+	SPAM[user_id] = time.Now().Unix()
+	return 0, false
 
 }
 
 func StripeRs(cc string, month string, year string, cvc string, c tb.Context) string {
-        if !IsBotAdmin(c.Sender().ID) {
-if t, s := AntiSpam(c.Sender().ID) ; s {
- return fmt.Sprintf("<b>AntiSpam try again after %d's</b>", t)
-}
+	if !IsBotAdmin(c.Sender().ID) {
+		if t, s := AntiSpam(c.Sender().ID); s {
+			return fmt.Sprintf("<b>AntiSpam try again after %d's</b>", t)
+		}
 
-}
+	}
 	if strings.HasPrefix(cc, "533178") {
 		return "Bin blocked!"
 	}
