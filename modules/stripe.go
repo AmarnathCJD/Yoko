@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-var SPAM = make(map[int64]int32)
+var SPAM = make(map[int64]int64)
 
 func create_intent() (string, string) {
 	client := &http.Client{}
@@ -108,14 +108,14 @@ func confirm(id string, s string, cc string, year string, month string, cvc stri
 	return code, dcode, msg
 }
 
-func AntiSpam(user_id int64) bool {
+func AntiSpam(user_id int64) (int64, bool) {
 for x, t := range SPAM{
 if x == user_id {
-if time.Now().Unix() - t < 10 {
-return true
+if tim := time.Now().Unix() - t ; tim < 15 {
+return tim, true
 } else {
 SPAM[user_id] = time.Now().Unix()
-return false
+return 0, false
 }
 
 }
@@ -123,11 +123,17 @@ return false
 
 }
 SPAM[user_id] = time.Now().Unix()
-return false
+return 0, false
 
 }
 
 func StripeRs(cc string, month string, year string, cvc string, c tb.Context) string {
+        if !IsBotAdmin(c.Sender().ID) {
+if t, s := AntiSpam(c.Sender().ID) ; s {
+ return fmt.Sprinf("<b>AntiSpam try again after %d's</b>", t)
+}
+
+}
 	if strings.HasPrefix(cc, "533178") {
 		return "Bin blocked!"
 	}
