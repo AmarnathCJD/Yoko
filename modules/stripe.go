@@ -111,10 +111,10 @@ func confirm(id string, s string, cc string, year string, month string, cvc stri
 func AntiSpam(user_id int64) bool {
 for x, t := range SPAM{
 if x == user_id {
-if time.Now() - t < 10 {
+if time.Now().Unix() - t < 10 {
 return true
 } else {
-SPAM[user_id] = time.Now()
+SPAM[user_id] = time.Now().Unix()
 return false
 }
 
@@ -122,7 +122,7 @@ return false
 
 
 }
-SPAM[user_id] = time.Now()
+SPAM[user_id] = time.Now().Unix()
 return false
 
 }
