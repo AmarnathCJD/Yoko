@@ -1,6 +1,7 @@
 package modules
 
 import tb "gopkg.in/tucnak/telebot.v3"
+import "encoding/json"
 import "fmt"
 
 var (
@@ -43,6 +44,8 @@ func AnonCB(c tb.Context) error {
 			return c.Edit("You are missing the following rights to use this command: CanPromoteMembers")
 		}
 	}
+        b, err := json.Marshal(update.C)
+        fmt.Println(b)
 	return nil
 }
 
