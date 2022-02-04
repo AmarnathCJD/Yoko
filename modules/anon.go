@@ -20,7 +20,6 @@ func AnonAdmin(next tb.HandlerFunc, p string, c tb.Context) {
 	sel.Inline(sel.Row(anon_button))
 	msg, _ := c.Bot().Send(c.Chat(), "It looks like you're anonymous. Tap this button to confirm your identity.", &tb.SendOptions{ReplyMarkup: sel, ReplyTo: c.Message()})
 	ANON[msg.ID] = Update{c.Message().ID, next, p, c}
-	fmt.Println(ANON)
 }
 
 func AnonCB(c tb.Context) error {
@@ -51,6 +50,16 @@ func AnonCB(c tb.Context) error {
 			Chat:    update.C.Message().Chat,
 			Payload: update.C.Message().Payload,
 			Text:    update.C.Message().Text,
+ReplyTo: update.C.Message().ReplyTo,
+Audio: update.C.Message().Audio,
+Video: update.C.Message().Video,
+Document: update.C.Message().Document,
+Photo: update.C.Message().Photo,
+Sticker: update.C.Message().Sticker,
+Voice: update.C.Message().Voice,
+Animation: update.C.Message().Animation,
+ReplyMarkup: update.C.Message().ReplyMarkup,
+ID: update.C.Message().ID,
 		},
 	})
 	fmt.Println(string(b), s.Sender(), s.Chat())
