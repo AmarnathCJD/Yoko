@@ -27,7 +27,7 @@ func AnonCB(c tb.Context) error {
 	if !exist {
 		fmt.Println("Not exist")
 	}
-	fmt.Println(update)
+	c.Edit(fmt.Sprint(update))
 	return nil
 }
 
