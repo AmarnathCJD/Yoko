@@ -17,11 +17,17 @@ type Update struct {
 
 func AnonAdmin(next tb.HandlerFunc, p string, c tb.Context) {
 	sel.Inline(sel.Row(anon_button))
-	c.Set("p", "Hi babe hw are your u")
-	fmt.Println(fmt.Sprint(c), c.Get("p"))
 	msg, _ := c.Bot().Send(c.Chat(), "It looks like you're anonymous. Tap this button to confirm your identity.", &tb.SendOptions{ReplyMarkup: sel, ReplyTo: c.Message()})
 	ANON[msg.ID] = Update{c.Message().ID, next, p, c}
 	fmt.Println(ANON)
+}
+
+func AnonCB(c tb.Context) error {
+if update, exist := ANON[c.Callback().Message.ID] ; !exist{
+fmt.Println("Not exist")
+}
+fmt.Println(update)
+return nil
 }
 
 // Soon, today
