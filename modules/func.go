@@ -232,7 +232,6 @@ func Ban_users(next tb.HandlerFunc) tb.HandlerFunc {
 			AnonAdmin(next, "ban_users", c)
 			return nil
 		}
-		AnonAdmin(next, "ban", c)
 		p, _ := c.Bot().ChatMemberOf(c.Chat(), c.Sender())
 		if p.Role == "member" {
 			c.Reply("You need to be an admin to do this!")
