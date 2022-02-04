@@ -9,12 +9,12 @@ type Update struct {
 	Id    int
 	Func  func(tb.Context) error
 	Right string
-        C tb.Context
+	C     tb.Context
 }
 
 func AnonAdmin(next tb.HandlerFunc, p string, c tb.Context) {
 	ANON[c.Message().ID] = Update{c.Message().ID, next, p, c}
-        fmt.Println(ANON)
+	fmt.Println(ANON)
 }
 
 // Soon, today
