@@ -18,7 +18,7 @@ type Update struct {
 
 func AnonAdmin(next tb.HandlerFunc, p string, c tb.Context) {
         sel.Inline(sel.Row(anon_button))
-        msg, _ := c.Bot().Send("It looks like you're anonymous. Tap this button to confirm your identity.", &tb.SendOptions{ReplyMarkup: sel, ReplyTo: c.Message()}
+        msg, _ := c.Bot().Send(c.Chat(),"It looks like you're anonymous. Tap this button to confirm your identity.", &tb.SendOptions{ReplyMarkup: sel, ReplyTo: c.Message()}
 	ANON[msg.ID] = Update{c.Message().ID, next, p, c}
 	fmt.Println(ANON)
 }
