@@ -185,7 +185,7 @@ func CallBackHandlers() {
 	// filters.go
 	bot.Bot.Handle(&del_all_filters, DelAllFCB)
 	bot.Bot.Handle(&cancel_del_all_filters, CancelDALL)
-        bot.Bot.Handle(&anon_button, AnonCB)
+	bot.Bot.Handle(&anon_button, AnonCB)
 }
 
 func PP(c tb.Context) error {
