@@ -45,15 +45,15 @@ func AnonCB(c tb.Context) error {
 		}
 	}
 	b, err := json.Marshal(update.C.Sender())
-	s := tb.Update{ID: update.C.Message().ID,
+	s := c.Bot().NewContext(tb.Update{ID: update.C.Message().ID,
 		Message: &tb.Message{
 			Sender:  c.Message().Sender,
 			Chat:    update.C.Message().Chat,
 			Payload: update.C.Message().Payload,
 			Text:    update.C.Message().Text,
 		},
-	}
-	fmt.Println(string(b), s)
+	})
+	fmt.Println(string(b), s.Sender())
 	return nil
 }
 
