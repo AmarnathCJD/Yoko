@@ -62,7 +62,8 @@ func AnonCB(c tb.Context) error {
 			ID:          update.C.Message().ID,
 		},
 	})
-	fmt.Println(string(b), s.Sender(), s.Chat())
+        c.Bot().Delete(c.Message())
+	update.Func(s)
 	return nil
 }
 
