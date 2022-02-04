@@ -1,7 +1,8 @@
 package modules
 
 
-import "gopkg.in/tucnak/telebot.v3"
+import tb "gopkg.in/tucnak/telebot.v3"
+import "fmt"
 
 var ANON = make(map[int]func(tb.Context) error)
 
