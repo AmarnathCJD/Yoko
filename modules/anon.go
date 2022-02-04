@@ -45,7 +45,7 @@ func AnonCB(c tb.Context) error {
 		}
 	}
 	b, err := json.Marshal(update.C.Sender())
-	fmt.Println(b)
+	fmt.Println(string(b))
 	return nil
 }
 
