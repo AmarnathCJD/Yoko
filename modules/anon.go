@@ -7,6 +7,8 @@ ANON = make(map[int]func(tb.Context) error)
 
 func AnonAdmin(next tb.HandlerFunc) tb.HandlerFunc {
 fmt.Println("Hmm")
+return nil
+
 }
 
 // Soon, today
