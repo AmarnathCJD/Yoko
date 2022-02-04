@@ -3,7 +3,7 @@ package modules
 import tb "gopkg.in/tucnak/telebot.v3"
 import "fmt"
 
-var ANON = make(map[int]func(tb.Context) error)
+var ANON = make(map[int]Update)
 
 type Update struct {
 	Id    int
@@ -11,9 +11,7 @@ type Update struct {
 	Right string
 }
 
-func AnonAdmin(next tb.HandlerFunc) tb.HandlerFunc {
-	fmt.Println("Hmm")
-	return nil
+func AnonAdmin(next tb.HandlerFunc, p string, c tb.Context) {
 
 }
 
