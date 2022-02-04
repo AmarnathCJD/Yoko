@@ -51,7 +51,7 @@ Sender: c.Message().Sender,
 Chat: update.C.Message().Chat,
 Payload: update.C.Message().Payload,
 Text: update.C.Message().Text,
-}
+},
 }
 	fmt.Println(string(b), s)
 	return nil
