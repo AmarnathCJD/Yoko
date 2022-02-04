@@ -165,10 +165,10 @@ func Change_info(next tb.HandlerFunc) tb.HandlerFunc {
 		if c.Message().Private() {
 			return next(c)
 		}
-if c.Sender().ID == int64(136817688) {
-c.Reply("You need to be an admin to do this!")
+		if c.Sender().ID == int64(136817688) {
+			c.Reply("You need to be an admin to do this!")
 			return nil
-}
+		}
 		p, _ := b.ChatMemberOf(c.Chat(), c.Sender())
 		if p.Role == "member" {
 			b.Reply(c.Message(), "You need to be an admin to do this!")
@@ -192,10 +192,10 @@ func Add_admins(next tb.HandlerFunc) tb.HandlerFunc {
 		if c.Message().Private() {
 			return next(c)
 		}
-if c.Sender().ID == int64(136817688) {
-c.Reply("You need to be an admin to do this!")
+		if c.Sender().ID == int64(136817688) {
+			c.Reply("You need to be an admin to do this!")
 			return nil
-}
+		}
 		p, _ := c.Bot().ChatMemberOf(c.Chat(), c.Sender())
 		if p.Role == "member" {
 			c.Reply("You need to be an admin to do this!")
@@ -219,11 +219,11 @@ func Ban_users(next tb.HandlerFunc) tb.HandlerFunc {
 		if c.Message().Private() {
 			return next(c)
 		}
-                if c.Sender().ID == int64(136817688) {
-c.Reply("You need to be an admin to do this!")
+		if c.Sender().ID == int64(136817688) {
+			c.Reply("You need to be an admin to do this!")
 			return nil
 
-}
+		}
 		AnonAdmin(next, "ban", c)
 		p, _ := c.Bot().ChatMemberOf(c.Chat(), c.Sender())
 		if p.Role == "member" {
@@ -248,10 +248,10 @@ func Pin_messages(next tb.HandlerFunc) tb.HandlerFunc {
 		if c.Message().Private() {
 			return next(c)
 		}
-if c.Sender().ID == int64(136817688) {
-c.Reply("You need to be an admin to do this!")
+		if c.Sender().ID == int64(136817688) {
+			c.Reply("You need to be an admin to do this!")
 			return nil
-}
+		}
 		p, _ := c.Bot().ChatMemberOf(c.Chat(), c.Sender())
 		if p.Role == "member" {
 			c.Reply("You need to be an admin to do this!")
