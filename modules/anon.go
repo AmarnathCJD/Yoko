@@ -28,6 +28,7 @@ func AnonCB(c tb.Context) error {
 		fmt.Println("Not exist")
 	}
 	p, err := c.Bot().ChatMemberOf(c.Chat(), c.Sender())
+        check (err)
         if p.Role == tb.Member || p.Role == tb.Left {
 return c.Respond(&tb.CallbackResponse{Text: "You should be an admin to do this", ShowAlert: true})
 
