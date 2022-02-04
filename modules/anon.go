@@ -1,8 +1,9 @@
 package modules
 
-import tb "gopkg.in/tucnak/telebot.v3"
-import "encoding/json"
-import "fmt"
+import (
+        tb "gopkg.in/tucnak/telebot.v3"
+       "fmt"
+)
 
 var (
 	ANON        = make(map[int]Update)
