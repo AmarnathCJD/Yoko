@@ -43,7 +43,6 @@ func AnonCB(c tb.Context) error {
 			return c.Edit("You are missing the following rights to use this command: CanPromoteMembers")
 		}
 	}
-	b, err := json.Marshal(update.C.Sender())
 	s := c.Bot().NewContext(tb.Update{ID: update.C.Message().ID,
 		Message: &tb.Message{
 			Sender:      c.Sender(),
