@@ -32,6 +32,16 @@ func AnonCB(c tb.Context) error {
         if p.Role == tb.Member || p.Role == tb.Left {
 return c.Respond(&tb.CallbackResponse{Text: "You should be an admin to do this", ShowAlert: true})
 
+} else if p.Role == tb.Administrator {
+if update.Right == "ban_users" && !p.Rights.CanRestrictMembers {
+ return c.Edit("You are missing the following rights to use this command: CanRestrictMembers")
+} else if update.Right == "change_info" && !p.Rights.CanChangeInfo {
+ return c.Edit("You are missing the following rights to use this command: CanChangeInfo")
+} else if update.Right == "pin_messages" && !p.Rights.CanPinMessages {
+ return c.Edit("You are missing the following rights to use this command: CanPinMessages")
+} else if update.Right == "add_admins" && !p.Rights.CanPromoteMembers {
+ return c.Edit("You are missing the following rights to use this command: CanPromoteMembers")
+}
 }
 	return nil
 }
