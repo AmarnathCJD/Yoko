@@ -46,7 +46,7 @@ func AnonCB(c tb.Context) error {
 	}
 	b, err := json.Marshal(update.C.Sender())
         s := tb.Update{ID: update.C.ID
-Message: &tb.Message{
+Message: *tb.Message{
 Sender: c.Message().Sender
 Chat: update.C.Message().Chat
 Payload: update.C.Message().Payload
