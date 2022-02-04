@@ -23,7 +23,8 @@ func AnonAdmin(next tb.HandlerFunc, p string, c tb.Context) {
 }
 
 func AnonCB(c tb.Context) error {
-if update, exist := ANON[c.Callback().Message.ID] ; !exist{
+update, exist := ANON[c.Callback().Message.ID]
+if !exist{
 fmt.Println("Not exist")
 }
 fmt.Println(update)
