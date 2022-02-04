@@ -12,7 +12,7 @@ type Update struct {
 }
 
 func AnonAdmin(next tb.HandlerFunc, p string, c tb.Context) {
-
+ fmt.Println(c.Sender())
 }
 
 // Soon, today
