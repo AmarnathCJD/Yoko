@@ -4,10 +4,9 @@ import tb "gopkg.in/tucnak/telebot.v3"
 import "fmt"
 
 var (
-ANON = make(map[int]Update)
-anon_button = sel.Data("Click to prove admin", "anon_btn")
+	ANON        = make(map[int]Update)
+	anon_button = sel.Data("Click to prove admin", "anon_btn")
 )
-
 
 type Update struct {
 	Id    int
@@ -17,8 +16,8 @@ type Update struct {
 }
 
 func AnonAdmin(next tb.HandlerFunc, p string, c tb.Context) {
-        sel.Inline(sel.Row(anon_button))
-        msg, _ := c.Bot().Send(c.Chat(),"It looks like you're anonymous. Tap this button to confirm your identity.", &tb.SendOptions{ReplyMarkup: sel, ReplyTo: c.Message()})
+	sel.Inline(sel.Row(anon_button))
+	msg, _ := c.Bot().Send(c.Chat(), "It looks like you're anonymous. Tap this button to confirm your identity.", &tb.SendOptions{ReplyMarkup: sel, ReplyTo: c.Message()})
 	ANON[msg.ID] = Update{c.Message().ID, next, p, c}
 	fmt.Println(ANON)
 }
