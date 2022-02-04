@@ -1,8 +1,8 @@
 package modules
 
 import (
-        tb "gopkg.in/tucnak/telebot.v3"
-       "fmt"
+	"fmt"
+	tb "gopkg.in/tucnak/telebot.v3"
 )
 
 var (
@@ -62,7 +62,7 @@ func AnonCB(c tb.Context) error {
 			ID:          update.C.Message().ID,
 		},
 	})
-        c.Bot().Delete(c.Message())
+	c.Bot().Delete(c.Message())
 	update.Func(s)
 	return nil
 }
