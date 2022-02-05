@@ -8,14 +8,13 @@ import (
 )
 
 var (
-HyperLink = regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
-Bold = regexp.MustCompile(`\*(.*?)\*`)
-Italic = regexp.MustCompile(`\_(.*?)\_`)
-Strike = regexp.MustCompile(`\~(.*?)\~`)
-Underline = regexp.MustCompile(`\_\_(.*?)\_\_`)
-Spoiler = regexp.MustCompile(`\|\|(.*?)\|\|`)
+	HyperLink = regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
+	Bold      = regexp.MustCompile(`\*(.*?)\*`)
+	Italic    = regexp.MustCompile(`\_(.*?)\_`)
+	Strike    = regexp.MustCompile(`\~(.*?)\~`)
+	Underline = regexp.MustCompile(`\_\_(.*?)\_\_`)
+	Spoiler   = regexp.MustCompile(`\|\|(.*?)\|\|`)
 )
-
 
 func PARSET(c tb.Context) error {
 
