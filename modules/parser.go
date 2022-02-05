@@ -41,11 +41,10 @@ func ParseMD(c tb.Context) string {
 			text = string(text[:offset+cor]) + "<s>" + string(text[offset+cor:offset+cor+length]) + "</s>" + string(text[offset+cor+length:])
 			cor += 7
 
-		} else if x.Type == "spolier" {
-
-			fmt.Println("Spoil")
 		} else {
 			fmt.Println(x.Type)
+text = string(text[:offset+cor]) + "<tgspoiler>" + string(text[offset+cor:offset+cor+length]) + "</tgspolier>" + string(text[offset+cor+length:])
+			cor += 23
 		}
 	}
 	Links := HyperLink.FindAllStringSubmatch(text, -1)
