@@ -23,7 +23,7 @@ func PARSET(c tb.Context) error {
 
 }
 
-func ParseMD(c tb.Message) string {
+func ParseMD(c *tb.Message) string {
 	text := c.Text
 	cor := 0
 	for _, x := range c.ReplyTo.Entities {
