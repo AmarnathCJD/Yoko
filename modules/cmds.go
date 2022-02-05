@@ -5,6 +5,7 @@ import (
 	"github.com/amarnathcjd/yoko/bot"
 	tb "gopkg.in/tucnak/telebot.v3"
 	"strings"
+        "log"
 )
 
 type HANDLE struct {
@@ -151,8 +152,9 @@ func RegisterHandlers() {
 	HANDLERS := GatherHandlers()
 	for endpoint, function := range HANDLERS {
 		if function.MIDDLEWARE != nil {
-			bot.Bot.Handle(fmt.Sprintf("!%s", endpoint), function.FUNC, function.MIDDLEWARE)
-			bot.Bot.Handle(fmt.Sprintf("/%s", endpoint), function.FUNC, function.MIDDLEWARE)
+                        log.Print(endpoint)
+			bot.Bot.Handle("/" + endpoint, function.FUNC, function.MIDDLEWARE)
+			bot.Bot.Handle("!" + endpoint, function.FUNC, function.MIDDLEWARE)
 		} else {
 			bot.Bot.Handle(fmt.Sprintf("!%s", endpoint), function.FUNC)
 			bot.Bot.Handle(fmt.Sprintf("/%s", endpoint), function.FUNC)
