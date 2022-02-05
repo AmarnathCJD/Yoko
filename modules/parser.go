@@ -19,7 +19,7 @@ Spoiler = regexp.MustCompile(`\|\|(.*?)\|\|`)
 
 func PARSET(c tb.Context) error {
 
-	return c.Reply(ParseMD(c.Text()))
+	return c.Reply(ParseMD(c.Message()))
 
 }
 
