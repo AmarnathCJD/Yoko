@@ -13,12 +13,13 @@ func PARSET(c tb.Context) error {
 
 func ParseMD(c tb.Context) string {
 	text := c.Message().ReplyTo.Text
+        cor := 0
 	for _, x := range c.Message().ReplyTo.Entities {
-		fmt.Println(x)
 		if x.Type == tb.EntityBold {
 			offset, length := x.Offset, x.Length
-			text = string(text[:offset]) + "<b>" + string(text[offset:offset+length]) + "</b>" + string(text[offset+length:])
-		}
+			text = string(text[:offset+cor]) + "<b>" + string(text[offset+cor:offset+cor+length]) + "</b>" + string(text[offset+cor+length:])
+                        cor += 6
+		} else if 
 	}
 	fmt.Println(text)
 	return text
