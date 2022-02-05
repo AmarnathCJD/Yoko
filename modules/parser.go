@@ -41,8 +41,7 @@ func ParseMD(c tb.Context) string {
 			text = string(text[:offset+cor]) + "<s>" + string(text[offset+cor:offset+cor+length]) + "</s>" + string(text[offset+cor+length:])
 			cor += 7
 
-		} else {
-			fmt.Println(x.Type == "spoiler")
+		} else if x.Type == "spoiler" {
 			text = string(text[:offset+cor]) + "<tg-spoiler>" + string(text[offset+cor:offset+cor+length]) + "</tg-spoiler>" + string(text[offset+cor+length:])
 			cor += 25
 		}
@@ -76,7 +75,7 @@ func ParseMD(c tb.Context) string {
 
 	}
 	for _, x := range Spoiler.FindAllStringSubmatch(text, -1) {
-		text = strings.Replace(text, x[0], "<tgspoiler>"+x[1]+"</tgspoiler>", -1)
+		text = strings.Replace(text, x[0], "<tg-spoiler>"+x[1]+"</tg-spoiler>", -1)
 
 	}
 	fmt.Println(text)
