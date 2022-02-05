@@ -1,11 +1,11 @@
 package modules
 
 import (
+	"encoding/json"
 	"fmt"
 	tb "gopkg.in/tucnak/telebot.v3"
 	"regexp"
 	"strings"
-"encoding/json"
 )
 
 var HyperLink = regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
@@ -24,8 +24,8 @@ func PARSET(c tb.Context) error {
 func ParseMD(c tb.Context) string {
 	text := c.Message().ReplyTo.Text
 	cor := 0
-        d, _ := json.Marshal(c.Message().ReplyTo.Entities)
-        fmt.Println(d)
+	d, _ := json.Marshal(c.Message().ReplyTo.Entities)
+	fmt.Println(d)
 	for _, x := range c.Message().ReplyTo.Entities {
 		offset, length := x.Offset, x.Length
 		if x.Type == tb.EntityBold {
@@ -41,10 +41,10 @@ func ParseMD(c tb.Context) string {
 			text = string(text[:offset+cor]) + "<i>" + string(text[offset+cor:offset+cor+length]) + "</i>" + string(text[offset+cor+length:])
 			cor += 7
 		} else if x.Type == tb.EntityStrikethrough {
-text = string(text[:offset+cor]) + "<s>" + string(text[offset+cor:offset+cor+length]) + "</s>" + string(text[offset+cor+length:])
+			text = string(text[:offset+cor]) + "<s>" + string(text[offset+cor:offset+cor+length]) + "</s>" + string(text[offset+cor+length:])
 			cor += 7
 
-}
+		}
 	}
 	Links := HyperLink.FindAllStringSubmatch(text, -1)
 	if Links != nil {
@@ -74,7 +74,7 @@ text = string(text[:offset+cor]) + "<s>" + string(text[offset+cor:offset+cor+len
 		text = strings.Replace(text, x[0], "<u>"+x[1]+"</u>", -1)
 
 	}
-        for _, x := range Spoiler.FindAllStringSubmatch(text, -1) {
+	for _, x := range Spoiler.FindAllStringSubmatch(text, -1) {
 		text = strings.Replace(text, x[0], "<tgspoiler>"+x[1]+"</tgspoiler>", -1)
 
 	}
