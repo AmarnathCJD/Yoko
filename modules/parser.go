@@ -6,19 +6,19 @@ import (
 )
 
 func PARSET(c tb.Context) error {
-	
+
 	return c.Reply(ParseMD(c))
 
 }
 
 func ParseMD(c tb.Context) string {
-        text := c.Message().ReplyTo.Text
-        for _, x := range c.Message().Entities{
-if x.Type == tb.EntityBold {
-offset, length := x.Offset, x.Length
- text = string(text[:offset]) + "<b>" + string(text[offset:offset+length]) + "</b>" + string(text[offset+length:])
-}
-}
+	text := c.Message().ReplyTo.Text
+	for _, x := range c.Message().Entities {
+		if x.Type == tb.EntityBold {
+			offset, length := x.Offset, x.Length
+			text = string(text[:offset]) + "<b>" + string(text[offset:offset+length]) + "</b>" + string(text[offset+length:])
+		}
+	}
 	return fmt.Sprint(text)
 
 }
