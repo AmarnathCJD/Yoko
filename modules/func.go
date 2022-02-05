@@ -96,7 +96,6 @@ func get_file(m *tb.Message) (string, string) {
 
 func unparse_message(file interface{}, note string, m *tb.Message, p bool) {
 	text, buttons := button_parser(note)
-	fmt.Println("R Here")
 	if file != nil && len(file.(bson.A)) != 0 {
 		id, f := file.(bson.A)[0].(string), file.(bson.A)[1].(string)
 		if f == "document" {
@@ -125,7 +124,8 @@ func unparse_message(file interface{}, note string, m *tb.Message, p bool) {
 			b.Reply(m, file, &tb.SendOptions{ReplyMarkup: buttons, DisableWebPagePreview: p})
 		}
 	} else {
-		b.Reply(m, text, &tb.SendOptions{ReplyMarkup: buttons, DisableWebPagePreview: p})
+		err := b.Reply(m, text, &tb.SendOptions{ReplyMarkup: buttons, DisableWebPagePreview: p})
+                fmt.Println(err)
 	}
 }
 
