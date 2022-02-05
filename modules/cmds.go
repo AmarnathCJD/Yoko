@@ -143,7 +143,7 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["remsudo"] = HANDLE{FUNC: RemoveSudo}
 	HANDLERS["logs"] = HANDLE{FUNC: Logs}
 	HANDLERS["ping"] = HANDLE{FUNC: Ping}
-        HANDLERS["test"] = HANDLE{FUNC: PARSET}
+	HANDLERS["test"] = HANDLE{FUNC: PARSET}
 	return HANDLERS
 
 }

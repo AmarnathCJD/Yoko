@@ -1,17 +1,16 @@
 package modules
 
-
 import (
- tb "gopkg.in/tucnak/telebot.v3"
- "fmt"
+	"fmt"
+	tb "gopkg.in/tucnak/telebot.v3"
 )
 
 func PARSET(c tb.Context) error {
-return c.Reply(ParseMD(c))
+	return c.Reply(ParseMD(c))
 
 }
 
 func ParseMD(c tb.Context) string {
-return fmt.Sprint(c.Message().Entities)
+	return fmt.Sprint(c.Message().Entities)
 
 }
