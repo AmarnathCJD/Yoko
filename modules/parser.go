@@ -9,6 +9,9 @@ import (
 
 var HyperLink = regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
 var Bold = regexp.MustCompile(`\*(.*?)\*`)
+var Italic = regexp.MustCompile(`\_(.*?)\_`)
+var Strike = regexp.MustCompile(`\~(.*?)\~`)
+var Underline = regexp.MustCompile(`\_\_(.*?)\_\_`)
 
 func PARSET(c tb.Context) error {
 
@@ -46,6 +49,21 @@ func ParseMD(c tb.Context) string {
 	}
 	for _, x := range Bold.FindAllStringSubmatch(text, -1) {
 		text = strings.Replace(text, x[0], "<b>"+x[1]+"</b>", -1)
+
+	}
+        for _, x := range Italic.FindAllStringSubmatch(text, -1) {
+                if match, _ := regexp.Match(`\_\_(.*?)\_\_`, x[0]); match {
+continue
+}
+		text = strings.Replace(text, x[0], "<i>"+x[1]+"</i>", -1)
+
+	}
+        for _, x := range Strike.FindAllStringSubmatch(text, -1) {
+		text = strings.Replace(text, x[0], "<s>"+x[1]+"</s>", -1)
+
+	}
+        for _, x := range Underline.FindAllStringSubmatch(text, -1) {
+		text = strings.Replace(text, x[0], "<u>"+x[1]+"</u>", -1)
 
 	}
 	fmt.Println(text)
