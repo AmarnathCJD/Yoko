@@ -45,7 +45,7 @@ func ParseMD(c tb.Context) string {
 
 			fmt.Println("Spoil")
 		} else {
-			fmt.Println(x)
+			fmt.Println(x.Type)
 		}
 	}
 	Links := HyperLink.FindAllStringSubmatch(text, -1)
