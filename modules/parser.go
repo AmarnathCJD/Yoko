@@ -6,7 +6,8 @@ import (
 )
 
 func PARSET(c tb.Context) error {
-	return c.Reply(ParseMD(c))
+        fmt.Println(ParseMD(c))
+	return nil
 
 }
 
