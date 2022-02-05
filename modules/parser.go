@@ -5,6 +5,7 @@ import (
 	tb "gopkg.in/tucnak/telebot.v3"
 	"regexp"
 	"strings"
+"encoding/json"
 )
 
 var HyperLink = regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
@@ -12,6 +13,7 @@ var Bold = regexp.MustCompile(`\*(.*?)\*`)
 var Italic = regexp.MustCompile(`\_(.*?)\_`)
 var Strike = regexp.MustCompile(`\~(.*?)\~`)
 var Underline = regexp.MustCompile(`\_\_(.*?)\_\_`)
+var Spoiler = regexp.MustCompile(`\|\|(.*?)\|\|`)
 
 func PARSET(c tb.Context) error {
 
@@ -22,6 +24,8 @@ func PARSET(c tb.Context) error {
 func ParseMD(c tb.Context) string {
 	text := c.Message().ReplyTo.Text
 	cor := 0
+        d, _ := json.Marshal(c.Message().ReplyTo.Entities)
+        fmt.Println(d)
 	for _, x := range c.Message().ReplyTo.Entities {
 		offset, length := x.Offset, x.Length
 		if x.Type == tb.EntityBold {
@@ -31,12 +35,16 @@ func ParseMD(c tb.Context) string {
 			text = string(text[:offset+cor]) + "<code>" + string(text[offset+cor:offset+cor+length]) + "</code>" + string(text[offset+cor+length:])
 			cor += 13
 		} else if x.Type == tb.EntityUnderline {
-			text = string(text[:offset+cor]) + "<code>" + string(text[offset+cor:offset+cor+length]) + "</code>" + string(text[offset+cor+length:])
+			text = string(text[:offset+cor]) + "<u>" + string(text[offset+cor:offset+cor+length]) + "</u>" + string(text[offset+cor+length:])
 			cor += 7
 		} else if x.Type == tb.EntityItalic {
-			text = string(text[:offset+cor]) + "<code>" + string(text[offset+cor:offset+cor+length]) + "</code>" + string(text[offset+cor+length:])
+			text = string(text[:offset+cor]) + "<i>" + string(text[offset+cor:offset+cor+length]) + "</i>" + string(text[offset+cor+length:])
 			cor += 7
-		}
+		} else if x.Type == tb.EntityStrikethrough {
+text = string(text[:offset+cor]) + "<s>" + string(text[offset+cor:offset+cor+length]) + "</s>" + string(text[offset+cor+length:])
+			cor += 7
+
+}
 	}
 	Links := HyperLink.FindAllStringSubmatch(text, -1)
 	if Links != nil {
@@ -64,6 +72,10 @@ func ParseMD(c tb.Context) string {
 	}
 	for _, x := range Underline.FindAllStringSubmatch(text, -1) {
 		text = strings.Replace(text, x[0], "<u>"+x[1]+"</u>", -1)
+
+	}
+        for _, x := range Spoiler.FindAllStringSubmatch(text, -1) {
+		text = strings.Replace(text, x[0], "<tgspoiler>"+x[1]+"</tgspoiler>", -1)
 
 	}
 	fmt.Println(text)
