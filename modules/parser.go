@@ -22,7 +22,13 @@ func ParseMD(c tb.Context) string {
 		} else if x.Type == tb.EntityCode {
 			text = string(text[:offset+cor]) + "<code>" + string(text[offset+cor:offset+cor+length]) + "</code>" + string(text[offset+cor+length:])
 			cor += 13
-		}
+		} else if x.Type == tb.EntityUnderline {
+text = text = string(text[:offset+cor]) + "<code>" + string(text[offset+cor:offset+cor+length]) + "</code>" + string(text[offset+cor+length:])
+			cor += 7
+} else if x.Type == tb.EntityItalic {
+text = string(text[:offset+cor]) + "<code>" + string(text[offset+cor:offset+cor+length]) + "</code>" + string(text[offset+cor+length:])
+			cor += 7
+}
 	}
 	fmt.Println(text)
 	return text
