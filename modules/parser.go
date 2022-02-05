@@ -12,6 +12,6 @@ fmt.Println(ParseMD(c))
 }
 
 func ParseMD(c tb.Context) string {
-return fmt.Sprint(c.Message().Entites)
+return fmt.Sprint(c.Message().Entities)
 
 }
