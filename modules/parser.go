@@ -7,7 +7,7 @@ import (
 )
 
 func PARSET(c tb.Context) error {
-fmt.Println(ParseMD(c))
+return c.Reply(ParseMD(c))
 
 }
 
