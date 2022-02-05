@@ -41,14 +41,16 @@ func parse_message(m *tb.Message) (string, string, []string) {
 		if m.ReplyTo.ReplyMarkup != nil {
 			buttons = get_reply_markup(m.ReplyTo)
 		}
-		args := strings.SplitN(m.Text, " ", 3)
+                Ptext := ParseMD(m)
+		args := strings.SplitN(Ptext, " ", 3)
 		if len(args) == 3 {
 			note, name := args[2], args[1]
 			note += buttons
 			return name, note, []string{file_id, file_type}
 		} else if len(args) == 2 {
 			if m.ReplyTo.Text != string("") {
-				note, name := m.ReplyTo.Text, args[1]
+                                Ptext := ParseMD(m.ReplyTo)
+				note, name := , args[1]
 				note += buttons
 				return name, note, []string{file_id, file_type}
 			} else {
@@ -58,7 +60,8 @@ func parse_message(m *tb.Message) (string, string, []string) {
 			return "", buttons, []string{file_id, file_type}
 		}
 	} else {
-		args := strings.SplitN(m.Text, " ", 3)
+                Ptext := ParseMD(m)
+		args := strings.SplitN(Ptext, " ", 3)
 		if len(args) == 3 {
 			return args[1], args[2], nil
 		} else if len(args) == 2 {
