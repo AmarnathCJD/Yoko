@@ -1,7 +1,6 @@
 package modules
 
 import (
-	"encoding/json"
 	"fmt"
 	tb "gopkg.in/tucnak/telebot.v3"
 	"regexp"
