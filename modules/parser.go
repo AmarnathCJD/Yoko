@@ -51,18 +51,18 @@ func ParseMD(c tb.Context) string {
 		text = strings.Replace(text, x[0], "<b>"+x[1]+"</b>", -1)
 
 	}
-        for _, x := range Italic.FindAllStringSubmatch(text, -1) {
-                if match, _ := regexp.Match(`\_\_(.*?)\_\_`, []byte(x[0])); match {
-continue
-}
+	for _, x := range Italic.FindAllStringSubmatch(text, -1) {
+		if match, _ := regexp.Match(`\_\_(.*?)\_\_`, []byte(x[0])); match {
+			continue
+		}
 		text = strings.Replace(text, x[0], "<i>"+x[1]+"</i>", -1)
 
 	}
-        for _, x := range Strike.FindAllStringSubmatch(text, -1) {
+	for _, x := range Strike.FindAllStringSubmatch(text, -1) {
 		text = strings.Replace(text, x[0], "<s>"+x[1]+"</s>", -1)
 
 	}
-        for _, x := range Underline.FindAllStringSubmatch(text, -1) {
+	for _, x := range Underline.FindAllStringSubmatch(text, -1) {
 		text = strings.Replace(text, x[0], "<u>"+x[1]+"</u>", -1)
 
 	}
