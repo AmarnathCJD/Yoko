@@ -50,7 +50,7 @@ func parse_message(m *tb.Message) (string, string, []string) {
 		} else if len(args) == 2 {
 			if m.ReplyTo.Text != string("") {
                                 Ptext := ParseMD(m.ReplyTo)
-				note, name := , args[1]
+				note, name := Ptext, args[1]
 				note += buttons
 				return name, note, []string{file_id, file_type}
 			} else {
