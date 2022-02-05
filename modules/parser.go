@@ -40,8 +40,7 @@ func ParseMD(c tb.Context) string {
 			if strings.Contains(x[2], "buttonurl") {
 				continue
 			}
-			text = strings.Replace(text, x[0], fmt.Sprintf("<a href='%s'>%s</a>", x[1], x[2]), 1)
-			fmt.Println(text)
+			text = strings.Replace(text, x[0], fmt.Sprintf("<a href='%s'>%s</a>", x[2], x[1]), -1)
 		}
 	}
 	fmt.Println(text)
