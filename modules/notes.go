@@ -62,6 +62,7 @@ func Gnote(c tb.Context) error {
 		return nil
 	}
 	n, p := ParseString(note["note"].(string), c)
+        fmt.Println(n, p)
 	unparse_message(note["file"], n, c.Message(), p)
 	return nil
 }
