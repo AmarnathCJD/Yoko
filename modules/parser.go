@@ -8,6 +8,7 @@ import (
 )
 
 var HyperLink = regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
+var Bold = regexp.MustCompile(`\*(.*?)\*`)
 
 func PARSET(c tb.Context) error {
 
@@ -43,6 +44,10 @@ func ParseMD(c tb.Context) string {
 			text = strings.Replace(text, x[0], fmt.Sprintf("<a href='%s'>%s</a>", x[2], x[1]), -1)
 		}
 	}
+        for _, x := range Bold.FindAllStringSubmatch(text, -1) {
+		text = strings.Replace(text, x[0], "<b>"+x[1]+"</b>", -1)
+
+}
 	fmt.Println(text)
 	return text
 
