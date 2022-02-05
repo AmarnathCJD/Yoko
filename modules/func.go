@@ -125,7 +125,7 @@ func unparse_message(file interface{}, note string, m *tb.Message, p bool) {
 		}
 	} else {
 		_, err := b.Reply(m, text, &tb.SendOptions{ReplyMarkup: buttons, DisableWebPagePreview: p})
-                fmt.Println(err)
+		fmt.Println(err)
 	}
 }
 
