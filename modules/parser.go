@@ -43,7 +43,7 @@ func ParseMD(c tb.Context) string {
 
 		} else {
 			fmt.Println(x.Type == "spoiler")
-			text = string(text[:offset+cor]) + "<tg-spoiler>" + string(text[offset+cor:offset+cor+length]) + "</tg-spolier>" + string(text[offset+cor+length:])
+			text = string(text[:offset+cor]) + "<tg-spoiler>" + string(text[offset+cor:offset+cor+length]) + "</tg-spoiler>" + string(text[offset+cor+length:])
 			cor += 25
 		}
 	}
