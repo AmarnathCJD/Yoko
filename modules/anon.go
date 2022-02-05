@@ -1,7 +1,6 @@
 package modules
 
 import (
-	"fmt"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
 
@@ -11,7 +10,6 @@ var (
 )
 
 type Update struct {
-	Id    int
 	Func  func(tb.Context) error
 	Right string
 	C     tb.Context
@@ -20,13 +18,13 @@ type Update struct {
 func AnonAdmin(next tb.HandlerFunc, p string, c tb.Context) {
 	sel.Inline(sel.Row(anon_button))
 	msg, _ := c.Bot().Send(c.Chat(), "It looks like you're anonymous. Tap this button to confirm your identity.", &tb.SendOptions{ReplyMarkup: sel, ReplyTo: c.Message()})
-	ANON[msg.ID] = Update{c.Message().ID, next, p, c}
+	ANON[msg.ID] = Update{next, p, c}
 }
 
 func AnonCB(c tb.Context) error {
 	update, exist := ANON[c.Callback().Message.ID]
 	if !exist {
-		fmt.Println("Not exist")
+		return c.Respond(&tb.CallbackResponse{Text: "This request is too old to interact with!", ShowAlert: true})
 	}
 	p, err := c.Bot().ChatMemberOf(c.Chat(), c.Sender())
 	check(err)
@@ -63,8 +61,5 @@ func AnonCB(c tb.Context) error {
 		},
 	})
 	c.Bot().Delete(c.Message())
-	update.Func(s)
-	return nil
+	return update.Func(s)
 }
-
-// Soon, today

@@ -20,6 +20,9 @@ func Start(c tb.Context) error {
 	} else if strings.HasPrefix(m.Payload, "allnotes") {
 		private_startallnotes(c)
 		return nil
+	} else if strings.HasPrefix(m.Payload, "connect") {
+		private_connect(c)
+		return nil
 	}
 	if m.Private() {
 		menu.Inline(
