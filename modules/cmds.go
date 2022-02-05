@@ -2,10 +2,10 @@ package modules
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/amarnathcjd/yoko/bot"
 	tb "gopkg.in/tucnak/telebot.v3"
-	"log"
-	"strings"
 )
 
 type HANDLE struct {
@@ -27,7 +27,6 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["id"] = HANDLE{FUNC: ID_info}
 	HANDLERS["fake"] = HANDLE{FUNC: Fake_gen}
 	HANDLERS["paste"] = HANDLE{FUNC: Paste}
-	HANDLERS["st"] = HANDLE{FUNC: StripeCharge}
 	HANDLERS["stat"] = HANDLE{FUNC: GroupStat}
 	HANDLERS["webss"] = HANDLE{FUNC: WebSS}
 	HANDLERS["tr"] = HANDLE{FUNC: Tr2}
@@ -134,7 +133,6 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["setfloodmode"] = HANDLE{SetFloodMode, Ban_users}
 	// gbans.go
 	HANDLERS["gban"] = HANDLE{FUNC: Gban}
-	HANDLERS["parse"] = HANDLE{FUNC: PP}
 	// devs.go
 	HANDLERS["addsudo"] = HANDLE{FUNC: AddSudo}
 	HANDLERS["adddev"] = HANDLE{FUNC: AddDev}
@@ -152,7 +150,6 @@ func RegisterHandlers() {
 	HANDLERS := GatherHandlers()
 	for endpoint, function := range HANDLERS {
 		if function.MIDDLEWARE != nil {
-			log.Print(endpoint)
 			bot.Bot.Handle("/"+endpoint, function.FUNC, function.MIDDLEWARE)
 			bot.Bot.Handle("!"+endpoint, function.FUNC, function.MIDDLEWARE)
 		} else {
@@ -187,12 +184,9 @@ func CallBackHandlers() {
 	// filters.go
 	bot.Bot.Handle(&del_all_filters, DelAllFCB)
 	bot.Bot.Handle(&cancel_del_all_filters, CancelDALL)
+	bot.Bot.Handle(&imdb_btn, ImdbCB)
+
 	bot.Bot.Handle(&anon_button, AnonCB)
-}
-
-func PP(c tb.Context) error {
-	return c.Reply(ParseString(c.Message().Payload, c))
-
 }
 
 func RsStripe(c tb.Context) error {

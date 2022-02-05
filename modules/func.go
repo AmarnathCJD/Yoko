@@ -364,10 +364,7 @@ func IsBotAdmin(user_id int64) bool {
 			return true
 		}
 	}
-	if user_id == OWNER_ID {
-		return true
-	}
-	return false
+	return user_id == OWNER_ID
 }
 
 func check(err error) {
@@ -389,8 +386,14 @@ func GetBin(bin string, m int) string {
 		return ""
 
 	}
-	bankd := v["bank"].(map[string]interface{})
-	ct := v["country"].(map[string]interface{})
+	var bankd map[string]interface{}
+	var ct map[string]interface{}
+	if bd, ok := v["bank"]; ok {
+		bankd = bd.(map[string]interface{})
+	}
+	if cxt, ok := v["country"]; ok {
+		ct = cxt.(map[string]interface{})
+	}
 	bank, scheme, btype, brand, country, bin_details := "null", "null", "null", "null", "null", ""
 	if bankd != nil {
 		if _, ok := bankd["name"]; ok {
@@ -412,7 +415,7 @@ func GetBin(bin string, m int) string {
 	if m == 1 {
 		bin_details = fmt.Sprintf("<u>Bank Info:</u> <b>%s</b>\n<u>Card Type:</u> <b>%s - %s - %s</b>\n<u>Country:</u> <b>%s</b>", bank, scheme, btype, brand, country)
 	} else if m == 2 {
-		bin_details = fmt.Sprintf("%s - %s - %s - %s - %s - %s", bin[:6], strings.ToUpper(bank), strings.ToUpper(scheme), strings.ToUpper(btype), strings.ToUpper(brand), strings.ToUpper(country))
+		bin_details = fmt.Sprintf("%s - %s - %s - %s - %s - %s", bin[:6], bank, scheme, btype, brand, country)
 	}
 
 	return bin_details

@@ -3,11 +3,12 @@ package modules
 import (
 	"encoding/json"
 	"fmt"
-	tb "gopkg.in/tucnak/telebot.v3"
 	"log"
 	"net/http"
 	"strings"
 	"time"
+
+	tb "gopkg.in/tucnak/telebot.v3"
 )
 
 var SPAM = make(map[int64]int64)
@@ -74,7 +75,7 @@ func confirm(id string, s string, cc string, year string, month string, cvc stri
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(x)
+	log.Print(x)
 	code, dcode, msg := "", "", ""
 	if e, ok := x["error"]; ok {
 		e := e.(map[string]interface{})
@@ -99,9 +100,7 @@ func confirm(id string, s string, cc string, year string, month string, cvc stri
 		if s.(string) == "succeeded" {
 			code = "Charged 1$"
 			msg = "Your card has been successfully charged!"
-			dcode = ""
-		} else if s.(string) == "requires_source_action" {
-			fmt.Println("VBV")
+			dcode = "donated"
 		}
 	}
 

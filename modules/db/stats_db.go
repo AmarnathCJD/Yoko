@@ -85,18 +85,17 @@ func AddDev(user_id int64, name string) {
 }
 
 func RemSudo(user_id int64) bool {
-	x, _ := sudo.DeleteOne(context.TODO(), User{Id: user_id})
+	x, _ := sudo.DeleteOne(context.TODO(), bson.M{"_id": user_id})
 	if x.DeletedCount == 0 {
 		return false
 	} else {
 		Sudos = RmUser(Sudos, user_id)
-		fmt.Println(Sudos)
 		return true
 	}
 }
 
 func RemDev(user_id int64) bool {
-	x, _ := sudo.DeleteOne(context.TODO(), User{Id: user_id})
+	x, _ := sudo.DeleteOne(context.TODO(), bson.M{"_id": user_id})
 	if x.DeletedCount == 0 {
 		return false
 	} else {

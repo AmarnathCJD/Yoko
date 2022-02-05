@@ -36,48 +36,6 @@ var AFK_STR = []string{
 	"Pro <b>%s</b>, is back alive!",
 }
 
-var dead_cc = `
-<b>❌ Stripe/15$ - DEAD</b>
-<b>CC:</b> <code>%s|%s|%s|%s</code>
-<u>Result:</u> <b>%s</b>
-%s
-<U>Time:</u> <b>%d's</b>
-<b>Checked By <a href='tg://user?id=%d'>%s</a> [%s]</b>`
-
-var ccn_cc = `
-<b>✅ Stripe/15$ - CCN Live</b>
-<b>CC:</b> <code>%s|%s|%s|%s</code>
-<u>Result:</u> <b>%s</b>
-%s
-<U>Time:</u> <b>%d's</b>
-<b>Checked By <a href='tg://user?id=%d'>%s</a> [%s]</b>`
-
-var insuf_funds = `
-<b>✅ Stripe/15$ - Insuffient Funds</b>
-<b>CC:</b> <code>%s|%s|%s|%s</code>
-<u>Result:</u> <b>%s</b>
-%s
-<U>Time:</u> <b>%d's</b>
-<b>Checked By <a href='tg://user?id=%d'>%s</a> [%s]</b>`
-
-var stripe_rs = `
->. <b>𝐆𝐚𝐭𝐞𝐬/𝐂𝐡𝐚𝐫𝐠𝐞/𝐒𝐭𝐫𝐢𝐩𝐞-$1</b>
-
-| —  <b>𝐑𝐄𝐒𝐔𝐋𝐓</b>
-|- <b>CARD:</b> <code>%s|%s|%s|%s</code>
-|- <b>STATUS:</b> %s %s
-|- <b>RESPONSE:</b> %s
-|- <b>CODE:</b> %s
-| —  <b>𝐁𝐈𝐍-𝐈𝐍𝐅𝐎</b>
-|- <b>BANK/TYPE:</b> .
-|- <b>COUNTRY:</b> . .
-| —  <b>𝐈𝐍𝐅𝐎𝐒</b>
-|- <b>Checked By:</b> @%s[%s]
-|- <b>Time Taken:</b>  "."
-
-| — 𝙱𝚘𝚝 𝙱𝚢 <b>RoseLoverX</b>
-`
-
 var stripe_1 = `
 <b>⌥ Gateway ✑ Stripe 1$</b>
 <b>CC ✑</b> <code>%s|%s|%s|%s</code>
@@ -86,6 +44,5 @@ var stripe_1 = `
 
 <b>⎋ Card Details: %s</b>
 <b>⎋ Time: %ds</b>
-<b>✁ Bot by</b> <code>@RoseLoverX & @NeptunexD</code>
 <b>✁Checked by</b> <b>%s</b> [%s]
 `

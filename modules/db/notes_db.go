@@ -14,15 +14,6 @@ var (
 	pnote    = database.Collection("pnote")
 )
 
-func stringInSlice(a string, list []string) bool {
-	for _, b := range list {
-		if b == a {
-			return true
-		}
-	}
-	return false
-}
-
 func deduplicate_note(s bson.A, x string) (bson.A, bool) {
 	for i, v := range s {
 		if v.(bson.M)["name"].(string) == x {
