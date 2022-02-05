@@ -25,7 +25,7 @@ func ParseMD(c tb.Context) string {
 	text := c.Message().ReplyTo.Text
 	cor := 0
 	d, _ := json.Marshal(c.Message().ReplyTo.Entities)
-	fmt.Println(string(d[0]))
+	fmt.Println(string(d[0]), c.Message().ReplyTo.Entities)
 	for _, x := range c.Message().ReplyTo.Entities {
 		offset, length := x.Offset, x.Length
 		if x.Type == tb.EntityBold {
