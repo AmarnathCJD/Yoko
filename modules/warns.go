@@ -12,8 +12,8 @@ import (
 var unwarn_btn = sel.Data("Remove warn (admin only)", "remove_user_warning")
 
 func WARN(c tb.Context) error {
-	cmd := strings.SplitN(c.Message().Text, " ", 2)[0]
-	if cmd == "/dwarn" && !c.Message().IsReply() {
+	cmd := strings.SplitN(c.Message().Text, " ", 2)[0][1:]
+	if cmd == "dwarn" && !c.Message().IsReply() {
 		c.Reply("You have to reply to a message to delete it and warn the user.")
 		return nil
 	}
@@ -35,7 +35,7 @@ func WARN(c tb.Context) error {
 	if extra == string("") {
 		extra = "No reason given."
 	}
-	if !exceeded {
+	if !exceeded && cmd != "swarn" {
 		unwarn_btn.Data = strconv.Itoa(int(user.ID))
 		sel.Inline(sel.Row(unwarn_btn))
 		c.Reply(fmt.Sprintf("User <a href='tg://user?id=%d'>%s</a> has %d/%d warnings; be careful!\n<b>Reason</b>: %s", user.ID, user.FirstName, count, limit, extra), sel)
