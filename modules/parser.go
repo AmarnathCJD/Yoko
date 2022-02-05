@@ -18,10 +18,10 @@ func ParseMD(c tb.Context) string {
 		offset, length := x.Offset, x.Length
 		if x.Type == tb.EntityBold {
 			text = string(text[:offset+cor]) + "<b>" + string(text[offset+cor:offset+cor+length]) + "</b>" + string(text[offset+cor+length:])
-			cor += 6
+			cor += 7
 		} else if x.Type == tb.EntityCode {
 			text = string(text[:offset+cor]) + "<code>" + string(text[offset+cor:offset+cor+length]) + "</code>" + string(text[offset+cor+length:])
-			cor += 12
+			cor += 13
 		}
 	}
 	fmt.Println(text)
