@@ -4,6 +4,7 @@ import (
 	"fmt"
 	tb "gopkg.in/tucnak/telebot.v3"
 "regexp"
+"strings"
 )
 
 var HyperLink = regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
@@ -35,7 +36,7 @@ text = string(text[:offset+cor]) + "<code>" + string(text[offset+cor:offset+cor+
 	}
         Links := HyperLink.FindAllStringSubmatch(text, -1)
 	if Links != nil {
-		for _, x := range f {
+		for _, x := range Links {
                         if strings.Contains(x[2], "buttonurl") {
 continue
 }
