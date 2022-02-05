@@ -61,10 +61,16 @@ func Gnote(c tb.Context) error {
 		c.Reply(fmt.Sprintf("Tap here to view '%s' in your private chat.", c.Message().Payload), menu)
 		return nil
 	}
-	n, p := ParseString(note["note"].(string), c)
-	fmt.Println(n, p)
-	unparse_message(note["file"], n, c.Message(), p)
-	return nil
+	text, p := ParseString(note["note"].(string), c)
+	if note["file"] != nil {
+f := GetFile(file.(bson.A), text)
+return f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()})
+} else {
+text, p := ParseString(text, c)
+				return c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()})
+			
+}
+	
 }
 
 func OnTextHandler(c tb.Context) error {
