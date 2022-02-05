@@ -52,7 +52,7 @@ func ParseMD(c tb.Context) string {
 
 	}
         for _, x := range Italic.FindAllStringSubmatch(text, -1) {
-                if match, _ := regexp.Match(`\_\_(.*?)\_\_`, x[0]); match {
+                if match, _ := regexp.Match(`\_\_(.*?)\_\_`, []byte(x[0])); match {
 continue
 }
 		text = strings.Replace(text, x[0], "<i>"+x[1]+"</i>", -1)
