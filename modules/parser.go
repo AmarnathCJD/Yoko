@@ -24,8 +24,6 @@ func PARSET(c tb.Context) error {
 func ParseMD(c tb.Context) string {
 	text := c.Message().ReplyTo.Text
 	cor := 0
-	d, _ := json.Marshal(c.Message().ReplyTo.Entities)
-	fmt.Println(string(d[0]), c.Message().ReplyTo.Entities)
 	for _, x := range c.Message().ReplyTo.Entities {
 		offset, length := x.Offset, x.Length
 		if x.Type == tb.EntityBold {
@@ -44,7 +42,10 @@ func ParseMD(c tb.Context) string {
 			text = string(text[:offset+cor]) + "<s>" + string(text[offset+cor:offset+cor+length]) + "</s>" + string(text[offset+cor+length:])
 			cor += 7
 
-		}
+		} else if x.Type == "spolier" {
+
+fmt.Println("Spoil")
+}
 	}
 	Links := HyperLink.FindAllStringSubmatch(text, -1)
 	if Links != nil {
