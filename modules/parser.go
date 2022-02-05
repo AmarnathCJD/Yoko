@@ -18,6 +18,7 @@ if x.Type == tb.EntityBold {
 offset, length := x.Offset, x.Length
  text = string(text[:offset]) + "<b>" + string(text[offset:offset+length]) + "</b>" + string(text[offset+length:])
 }
+}
 	return fmt.Sprint(text)
 
 }
