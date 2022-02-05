@@ -15,11 +15,14 @@ func ParseMD(c tb.Context) string {
 	text := c.Message().ReplyTo.Text
         cor := 0
 	for _, x := range c.Message().ReplyTo.Entities {
+offset, length := x.Offset, x.Length
 		if x.Type == tb.EntityBold {
-			offset, length := x.Offset, x.Length
 			text = string(text[:offset+cor]) + "<b>" + string(text[offset+cor:offset+cor+length]) + "</b>" + string(text[offset+cor+length:])
                         cor += 6
-		} else if 
+		} else if x.Type == tb.EntityCode {
+text = string(text[:offset+cor]) + "<code>" + string(text[offset+cor:offset+cor+length]) + "</code>" + string(text[offset+cor+length:])
+                        cor += 12
+}
 	}
 	fmt.Println(text)
 	return text
