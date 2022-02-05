@@ -63,7 +63,7 @@ func Gnote(c tb.Context) error {
 	}
 	text, p := ParseString(note["note"].(string), c)
 	if note["file"] != nil {
-f := GetFile(file.(bson.A), text)
+f := GetFile(note["file"].(bson.A), text)
 f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()})
 } else {
 text, p := ParseString(text, c)
