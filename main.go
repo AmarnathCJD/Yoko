@@ -10,7 +10,6 @@ import (
 
 func main() {
 	mod.RegisterHandlers()
-
 	// logging
 	file, _ := os.OpenFile("logs.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	log.SetOutput(file)

@@ -37,7 +37,7 @@ var AFK_STR = []string{
 }
 
 var stripe_1 = `
-<b>⌥ Gateway ✑ Stripe 1$</b>
+<b>⌥ Gateway ✑ %s</b>
 <b>CC ✑</b> <code>%s|%s|%s|%s</code>
 <b>⌥ Status ✑ %s</b> %s %s
 <b>⌥ Response ✑</b> %s
