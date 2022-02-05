@@ -7,23 +7,26 @@ import (
 	"strings"
 )
 
-var HyperLink = regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
-var Bold = regexp.MustCompile(`\*(.*?)\*`)
-var Italic = regexp.MustCompile(`\_(.*?)\_`)
-var Strike = regexp.MustCompile(`\~(.*?)\~`)
-var Underline = regexp.MustCompile(`\_\_(.*?)\_\_`)
-var Spoiler = regexp.MustCompile(`\|\|(.*?)\|\|`)
+var (
+HyperLink = regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
+Bold = regexp.MustCompile(`\*(.*?)\*`)
+Italic = regexp.MustCompile(`\_(.*?)\_`)
+Strike = regexp.MustCompile(`\~(.*?)\~`)
+Underline = regexp.MustCompile(`\_\_(.*?)\_\_`)
+Spoiler = regexp.MustCompile(`\|\|(.*?)\|\|`)
+)
+
 
 func PARSET(c tb.Context) error {
 
-	return c.Reply(ParseMD(c))
+	return c.Reply(ParseMD(c.Text()))
 
 }
 
-func ParseMD(c tb.Context) string {
-	text := c.Message().ReplyTo.Text
+func ParseMD(c tb.Message) string {
+	text := c.Text
 	cor := 0
-	for _, x := range c.Message().ReplyTo.Entities {
+	for _, x := range c.ReplyTo.Entities {
 		offset, length := x.Offset, x.Length
 		if x.Type == tb.EntityBold {
 			text = string(text[:offset+cor]) + "<b>" + string(text[offset+cor:offset+cor+length]) + "</b>" + string(text[offset+cor+length:])
