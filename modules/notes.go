@@ -64,13 +64,13 @@ func Gnote(c tb.Context) error {
 	text, p := ParseString(note["note"].(string), c)
 	if note["file"] != nil {
 f := GetFile(file.(bson.A), text)
-return f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()})
+f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()})
 } else {
 text, p := ParseString(text, c)
-				return c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()})
+				c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()})
 			
 }
-	
+	return nil
 }
 
 func OnTextHandler(c tb.Context) error {
