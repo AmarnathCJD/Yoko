@@ -2,11 +2,11 @@ package modules
 
 import (
 	"fmt"
-	"regexp"
-"go.mongodb.org/mongo-driver/bson"
-"strings"
 	"github.com/amarnathcjd/yoko/modules/db"
+	"go.mongodb.org/mongo-driver/bson"
 	tb "gopkg.in/tucnak/telebot.v3"
+	"regexp"
+	"strings"
 )
 
 var (
@@ -102,20 +102,20 @@ func FilterEvent(c tb.Context) (error, bool) {
 			filter := db.Get_filter(c.Chat().ID, x)
 			text, p := ParseString(filter["note"].(string), c)
 
-	        if filter["file"] != nil && len(filter["file"].(bson.A)) != 0 && filter["file"].(bson.A)[0] != string("") {
-		f := GetFile(filter["file"].(bson.A), text)
-		_, err := f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()})
-		if err != nil && strings.Contains(err.Error(), "telegram unknown: Bad Request: can't parse entities") {
-			_, err = f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
-                        return err, true
-		}
-	        } else {
+			if filter["file"] != nil && len(filter["file"].(bson.A)) != 0 && filter["file"].(bson.A)[0] != string("") {
+				f := GetFile(filter["file"].(bson.A), text)
+				_, err := f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()})
+				if err != nil && strings.Contains(err.Error(), "telegram unknown: Bad Request: can't parse entities") {
+					_, err = f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
+					return err, true
+				}
+			} else {
 
-		if err := c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()}); strings.Contains(err.Error(), "telegram unknown: Bad Request: can't parse entities") {
-			c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
-		}}
+				if err := c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()}); strings.Contains(err.Error(), "telegram unknown: Bad Request: can't parse entities") {
+					c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
+				}
+			}
 
-	
 			return nil, true
 		}
 	}

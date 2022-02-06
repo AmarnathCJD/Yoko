@@ -83,8 +83,8 @@ func Gnote(c tb.Context) error {
 func OnTextHandler(c tb.Context) error {
 	FLOOD_EV(c)
 	if err, ok := FilterEvent(c); ok {
-return err
-}
+		return err
+	}
 	match, _ := regexp.MatchString("\\#(\\S+)", c.Message().Text)
 	if match {
 		Hash_note(c)
