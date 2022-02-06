@@ -64,10 +64,8 @@ func Gnote(c tb.Context) error {
 	fmt.Println("1")
 	text, p := ParseString(note["note"].(string), c)
 	fmt.Println("2")
-	if note["file"] != nil && len(note["file"].(bson.A)) != 0 {
+	if note["file"] != nil && len(note["file"].(bson.A)) != 0 && note["file"].(bson.A)[0] != string ("") {
 		f := GetFile(note["file"].(bson.A), text)
-		fmt.Println(note["file"])
-		fmt.Println("4")
 		fmt.Println(f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()}))
 		fmt.Println("5")
 	} else {
