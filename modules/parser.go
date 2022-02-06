@@ -14,7 +14,7 @@ var (
 	Strike    = regexp.MustCompile(`\~(.*?)\~`)
 	Underline = regexp.MustCompile(`\_\_(.*?)\_\_`)
 	Spoiler   = regexp.MustCompile(`\|\|(.*?)\|\|`)
-        Lone = regexp.MustCompile(`\<[^>(.*?)]`)
+	Lone      = regexp.MustCompile(`\<[^>(.*?)]`)
 )
 
 func PARSET(c tb.Context) error {
@@ -81,7 +81,7 @@ func ParseMD(c *tb.Message) string {
 		text = strings.Replace(text, x[0], "<tg-spoiler>"+x[1]+"</tg-spoiler>", -1)
 
 	}
-        for _, x := range Lone.FindAllStringSubmatch(text, -1) {
+	for _, x := range Lone.FindAllStringSubmatch(text, -1) {
 		fmt.Println(x)
 	}
 	fmt.Println(text)
