@@ -3,7 +3,8 @@ package modules
 import (
 	"fmt"
 	"regexp"
-
+"go.mongodb.org/mongo-driver/bson"
+"strings"
 	"github.com/amarnathcjd/yoko/modules/db"
 	tb "gopkg.in/tucnak/telebot.v3"
 )
@@ -90,10 +91,10 @@ func CancelDALL(c tb.Context) error {
 	return nil
 }
 
-func FilterEvent(c tb.Context) bool {
+func FilterEvent(c tb.Context) (error, bool) {
 	f := db.Get_filters(c.Chat().ID)
 	if len(f) == 0 {
-		return false
+		return nil, false
 	}
 	for _, x := range f {
 		pattern := `( |^|[^\w])(?i)` + x + `( |$|[^\w])`
@@ -101,21 +102,22 @@ func FilterEvent(c tb.Context) bool {
 			filter := db.Get_filter(c.Chat().ID, x)
 			text, p := ParseString(filter["note"].(string), c)
 
-	if filter["file"] != nil && len(filter["file"].(bson.A)) != 0 && filter["file"].(bson.A)[0] != string("") {
+	        if filter["file"] != nil && len(filter["file"].(bson.A)) != 0 && filter["file"].(bson.A)[0] != string("") {
 		f := GetFile(filter["file"].(bson.A), text)
 		_, err := f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()})
 		if err != nil && strings.Contains(err.Error(), "telegram unknown: Bad Request: can't parse entities") {
-			f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
+			_, err = f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
+                        return err, true
 		}
-	} else {
+	        } else {
 
 		if err := c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()}); strings.Contains(err.Error(), "telegram unknown: Bad Request: can't parse entities") {
 			c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
 		}
 
-	}
-			return true
+	
+			return nil, true
 		}
 	}
-	return false
+	return nil, false
 }
