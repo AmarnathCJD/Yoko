@@ -101,7 +101,7 @@ func FilterEvent(c tb.Context) (error, bool) {
 		if match, _ := regexp.Match(pattern, []byte(c.Text())); match {
 			filter := db.Get_filter(c.Chat().ID, x)
 			text, p := ParseString(filter["text"].(string), c)
-
+text, btns := button_parser(text)
 			if filter["file"] != nil && len(filter["file"].(bson.A)) != 0 && filter["file"].(bson.A)[0] != string("") {
 				f := GetFile(filter["file"].(bson.A), text)
 				_, err := f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()})
