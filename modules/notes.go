@@ -98,7 +98,6 @@ func OnTextHandler(c tb.Context) error {
 }
 
 func Hash_note(c tb.Context) error {
-	fmt.Println("#hash")
 	args := strings.SplitN(c.Message().Text, "#", 2)
 	note := db.Get_note(c.Message().Chat.ID, args[1])
 	if note == nil {
