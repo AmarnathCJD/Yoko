@@ -14,7 +14,7 @@ var (
 	Strike        = regexp.MustCompile(`\~(.*?)\~`)
 	Underline     = regexp.MustCompile(`\_\_(.*?)\_\_`)
 	Spoiler       = regexp.MustCompile(`\|\|(.*?)\|\|`)
-        Code = regexp.MustCompile("\`(.*?)\`")
+        Code = regexp.MustCompile("`(.*?)`")
 )
 
 func PARSET(c tb.Context) error {
