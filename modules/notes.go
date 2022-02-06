@@ -61,15 +61,15 @@ func Gnote(c tb.Context) error {
 		c.Reply(fmt.Sprintf("Tap here to view '%s' in your private chat.", c.Message().Payload), menu)
 		return nil
 	}
-        fmt.Println("1")
+	fmt.Println("1")
 	text, p := ParseString(note["note"].(string), c)
-        fmt.Println("2")
+	fmt.Println("2")
 	if note["file"] != nil {
 		f := GetFile(note["file"].(bson.A), text)
-                fmt.Println("4")
+		fmt.Println("4")
 		f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()})
 	} else {
-                fmt.Println("3")
+		fmt.Println("3")
 		fmt.Println(c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()}))
 
 	}
