@@ -61,16 +61,20 @@ func Gnote(c tb.Context) error {
 		c.Reply(fmt.Sprintf("Tap here to view '%s' in your private chat.", c.Message().Payload), menu)
 		return nil
 	}
-	fmt.Println("1")
+	
 	text, p := ParseString(note["note"].(string), c)
-	fmt.Println("2")
+
 	if note["file"] != nil && len(note["file"].(bson.A)) != 0 && note["file"].(bson.A)[0] != string("") {
 		f := GetFile(note["file"].(bson.A), text)
-		fmt.Println(f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()}))
-		fmt.Println("5")
+		_, err := f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()})
+                if err != nil && strings.Contains(err.Error(), "telegram unknown: Bad Request: can't parse entities") {
+f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
+}}
 	} else {
-		fmt.Println("3")
-		fmt.Println(c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()}))
+		
+		if err := c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()})) ; strings.Contains(err.Error(), "telegram unknown: Bad Request: can't parse entities") {
+c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"}))
+}
 
 	}
 	return nil
