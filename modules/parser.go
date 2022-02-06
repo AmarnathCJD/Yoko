@@ -28,7 +28,7 @@ func ParseMD(c *tb.Message) string {
 	cor := 0
 	for _, x := range c.Entities {
 		offset, length := x.Offset, x.Length
-                fmt.Println(offset, length)
+		fmt.Println(offset, length)
 		if x.Type == tb.EntityBold {
 			text = string(text[:offset+cor]) + "<b>" + string(text[offset+cor:offset+cor+length]) + "</b>" + string(text[offset+cor+length:])
 			cor += 7
