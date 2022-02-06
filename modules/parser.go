@@ -8,14 +8,14 @@ import (
 )
 
 var (
-	HyperLink = regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
-	Bold      = regexp.MustCompile(`\*(.*?)\*`)
-	Italic    = regexp.MustCompile(`\_(.*?)\_`)
-	Strike    = regexp.MustCompile(`\~(.*?)\~`)
-	Underline = regexp.MustCompile(`\_\_(.*?)\_\_`)
-	Spoiler   = regexp.MustCompile(`\|\|(.*?)\|\|`)
-	Lone      = regexp.MustCompile(`\<[^>(.*?)]`)
-        BoldUnderline = regexp.MustCompile(`\<b><u>[^>(.*?)]</u></b>`)
+	HyperLink     = regexp.MustCompile(`\[(.*?)\]\((.*?)\)`)
+	Bold          = regexp.MustCompile(`\*(.*?)\*`)
+	Italic        = regexp.MustCompile(`\_(.*?)\_`)
+	Strike        = regexp.MustCompile(`\~(.*?)\~`)
+	Underline     = regexp.MustCompile(`\_\_(.*?)\_\_`)
+	Spoiler       = regexp.MustCompile(`\|\|(.*?)\|\|`)
+	Lone          = regexp.MustCompile(`\<[^>(.*?)]`)
+	BoldUnderline = regexp.MustCompile(`\<b><u>[^>(.*?)]</u></b>`)
 )
 
 func PARSET(c tb.Context) error {
@@ -82,8 +82,8 @@ func ParseMD(c *tb.Message) string {
 		text = strings.Replace(text, x[0], "<tg-spoiler>"+x[1]+"</tg-spoiler>", -1)
 
 	}
-        for _, x := range BoldUnderline.FindAllStringSubmatch(text, -1) {
-fmt.Println(x)
+	for _, x := range BoldUnderline.FindAllStringSubmatch(text, -1) {
+		fmt.Println(x)
 		text = strings.Replace(text, x[0], "<b><u>"+x[1]+"</u></b>", -1)
 	}
 	for _, x := range Lone.FindAllStringSubmatch(text, -1) {
