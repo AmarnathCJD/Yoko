@@ -108,8 +108,21 @@ func Hash_note(c tb.Context) error {
 		c.Reply(fmt.Sprintf("Tap here to view '%s' in your private chat.", args[1]), menu)
 		return nil
 	}
-	n, p := ParseString(note["note"].(string), c)
-	unparse_message(note["file"], n, c.Message(), p)
+	text, p := ParseString(note["note"].(string), c)
+
+	if note["file"] != nil && len(note["file"].(bson.A)) != 0 && note["file"].(bson.A)[0] != string("") {
+		f := GetFile(note["file"].(bson.A), text)
+		_, err := f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()})
+		if err != nil && strings.Contains(err.Error(), "telegram unknown: Bad Request: can't parse entities") {
+			f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
+		}
+	} else {
+
+		if err := c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()}); strings.Contains(err.Error(), "telegram unknown: Bad Request: can't parse entities") {
+			c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
+		}
+
+	}
 	return nil
 }
 
@@ -211,8 +224,21 @@ func private_start_note(c tb.Context) {
 		c.Reply("This note was not found ~")
 		return
 	}
-	n, p := ParseString(note["note"].(string), c)
-	unparse_message(note["file"], n, c.Message(), p)
+	text, p := ParseString(note["note"].(string), c)
+
+	if note["file"] != nil && len(note["file"].(bson.A)) != 0 && note["file"].(bson.A)[0] != string("") {
+		f := GetFile(note["file"].(bson.A), text)
+		_, err := f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()})
+		if err != nil && strings.Contains(err.Error(), "telegram unknown: Bad Request: can't parse entities") {
+			f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
+		}
+	} else {
+
+		if err := c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()}); strings.Contains(err.Error(), "telegram unknown: Bad Request: can't parse entities") {
+			c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
+		}
+
+	}
 }
 
 func private_startallnotes(c tb.Context) {
