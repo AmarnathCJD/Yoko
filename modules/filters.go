@@ -100,7 +100,7 @@ func FilterEvent(c tb.Context) (error, bool) {
 		pattern := `( |^|[^\w])(?i)` + x + `( |$|[^\w])`
 		if match, _ := regexp.Match(pattern, []byte(c.Text())); match {
 			filter := db.Get_filter(c.Chat().ID, x)
-			text, p := ParseString(filter["note"].(string), c)
+			text, p := ParseString(filter["text"].(string), c)
 
 			if filter["file"] != nil && len(filter["file"].(bson.A)) != 0 && filter["file"].(bson.A)[0] != string("") {
 				f := GetFile(filter["file"].(bson.A), text)
