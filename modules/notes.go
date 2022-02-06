@@ -68,7 +68,7 @@ func Gnote(c tb.Context) error {
 		f := GetFile(note["file"].(bson.A), text)
 		fmt.Println("4")
 		fmt.Println(f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()}))
-                fmt.Println("5")
+		fmt.Println("5")
 	} else {
 		fmt.Println("3")
 		fmt.Println(c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()}))
