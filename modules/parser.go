@@ -82,7 +82,7 @@ func ParseMD(c *tb.Message) string {
 
 	}
         for _, x := range Lone.FindAllStringSubmatch(text, -1) {
-		fmt Println(x)
+		fmt.Println(x)
 	}
 	fmt.Println(text)
 	return text
