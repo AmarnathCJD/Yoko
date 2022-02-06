@@ -14,13 +14,12 @@ var (
 	Strike        = regexp.MustCompile(`\~(.*?)\~`)
 	Underline     = regexp.MustCompile(`\_\_(.*?)\_\_`)
 	Spoiler       = regexp.MustCompile(`\|\|(.*?)\|\|`)
-	Lone          = regexp.MustCompile(`\<[^>(.*?)]`)
-	BoldUnderline = regexp.MustCompile(`\<b><u>[^>(.*?)]</u></b>`)
+        Code = regexp.MustCompile("\`(.*?)\`")
 )
 
 func PARSET(c tb.Context) error {
 
-	return c.Reply(ParseMD(c.Message()))
+	return c.Reply(ParseMD(c.Message().ReplyTo))
 
 }
 
@@ -82,12 +81,8 @@ func ParseMD(c *tb.Message) string {
 		text = strings.Replace(text, x[0], "<tg-spoiler>"+x[1]+"</tg-spoiler>", -1)
 
 	}
-	for _, x := range BoldUnderline.FindAllStringSubmatch(text, -1) {
-		fmt.Println(x)
-		text = strings.Replace(text, x[0], "<b><u>"+x[1]+"</u></b>", -1)
-	}
-	for _, x := range Lone.FindAllStringSubmatch(text, -1) {
-		fmt.Println(x)
+	for _, x := range Code.FindAllStringSubmatch(text, -1) {
+		text = strings.Replace(text, x[0], "<code>"+x[1]+"</code>", -1)
 	}
 	fmt.Println(text)
 	return text
