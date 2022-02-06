@@ -80,6 +80,9 @@ func ParseMD(c *tb.Message) string {
 		text = strings.Replace(text, x[0], "<tg-spoiler>"+x[1]+"</tg-spoiler>", -1)
 
 	}
+        text = strings.ReplaceAll(text, "<", "&lt;")
+        text = strings.ReplaceAll(text, ">", "&gt;")
+        text = strings.ReplaceAll(text, "&", "&amp;")
 	fmt.Println(text)
 	return text
 
