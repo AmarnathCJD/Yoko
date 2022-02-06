@@ -63,7 +63,7 @@ func Gnote(c tb.Context) error {
 	}
 
 	text, p := ParseString(note["note"].(string), c)
-        text, btns := button_parser(text)
+	text, btns := button_parser(text)
 	if note["file"] != nil && len(note["file"].(bson.A)) != 0 && note["file"].(bson.A)[0] != string("") {
 		f := GetFile(note["file"].(bson.A), text)
 		_, err := f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()})
@@ -111,7 +111,7 @@ func Hash_note(c tb.Context) error {
 		return nil
 	}
 	text, p := ParseString(note["note"].(string), c)
-text, btns := button_parser(text)
+	text, btns := button_parser(text)
 	if note["file"] != nil && len(note["file"].(bson.A)) != 0 && note["file"].(bson.A)[0] != string("") {
 		f := GetFile(note["file"].(bson.A), text)
 		_, err := f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()})
