@@ -50,10 +50,10 @@ func ParseMD(c *tb.Message) string {
 		}
 	}
 	for _, x := range HyperLink.FindAllStringSubmatch(text, -1) {
-			if strings.Contains(x[2], "buttonurl") {
-				continue
-			}
-			text = strings.Replace(text, x[0], fmt.Sprintf("<a href='%s'>%s</a>", x[2], x[1]), -1)
+		if strings.Contains(x[2], "buttonurl") {
+			continue
+		}
+		text = strings.Replace(text, x[0], fmt.Sprintf("<a href='%s'>%s</a>", x[2], x[1]), -1)
 	}
 	for _, x := range Bold.FindAllStringSubmatch(text, -1) {
 		text = strings.Replace(text, x[0], "<b>"+x[1]+"</b>", -1)
