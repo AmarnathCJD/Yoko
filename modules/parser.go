@@ -15,6 +15,7 @@ var (
 	Underline = regexp.MustCompile(`\_\_(.*?)\_\_`)
 	Spoiler   = regexp.MustCompile(`\|\|(.*?)\|\|`)
 	Lone      = regexp.MustCompile(`\<[^>(.*?)]`)
+        BoldUnderline = regexp.MustCompile(`\<b><u>[^>(.*?)]</u></b>`)
 )
 
 func PARSET(c tb.Context) error {
@@ -44,7 +45,6 @@ func ParseMD(c *tb.Message) string {
 		} else if x.Type == tb.EntityStrikethrough {
 			text = string(text[:offset+cor]) + "<s>" + string(text[offset+cor:offset+cor+length]) + "</s>" + string(text[offset+cor+length:])
 			cor += 7
-
 		} else if x.Type == "spoiler" {
 			text = string(text[:offset+cor]) + "<tg-spoiler>" + string(text[offset+cor:offset+cor+length]) + "</tg-spoiler>" + string(text[offset+cor+length:])
 			cor += 25
@@ -81,6 +81,10 @@ func ParseMD(c *tb.Message) string {
 	for _, x := range Spoiler.FindAllStringSubmatch(text, -1) {
 		text = strings.Replace(text, x[0], "<tg-spoiler>"+x[1]+"</tg-spoiler>", -1)
 
+	}
+        for _, x := range BoldUnderline.FindAllStringSubmatch(text, -1) {
+fmt.Println(x)
+		text = strings.Replace(text, x[0], "<b><u>"+x[1]+"</u></b>", -1)
 	}
 	for _, x := range Lone.FindAllStringSubmatch(text, -1) {
 		fmt.Println(x)
