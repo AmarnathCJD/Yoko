@@ -12,7 +12,7 @@ var (
 	Bold      = regexp.MustCompile(`\*(.*?)\*`)
 	Italic    = regexp.MustCompile(`\_(.*?)\_`)
 	Strike    = regexp.MustCompile(`\~(.*?)\~`)
-	Underline = regexp.MustCompile(`\_\_(.*?)\_\_`)
+	Underline = regexp.MustCompile(`•(.*?)•`)
 	Spoiler   = regexp.MustCompile(`\|\|(.*?)\|\|`)
 	Code      = regexp.MustCompile("`(.*?)`")
 )
