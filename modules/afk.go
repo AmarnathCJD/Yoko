@@ -11,7 +11,7 @@ import (
 )
 
 func AFK(c tb.Context) bool {
-	if c.Sender() == nil || c.Media() != nil {
+	if c.Sender() == nil {
 		return false
 	}
 	prefix := strings.SplitN(c.Text(), " ", 2)
