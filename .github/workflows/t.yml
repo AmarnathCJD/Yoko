@@ -11,7 +11,7 @@ jobs:
         with:
           find: "gopkg.in/tucnak/telebot.v3"
           replace: "gopkg.in/telebot.v3"
-      - name: Create Pull Request
+      - name: Hq
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: 'RoseLoverX: auto fixes'
