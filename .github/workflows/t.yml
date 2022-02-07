@@ -1,22 +1,18 @@
-  
-name: Fix
-on: push
+name: My Workflow
+on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Find and Replace
-        uses: jacobtomlinson/gha-find-replace@master
+        uses: jacobtomlinson/gha-find-replace@v2
         with:
           find: "gopkg.in/tucnak/telebot.v3"
           replace: "gopkg.in/telebot.v3"
-      - name: Hq
-        uses: stefanzweifel/git-auto-commit-action@v4
+          regex: false
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0
         with:
-          commit_message: 'RoseLoverX: auto fixes'
-          commit_options: '--no-verify'
-          repository: .
-          commit_user_name: AmarnathCjd
-          commit_user_email: 72609355+AmarnathCjd@users.noreply.github.com
-          commit_author: AmarnathCjd <72609355+AmarnathCjd+@users.noreply.github.com>
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
