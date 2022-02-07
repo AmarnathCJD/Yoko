@@ -17,6 +17,7 @@ jobs:
 
       - name: Lint
         run: |
+          go get gopkg.in/telebot.v3
           gofmt -l -s -w .
           go vet main.go
           go mod tidy
