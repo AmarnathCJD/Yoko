@@ -8,7 +8,7 @@ import (
 	"os/exec"
 	"strings"
 
-	tb "gopkg.in/tucnak/telebot.v3"
+	tb "gopkg.in/telebot.v3"
 )
 
 func Exec(c tb.Context) error {
