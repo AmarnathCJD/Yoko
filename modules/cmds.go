@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/amarnathcjd/yoko/bot"
-	tb "gopkg.in/tucnak/telebot.v3"
+	tb "gopkg.in/telebot.v3"
 )
 
 type HANDLE struct {
