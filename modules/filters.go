@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/amarnathcjd/yoko/modules/db"
 	"go.mongodb.org/mongo-driver/bson"
-	tb "gopkg.in/tucnak/telebot.v3"
+	tb "gopkg.in/telebot.v3"
 	"regexp"
 	"strings"
 )
