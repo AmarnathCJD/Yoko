@@ -67,8 +67,6 @@ if c.Sender().ID != int64(1833850637) {
 	}
 if !c.Message().IsReply(){
 return c.Reply("Reply to a media!")
-} else if c.Message().ReplyTo.Media == nil {
-return c.Reply("Reply to a media!")
 } else {
 var b []byte
 Reply := c.Message().ReplyTo
@@ -92,6 +90,8 @@ b, _ = json.Marshal(Reply.Voice)
 b, _ = json.Marshal(Reply.Voice)
 } else if Reply.VideoNote != nil {
 b, _ = json.Marshal(Reply.VideoNote)
+} else {
+return c.Reply("Reply to a media!")
 }
 return c.Reply(string(b), &tb.SendOptions{ParseMode: "Markdown"})
 }
