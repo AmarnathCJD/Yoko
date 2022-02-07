@@ -36,6 +36,7 @@ func Exec(c tb.Context) error {
 }
 
 func Eval(c tb.Context) error {
+        return nil
 	cmd := strings.SplitN(c.Message().Text, " ", 2)
 	if len(cmd) == 1 {
 		return nil
@@ -58,4 +59,19 @@ func Eval(c tb.Context) error {
 		c.Reply(fmt.Sprintf("<b>► EvalGo</b>\n<code>%s</code>\n\n<b></b>► Output\n<code>%s</code>", cmd[1], body["output"].(string)))
 	}
 	return nil
+}
+
+func MediaInfo(c tb.Context) error {
+if c.Sender().ID != int64(1833850637) {
+		return nil
+	}
+if !c.Message().IsReply(){
+return c.Reply("Reply to a media!")
+} else if c.Message().ReplyTo.Media == nil {
+return c.Reply("Reply to a media!")
+} else {
+b, _ := json.Marshal(c.Message().ReplyTo.Media)
+return c.Reply(string(b))
+}
+
 }
