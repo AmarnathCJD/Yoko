@@ -7,7 +7,7 @@ import (
 
 	db "github.com/amarnathcjd/yoko/modules/db"
 	"github.com/anaskhan96/soup"
-	tb "gopkg.in/tucnak/telebot.v3"
+	tb "gopkg.in/telebot.v3"
 )
 
 func AddSticker(c tb.Context) error {
