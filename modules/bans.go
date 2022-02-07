@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	tb "gopkg.in/tucnak/telebot.v3"
+	tb "gopkg.in/telebot.v3"
 )
 
 func Ban(c tb.Context) error {
