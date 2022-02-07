@@ -1,0 +1,22 @@
+  
+name: Fix
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Find and Replace
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "gopkg.in/tucnak/telebot.v3"
+          replace: "gopkg.in/telebot.v3"
+      - name: Create Pull Request
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: 'RoseLoverX: auto fixes'
+          commit_options: '--no-verify'
+          repository: .
+          commit_user_name: AmarnathCjd
+          commit_user_email: 72609355+AmarnathCjd@users.noreply.github.com
+          commit_author: AmarnathCjd <72609355+AmarnathCjd+@users.noreply.github.com>
