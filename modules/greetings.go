@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/amarnathcjd/yoko/modules/db"
-	tb "gopkg.in/tucnak/telebot.v3"
+	tb "gopkg.in/telebot.v3"
 )
 
 func Welcome_set(c tb.Context) error {
