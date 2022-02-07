@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	tb "gopkg.in/tucnak/telebot.v3"
+	tb "gopkg.in/telebot.v3"
 )
 
 func pin_message(c tb.Context) error {

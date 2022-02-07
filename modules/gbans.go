@@ -1,6 +1,6 @@
 package modules
 
-import tb "gopkg.in/tucnak/telebot.v3"
+import tb "gopkg.in/telebot.v3"
 
 func Gban(c tb.Context) error {
 	if !IsBotAdmin(c.Sender().ID) {

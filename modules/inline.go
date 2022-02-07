@@ -11,7 +11,7 @@ import (
 	googlesearch "github.com/rocketlaunchr/google-search"
 	"google.golang.org/api/option"
 	"google.golang.org/api/youtube/v3"
-	tb "gopkg.in/tucnak/telebot.v3"
+	tb "gopkg.in/telebot.v3"
 )
 
 var imdb_btn = sel.Data("imdb_in", "imdb_inline")

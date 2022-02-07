@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/anaskhan96/soup"
-	tb "gopkg.in/tucnak/telebot.v3"
+	tb "gopkg.in/telebot.v3"
 )
 
 var SPAM = make(map[int64]int64)

@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	db "github.com/amarnathcjd/yoko/modules/db"
-	tb "gopkg.in/tucnak/telebot.v3"
+	tb "gopkg.in/telebot.v3"
 )
 
 var unwarn_btn = sel.Data("Remove warn (admin only)", "remove_user_warning")

@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/amarnathcjd/yoko/modules/db"
-	tb "gopkg.in/tucnak/telebot.v3"
+	tb "gopkg.in/telebot.v3"
 )
 
 func Chat_bot(c tb.Context) error {

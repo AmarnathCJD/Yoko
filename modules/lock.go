@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	db "github.com/amarnathcjd/yoko/modules/db"
-	tb "gopkg.in/tucnak/telebot.v3"
+	tb "gopkg.in/telebot.v3"
 )
 
 var LOCK_TYPES = []string{"all", "album", "anonchannel", "audio", "bot", "button", "command", "comment", "contact", "document", "email", "emojigame", "forward", "forwardbot", "forwardchannel", "forwarduser", "game", "gif", "inline", "invitelink", "location", "phone", "photo", "poll", "rtl", "sticker", "text", "url", "video", "videonote", "voice"}

@@ -17,7 +17,7 @@ import (
 	tg "github.com/TechMinerApps/telegraph"
 	"github.com/anaskhan96/soup"
 	"go.mongodb.org/mongo-driver/bson"
-	tb "gopkg.in/tucnak/telebot.v3"
+	tb "gopkg.in/telebot.v3"
 )
 
 var myClient = &http.Client{Timeout: 10 * time.Second}

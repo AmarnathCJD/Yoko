@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/amarnathcjd/yoko/modules/db"
-	tb "gopkg.in/tucnak/telebot.v3"
+	tb "gopkg.in/telebot.v3"
 )
 
 func AFK(c tb.Context) bool {
