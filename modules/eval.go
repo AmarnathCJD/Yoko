@@ -93,7 +93,7 @@ func MediaInfo(c tb.Context) error {
 		} else {
 			return c.Reply("Reply to a media!")
 		}
-		return c.Reply(string(b), &tb.SendOptions{ParseMode: "Markdown"})
+		return c.Reply("<code>" + string(b) + "</code>")
 	}
 
 }
