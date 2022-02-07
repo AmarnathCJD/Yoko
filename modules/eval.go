@@ -70,8 +70,30 @@ return c.Reply("Reply to a media!")
 } else if c.Message().ReplyTo.Media == nil {
 return c.Reply("Reply to a media!")
 } else {
-b, _ := json.Marshal(c.Message().ReplyTo.Media)
-return c.Reply(string(b))
+var b []byte
+Reply := c.Message().ReplyTo
+if Reply.Audio != nil {
+b, _ = json.Marshal(Reply.Audio)
+} else if Reply.Document != nil {
+b, _ = json.Marshal(Reply.Document)
+} else if Reply.Animation != nil {
+b, _ = json.Marshal(Reply.Animation)
+} else if Reply.Video != nil {
+b, _ = json.Marshal(Reply.Video
+} else if Reply.Photo != nil {
+b, _ = json.Marshal(Reply.Photo)
+} else if Reply.Sticker != nil {
+b, _ = json.Marshal(Reply.Sticker)
+} else if Reply.Voice != nil {
+b, _ = json.Marshal(Reply.Voice)
+} else if Reply.Contact != nil {
+b, _ = json.Marshal(Reply.Voice)
+} else if Reply.Location != nil {
+b, _ = json.Marshal(Reply.Voice)
+} else if Reply.VideoNote != nil {
+b, _ = json.Marshal(Reply.VideoNote)
+}
+return c.Reply(string(b), &tb.SendOptions{ParseMode: "Markdown"})
 }
 
 }
