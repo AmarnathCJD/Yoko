@@ -218,6 +218,6 @@ func RsStripe(c tb.Context) error {
 func USDStripe(c tb.Context) error {
 	return c.Send(
         "Input your new name:",
-        tele.Placeholder("John Doe"),
+        tb.Placeholder("John Doe"),
     )
 }
