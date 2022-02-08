@@ -32,7 +32,7 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["tr"] = HANDLE{FUNC: Tr2}
 	HANDLERS["chatinfo"] = HANDLE{FUNC: ChatInfo}
 	HANDLERS["rs"] = HANDLE{FUNC: RsStripe}
-	HANDLERS["st"] = HANDLE{FUNC: USDStripe}
+	HANDLERS["sm"] = HANDLE{FUNC: USDStripe}
 	// start.go
 	HANDLERS["start"] = HANDLE{FUNC: Start}
 	HANDLERS["help"] = HANDLE{FUNC: Help_Menu}
@@ -216,24 +216,7 @@ func RsStripe(c tb.Context) error {
 }
 
 func USDStripe(c tb.Context) error {
-	d := strings.TrimSpace(c.Message().Payload)
-	cc, year, month, cvc := "", "", "", ""
-	for i, x := range strings.SplitN(d, "|", -1) {
-		if i == 0 {
-			cc = x
-		} else if i == 1 {
-			month = x
-		} else if i == 2 {
-			year = x
-		} else if i == 3 {
-			cvc = x
-		}
-	}
-	for _, x := range []string{cc, year, month, cvc} {
-		if x == string("") {
-			c.Reply("Invalid format, please send as <code>/usd cc|mm|yy|cvv</code>")
-			return nil
-		}
-	}
-	return c.Reply(StripeUSD(cc, year, month, cvc, c))
-}
+	return c.Send(
+        "Input your new name:",
+        tele.Placeholder("John Doe"),
+    )
