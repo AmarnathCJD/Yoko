@@ -12,6 +12,7 @@ import (
 
 func AddSticker(c tb.Context) error {
 	pack, count, name := db.Get_user_pack(c.Sender().ID)
+        fmt.Println(pack, count, name)
 	Emoji := "😙"
 	if c.Message().Payload != string("") {
 		Emoji = c.Message().Payload
