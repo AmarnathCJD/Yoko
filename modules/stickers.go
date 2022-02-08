@@ -31,7 +31,7 @@ func AddSticker(c tb.Context) error {
 		fmt.Println("Video")
 	}
 	if !pack {
-		Name := fmt.Sprintf("d%d_%d_by_missmikabot", c.Sender().ID, 1)
+		Name := fmt.Sprintf("s%d_%d_by_missmikabot", c.Sender().ID, 1)
 		err := c.Bot().CreateStickerSet(c.Sender(), tb.StickerSet{Name: Name, Title: fmt.Sprintf("%s's kang pack", c.Sender().FirstName), Stickers: []tb.Sticker{*c.Message().Sticker}, PNG: &c.Message().ReplyTo.Sticker.File, Emojis: Emoji})
 		if err == nil {
 			db.Add_sticker(c.Sender().ID, Name)
