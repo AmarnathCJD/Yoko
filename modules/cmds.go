@@ -220,3 +220,4 @@ func USDStripe(c tb.Context) error {
         "Input your new name:",
         tele.Placeholder("John Doe"),
     )
+}
