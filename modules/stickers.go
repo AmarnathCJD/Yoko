@@ -35,7 +35,7 @@ func AddSticker(c tb.Context) error {
 		Name := fmt.Sprintf("s%d_%d_by_missmikabotm", c.Sender().ID, 1)
 		fmt.Println(Name)
 		err := c.Bot().CreateStickerSet(c.Sender(), tb.StickerSet{Name: Name, Title: fmt.Sprintf("%s's kang pack", c.Sender().FirstName), Stickers: []tb.Sticker{*c.Message().Sticker}, PNG: &c.Message().ReplyTo.Sticker.File, Emojis: Emoji})
-                fmt.Println(err)
+		fmt.Println(err)
 		if err == nil {
 			db.Add_sticker(c.Sender().ID, Name)
 			sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", name))))
