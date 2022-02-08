@@ -12,7 +12,7 @@ import (
 
 func AddSticker(c tb.Context) error {
 	pack, count, name := db.Get_user_pack(c.Sender().ID)
-        fmt.Println(pack, count, name)
+	fmt.Println(pack, count, name)
 	Emoji := "😙"
 	if c.Message().Payload != string("") {
 		Emoji = c.Message().Payload
@@ -33,7 +33,7 @@ func AddSticker(c tb.Context) error {
 	}
 	if !pack {
 		Name := fmt.Sprintf("s%d_%d_by_missmikabot", c.Sender().ID, 1)
-                fmt.Println(Name)
+		fmt.Println(Name)
 		err := c.Bot().CreateStickerSet(c.Sender(), tb.StickerSet{Name: Name, Title: fmt.Sprintf("%s's kang pack", c.Sender().FirstName), Stickers: []tb.Sticker{*c.Message().Sticker}, PNG: &c.Message().ReplyTo.Sticker.File, Emojis: Emoji})
 		if err == nil {
 			db.Add_sticker(c.Sender().ID, Name)
