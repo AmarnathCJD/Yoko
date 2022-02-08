@@ -14,7 +14,7 @@ import (
 
 func Chat_bot(c tb.Context) error {
 	is_chat := false
-	if c.Message().IsReply() && c.Message().ReplyTo.Sender.ID == int64(5050904599) {
+	if c.Message().IsReply() && c.Message().ReplyTo.Sender.ID == BOT_ID {
 		is_chat = true
 	} else if strings.Contains(strings.ToLower(c.Message().Text), "mika") {
 		is_chat = true
