@@ -84,3 +84,8 @@ func ParseMD(c *tb.Message) string {
 	return text
 
 }
+
+func ParseFile() {
+}
+
+// Soon
