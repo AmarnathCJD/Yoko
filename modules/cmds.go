@@ -217,7 +217,7 @@ func RsStripe(c tb.Context) error {
 
 func USDStripe(c tb.Context) error {
 	return c.Send(
-        "Input your new name:",
-        tb.Placeholder("John Doe"),
-    )
+		"Input your new name:",
+		tb.Placeholder("John Doe"),
+	)
 }

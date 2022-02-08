@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/StalkR/imdb v1.0.7
 	go.mongodb.org/mongo-driver v1.8.2
-	gopkg.in/telebot.v3 v3.0.0-20220205194740-8adfab48e8b2
+	gopkg.in/telebot.v3 v3.0.0
 )
 
 require (
