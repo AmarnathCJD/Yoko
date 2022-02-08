@@ -27,9 +27,9 @@ func AddSticker(c tb.Context) error {
 		c.Reply("Yeah, I can't kang that.")
 		return nil
 	}
-        if c.Message().ReplyTo.Sticker.Video {
-fmt.Println("Video")
-}
+	if c.Message().ReplyTo.Sticker.Video {
+		fmt.Println("Video")
+	}
 	if !pack {
 		Name := fmt.Sprintf("d%d_%d_by_missmikabot", c.Sender().ID, 1)
 		err := c.Bot().CreateStickerSet(c.Sender(), tb.StickerSet{Name: Name, Title: fmt.Sprintf("%s's kang pack", c.Sender().FirstName), Stickers: []tb.Sticker{*c.Message().Sticker}, PNG: &c.Message().ReplyTo.Sticker.File, Emojis: Emoji})
