@@ -82,7 +82,7 @@ func Gnote(c tb.Context) error {
 
 func OnTextHandler(c tb.Context) error {
 	FLOOD_EV(c)
-        Chat_bot(c)
+	Chat_bot(c)
 	if err, ok := FilterEvent(c); ok {
 		return err
 	}
@@ -94,7 +94,7 @@ func OnTextHandler(c tb.Context) error {
 	if afk := AFK(c); afk {
 		return nil
 	}
-	
+
 	return nil
 }
 
