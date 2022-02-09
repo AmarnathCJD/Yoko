@@ -9,9 +9,14 @@ import (
 )
 
 func main() {
-	file, _ := os.OpenFile("logs.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-	log.Print("Bot started")
-	log.SetOutput(file)
+	f, err := os.OpenFile("log.txt", os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
+if err != nil {
+    log.Print("error opening file: %v", err)
+}
+defer f.Close()
+
+log.SetOutput(f)
+log.Print("Bot Started")
 	mod.RegisterHandlers()
 	// logging
 	bot.Bot.Start()
