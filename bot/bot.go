@@ -12,7 +12,7 @@ func BotInit() tb.Bot {
 		Token:       "5181620060:AAF6FCOW9M6tbUPPtLs_b2UkXKGz7ksaggo",
 		Poller:      &tb.LongPoller{Timeout: 10, AllowedUpdates: []string{"message", "chat_member", "inline_query", "callback_query"}},
 		Synchronous: false,
-		Verbose:     false,
+		Verbose:     true,
 		ParseMode:   "HTML",
 		Offline:     false,
 		OnError: func(e error, c tb.Context) {
