@@ -9,11 +9,10 @@ import (
 )
 
 func main() {
+        file, _ := os.OpenFile("logs.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+        log.Print("Bot started")
+	log.SetOutput(file)
 	mod.RegisterHandlers()
 	// logging
-	file, _ := os.OpenFile("logs.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-	log.SetOutput(file)
-
-	log.Print("Bot started")
 	bot.Bot.Start()
 }
