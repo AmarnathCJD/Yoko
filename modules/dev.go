@@ -99,7 +99,7 @@ func RemoveDev(c tb.Context) error {
 }
 
 func Logs(c tb.Context) error {
-	if !IsDev(c.Sender().ID) {
+	if !IsBotAdmin(c.Sender().ID) {
 		return nil
 	} else {
 		return c.Reply(&tb.Document{
