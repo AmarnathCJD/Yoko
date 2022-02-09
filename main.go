@@ -11,7 +11,7 @@ import (
 func main() {
 	f, err := os.OpenFile("log.txt", os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
 if err != nil {
-    log.Print("error opening file: %v", err)
+    log.Print("error opening file: Hi")
 }
 defer f.Close()
 
