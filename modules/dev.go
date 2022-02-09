@@ -103,9 +103,9 @@ func Logs(c tb.Context) error {
 		return nil
 	} else {
 		return c.Reply(&tb.Document{
-			File:     tb.File{FileLocal: "logs.txt"},
-			Caption:  "bot logs",
-			FileName: "logs.txt",
+			File:     tb.File{FileLocal: "log.txt"},
+			Caption:  time.Now().String(),
+			FileName: "log.txt",
 		})
 	}
 }
