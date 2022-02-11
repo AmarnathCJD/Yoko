@@ -566,6 +566,7 @@ func Music(c tb.Context) error {
 	ioutil.WriteFile("t.mp3", b, 0666)
 	stream.Close()
 	check(err)
+        thumb := &tb.Photo{File: tb.FromURL(vid.Thumbnails[0].URL)}
 	duration, _ := time.ParseDuration(vid.Duration.String())
 	c.Reply(&tb.Audio{
 		File:      tb.File{FileLocal: "t.mp3"},
@@ -573,6 +574,7 @@ func Music(c tb.Context) error {
 		Performer: vid.Author,
 		FileName:  vid.Title,
 		Duration:  int(duration.Seconds()),
+                Thumb: thumb,
 	})
 	return nil
 }
