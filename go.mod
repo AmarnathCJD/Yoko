@@ -50,4 +50,5 @@ require (
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 	google.golang.org/api v0.68.0
 	gopkg.in/telebot.v3 v3.0.0
+        github.com/rocketlaunchr/google-search v1.1.4
 )
