@@ -16,8 +16,8 @@ import (
 
 var imdb_btn = sel.Data("imdb_in", "imdb_inline")
 
-func inline_markup(query string) *tb.InlineKeyboardMarkup {
-	btns := &tb.InlineKeyboardMarkup{}
+func inline_markup(query string) *tb.ReplyMarkup {
+	btns := &tb.ReplyMarkup{}
 	btns.InlineKeyboard = [][]tb.InlineButton{{tb.InlineButton{
 		Text:            "Search again",
 		InlineQueryChat: query,
@@ -48,7 +48,7 @@ func InlineQueryHandler(c tb.Context) error {
 
 func InlineMainMenu(c tb.Context) {
 	text := "Inline Query Help Menu"
-	btns := &tb.InlineKeyboardMarkup{}
+	btns := &tb.ReplyMarkup{}
 	btns.InlineKeyboard = [][]tb.InlineButton{{tb.InlineButton{
 		Text:            "Google Search",
 		InlineQueryChat: "google ",
@@ -134,7 +134,7 @@ func imdb_inline(c tb.Context) {
 		if qb >= 10 {
 			break
 		}
-		btns := &tb.InlineKeyboardMarkup{}
+		btns := &tb.ReplyMarkup{}
 		btns.InlineKeyboard = [][]tb.InlineButton{{tb.InlineButton{Text: result.Name, Data: fmt.Sprintf("imdb_inline_%d", &result.ID), Unique: "imdb_inline"}}, {tb.InlineButton{
 			Text:            "Search again",
 			InlineQueryChat: "imdb ",
