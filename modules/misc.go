@@ -409,13 +409,13 @@ func Paste(c tb.Context) error {
 		"content": text,
 	})
 	responseBody := bytes.NewBuffer(postBody)
-	resp, err := http.Post("https://neko.roseloverx.in/api/documents", "application/json", responseBody)
+	resp, err := http.Post("https://warm-anchorage-15807.herokuapp.com/api/documents", "application/json", responseBody)
 	check(err)
 	defer resp.Body.Close()
 	var body mapType
 	json.NewDecoder(resp.Body).Decode(&body)
-	sel.Inline(sel.Row(sel.URL("View Paste", fmt.Sprintf("https://neko.roseloverx.in/%s", body["result"].(map[string]interface{})["key"].(string)))))
-	c.Reply(fmt.Sprintf("Pasted to <b><a href='https://neko.roseloverx.in/%s'>NekoBin</a></b>.", body["result"].(map[string]interface{})["key"].(string)), &tb.SendOptions{DisableWebPagePreview: true, ReplyMarkup: sel})
+	sel.Inline(sel.Row(sel.URL("View Paste", fmt.Sprintf("https://warm-anchorage-15807.herokuapp.com/%s", body["result"].(map[string]interface{})["key"].(string)))))
+	c.Reply(fmt.Sprintf("Pasted to <b><a href='https://warm-anchorage-15807.herokuapp.com/%s'>NekoBin</a></b>.", body["result"].(map[string]interface{})["key"].(string)), &tb.SendOptions{DisableWebPagePreview: true, ReplyMarkup: sel})
 	return nil
 }
 
