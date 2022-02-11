@@ -554,7 +554,7 @@ func Tr2(c tb.Context) error {
 
 func Music(c tb.Context) error {
 	r, _ := SearchYT(c.Message().Payload, 2)
-        fmt.Println(r.Items)
+	fmt.Println(r.Items)
 	ID := r.Items[0].Id.VideoId
 	y := yt.Client{HTTPClient: myClient}
 	vid, err := y.GetVideo("https://www.youtube.com/watch?v=" + ID)
