@@ -16,6 +16,7 @@ import (
 	"github.com/StalkR/imdb"
 	tg "github.com/TechMinerApps/telegraph"
 	"github.com/anaskhan96/soup"
+	yt "github.com/kkdai/youtube/v2"
 	"go.mongodb.org/mongo-driver/bson"
 	tb "gopkg.in/telebot.v3"
 )
@@ -548,5 +549,26 @@ func Tr2(c tb.Context) error {
 	x := soup.HTMLParse(string(bodyText))
 	g := x.Find("span", "id", "tw-answ-target-text")
 	c.Reply(fmt.Sprint(g.Text()))
+	return nil
+}
+
+func Music(c tb.Context) error {
+	r, _ := SearchYT(c.Message().Payload, 1)
+	ID := r.Items[0].Id.VideoId
+	y := yt.Client{HTTPClient: myClient}
+	vid, err := y.GetVideo("https://www.youtube.com/watch?v=" + ID)
+	for _, x := range vid.Formats {
+		fmt.Println(x.Quality, x.QualityLabel, x.AudioQuality)
+	}
+	format := vid.Formats.FindByQuality("tiny")
+	stream, _, _ := y.GetStream(vid, format)
+	b, _ := ioutil.ReadAll(stream)
+	ioutil.WriteFile("t.mp3", b, 0666)
+	stream.Close()
+	check(err)
+	c.Reply(&tb.Document{
+		File:     tb.File{FileLocal: "t.mp3"},
+		FileName: "song.mp3",
+	})
 	return nil
 }

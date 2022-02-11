@@ -1,6 +1,7 @@
 package modules
 
 import (
+	"context"
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
@@ -16,6 +17,8 @@ import (
 	"github.com/amarnathcjd/yoko/bot"
 	"github.com/amarnathcjd/yoko/modules/db"
 	"go.mongodb.org/mongo-driver/bson"
+	"google.golang.org/api/option"
+	youtube "google.golang.org/api/youtube/v3"
 	tb "gopkg.in/telebot.v3"
 )
 
@@ -96,7 +99,6 @@ func get_file(m *tb.Message) (string, string) {
 
 func unparse_message(file interface{}, note string, m *tb.Message, p bool) {
 	text, buttons := button_parser(note)
-	fmt.Println("H8")
 	if file != nil && len(file.(map[string]interface{})) != 0 {
 		id, f := file.(bson.A)[0].(string), file.(bson.A)[1].(string)
 		if f == "document" {
@@ -589,4 +591,10 @@ func AddPayload(c tb.Context) tb.Context {
 		return s
 	}
 	return c
+}
+
+func SearchYT(q string, limit int64) (*youtube.SearchListResponse, error) {
+	client, _ := youtube.NewService(context.TODO(), option.WithAPIKey(YOUTUBE_API_KEY))
+	call := client.Search.List([]string{"snippet"}).Q(q).MaxResults(limit)
+	return call.Do()
 }
