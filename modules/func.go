@@ -559,12 +559,21 @@ func GetFile(file bson.A, caption string) tb.Sendable {
 	}
 }
 
-var cmdRx = regexp.MustCompile(`^(!\w+)(@(\w+))?(\s|$)(.+)?`)
+var (
+cmdRx_!   = regexp.MustCompile(`^(!\w+)(@(\w+))?(\s|$)(.+)?`)
+cmdRx_? = regexp.MustCompile(`^(\?\w+)(@(\w+))?(\s|$)(.+)?`)
+)
 
 func AddPayload(c tb.Context) tb.Context {
-	match := cmdRx.FindAllStringSubmatch(c.Text(), -1)
+        var match [][]string
+        if strings.HasPrefix(c.Text(), "!") {
+match = cmdRx_!.FindAllStringSubmatch(c.Text(), -1)
+} else if strings.HasPrefix(c.Text(), "?") {
+match = cmdRx_?.FindAllStringSubmatch(c.Text(), -1)
+}
+	
 	if match != nil {
-		_, botName := match[0][1], match[0][3]
+		botName := match[0][3]
 		if botName != "" && !strings.EqualFold(b.Me.Username, botName) {
 			return nil
 		}
