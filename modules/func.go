@@ -560,18 +560,18 @@ func GetFile(file bson.A, caption string) tb.Sendable {
 }
 
 var (
-cmdRx_exclam  = regexp.MustCompile(`^(!\w+)(@(\w+))?(\s|$)(.+)?`)
-cmdRx_quest = regexp.MustCompile(`^(\?\w+)(@(\w+))?(\s|$)(.+)?`)
+	cmdRx_exclam = regexp.MustCompile(`^(!\w+)(@(\w+))?(\s|$)(.+)?`)
+	cmdRx_quest  = regexp.MustCompile(`^(\?\w+)(@(\w+))?(\s|$)(.+)?`)
 )
 
 func AddPayload(c tb.Context) tb.Context {
-        var match [][]string
-        if strings.HasPrefix(c.Text(), "!") {
-match = cmdRx_exclam.FindAllStringSubmatch(c.Text(), -1)
-} else if strings.HasPrefix(c.Text(), "?") {
-match = cmdRx_quest.FindAllStringSubmatch(c.Text(), -1)
-}
-	
+	var match [][]string
+	if strings.HasPrefix(c.Text(), "!") {
+		match = cmdRx_exclam.FindAllStringSubmatch(c.Text(), -1)
+	} else if strings.HasPrefix(c.Text(), "?") {
+		match = cmdRx_quest.FindAllStringSubmatch(c.Text(), -1)
+	}
+
 	if match != nil {
 		botName := match[0][3]
 		if botName != "" && !strings.EqualFold(b.Me.Username, botName) {
