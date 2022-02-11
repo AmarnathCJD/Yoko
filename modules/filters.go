@@ -2,11 +2,12 @@ package modules
 
 import (
 	"fmt"
+	"regexp"
+	"strings"
+
 	"github.com/amarnathcjd/yoko/modules/db"
 	"go.mongodb.org/mongo-driver/bson"
 	tb "gopkg.in/telebot.v3"
-	"regexp"
-	"strings"
 )
 
 var (
@@ -91,10 +92,10 @@ func CancelDALL(c tb.Context) error {
 	return nil
 }
 
-func FilterEvent(c tb.Context) (error, bool) {
+func FilterEvent(c tb.Context) (bool, error) {
 	f := db.Get_filters(c.Chat().ID)
 	if len(f) == 0 {
-		return nil, false
+		return false, nil
 	}
 	for _, x := range f {
 		pattern := `( |^|[^\w])(?i)` + x + `( |$|[^\w])`
@@ -107,7 +108,7 @@ func FilterEvent(c tb.Context) (error, bool) {
 				_, err := f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()})
 				if err != nil && strings.Contains(err.Error(), "telegram unknown: Bad Request: can't parse entities") {
 					_, err = f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
-					return err, true
+					return true, err
 				}
 			} else {
 
@@ -116,8 +117,8 @@ func FilterEvent(c tb.Context) (error, bool) {
 				}
 			}
 
-			return nil, true
+			return true, nil
 		}
 	}
-	return nil, false
+	return false, nil
 }

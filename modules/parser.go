@@ -2,9 +2,11 @@ package modules
 
 import (
 	"fmt"
-	tb "gopkg.in/telebot.v3"
 	"regexp"
+	"strconv"
 	"strings"
+
+	tb "gopkg.in/telebot.v3"
 )
 
 var (
@@ -60,7 +62,8 @@ func ParseMD(c *tb.Message) string {
 
 	}
 	for _, x := range Italic.FindAllStringSubmatch(text, -1) {
-		if match, _ := regexp.Match(`\_\_(.*?)\_\_`, []byte(x[0])); match {
+		pattern, _ := regexp.Compile(`\_\_(.*?)\_\_`)
+		if match := pattern.Match([]byte(x[0])); match {
 			continue
 		}
 		text = strings.Replace(text, x[0], "<i>"+x[1]+"</i>", -1)
@@ -82,6 +85,45 @@ func ParseMD(c *tb.Message) string {
 		text = strings.Replace(text, x[0], "<code>"+x[1]+"</code>", -1)
 	}
 	return text
+
+}
+
+var FILLINGS = []FF{{"{first}", 1}, {"{last}", 2}, {"{username}", 3}, {"{fullname}", 5}, {"{id}", 4}, {"{chatname}", 6}, {"{mention}", 7}}
+
+func ParseString(t string, c tb.Context) (string, bool) {
+	q, preview := 0, true
+	if strings.Contains(t, "{preview}") {
+		preview = false
+		t = strings.ReplaceAll(t, "{preview}", "")
+	}
+	for _, f := range FILLINGS {
+		if strings.Contains(t, f.F) {
+			q++
+			t = strings.ReplaceAll(t, f.F, "%["+strconv.Itoa(f.INDEX)+"]s")
+
+		}
+
+	}
+	if strings.Contains(t, "{rules}") {
+		t = strings.ReplaceAll(t, "{rules}", "[Rules](buttonurl://rules)")
+	}
+	first := c.Sender().FirstName
+	last := c.Sender().LastName
+	fullname := first
+	if last != string("") {
+		fullname += " " + last
+	}
+	username := c.Sender().Username
+	id := strconv.Itoa(int(c.Sender().ID))
+	mention := fmt.Sprintf("<a href='tg://user?id=%s'>%s</a>", id, first)
+	if username == string("") {
+		username = mention
+	}
+	chatname := c.Chat().Title
+	if q != 0 {
+		t = fmt.Sprintf(t, first, last, username, id, fullname, chatname, mention)
+	}
+	return t, preview
 
 }
 

@@ -557,41 +557,36 @@ func GetFile(file bson.A, caption string) tb.Sendable {
 	}
 }
 
-var FILLINGS = []FF{{"{first}", 1}, {"{last}", 2}, {"{username}", 3}, {"{fullname}", 5}, {"{id}", 4}, {"{chatname}", 6}, {"{mention}", 7}}
+var cmdRx = regexp.MustCompile(`^((!|\?)\w+)(@(\w+))?(\s|$)(.+)?`)
 
-func ParseString(t string, c tb.Context) (string, bool) {
-	q, preview := 0, true
-	if strings.Contains(t, "{preview}") {
-		preview = false
-		t = strings.ReplaceAll(t, "{preview}", "")
-	}
-	for _, f := range FILLINGS {
-		if strings.Contains(t, f.F) {
-			q++
-			t = strings.ReplaceAll(t, f.F, "%["+strconv.Itoa(f.INDEX)+"]s")
-
+func AddPayload(c tb.Context) tb.Context {
+	match := cmdRx.FindAllStringSubmatch(c.Text(), -1)
+	if match != nil {
+		_, botName := match[0][1], match[0][3]
+		if botName != "" && !strings.EqualFold(b.Me.Username, botName) {
+			return nil
 		}
-
+		Payload := match[0][5]
+		fmt.Println(Payload)
+		s := c.Bot().NewContext(tb.Update{ID: c.Message().ID,
+			Message: &tb.Message{
+				Sender:      c.Sender(),
+				Chat:        c.Message().Chat,
+				Payload:     Payload,
+				Text:        c.Message().Text,
+				ReplyTo:     c.Message().ReplyTo,
+				Audio:       c.Message().Audio,
+				Video:       c.Message().Video,
+				Document:    c.Message().Document,
+				Photo:       c.Message().Photo,
+				Sticker:     c.Message().Sticker,
+				Voice:       c.Message().Voice,
+				Animation:   c.Message().Animation,
+				ReplyMarkup: c.Message().ReplyMarkup,
+				ID:          c.Message().ID,
+			},
+		})
+		return s
 	}
-	if strings.Contains(t, "{rules}") {
-		t = strings.ReplaceAll(t, "{rules}", "[Rules](buttonurl://rules)")
-	}
-	first := c.Sender().FirstName
-	last := c.Sender().LastName
-	fullname := first
-	if last != string("") {
-		fullname += " " + last
-	}
-	username := c.Sender().Username
-	id := strconv.Itoa(int(c.Sender().ID))
-	mention := fmt.Sprintf("<a href='tg://user?id=%s'>%s</a>", id, first)
-	if username == string("") {
-		username = mention
-	}
-	chatname := c.Chat().Title
-	if q != 0 {
-		t = fmt.Sprintf(t, first, last, username, id, fullname, chatname, mention)
-	}
-	return t, preview
-
+	return c
 }

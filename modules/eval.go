@@ -4,9 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"os/exec"
-	"strings"
 
 	tb "gopkg.in/telebot.v3"
 )
@@ -31,32 +29,6 @@ func Exec(c tb.Context) error {
 		} else if err != nil {
 			c.Reply(fmt.Sprintf("<code>Mika#~</code>: <code>%s</code>\n<code>%s</code>", c.Message().Payload, err.Error()))
 		}
-	}
-	return nil
-}
-
-func Eval(c tb.Context) error {
-	return nil
-	cmd := strings.SplitN(c.Message().Text, " ", 2)
-	if len(cmd) == 1 {
-		return nil
-	}
-	api_url := "https://api.roseloverx.in/go"
-	req, _ := http.NewRequest("GET", api_url, nil)
-	q := req.URL.Query()
-	q.Add("code", "package main\n"+cmd[1])
-	req.URL.RawQuery = q.Encode()
-	resp, err := myClient.Do(req)
-	if err != nil {
-		c.Reply(err.Error())
-	}
-	defer resp.Body.Close()
-	var body mapType
-	json.NewDecoder(resp.Body).Decode(&body)
-	if body["errors"].(string) != string("") {
-		c.Reply(fmt.Sprintf("<b>► EvalGo</b>\n<code>%s</code>\n\n<b>►</b> Output\n<code>%s</code>", cmd[1], body["errors"].(string)))
-	} else if body["output"] != string("") {
-		c.Reply(fmt.Sprintf("<b>► EvalGo</b>\n<code>%s</code>\n\n<b></b>► Output\n<code>%s</code>", cmd[1], body["output"].(string)))
 	}
 	return nil
 }

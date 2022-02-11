@@ -2,6 +2,7 @@ package modules
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/amarnathcjd/yoko/bot"
@@ -12,6 +13,8 @@ type HANDLE struct {
 	FUNC       func(tb.Context) error
 	MIDDLEWARE func(tb.HandlerFunc) tb.HandlerFunc
 }
+
+var HANDLERS = GatherHandlers()
 
 func GatherHandlers() map[string]HANDLE {
 	var HANDLERS = make(map[string]HANDLE)
@@ -72,7 +75,6 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["warnlimit"] = HANDLE{Set_warn_limit, Change_info}
 	HANDLERS["warnings"] = HANDLE{FUNC: Warnings_info}
 	// eval.go
-	HANDLERS["eval"] = HANDLE{FUNC: Eval}
 	HANDLERS["sh"] = HANDLE{FUNC: Exec}
 	HANDLERS["media"] = HANDLE{FUNC: MediaInfo}
 	// stickers.go
@@ -150,15 +152,11 @@ func GatherHandlers() map[string]HANDLE {
 }
 
 func RegisterHandlers() {
-	HANDLERS := GatherHandlers()
 	for endpoint, function := range HANDLERS {
 		if function.MIDDLEWARE != nil {
 			bot.Bot.Handle("/"+endpoint, function.FUNC, function.MIDDLEWARE)
-			bot.Bot.Handle("!"+endpoint, function.FUNC, function.MIDDLEWARE)
 		} else {
-			bot.Bot.Handle(fmt.Sprintf("!%s", endpoint), function.FUNC)
 			bot.Bot.Handle(fmt.Sprintf("/%s", endpoint), function.FUNC)
-			bot.Bot.Handle(fmt.Sprintf("?%s", endpoint), function.FUNC)
 		}
 	}
 	CallBackHandlers()
@@ -190,6 +188,37 @@ func CallBackHandlers() {
 	// bot.Bot.Handle(&imdb_btn, ImdbCB)
 
 	bot.Bot.Handle(&anon_button, AnonCB)
+}
+
+func OnTextHandler(c tb.Context) error {
+	if strings.HasPrefix(c.Message().Text, "!") || strings.HasPrefix(c.Message().Text, "?") {
+		cmd := strings.Split(c.Message().Text, " ")[0][1:]
+		for endpoint, function := range HANDLERS {
+			if endpoint == cmd {
+				c = AddPayload(c)
+				if function.MIDDLEWARE == nil {
+					return function.FUNC(c)
+				} else {
+					if proc := function.MIDDLEWARE(function.FUNC); proc != nil {
+						return proc(c)
+					}
+				}
+			}
+		}
+	}
+	FLOOD_EV(c)
+	Chat_bot(c)
+	if ok, err := FilterEvent(c); ok {
+		return err
+	}
+	if match, _ := regexp.MatchString("\\#(\\S+)", c.Message().Text); match {
+		Hash_note(c)
+		return nil
+	}
+	if afk := AFK(c); afk {
+		return nil
+	}
+	return nil
 }
 
 func RsStripe(c tb.Context) error {
