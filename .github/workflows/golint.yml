@@ -17,10 +17,9 @@ jobs:
 
       - name: Lint
         run: |
-          go get gopkg.in/telebot.v3
+          go mod tidy -compat=1.17
           gofmt -l -s -w .
           go vet main.go
-          go mod tidy -compat=1.17
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: 'RoseLoverX: auto fixes'
