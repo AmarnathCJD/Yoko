@@ -578,7 +578,6 @@ match = cmdRx_quest.FindAllStringSubmatch(c.Text(), -1)
 			return nil
 		}
 		Payload := match[0][5]
-		fmt.Println(Payload)
 		s := c.Bot().NewContext(tb.Update{ID: c.Message().ID,
 			Message: &tb.Message{
 				Sender:      c.Sender(),
