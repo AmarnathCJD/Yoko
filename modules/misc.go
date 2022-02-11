@@ -567,11 +567,11 @@ func Music(c tb.Context) error {
 	stream.Close()
 	check(err)
 	c.Reply(&tb.Audio{
-		File:     tb.File{FileLocal: "t.mp3"},
-		Title: vid.Title,
-                Performer: vid.Author,
-                FileName: vid.Title,
-                Duration: int(vid.Duration),
+		File:      tb.File{FileLocal: "t.mp3"},
+		Title:     vid.Title,
+		Performer: vid.Author,
+		FileName:  vid.Title,
+		Duration:  int(vid.Duration),
 	})
 	return nil
 }
