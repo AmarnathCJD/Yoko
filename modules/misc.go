@@ -573,6 +573,6 @@ func Music(c tb.Context) error {
 		Performer: vid.Author,
 		FileName:  vid.Title,
 		Duration:  int(duration.Seconds()),
-                Thumbnail: &tb.Photo{File: tb.FromURL(vid.Thumbnails[0].URL)},
+		Thumbnail: &tb.Photo{File: tb.FromURL(vid.Thumbnails[0].URL)},
 	})
 }
