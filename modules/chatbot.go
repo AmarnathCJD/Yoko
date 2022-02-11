@@ -74,7 +74,7 @@ func Chat_bot(c tb.Context) error {
 	message = strings.ReplaceAll(strings.ReplaceAll(message, "kuki", "mika"), "Kuki", "Mika")
 	defer c.Bot().Notify(c.Chat(), tb.Typing)
         if err := c.Reply(message) ; err != nil {
-return c.Reply(message, &tb.SendOptions{ParseMode: tb.Markdown})
+return c.Reply(message, &tb.SendOptions{ParseMode: tb.MarkDown})
 }
 	return nil
 }
