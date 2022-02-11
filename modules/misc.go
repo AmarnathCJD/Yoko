@@ -566,13 +566,13 @@ func Music(c tb.Context) error {
 	ioutil.WriteFile("t.mp3", b, 0666)
 	stream.Close()
 	check(err)
-	duration, _ := time.ParseDuration(vid.Duration)
+	duration, _ := time.ParseDuration(vid.Duration.String())
 	c.Reply(&tb.Audio{
 		File:      tb.File{FileLocal: "t.mp3"},
 		Title:     vid.Title,
 		Performer: vid.Author,
 		FileName:  vid.Title,
-		Duration:  int(duration),
+		Duration:  int(duration.Seconds()),
 	})
 	return nil
 }
