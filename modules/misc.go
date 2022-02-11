@@ -558,9 +558,6 @@ func Music(c tb.Context) error {
 	ID := r.Items[0].Id.VideoId
 	y := yt.Client{HTTPClient: myClient}
 	vid, err := y.GetVideo("https://www.youtube.com/watch?v=" + ID)
-	for _, x := range vid.Thumbnails {
-		fmt.Println(x.Width, x.URL, x.Height)
-	}
 	format := vid.Formats.FindByQuality("tiny")
 	stream, _, _ := y.GetStream(vid, format)
 	b, _ := ioutil.ReadAll(stream)
