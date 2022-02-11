@@ -567,6 +567,7 @@ func Music(c tb.Context) error {
 	stream.Close()
 	check(err)
 	duration, _ := time.ParseDuration(vid.Duration.String())
+        c.Bot().Notify(c.Chat(), "upload_voice")
 	return c.Reply(&tb.Audio{
 		File:      tb.File{FileLocal: "t.mp3"},
 		Title:     vid.Title,
