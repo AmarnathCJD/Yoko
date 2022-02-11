@@ -566,9 +566,12 @@ func Music(c tb.Context) error {
 	ioutil.WriteFile("t.mp3", b, 0666)
 	stream.Close()
 	check(err)
-	c.Reply(&tb.Document{
+	c.Reply(&tb.Audio{
 		File:     tb.File{FileLocal: "t.mp3"},
-		FileName: "song.mp3",
+		Title: vid.Title,
+                Performer: vid.Author,
+                FileName: vid.Title,
+                Duration: int(vid.Duration),
 	})
 	return nil
 }
