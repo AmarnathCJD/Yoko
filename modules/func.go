@@ -559,7 +559,7 @@ func GetFile(file bson.A, caption string) tb.Sendable {
 	}
 }
 
-var cmdRx = regexp.MustCompile(`^(\/\w+)(@(\w+))?(\s|$)(.+)?`)
+var cmdRx   = regexp.MustCompile(`^(!\w+)(@(\w+))?(\s|$)(.+)?`)
 
 func AddPayload(c tb.Context) tb.Context {
 	match := cmdRx.FindAllStringSubmatch(c.Text(), -1)
