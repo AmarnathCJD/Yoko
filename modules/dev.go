@@ -118,6 +118,6 @@ func Ping(c tb.Context) error {
 	alive := a.Sub(StartTime)
 	msg, _ := c.Bot().Send(c.Chat(), "<code>Pinging!</code>")
 	b := time.Now()
-	_, err := c.Bot().Edit(msg, fmt.Sprintf("<b>► Ping</b>: <code>%s</code>\n<b>► Uptime:</b> %d", b.Sub(a).String(), int(alive)))
+	_, err := c.Bot().Edit(msg, fmt.Sprintf("<b>► Ping</b>: <code>%s</code>\n<b>► Uptime:</b> %s", b.Sub(a).String(), alive.Truncate(time.Second).String()))
 	return err
 }
