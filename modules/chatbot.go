@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	MediaRe = regexp.MustCompile(`<image>.+</image>`)
+	MediaRe = regexp.MustCompile(`<image>(.*?)</image>`)
 )
 
 func Chat_bot(c tb.Context) error {
@@ -155,6 +155,6 @@ func Parse_ai_msg(c tb.Context, t string, mode string) {
 
 func ExtractMeta(t string) {
 	for _, x := range MediaRe.FindAllStringSubmatch(t, -1) {
-		fmt.Println(x)
+		fmt.Println(x[1])
 	}
 }
