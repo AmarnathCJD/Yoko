@@ -14,9 +14,9 @@ import (
 
 var (
 	MediaRe = regexp.MustCompile(`<image>(.*?)</image>`)
-        BtnRe = regexp.MustCompile(`<button>`(.*?)</button>`)
-        UrlRe = regexp.MustCompile(`<url>`(.*?)</url>`)
-        TextRe = regexp.MustCompile(`<text>`(.*?)</text>`)
+        BtnRe = regexp.MustCompile(`<button>(.*?)</button>`)
+        UrlRe = regexp.MustCompile(`<url>(.*?)</url>`)
+        TextRe = regexp.MustCompile(`<text>(.*?)</text>`)
 )
 
 func Chat_bot(c tb.Context) error {
