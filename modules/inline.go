@@ -135,7 +135,7 @@ func imdb_inline(c tb.Context) {
 			break
 		}
 		btns := &tb.ReplyMarkup{}
-		btns.InlineKeyboard = [][]tb.InlineButton{{tb.InlineButton{Text: result.Name, Data: fmt.Sprintf("imdb_inline_%d", &result.ID), Unique: "imdb_inline"}}, {tb.InlineButton{
+		btns.InlineKeyboard = [][]tb.InlineButton{{tb.InlineButton{Text: result.Name, Data: fmt.Sprintf("imdb_inline_%s", result.ID), Unique: "imdb_inline"}}, {tb.InlineButton{
 			Text:            "Search again",
 			InlineQueryChat: "imdb ",
 		}}}
