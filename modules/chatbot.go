@@ -34,7 +34,6 @@ func Chat_bot(c tb.Context) error {
 	var resp mapType
 	json.NewDecoder(req.Body).Decode(&resp)
 	msg := resp["responses"].([]interface{})[0].(string)
-	fmt.Println(msg)
 	pattern := regexp.MustCompile(`<image>.+</image>`)
 	media := pattern.FindAllStringSubmatch(msg, -1)
 	yt := regexp.MustCompile(`<card>.+</card>`).FindAllStringSubmatch(msg, -1)
@@ -73,6 +72,7 @@ func Chat_bot(c tb.Context) error {
 	}
 	message = strings.ReplaceAll(strings.ReplaceAll(message, "kuki", "mika"), "Kuki", "Mika")
 	c.Bot().Notify(c.Chat(), tb.Typing)
+	fmt.Println(message)
 	return c.Reply(message)
 }
 
