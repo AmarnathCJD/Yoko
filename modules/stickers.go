@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-
+"io/ioutil"
+"mime/multipart"
 	db "github.com/amarnathcjd/yoko/modules/db"
 	"github.com/anaskhan96/soup"
 	tb "gopkg.in/telebot.v3"
@@ -154,6 +155,46 @@ func MyPacks(c tb.Context) error {
 }
 
 func PX(c tb.Context) error {
-b.Download(c.Message().ReplyTo)
+b.Download(c.Message().ReplyTo.Sticker.File, 't.webm')
+url := b.URL + "/bot" + b.Token + "/" + "createNewStickerSet"
+pipeReader, pipeWriter := io.Pipe()
+	writer := multipart.NewWriter(pipeWriter)
+rawFiles := make(map[string]interface{})
+rawFiles["t.webm"] = "t.webm"
+params := make(map[string]string{})
+params["user_id"] = 1833850637
+params["emojis"] = "☺️"
+params["title"] = "Text Packk.."
+params["name"] = "m_nekotest_by_aiko_robot"
+go func() {
+		defer pipeWriter.Close()
+
+		for field, file := range rawFiles {
+			if err := addFileToWriter(writer, "t.webm", field, file); err != nil {
+				pipeWriter.CloseWithError(err)
+				return
+			}
+		}
+		for field, value := range params {
+			if err := writer.WriteField(field, value); err != nil {
+				pipeWriter.CloseWithError(err)
+				return
+			}
+		}
+		if err := writer.Close(); err != nil {
+			pipeWriter.CloseWithError(err)
+			return
+		}
+	}()
+resp, err := b.client.Post(url, writer.FormDataContentType(), pipeReader)
+	if err != nil {
+		err = wrapError(err)
+		pipeReader.CloseWithError(err)
+		return nil, err
+	}
+	resp.Close = true
+	defer resp.Body.Close()
+data, _ := ioutil.ReadAll(resp.Body)
+	fmt.Println(string(data))
 return nil
 }
