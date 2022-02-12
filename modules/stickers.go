@@ -1,6 +1,7 @@
 package modules
 
 import (
+"strconv"
 	"fmt"
 	db "github.com/amarnathcjd/yoko/modules/db"
 	"github.com/anaskhan96/soup"
@@ -197,7 +198,7 @@ func UploadStick(F tb.File, ext string, new bool, name string, title string, emo
 	}
 	defer resp.Body.Close()
 	data, _ := ioutil.ReadAll(resp.Body)
-	return data, nil
+	return string(data), nil
 }
 
 func addFileToWriter(writer *multipart.Writer, filename, field string, file interface{}) error {
