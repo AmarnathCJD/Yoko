@@ -178,7 +178,7 @@ func CallBackHandlers() {
 	bot.Bot.Handle(&reject_ftransfer, Deny_Transfer_Fed_cb)
 	bot.Bot.Handle(&check_fed_admins, Check_f_admins_cb)
 	// common handlers
-	// bot.Bot.Handle(tb.OnQuery, InlineQueryHandler)
+	bot.Bot.Handle(tb.OnQuery, InlineQueryHandler)
 	bot.Bot.Handle(tb.OnText, OnTextHandler)
 	bot.Bot.Handle(tb.OnChatMember, OnChatMemberHandler)
 	// warns.go
@@ -186,7 +186,7 @@ func CallBackHandlers() {
 	// filters.go
 	bot.Bot.Handle(&del_all_filters, DelAllFCB)
 	bot.Bot.Handle(&cancel_del_all_filters, CancelDALL)
-	// bot.Bot.Handle(&imdb_btn, ImdbCB)
+	bot.Bot.Handle(&imdb_btn, ImdbCB)
 
 	bot.Bot.Handle(&anon_button, AnonCB)
 }
