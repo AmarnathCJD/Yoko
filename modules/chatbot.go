@@ -14,9 +14,9 @@ import (
 
 var (
 	MediaRe = regexp.MustCompile(`<image>(.*?)</image>`)
-        BtnRe = regexp.MustCompile(`<button>(.*?)</button>`)
-        UrlRe = regexp.MustCompile(`<url>(.*?)</url>`)
-        TextRe = regexp.MustCompile(`<text>(.*?)</text>`)
+	BtnRe   = regexp.MustCompile(`<button>(.*?)</button>`)
+	UrlRe   = regexp.MustCompile(`<url>(.*?)</url>`)
+	TextRe  = regexp.MustCompile(`<text>(.*?)</text>`)
 )
 
 func Chat_bot(c tb.Context) error {
@@ -157,21 +157,21 @@ func Parse_ai_msg(c tb.Context, t string, mode string) {
 }
 
 func ExtractMeta(t string) {
-        var Med []string
+	var Med []string
 	for _, x := range MediaRe.FindAllStringSubmatch(t, -1) {
 		Med = append(Med, x[1])
-                t = strings.Replace(t, x[0], "", 1)
+		t = strings.Replace(t, x[0], "", 1)
 	}
-        var Btn map[string]string
-        for _, x := range BtnRe.FindAllStringSubmatch(t, -1) {
-        url, text := "", "Link"
-for _, x := range UrlRe.FindAllStringSubmatch(x[1], -1) {
-url = x[1]
-}
-for _, x := range TextRe.FindAllStringSubmatch(x[1], -1) {
-text = x[1]
-}
-Btn[url] = text
-}
-fmt.Println(Btn, Med, t)
+	var Btn map[string]string
+	for _, x := range BtnRe.FindAllStringSubmatch(t, -1) {
+		url, text := "", "Link"
+		for _, x := range UrlRe.FindAllStringSubmatch(x[1], -1) {
+			url = x[1]
+		}
+		for _, x := range TextRe.FindAllStringSubmatch(x[1], -1) {
+			text = x[1]
+		}
+		Btn[url] = text
+	}
+	fmt.Println(Btn, Med, t)
 }
