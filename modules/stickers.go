@@ -2,14 +2,14 @@ package modules
 
 import (
 	"fmt"
-	"io"
-	"net/http"
-"os"
-"io/ioutil"
-"mime/multipart"
 	db "github.com/amarnathcjd/yoko/modules/db"
 	"github.com/anaskhan96/soup"
 	tb "gopkg.in/telebot.v3"
+	"io"
+	"io/ioutil"
+	"mime/multipart"
+	"net/http"
+	"os"
 )
 
 func AddSticker(c tb.Context) error {
@@ -157,18 +157,18 @@ func MyPacks(c tb.Context) error {
 
 func Pn(c tb.Context) error {
 
-b.Download(&c.Message().ReplyTo.Sticker.File, "t.webm")
-url := b.URL + "/bot" + b.Token + "/" + "createNewStickerSet"
-pipeReader, pipeWriter := io.Pipe()
+	b.Download(&c.Message().ReplyTo.Sticker.File, "t.webm")
+	url := b.URL + "/bot" + b.Token + "/" + "createNewStickerSet"
+	pipeReader, pipeWriter := io.Pipe()
 	writer := multipart.NewWriter(pipeWriter)
-rawFiles := make(map[string]interface{})
-rawFiles["t.webm"] = "t.webm"
-params := make(map[string]string)
-params["user_id"] = "1833850637"
-params["emojis"] = "☺️"
-params["title"] = "Text Packk."
-params["name"] = "m_nekotest_by_aiko_robot"
-go func() {
+	rawFiles := make(map[string]interface{})
+	rawFiles["t.webm"] = "t.webm"
+	params := make(map[string]string)
+	params["user_id"] = "1833850637"
+	params["emojis"] = "☺️"
+	params["title"] = "Text Packk."
+	params["name"] = "m_nekotest_by_aiko_robot"
+	go func() {
 		defer pipeWriter.Close()
 
 		for field, file := range rawFiles {
@@ -188,16 +188,16 @@ go func() {
 			return
 		}
 	}()
-resp, err := myClient.Post(url, writer.FormDataContentType(), pipeReader)
+	resp, err := myClient.Post(url, writer.FormDataContentType(), pipeReader)
 	if err != nil {
 		pipeReader.CloseWithError(err)
 		return err
 	}
 	resp.Close = true
 	defer resp.Body.Close()
-data, _ := ioutil.ReadAll(resp.Body)
+	data, _ := ioutil.ReadAll(resp.Body)
 	fmt.Println(string(data))
-return nil
+	return nil
 }
 
 func addFileToWriter(writer *multipart.Writer, filename, field string, file interface{}) error {
@@ -213,7 +213,7 @@ func addFileToWriter(writer *multipart.Writer, filename, field string, file inte
 		reader = f
 	} else {
 		return nil
-}
+	}
 
 	part, err := writer.CreateFormFile(field, filename)
 	if err != nil {
