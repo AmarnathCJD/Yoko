@@ -52,7 +52,7 @@ func Chat_bot(c tb.Context) error {
 				f := strings.SplitN(media[0][0], "<image>", -1)
 				fl := f[len(f)-1]
 				file = strings.ReplaceAll(strings.ReplaceAll(fl, "</image>", ""), "</image>", "")
-                                
+
 			}
 			if strings.HasSuffix(file, "jpg") || strings.HasSuffix(file, "png") {
 				c.Reply(&tb.Photo{File: tb.FromURL(file)})
@@ -61,11 +61,11 @@ func Chat_bot(c tb.Context) error {
 			}
 		}
 	}
-var message string
+	var message string
 	for _, m := range media {
-message = strings.Replace(message, m[0], "", -1)
-}
-        
+		message = strings.Replace(message, m[0], "", -1)
+	}
+
 	if strings.Contains(message, "<split>") {
 		message = strings.ReplaceAll(strings.ReplaceAll(message, "<split>", ""), "</split>", "")
 	}
