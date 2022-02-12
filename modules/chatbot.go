@@ -25,9 +25,6 @@ var (
 )
 
 func Chat_bot(c tb.Context) error {
-	if !db.IsChatbot(c.Chat().ID) {
-		return nil
-	}
 	is_chat := false
 	replace_addition := false
 	if c.Message().IsReply() && c.Message().ReplyTo.Sender.ID == BOT_ID {
@@ -60,8 +57,8 @@ func Chat_bot(c tb.Context) error {
 }
 
 type BTN struct {
-	Text string
-	URL  string
+	Text string `json:"text,omitempty"`
+	URL  string `json:"url,omitempty"`
 }
 
 func ExtractMeta(t string, c tb.Context, Edit bool) error {
