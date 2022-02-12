@@ -163,12 +163,13 @@ func ExtractMeta(t string) {
 		t = strings.Replace(t, x[0], "", 1)
 	}
 	var Btn map[string]string
-	for _, x := range BtnRe.FindAllStringSubmatch(t, -1) {
+	for _, y := range BtnRe.FindAllStringSubmatch(t, -1) {
 		url, text := "", "Link"
-		for _, x := range UrlRe.FindAllStringSubmatch(x[1], -1) {
+                fmt.Println(y)
+		for _, x := range UrlRe.FindAllStringSubmatch(y[1], -1) {
 			url = x[1]
 		}
-		for _, x := range TextRe.FindAllStringSubmatch(x[1], -1) {
+		for _, x := range TextRe.FindAllStringSubmatch(y[1], -1) {
 			text = x[1]
 		}
 		Btn[url] = text
