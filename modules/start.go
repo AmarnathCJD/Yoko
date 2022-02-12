@@ -15,21 +15,18 @@ var (
 func Start(c tb.Context) error {
 	m := c.Message()
 	if strings.HasPrefix(m.Payload, "notes") {
-		private_start_note(c)
-		return nil
+		return PrivateStartNote(c)
 	} else if strings.HasPrefix(m.Payload, "allnotes") {
-		private_startallnotes(c)
-		return nil
+		return PrivateStartNotes(c)
 	} else if strings.HasPrefix(m.Payload, "connect") {
-		private_connect(c)
-		return nil
+		return PrivateConnect(c)
 	}
 	if m.Private() {
 		menu.Inline(
 			menu.Row(menu.URL("Support", "t.me/roseloverx_support"), menu.URL("Updates", "t.me/roseloverx_support")),
 			menu.Row(menu.Data("Commands", "help_menu")),
-			menu.Row(menu.URL("Add me to your group", "https://t.me/yoko_robot?startgroup=true")))
-		b.Send(m.Sender, "Hey there! I am <b>Yoko</b>.\nIm an Anime themed Group Management Bot, feel free to add me to your groups!", menu)
+			menu.Row(menu.URL("Add me to your group", "https://t.me/missmikabot?startgroup=true")))
+		b.Send(m.Sender, "Hey there! I am <b>Mika</b>.\nIm an Anime themed Group Management Bot, feel free to add me to your groups!", menu)
 		return nil
 	}
 	b.Reply(m, "Hey I'm Alive.")
@@ -38,7 +35,7 @@ func Start(c tb.Context) error {
 
 func Help_Menu(c tb.Context) error {
 	if !c.Message().Private() {
-		sel.Inline(sel.Row(sel.URL("Click here", "https://t.me/Yoko_Robot?start=help")))
+		sel.Inline(sel.Row(sel.URL("Click here", "https://t.me/missmikabot?start=help")))
 		c.Reply("Contact me at PM to get help.", sel)
 	} else {
 		gen_help_buttons(c, help_caption, true)

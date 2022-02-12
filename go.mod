@@ -9,17 +9,17 @@ require (
 
 require (
 	cloud.google.com/go/compute v1.2.0 // indirect
-	github.com/PuerkitoBio/goquery v1.5.0 // indirect
-	github.com/andybalholm/cascadia v1.0.0 // indirect
-	github.com/antchfx/htmlquery v1.0.0 // indirect
-	github.com/antchfx/xmlquery v1.0.0 // indirect
-	github.com/antchfx/xpath v1.0.0 // indirect
+	github.com/PuerkitoBio/goquery v1.5.1 // indirect
+	github.com/andybalholm/cascadia v1.2.0 // indirect
+	github.com/antchfx/htmlquery v1.2.3 // indirect
+	github.com/antchfx/xmlquery v1.2.4 // indirect
+	github.com/antchfx/xpath v1.1.8 // indirect
 	github.com/bitly/go-simplejson v0.5.0 // indirect
 	github.com/dlclark/regexp2 v1.4.1-0.20201116162257-a2a8dda75c91 // indirect
 	github.com/dop251/goja v0.0.0-20211211112501-fb27c91c26ed // indirect
 	github.com/go-sourcemap/sourcemap v2.1.3+incompatible // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
-	github.com/gocolly/colly/v2 v2.0.1 // indirect
+	github.com/gocolly/colly/v2 v2.1.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/googleapis/gax-go/v2 v2.1.1 // indirect
 	github.com/kennygrant/sanitize v1.2.4 // indirect
