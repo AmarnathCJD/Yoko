@@ -22,7 +22,7 @@ func ConnectChat(c tb.Context) error {
 	}
 	chat_id, _ := strconv.Atoi(c.Message().Payload)
 	Chat, _ := b.ChatByID(int64(chat_id))
-	db.ConnectChat(c.Sender().ID, int64(chat_id))
+	db.ConnectChat(int64(chat_id), c.Sender().ID)
 	P, _ := b.ChatMemberOf(Chat, c.Sender())
 	if P.Role == tb.Member {
 		sel.Inline(sel.Row(sel.Data("User commands", "connect_us_cmd")))
@@ -44,6 +44,7 @@ func PrivateConnect(c tb.Context) error {
 		sel.Inline(sel.Row(sel.Data("Admin Commands", "connect_ad_cmd")), sel.Row(sel.Data("User commands", "connect_us_cmd")))
 	}
 	c.Reply(fmt.Sprintf("You have been connected to %s!", chat.Title), sel)
+	db.ConnectChat(chat.ID, c.Sender().ID)
 	return nil
 }
 
