@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/amarnathcjd/yoko/bot"
+	"github.com/amarnathcjd/yoko/modules/db"
 	tb "gopkg.in/telebot.v3"
 )
 
@@ -189,6 +190,7 @@ func CallBackHandlers() {
 	bot.Bot.Handle(&imdb_btn, ImdbCB)
 	bot.Bot.Handle(&ChatBTN, ChatbotCB)
 	bot.Bot.Handle(&anon_button, AnonCB)
+	bot.Bot.Handle(tb.OnAddedToGroup, AddedToGroupHandler)
 }
 
 func OnTextHandler(c tb.Context) error {
@@ -221,6 +223,13 @@ func OnTextHandler(c tb.Context) error {
 	}
 	if afk := AFK(c); afk {
 		return nil
+	}
+	return nil
+}
+
+func AddedToGroupHandler(c tb.Context) error {
+	if !db.IsChat(c.Chat().ID) {
+		db.AddChat(db.Chat{Id: c.Chat().ID, Title: c.Chat().Title})
 	}
 	return nil
 }

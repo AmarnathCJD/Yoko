@@ -71,12 +71,6 @@ func OnChatMemberHandler(c tb.Context) error {
 	upd := c.ChatMember()
 	if upd.NewChatMember != nil && upd.OldChatMember != nil {
 		if upd.NewChatMember.Role == tb.Member && upd.OldChatMember.Role == tb.Left {
-			if upd.Sender.ID == BOT_ID {
-				if !db.IsChat(upd.Chat.ID) {
-					db.AddChat(db.Chat{Id: upd.Chat.ID, Title: upd.Chat.Title})
-				}
-				return nil
-			}
 			text, file, mode := db.Get_welcome(c.Chat().ID)
 			if !mode {
 				return nil
