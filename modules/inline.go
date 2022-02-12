@@ -134,7 +134,6 @@ func imdb_inline(c tb.Context) {
 		if qb >= 10 {
 			break
 		}
-		fmt.Println(result.ID)
 		btns := &tb.ReplyMarkup{}
 		btns.InlineKeyboard = [][]tb.InlineButton{{tb.InlineButton{Text: result.Name, Data: fmt.Sprintf("imdb_inline_%s", result.ID), Unique: "imdb_inline"}}, {tb.InlineButton{
 			Text:            "Search again",
@@ -161,9 +160,7 @@ func imdb_inline(c tb.Context) {
 
 func ImdbCB(c tb.Context) error {
 	d := strings.Split(c.Callback().Data, "_")
-	fmt.Println(d[2])
 	title, err := imdb.NewTitle(myClient, d[2])
-	fmt.Println("Hi")
 	check(err)
 	movie := fmt.Sprintf("<b><u>%s</u></b>\n<b>Type:</b> %s\n<b>Year:</b> %s\n<b>AKA:</b> %s\n<b>Duration:</b> %s\n<b>Rating:</b> %s/10\n<b>Genre:</b> %s\n\n<code>%s</code>\n<b>Source ---> IMDb</b>", title.Name, title.Type, strconv.Itoa(title.Year), title.AKA[0], title.Duration, title.Rating, strings.Join(title.Genres, ", "), title.Description)
 	sel.Inline(sel.Row(sel.QueryChat("Search again", "imdb ")))
