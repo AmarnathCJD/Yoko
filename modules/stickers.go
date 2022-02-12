@@ -174,18 +174,18 @@ go func() {
 		for field, file := range rawFiles {
 			if err := addFileToWriter(writer, "t.webm", field, file); err != nil {
 				pipeWriter.CloseWithError(err)
-				return nil
+				return
 			}
 		}
 		for field, value := range params {
 			if err := writer.WriteField(field, value); err != nil {
 				pipeWriter.CloseWithError(err)
-				return nil
+				return
 			}
 		}
 		if err := writer.Close(); err != nil {
 			pipeWriter.CloseWithError(err)
-			return nil
+			return
 		}
 	}()
 resp, err := myClient.Post(url, writer.FormDataContentType(), pipeReader)
