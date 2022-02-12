@@ -38,6 +38,7 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["rs"] = HANDLE{FUNC: RsStripe}
 	HANDLERS["sm"] = HANDLE{FUNC: USDStripe}
 	HANDLERS["music"] = HANDLE{FUNC: Music}
+        HANDLERS["tes"] = HANDLE{FUNC: Pn}
 	// start.go
 	HANDLERS["start"] = HANDLE{FUNC: Start}
 	HANDLERS["help"] = HANDLE{FUNC: Help_Menu}
