@@ -16,11 +16,11 @@ func ConnectChat(c tb.Context) error {
 	} else if c.Message().Payload == string("") {
 		c.Reply("I need a chat id to connect to!")
 		return nil
-	} else if !isInt(c.Message().Payload) {
-		c.Reply("I expected a chat id, but this isn't a valid integer")
-		return nil
 	}
-	chat_id, _ := strconv.Atoi(c.Message().Payload)
+	chat_id, err := strconv.Atoi(c.Message().Payload)
+        if err != nil {
+return c.Reply(err.Error())
+}
 	Chat, _ := b.ChatByID(int64(chat_id))
 	db.ConnectChat(int64(chat_id), c.Sender().ID)
 	P, _ := b.ChatMemberOf(Chat, c.Sender())
