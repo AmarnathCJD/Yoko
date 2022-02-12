@@ -197,6 +197,9 @@ func OnTextHandler(c tb.Context) error {
 		for endpoint, function := range HANDLERS {
 			if endpoint == cmd {
 				c = AddPayload(c)
+                                if c.Message().Private() {
+c = ChatContext(c)
+}
 				if function.MIDDLEWARE == nil {
 					return function.FUNC(c)
 				} else {
