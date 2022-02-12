@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"fmt"
 
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -9,7 +10,7 @@ import (
 var c = database.Collection("connect")
 
 func ConnectChat(chatID int64, userID int64) {
-	c.UpdateOne(context.TODO(), bson.M{"user_id": userID}, bson.M{"$set": bson.M{"chat_id": chatID}}, opts)
+	fmt.Println(c.UpdateOne(context.TODO(), bson.M{"user_id": userID}, bson.M{"$set": bson.M{"chat_id": chatID}}, opts))
 }
 
 func GetChat(userID int64) int64 {
