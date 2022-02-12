@@ -152,3 +152,7 @@ func MyPacks(c tb.Context) error {
 	}
 	return nil
 }
+
+func PX(c tb.Context) error {
+b.Download(c.Message().ReplyTo)
+}
