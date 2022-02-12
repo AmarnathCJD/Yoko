@@ -155,9 +155,9 @@ func GatherHandlers() map[string]HANDLE {
 func RegisterHandlers() {
 	for endpoint, function := range HANDLERS {
 		if function.MIDDLEWARE != nil {
-			bot.Bot.Handle("/"+endpoint, function.FUNC, function.MIDDLEWARE)
+			bot.Bot.Handle("/"+endpoint, function.FUNC, function.MIDDLEWARE, ConnectFunc)
 		} else {
-			bot.Bot.Handle(fmt.Sprintf("/%s", endpoint), function.FUNC)
+			bot.Bot.Handle(fmt.Sprintf("/%s", endpoint), function.FUNC, ConnectFunc)
 		}
 	}
 	CallBackHandlers()

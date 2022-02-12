@@ -571,7 +571,6 @@ func AddPayload(c tb.Context) tb.Context {
 	} else if strings.HasPrefix(c.Text(), "?") {
 		match = cmdRx_quest.FindAllStringSubmatch(c.Text(), -1)
 	}
-
 	if match != nil {
 		botName := match[0][3]
 		if botName != "" && !strings.EqualFold(b.Me.Username, botName) {
@@ -596,7 +595,13 @@ func AddPayload(c tb.Context) tb.Context {
 				ID:          c.Message().ID,
 			},
 		})
+		if c.Message().Private() {
+			return ChatContext(s)
+		}
 		return s
+	}
+	if c.Message().Private() {
+		return ChatContext(c)
 	}
 	return c
 }
@@ -605,4 +610,13 @@ func SearchYT(q string, limit int64) (*youtube.SearchListResponse, error) {
 	client, _ := youtube.NewService(context.TODO(), option.WithAPIKey(YOUTUBE_API_KEY))
 	call := client.Search.List([]string{"snippet"}).Q(q).MaxResults(limit)
 	return call.Do()
+}
+
+func ConnectFunc(next tb.HandlerFunc) tb.HandlerFunc {
+	return func(c tb.Context) error {
+		if c.Message().Private() {
+			return next(ChatContext(c))
+		}
+		return next(c)
+	}
 }

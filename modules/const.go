@@ -50,3 +50,4 @@ var stripe_1 = `
 <b>⎋ Time: %ds</b>
 <b>✁Checked by</b> <b>%s</b> [%s]
 `
+var CNT = []string{"locks", "flood", "filters", "get", "notes", "saved", "adminlist", "info", "warns", "rules", "approval"}

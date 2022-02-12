@@ -24,6 +24,7 @@ func Ban(c tb.Context) error {
 	arg := strings.SplitN(c.Message().Text, " ", 2)[0][1:]
 	until_date := 0
 	reason := xtra
+	fmt.Println(user)
 	if arg == "unban" {
 		err := c.Bot().Unban(c.Chat(), user, true)
 		if err != nil && err.Error() == "telegram: not enough rights to restrict/unrestrict chat member (400)" {
