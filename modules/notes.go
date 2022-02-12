@@ -200,13 +200,12 @@ func private_notes(c tb.Context) error {
 	return nil
 }
 
-func private_start_note(c tb.Context) {
+func PrivateStartNote(c tb.Context) error {
 	args := strings.SplitN(c.Message().Payload, "_", 3)
 	chat_id, _ := strconv.Atoi(args[1])
 	note := db.Get_note(int64(chat_id), args[2])
 	if note == nil {
-		c.Reply("This note was not found ~")
-		return
+		return c.Reply("This note was not found ~")
 	}
 	text, p := ParseString(note["note"].(string), c)
 
@@ -214,28 +213,29 @@ func private_start_note(c tb.Context) {
 		f := GetFile(note["file"].(bson.A), text)
 		_, err := f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()})
 		if err != nil && strings.Contains(err.Error(), "telegram unknown: Bad Request: can't parse entities") {
-			f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
+			_, err := f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
+			return err
 		}
 	} else {
 
 		if err := c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()}); strings.Contains(err.Error(), "telegram unknown: Bad Request: can't parse entities") {
-			c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
+			return c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
 		}
 
 	}
+	return nil
 }
 
-func private_startallnotes(c tb.Context) {
+func PrivateStartNotes(c tb.Context) error {
 	args := strings.SplitN(c.Message().Payload, "_", 2)
 	chat_id, _ := strconv.Atoi(args[1])
 	notes := db.Get_notes(int64(chat_id))
 	if notes == nil {
-		c.Reply("There are no notes in that chat. ~")
-		return
+		return c.Reply("There are no notes in that chat. ~")
 	}
 	out := fmt.Sprintf("<b>Notes in %s:</b>", args[1])
 	for _, x := range notes {
 		out += fmt.Sprintf("\n<b>-&gt;</b> <a href='t.me/missmikabot?start=notes_%s_%s'>%s</a>", args[1], x.(bson.M)["name"].(string), x.(bson.M)["name"].(string))
 	}
-	c.Reply(out)
+	return c.Reply(out)
 }
