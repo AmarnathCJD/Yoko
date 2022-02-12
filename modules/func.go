@@ -97,42 +97,6 @@ func get_file(m *tb.Message) (string, string) {
 	}
 }
 
-func unparse_message(file interface{}, note string, m *tb.Message, p bool) {
-	text, buttons := button_parser(note)
-	if file != nil && len(file.(map[string]interface{})) != 0 {
-		id, f := file.(bson.A)[0].(string), file.(bson.A)[1].(string)
-		if f == "document" {
-			file := &tb.Document{File: tb.File{FileID: id}, Caption: text}
-			b.Reply(m, file, &tb.SendOptions{ReplyMarkup: buttons, DisableWebPagePreview: p})
-		} else if f == "sticker" {
-			file := &tb.Sticker{File: tb.File{FileID: id}}
-			b.Reply(m, file, &tb.SendOptions{ReplyMarkup: buttons, DisableWebPagePreview: p})
-		} else if f == "photo" {
-			file := &tb.Photo{File: tb.File{FileID: id}, Caption: text}
-			b.Reply(m, file, &tb.SendOptions{ReplyMarkup: buttons, DisableWebPagePreview: p})
-		} else if f == "audio" {
-			file := &tb.Audio{File: tb.File{FileID: id}, Caption: text}
-			b.Reply(m, file, &tb.SendOptions{ReplyMarkup: buttons, DisableWebPagePreview: p})
-		} else if f == "voice" {
-			file := &tb.Voice{File: tb.File{FileID: id}, Caption: text}
-			b.Reply(m, file, &tb.SendOptions{ReplyMarkup: buttons, DisableWebPagePreview: p})
-		} else if f == "video" {
-			file := &tb.Video{File: tb.File{FileID: id}, Caption: text}
-			b.Reply(m, file, &tb.SendOptions{ReplyMarkup: buttons, DisableWebPagePreview: p})
-		} else if f == "animation" {
-			file := &tb.Animation{File: tb.File{FileID: id}, Caption: text}
-			b.Reply(m, file, &tb.SendOptions{ReplyMarkup: buttons, DisableWebPagePreview: p})
-		} else if f == "videonote" {
-			file := &tb.VideoNote{File: tb.File{FileID: id}}
-			b.Reply(m, file, &tb.SendOptions{ReplyMarkup: buttons, DisableWebPagePreview: p})
-		}
-	} else {
-		fmt.Println("H")
-		ms, err := b.Reply(m, text, &tb.SendOptions{ReplyMarkup: buttons, DisableWebPagePreview: p})
-		fmt.Println(err, ms)
-	}
-}
-
 func get_reply_markup(m *tb.Message) string {
 	reply_mark := ""
 	mark := m.ReplyMarkup
