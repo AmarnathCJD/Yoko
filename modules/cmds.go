@@ -187,7 +187,7 @@ func CallBackHandlers() {
 	bot.Bot.Handle(&del_all_filters, DelAllFCB)
 	bot.Bot.Handle(&cancel_del_all_filters, CancelDALL)
 	bot.Bot.Handle(&imdb_btn, ImdbCB)
-
+	bot.Bot.Handle(&ChatBTN, ChatbotCB)
 	bot.Bot.Handle(&anon_button, AnonCB)
 }
 
