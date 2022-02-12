@@ -134,6 +134,7 @@ func imdb_inline(c tb.Context) {
 		if qb >= 10 {
 			break
 		}
+		fmt.Println(result.ID)
 		btns := &tb.ReplyMarkup{}
 		btns.InlineKeyboard = [][]tb.InlineButton{{tb.InlineButton{Text: result.Name, Data: fmt.Sprintf("imdb_inline_%s", result.ID), Unique: "imdb_inline"}}, {tb.InlineButton{
 			Text:            "Search again",
