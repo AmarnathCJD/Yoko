@@ -63,7 +63,7 @@ func GatherHandlers() map[string]HANDLE {
 	// chatbot.go
 	HANDLERS["chatbot"] = HANDLE{FUNC: Chatbot_mode, MIDDLEWARE: Change_info}
 	// connect.go
-	HANDLERS["connect"] = HANDLE{FUNC: Connect_chat}
+	HANDLERS["connect"] = HANDLE{FUNC: ConnectChat}
 	// greetings.go
 	HANDLERS["welcome"] = HANDLE{Welcome_set, Change_info}
 	HANDLERS["setwelcome"] = HANDLE{Set_welcome, Change_info}
