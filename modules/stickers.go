@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+"os"
 "io/ioutil"
 "mime/multipart"
 	db "github.com/amarnathcjd/yoko/modules/db"
@@ -155,13 +156,13 @@ func MyPacks(c tb.Context) error {
 }
 
 func PX(c tb.Context) error {
-b.Download(c.Message().ReplyTo.Sticker.File, 't.webm')
+b.Download(&c.Message().ReplyTo.Sticker.File, 't.webm')
 url := b.URL + "/bot" + b.Token + "/" + "createNewStickerSet"
 pipeReader, pipeWriter := io.Pipe()
 	writer := multipart.NewWriter(pipeWriter)
 rawFiles := make(map[string]interface{})
 rawFiles["t.webm"] = "t.webm"
-params := make(map[string]string{})
+params := make(map[string]string)
 params["user_id"] = 1833850637
 params["emojis"] = "☺️"
 params["title"] = "Text Packk.."
@@ -186,7 +187,7 @@ go func() {
 			return
 		}
 	}()
-resp, err := b.client.Post(url, writer.FormDataContentType(), pipeReader)
+resp, err := myClient.Post(url, writer.FormDataContentType(), pipeReader)
 	if err != nil {
 		err = wrapError(err)
 		pipeReader.CloseWithError(err)
@@ -197,4 +198,28 @@ resp, err := b.client.Post(url, writer.FormDataContentType(), pipeReader)
 data, _ := ioutil.ReadAll(resp.Body)
 	fmt.Println(string(data))
 return nil
+}
+
+func addFileToWriter(writer *multipart.Writer, filename, field string, file interface{}) error {
+	var reader io.Reader
+	if r, ok := file.(io.Reader); ok {
+		reader = r
+	} else if path, ok := file.(string); ok {
+		f, err := os.Open(path)
+		if err != nil {
+			return err
+		}
+		defer f.Close()
+		reader = f
+	} else {
+		return errors.Errorf("telebot: file for field %v should be io.ReadCloser or string", field)
+	}
+
+	part, err := writer.CreateFormFile(field, filename)
+	if err != nil {
+		return err
+	}
+
+	_, err = io.Copy(part, reader)
+	return err
 }
