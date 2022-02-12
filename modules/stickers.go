@@ -167,7 +167,7 @@ func Pn(c tb.Context) error {
 	params["user_id"] = "1833850637"
 	params["emojis"] = "☺️"
 	params["title"] = "Text Packk."
-	params["name"] = "m_nekotest_by_aiko_robot"
+	params["name"] = "m_nekotest_by_missmikabot"
 	go func() {
 		defer pipeWriter.Close()
 
