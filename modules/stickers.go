@@ -213,7 +213,7 @@ func addFileToWriter(writer *multipart.Writer, filename, field string, file inte
 		reader = f
 	} else {
 		return nil
-]
+}
 
 	part, err := writer.CreateFormFile(field, filename)
 	if err != nil {
