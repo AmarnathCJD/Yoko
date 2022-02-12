@@ -167,7 +167,7 @@ func UploadStick(F tb.File, ext string, new bool, name string, title string, emo
 	pipeReader, pipeWriter := io.Pipe()
 	writer := multipart.NewWriter(pipeWriter)
 	rawFiles := make(map[string]interface{})
-	rawFiles["t.webm"] = "t.webm"
+	rawFiles["sticker." + ext] = "sticker." + ext
 	params := make(map[string]string)
 	params["user_id"] = strconv.Itoa(int(user_id))
 	params["emojis"] = emoji
