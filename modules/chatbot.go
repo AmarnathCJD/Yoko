@@ -13,7 +13,7 @@ import (
 )
 
 var (
-MediaRe = regexp.MustCompile(`<image>.+</image>`)
+	MediaRe = regexp.MustCompile(`<image>.+</image>`)
 )
 
 func Chat_bot(c tb.Context) error {
@@ -38,8 +38,8 @@ func Chat_bot(c tb.Context) error {
 	var resp mapType
 	json.NewDecoder(req.Body).Decode(&resp)
 	msg := resp["responses"].([]interface{})[0].(string)
-        fmt.Println(msg)
-        ExtractMeta(msg)
+	fmt.Println(msg)
+	ExtractMeta(msg)
 	pattern := regexp.MustCompile(`<image>.+</image>`)
 	media := pattern.FindAllStringSubmatch(msg, -1)
 	yt := regexp.MustCompile(`<card>.+</card>`).FindAllStringSubmatch(msg, -1)
@@ -154,8 +154,7 @@ func Parse_ai_msg(c tb.Context, t string, mode string) {
 }
 
 func ExtractMeta(t string) {
-for _, x := range MediaRe.FindAllStringSubmatch(t, -1) {
-fmt.Println(x)
+	for _, x := range MediaRe.FindAllStringSubmatch(t, -1) {
+		fmt.Println(x)
+	}
 }
-}
-
