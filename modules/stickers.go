@@ -157,7 +157,7 @@ func MyPacks(c tb.Context) error {
 
 func Pn(c tb.Context) error {
 
-b.Download(&c.Message().ReplyTo.Sticker.File, 't.webm')
+b.Download(&c.Message().ReplyTo.Sticker.File, "t.webm")
 url := b.URL + "/bot" + b.Token + "/" + "createNewStickerSet"
 pipeReader, pipeWriter := io.Pipe()
 	writer := multipart.NewWriter(pipeWriter)
@@ -166,7 +166,7 @@ rawFiles["t.webm"] = "t.webm"
 params := make(map[string]string)
 params["user_id"] = "1833850637"
 params["emojis"] = "☺️"
-params["title"] = "Text Packk.."
+params["title"] = "Text Packk."
 params["name"] = "m_nekotest_by_aiko_robot"
 go func() {
 		defer pipeWriter.Close()
@@ -212,8 +212,8 @@ func addFileToWriter(writer *multipart.Writer, filename, field string, file inte
 		defer f.Close()
 		reader = f
 	} else {
-		return errors.Errorf("telebot: file for field %v should be io.ReadCloser or string", field)
-	}
+		return nil
+]
 
 	part, err := writer.CreateFormFile(field, filename)
 	if err != nil {
