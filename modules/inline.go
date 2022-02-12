@@ -160,7 +160,9 @@ func imdb_inline(c tb.Context) {
 
 func ImdbCB(c tb.Context) error {
 	d := strings.Split(c.Callback().Data, "_")
+	fmt.Println(d[2])
 	title, err := imdb.NewTitle(myClient, d[2])
+	fmt.Println("Hi")
 	check(err)
 	movie := fmt.Sprintf("<b><u>%s</u></b>\n<b>Type:</b> %s\n<b>Year:</b> %s\n<b>AKA:</b> %s\n<b>Duration:</b> %s\n<b>Rating:</b> %s/10\n<b>Genre:</b> %s\n\n<code>%s</code>\n<b>Source ---> IMDb</b>", title.Name, title.Type, strconv.Itoa(title.Year), title.AKA[0], title.Duration, title.Rating, strings.Join(title.Genres, ", "), title.Description)
 	sel.Inline(sel.Row(sel.QueryChat("Search again", "imdb ")))
