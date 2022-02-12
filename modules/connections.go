@@ -18,9 +18,9 @@ func ConnectChat(c tb.Context) error {
 		return nil
 	}
 	chat_id, err := strconv.Atoi(c.Message().Payload)
-        if err != nil {
-return c.Reply(err.Error())
-}
+	if err != nil {
+		return c.Reply(err.Error())
+	}
 	Chat, _ := b.ChatByID(int64(chat_id))
 	db.ConnectChat(int64(chat_id), c.Sender().ID)
 	P, _ := b.ChatMemberOf(Chat, c.Sender())
