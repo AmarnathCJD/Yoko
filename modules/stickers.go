@@ -178,7 +178,7 @@ func UploadStick(F tb.File, ext string, new bool, name string, title string, emo
 				pipeWriter.CloseWithError(err)
 				return
 			}
-		}
+	
 		for field, value := range params {
 			if err := writer.WriteField(field, value); err != nil {
 				pipeWriter.CloseWithError(err)
