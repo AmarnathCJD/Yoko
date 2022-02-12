@@ -155,7 +155,8 @@ func MyPacks(c tb.Context) error {
 	return nil
 }
 
-func PX(c tb.Context) error {
+func Pn(c tb.Context) error {
+
 b.Download(&c.Message().ReplyTo.Sticker.File, 't.webm')
 url := b.URL + "/bot" + b.Token + "/" + "createNewStickerSet"
 pipeReader, pipeWriter := io.Pipe()
@@ -163,7 +164,7 @@ pipeReader, pipeWriter := io.Pipe()
 rawFiles := make(map[string]interface{})
 rawFiles["t.webm"] = "t.webm"
 params := make(map[string]string)
-params["user_id"] = 1833850637
+params["user_id"] = "1833850637"
 params["emojis"] = "☺️"
 params["title"] = "Text Packk.."
 params["name"] = "m_nekotest_by_aiko_robot"
@@ -173,25 +174,24 @@ go func() {
 		for field, file := range rawFiles {
 			if err := addFileToWriter(writer, "t.webm", field, file); err != nil {
 				pipeWriter.CloseWithError(err)
-				return
+				return nil
 			}
 		}
 		for field, value := range params {
 			if err := writer.WriteField(field, value); err != nil {
 				pipeWriter.CloseWithError(err)
-				return
+				return nil
 			}
 		}
 		if err := writer.Close(); err != nil {
 			pipeWriter.CloseWithError(err)
-			return
+			return nil
 		}
 	}()
 resp, err := myClient.Post(url, writer.FormDataContentType(), pipeReader)
 	if err != nil {
-		err = wrapError(err)
 		pipeReader.CloseWithError(err)
-		return nil, err
+		return err
 	}
 	resp.Close = true
 	defer resp.Body.Close()
