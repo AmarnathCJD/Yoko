@@ -161,7 +161,7 @@ func UploadStick(F tb.File, ext string, new bool, name string, title string, emo
         if new{
 	url = b.URL + "/bot" + b.Token + "/" + "createNewStickerSet"
  } else {
-url = url = b.URL + "/bot" + b.Token + "/" + "addStickerToSet"
+ url = b.URL + "/bot" + b.Token + "/" + "addStickerToSet"
 }
 	pipeReader, pipeWriter := io.Pipe()
 	writer := multipart.NewWriter(pipeWriter)
