@@ -55,7 +55,7 @@ func AFK(c tb.Context) bool {
 				if r, ok := a["reason"]; ok {
 					reason = fmt.Sprintf(", <b>Reason:</b> %s", r.(string))
 				}
-				since := get_readable_time(time.Unix(int64(a["time"].(int32)), 0), time.Now())
+				since := get_readable_time(time.Unix(int64(a["time"].(int64)), 0), time.Now())
 				if err := c.Reply(fmt.Sprintf("<b>%s</b> is AFK !\nLast Seen: %s ago.\n%s", a["fname"].(string), since.String(), reason)); err != nil {
 					fmt.Println(err)
 				}
