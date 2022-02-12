@@ -1,7 +1,6 @@
 package modules
 
 import (
-"strconv"
 	"fmt"
 	db "github.com/amarnathcjd/yoko/modules/db"
 	"github.com/anaskhan96/soup"
@@ -11,6 +10,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"os"
+	"strconv"
 )
 
 func AddSticker(c tb.Context) error {
@@ -157,13 +157,13 @@ func MyPacks(c tb.Context) error {
 }
 
 func UploadStick(F tb.File, ext string, new bool, name string, title string, emoji string, user_id int64) (string, error) {
-	b.Download(&F, "sticker." + ext)
-        var url string
-        if new{
-	url = b.URL + "/bot" + b.Token + "/" + "createNewStickerSet"
- } else {
- url = b.URL + "/bot" + b.Token + "/" + "addStickerToSet"
-}
+	b.Download(&F, "sticker."+ext)
+	var url string
+	if new {
+		url = b.URL + "/bot" + b.Token + "/" + "createNewStickerSet"
+	} else {
+		url = b.URL + "/bot" + b.Token + "/" + "addStickerToSet"
+	}
 	pipeReader, pipeWriter := io.Pipe()
 	writer := multipart.NewWriter(pipeWriter)
 	rawFiles := make(map[string]interface{})
@@ -175,11 +175,11 @@ func UploadStick(F tb.File, ext string, new bool, name string, title string, emo
 	params["name"] = name
 	go func() {
 		defer pipeWriter.Close()
-		if err := addFileToWriter(writer, "sticker." + ext, ext+ "_sticker", "sticker." + ext); err != nil {
-				pipeWriter.CloseWithError(err)
-				return
-			}
-	
+		if err := addFileToWriter(writer, "sticker."+ext, ext+"_sticker", "sticker."+ext); err != nil {
+			pipeWriter.CloseWithError(err)
+			return
+		}
+
 		for field, value := range params {
 			if err := writer.WriteField(field, value); err != nil {
 				pipeWriter.CloseWithError(err)
