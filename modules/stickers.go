@@ -171,7 +171,7 @@ func Pn(c tb.Context) error {
 	go func() {
 		defer pipeWriter.Close()
 
-		for field, file := range rawFiles {
+		for _, file := range rawFiles {
 			if err := addFileToWriter(writer, "t.webm", "webm_sticker", file); err != nil {
 				pipeWriter.CloseWithError(err)
 				return
