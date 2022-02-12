@@ -155,4 +155,5 @@ func MyPacks(c tb.Context) error {
 
 func PX(c tb.Context) error {
 b.Download(c.Message().ReplyTo)
+return nil
 }
