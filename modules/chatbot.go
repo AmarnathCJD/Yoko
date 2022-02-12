@@ -160,7 +160,7 @@ func ExtractMeta(t string) {
         var Med []string
 	for _, x := range MediaRe.FindAllStringSubmatch(t, -1) {
 		Med = append(Med, x[1])
-                t = strings.Replace(t, x[0], "")
+                t = strings.Replace(t, x[0], "", 1)
 	}
         var Btn map[string]string
         for _, x := range BtnRe.FindAllStringSubmatch(t, -1) {
@@ -173,5 +173,5 @@ text = x[1]
 }
 Btn[url] = text
 }
-fmt.Println(Btn, Med)
+fmt.Println(Btn, Med, t)
 }
