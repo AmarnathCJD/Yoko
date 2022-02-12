@@ -13,11 +13,11 @@ func ConnectChat(chatID int64, userID int64) {
 }
 
 func GetChat(userID int64) int64 {
-	var chatID int64
+	var ch bson.M
 	chat := c.FindOne(context.TODO(), bson.M{"user_id": userID})
 	if chat.Err() != nil {
 		return 0
 	}
-	chat.Decode(&chatID)
-	return chatID
+	chat.Decode(&ch)
+	return ch["chat_id"].(int64)
 }
