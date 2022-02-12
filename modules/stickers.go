@@ -155,24 +155,26 @@ func MyPacks(c tb.Context) error {
 	return nil
 }
 
-func Pn(c tb.Context) error {
-
-	b.Download(&c.Message().ReplyTo.Sticker.File, "t.webm")
-	url := b.URL + "/bot" + b.Token + "/" + "createNewStickerSet"
+func UploadStick(F tb.File, ext string, new bool, name string, title string, emoji string, user_id int64) (string, error) {
+	b.Download(&F, "sticker." + ext)
+        var url string
+        if new{
+	url = b.URL + "/bot" + b.Token + "/" + "createNewStickerSet"
+ } else {
+url = url = b.URL + "/bot" + b.Token + "/" + "addStickerToSet"
+}
 	pipeReader, pipeWriter := io.Pipe()
 	writer := multipart.NewWriter(pipeWriter)
 	rawFiles := make(map[string]interface{})
 	rawFiles["t.webm"] = "t.webm"
 	params := make(map[string]string)
-	params["user_id"] = "1833850637"
-	params["emojis"] = "☺️"
-	params["title"] = "Text Packk."
-	params["name"] = "m_nekotest_by_missmikabot"
+	params["user_id"] = strconv.Itoa(int(user_id))
+	params["emojis"] = emoji
+	params["title"] = title
+	params["name"] = name
 	go func() {
 		defer pipeWriter.Close()
-
-		for _, file := range rawFiles {
-			if err := addFileToWriter(writer, "t.webm", "webm_sticker", file); err != nil {
+		if err := addFileToWriter(writer, "sticker." + ext, ext+ "_sticker", "sticker." + ext); err != nil {
 				pipeWriter.CloseWithError(err)
 				return
 			}
@@ -191,13 +193,11 @@ func Pn(c tb.Context) error {
 	resp, err := myClient.Post(url, writer.FormDataContentType(), pipeReader)
 	if err != nil {
 		pipeReader.CloseWithError(err)
-		return err
+		return "", err
 	}
-	resp.Close = true
 	defer resp.Body.Close()
 	data, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println(string(data))
-	return nil
+	return data, nil
 }
 
 func addFileToWriter(writer *multipart.Writer, filename, field string, file interface{}) error {
