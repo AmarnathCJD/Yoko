@@ -42,7 +42,7 @@ func Get_user_pack(user_id int64, _type string) (bool, int32, string) {
 func Get_user_packs(user_id int64) map[string]string {
 	var files []bson.M
 	filter := bson.M{"user_id": user_id}
-	r, _ := filters.Find(context.TODO(), filter)
+	r, _ := stickers.Find(context.TODO(), filter)
 	r.All(context.TODO(), &files)
 	fmt.Println(files)
 	if len(files) == 0 {
