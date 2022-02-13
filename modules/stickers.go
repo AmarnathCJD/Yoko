@@ -45,7 +45,7 @@ func AddSticker(c tb.Context) error {
 			PrePre = "tg"
 		}
 		pack, count, name = db.Get_user_pack(c.Sender().ID, Ext)
-		title := fmt.Sprintf("%s's %s kang pack", c.Sender().FirstName, PrePre)
+		title := fmt.Sprintf("%s's %s kang pack", c.Sender().FirstName, Prefix)
 		if !pack {
 			Name := fmt.Sprintf("%s%d_%d_by_missmikabot", PrePre, c.Sender().ID, 1)
 			err := UploadStick(c.Message().ReplyTo.Sticker.File, Ext, true, Name, title, Emoji, c.Sender().ID)
@@ -161,6 +161,7 @@ func MyPacks(c tb.Context) error {
 		return nil
 	} else {
 		packs := db.Get_user_packs(c.Sender().ID)
+                fmt.Println(packs)
 		msg := "<b>Here are your kang packs.</b>"
 		q := 0
 		for i, x := range packs {
