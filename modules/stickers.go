@@ -82,8 +82,8 @@ pack, count, name = db.Get_user_pack(c.Sender().ID, Ext)
 
 
 }
-	if !pack {
 title := fmt.Sprintf("%s's kang pack", c.Sender().FirstName)
+	if !pack {
 		Name := fmt.Sprintf("pn%d_%d_by_missmikabot", c.Sender().ID, 1)
 		err := c.Bot().CreateStickerSet(c.Sender(), tb.StickerSet{Name: Name, Title: fmt.Sprintf("%s's kang pack", c.Sender().FirstName), Stickers: []tb.Sticker{*c.Message().ReplyTo.Sticker}, PNG: &c.Message().ReplyTo.Sticker.File, Emojis: Emoji, Video: false, Animated: false})
 		if err == nil {
