@@ -1,12 +1,12 @@
 package modules
 
 import (
+	"encoding/json"
 	"fmt"
 	db "github.com/amarnathcjd/yoko/modules/db"
 	"github.com/anaskhan96/soup"
 	tb "gopkg.in/telebot.v3"
 	"io"
-	"encoding/json"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -34,25 +34,25 @@ func AddSticker(c tb.Context) error {
 		c.Reply("Yeah, I can't kang that.")
 		return nil
 	}
-        Reply := c.Message().ReplyTo.Sticker
-        if Reply.Video || Reply.Animated {
-var Ext = "webm"
-var Prefix = "WebM"
-var PrePre = "vi"
-if Reply.Animated{
-Ext = "tgs"
-Prefix = "Animated"
-PrePre = "tg"
-}
-pack, count, name = db.Get_user_pack(c.Sender().ID, Ext)
-                title := fmt.Sprintf("%s's %s kang pack", c.Sender().FirstName, PrePre)
+	Reply := c.Message().ReplyTo.Sticker
+	if Reply.Video || Reply.Animated {
+		var Ext = "webm"
+		var Prefix = "WebM"
+		var PrePre = "vi"
+		if Reply.Animated {
+			Ext = "tgs"
+			Prefix = "Animated"
+			PrePre = "tg"
+		}
+		pack, count, name = db.Get_user_pack(c.Sender().ID, Ext)
+		title := fmt.Sprintf("%s's %s kang pack", c.Sender().FirstName, PrePre)
 		if !pack {
 			Name := fmt.Sprintf("%s%d_%d_by_missmikabot", PrePre, c.Sender().ID, 1)
 			err := UploadStick(c.Message().ReplyTo.Sticker.File, Ext, true, Name, title, Emoji, c.Sender().ID)
 			if err {
 				db.Add_sticker(c.Sender().ID, Name, title, Ext)
 				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", name))))
-				return c.Reply(fmt.Sprintf(Prefix + "Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
+				return c.Reply(fmt.Sprintf(Prefix+"Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
 			} else {
 				return c.Reply("Emrror")
 			}
@@ -63,7 +63,7 @@ pack, count, name = db.Get_user_pack(c.Sender().ID, Ext)
 				return c.Reply("Emrror")
 			} else {
 				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", name))))
-				c.Reply(fmt.Sprintf("Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>" + Prefix + "Pack</a></b>\nEmoji is: %s", stickerset.Name, Emoji), sel)
+				c.Reply(fmt.Sprintf("Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>"+Prefix+"Pack</a></b>\nEmoji is: %s", stickerset.Name, Emoji), sel)
 				db.Update_count(c.Sender().ID, stickerset.Name, Ext)
 				return nil
 			}
@@ -74,15 +74,14 @@ pack, count, name = db.Get_user_pack(c.Sender().ID, Ext)
 				return c.Reply("Emror")
 			} else {
 				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", name))))
-				c.Reply(fmt.Sprintf(Prefix + " Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
+				c.Reply(fmt.Sprintf(Prefix+" Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
 				db.Add_sticker(c.Sender().ID, Name, title, Ext)
 				return nil
 			}
 		}
 
-
-}
-title := fmt.Sprintf("%s's kang pack", c.Sender().FirstName)
+	}
+	title := fmt.Sprintf("%s's kang pack", c.Sender().FirstName)
 	if !pack {
 		Name := fmt.Sprintf("pn%d_%d_by_missmikabot", c.Sender().ID, 1)
 		err := c.Bot().CreateStickerSet(c.Sender(), tb.StickerSet{Name: Name, Title: fmt.Sprintf("%s's kang pack", c.Sender().FirstName), Stickers: []tb.Sticker{*c.Message().ReplyTo.Sticker}, PNG: &c.Message().ReplyTo.Sticker.File, Emojis: Emoji, Video: false, Animated: false})
@@ -163,9 +162,9 @@ func MyPacks(c tb.Context) error {
 	} else {
 		packs := db.Get_user_packs(c.Sender().ID)
 		msg := "<b>Here are your kang packs.</b>"
-                q := 0
+		q := 0
 		for i, x := range packs {
-                        q++
+			q++
 			msg += fmt.Sprintf("\n<b>%d. ~</b> <a href='http://t.me/addstickers/%s'>%s</a>", q, x, i)
 		}
 		c.Reply(msg)
