@@ -155,18 +155,17 @@ func CombotSticker(c tb.Context) error {
 }
 
 func MyPacks(c tb.Context) error {
-	pack, _, _ := db.Get_user_pack(c.Sender().ID, "png")
-	if !pack {
+	packs := db.Get_user_packs(c.Sender().ID)
+	if len(packs) == 0 {
 		c.Reply("You have not created any sticker packs, use <code>/kang</code> to save stickers!")
 		return nil
 	} else {
-		packs := db.Get_user_packs(c.Sender().ID)
 		fmt.Println(packs)
 		msg := "<b>Here are your kang packs.</b>"
 		q := 0
-		for i, x := range packs {
+		for _, x := range packs {
 			q++
-			msg += fmt.Sprintf("\n<b>%d. ~</b> <a href='http://t.me/addstickers/%s'>%s</a>", q, x, i)
+			msg += fmt.Sprintf("\n<b>%d. ~</b> <a href='http://t.me/addstickers/%s'>%s</a>", q, x.Name, x.Title)
 		}
 		c.Reply(msg)
 	}
