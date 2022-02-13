@@ -38,7 +38,7 @@ func AddSticker(c tb.Context) error {
 		pack, count, name = db.Get_user_pack(c.Sender().ID, "webm")
 		if !pack {
 			Name := fmt.Sprintf("vid%d_%d_by_missmikabot", c.Sender().ID, 1)
-		        fmt.Println(UploadStick(c.Message().ReplyTo.Sticker.File, "webm", true, Name, fmt.Println("%s's vid kang pack", c.Sender().FirstName), Emoji, c.Sender().ID))
+		        fmt.Println(UploadStick(c.Message().ReplyTo.Sticker.File, "webm", true, Name, fmt.Sprintf("%s's vid kang pack", c.Sender().FirstName), Emoji, c.Sender().ID))
 			if err == nil {
 				db.Add_sticker(c.Sender().ID+int64(100), Name, "webm")
 				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", name))))
