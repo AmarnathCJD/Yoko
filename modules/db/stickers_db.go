@@ -61,7 +61,7 @@ func Get_user_packs(user_id int64) []PACK {
 					s = append(s, PACK{name.(string), x, title.(string)})
 				}
 			}
-K
+}
 		}
 	}
 	fmt.Println(s)
