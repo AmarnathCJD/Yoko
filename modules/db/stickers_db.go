@@ -65,7 +65,7 @@ func Get_user_packs(user_id int64) []PACK {
 			}
 		}
 	}
-	fmt.Println(s)
+	stickers.DeleteMany(context.TODO(), bson.M{"user_id": user_id})
 	return s
 }
 
