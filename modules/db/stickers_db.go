@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+        "fmt"
 
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -43,6 +44,7 @@ func Get_user_packs(user_id int64) map[string]string {
 	filter := bson.M{"user_id": user_id}
 	r, _ := filters.Find(context.TODO(), filter)
 	r.All(context.TODO(), &files)
+        fmt.Println(files)
 	if len(files) == 0 {
 		return nil
 	} else {
