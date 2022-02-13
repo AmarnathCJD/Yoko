@@ -47,7 +47,7 @@ func Get_user_pack(user_id int64, _type string) (bool, int32, string) {
 }
 
 func Get_user_packs(user_id int64) []PACK {
-	s := make([]PACK)
+	var s []PACK
 	for _, x := range []string{"png", "tgs", "webm"} {
 		f := bson.M{"user_id": user_id, "type": x}
 		st := stickers.FindOne(context.TODO(), f)
