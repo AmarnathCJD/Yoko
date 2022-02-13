@@ -56,6 +56,7 @@ func Get_user_packs(user_id int64) []PACK {
 			st.Decode(&pk)
                         pack := pk["packs"].(bson.A)
                         for _, pk := range pack{
+pk = pk.(bson.M)
 			if name, ok := pk["name"]; ok {
 				if title, ok := pk["title"]; ok {
 					s = append(s, PACK{name.(string), x, title.(string)})
