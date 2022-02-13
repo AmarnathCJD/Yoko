@@ -25,7 +25,7 @@ func Add_sticker(user_id int64, name string, _type string) {
 
 }
 
-func Get_user_pack(user_id int64, _typr string) (bool, int32, string) {
+func Get_user_pack(user_id int64, _type string) (bool, int32, string) {
 	filter := bson.M{"user_id": user_id, "type": _type}
 	s := stickers.FindOne(context.TODO(), filter)
 	if s.Err() != nil {
@@ -47,8 +47,8 @@ func Get_user_packs(user_id int64) []string {
 		return nil
 	} else {
                 var Names []string
-                for _, x := range files {
-for _, x := range stick["packs"].(bson.A) {
+                for _, y := range files {
+for _, x := range y["packs"].(bson.A) {
 			Names = append(Names, x.(bson.M)["name"].(string))
 		}
 }
