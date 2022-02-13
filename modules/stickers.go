@@ -165,12 +165,12 @@ func MyPacks(c tb.Context) error {
 		q := 0
 		for _, x := range packs {
 			q++
-                        Addon := ""
-                        if x.Ext == "tgs" {
-Addon = "- Animated"
-} else if x.Ext == "webm" {
-Addon = "- Video"
-}
+			Addon := ""
+			if x.Ext == "tgs" {
+				Addon = "- Animated"
+			} else if x.Ext == "webm" {
+				Addon = "- Video"
+			}
 			msg += fmt.Sprintf("\n<b>%d. ~</b> <a href='http://t.me/addstickers/%s'>%s</a> %", q, x.Name, x.Title, Addon)
 		}
 		c.Reply(msg)
@@ -221,7 +221,7 @@ func UploadStick(F tb.File, ext string, new bool, name string, title string, emo
 	defer resp.Body.Close()
 	var d mapType
 	json.NewDecoder(resp.Body).Decode(&d)
-        fmt.Println(d)
+	fmt.Println(d)
 	return d["ok"].(bool), d
 }
 
@@ -248,4 +248,3 @@ func addFileToWriter(writer *multipart.Writer, filename, field string, file inte
 	_, err = io.Copy(part, reader)
 	return err
 }
-
