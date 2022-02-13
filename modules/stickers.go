@@ -6,11 +6,11 @@ import (
 	"github.com/anaskhan96/soup"
 	tb "gopkg.in/telebot.v3"
 	"io"
-	
+
+	"encoding/json"
 	"mime/multipart"
 	"net/http"
 	"os"
-"encoding/json"
 	"strconv"
 )
 
@@ -39,7 +39,7 @@ func AddSticker(c tb.Context) error {
 		pack, count, name = db.Get_user_pack(c.Sender().ID, "webm")
 		if !pack {
 			Name := fmt.Sprintf("vid%d_%d_by_missmikabot", c.Sender().ID, 1)
-		        err := UploadStick(c.Message().ReplyTo.Sticker.File, "webm", true, Name, fmt.Sprintf("%s's vid kang pack", c.Sender().FirstName), Emoji, c.Sender().ID)
+			err := UploadStick(c.Message().ReplyTo.Sticker.File, "webm", true, Name, fmt.Sprintf("%s's vid kang pack", c.Sender().FirstName), Emoji, c.Sender().ID)
 			if err {
 				db.Add_sticker(c.Sender().ID+int64(100), Name, "webm")
 				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", name))))
@@ -202,9 +202,9 @@ func UploadStick(F tb.File, ext string, new bool, name string, title string, emo
 	}
 	defer resp.Body.Close()
 	var d mapType
-        json.NewDecoder(resp.Body).Decode(&d)
+	json.NewDecoder(resp.Body).Decode(&d)
 	fmt.Println(d)
-        return d["ok"].(bool)
+	return d["ok"].(bool)
 }
 
 func addFileToWriter(writer *multipart.Writer, filename, field string, file interface{}) error {
