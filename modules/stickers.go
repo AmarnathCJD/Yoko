@@ -14,7 +14,7 @@ import (
 )
 
 var (
-PACK_TYPES = []string{"png", "webm", "tgs"}
+	PACK_TYPES = []string{"png", "webm", "tgs"}
 )
 
 func AddSticker(c tb.Context) error {

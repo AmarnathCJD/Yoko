@@ -39,19 +39,19 @@ func Get_user_pack(user_id int64, _type string) (bool, int32, string) {
 }
 
 func Get_user_packs(user_id int64) []string {
-        var files []bson.M
-        filter := bson.M{"user_id": user_id}
+	var files []bson.M
+	filter := bson.M{"user_id": user_id}
 	r, _ := filters.Find(context.TODO(), filter)
 	r.All(context.TODO(), &files)
 	if len(files) == 0 {
 		return nil
 	} else {
-                var Names []string
-                for _, y := range files {
-for _, x := range y["packs"].(bson.A) {
-			Names = append(Names, x.(bson.M)["name"].(string))
+		var Names []string
+		for _, y := range files {
+			for _, x := range y["packs"].(bson.A) {
+				Names = append(Names, x.(bson.M)["name"].(string))
+			}
 		}
-}
 		return Names
 	}
 }
