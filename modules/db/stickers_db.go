@@ -8,8 +8,8 @@ import (
 
 var stickers = database.Collection("stick")
 
-func Add_sticker(user_id int64, name string) {
-	filter := bson.M{"user_id": user_id}
+func Add_sticker(user_id int64, name string, _type string) {
+	filter := bson.M{"user_id": user_id, "type": _type}
 	s := stickers.FindOne(context.TODO(), filter)
 	if s.Err() != nil {
 		var packs bson.A
@@ -25,8 +25,8 @@ func Add_sticker(user_id int64, name string) {
 
 }
 
-func Get_user_pack(user_id int64) (bool, int32, string) {
-	filter := bson.M{"user_id": user_id}
+func Get_user_pack(user_id int64, _typr string) (bool, int32, string) {
+	filter := bson.M{"user_id": user_id, "type": _type}
 	s := stickers.FindOne(context.TODO(), filter)
 	if s.Err() != nil {
 		return false, 0, ""
@@ -39,24 +39,25 @@ func Get_user_pack(user_id int64) (bool, int32, string) {
 }
 
 func Get_user_packs(user_id int64) []string {
-	filter := bson.M{"user_id": user_id}
-	s := stickers.FindOne(context.TODO(), filter)
-	if s.Err() != nil {
+        var files []bson.M
+        filter := bson.M{"user_id": user_id}
+	r, _ := filters.Find(context.TODO(), filter)
+	r.All(context.TODO(), &files)
+	if len(files) == 0 {
 		return nil
 	} else {
-		var stick bson.M
-		s.Decode(&stick)
-		packs := stick["packs"].(bson.A)
-		pack_names := []string{}
-		for _, x := range packs {
-			pack_names = append(pack_names, x.(bson.M)["name"].(string))
+                var Names []string
+                for _, x := range files {
+for _, x := range stick["packs"].(bson.A) {
+			Names = append(Names, x.(bson.M)["name"].(string))
 		}
-		return pack_names
+}
+		return Names
 	}
 }
 
-func Update_count(user_id int64, name string) {
-	filter := bson.M{"user_id": user_id}
+func Update_count(user_id int64, name string, _type string) {
+	filter := bson.M{"user_id": user_id, "type": _type}
 	s := stickers.FindOne(context.TODO(), filter)
 	var stick bson.M
 	s.Decode(&stick)
