@@ -143,7 +143,7 @@ func CombotSticker(c tb.Context) error {
 }
 
 func MyPacks(c tb.Context) error {
-	pack, _, _ := db.Get_user_pack(c.Sender().ID)
+	pack, _, _ := db.Get_user_pack(c.Sender().ID, "png")
 	if !pack {
 		c.Reply("You have not created any sticker packs, use <code>/kang</code> to save stickers!")
 		return nil
