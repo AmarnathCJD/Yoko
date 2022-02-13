@@ -6,7 +6,7 @@ import (
 	"github.com/anaskhan96/soup"
 	tb "gopkg.in/telebot.v3"
 	"io"
-	"io/ioutil"
+	
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -45,7 +45,7 @@ func AddSticker(c tb.Context) error {
 				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", name))))
 				return c.Reply(fmt.Sprintf("WebP Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
 			} else {
-				return c.Reply(err.Error())
+				return c.Reply("Emrror")
 			}
 		} else if count <= 120 {
 			stickerset, _ := c.Bot().StickerSet(name)
