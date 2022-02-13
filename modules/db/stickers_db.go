@@ -7,13 +7,13 @@ import (
 )
 
 var (
-stickers = database.Collection("stick")
+	stickers = database.Collection("stick")
 )
 
 type PACK struct {
-Name string
-Ext string
-Title string
+	Name  string
+	Ext   string
+	Title string
 }
 
 func Add_sticker(user_id int64, name string, title string, _type string) {
@@ -48,16 +48,16 @@ func Get_user_pack(user_id int64, _type string) (bool, int32, string) {
 
 func Get_user_packs(user_id int64) []PACK {
 	var s []PACK
-        for _, x := range []string{"png", "tgs", "webm"} {
-f := bson.M{"user_id": user_id, "type": x}
-st := stickers.FindOne(context.TODO(), f)
-if st.Err() == nil {
-var pk bson.M
-st.Decode(&pk)
-s = append (s, PACK{pk["name"].(string), x, pk["title"].(string)})
-}
-}
-return s
+	for _, x := range []string{"png", "tgs", "webm"} {
+		f := bson.M{"user_id": user_id, "type": x}
+		st := stickers.FindOne(context.TODO(), f)
+		if st.Err() == nil {
+			var pk bson.M
+			st.Decode(&pk)
+			s = append(s, PACK{pk["name"].(string), x, pk["title"].(string)})
+		}
+	}
+	return s
 }
 
 func Update_count(user_id int64, name string, _type string) {
