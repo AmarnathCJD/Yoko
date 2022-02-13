@@ -46,7 +46,7 @@ func Get_user_packs(user_id int64) map[string]string {
 	if len(files) == 0 {
 		return nil
 	} else {
-		var Names = make(map[string]string{})
+		var Names = make(map[string]string)
 		for _, y := range files {
 			for _, x := range y["packs"].(bson.A) {
 				Names[x.(bson.M)["name"].(string)] = x.(bson.M)["title"].(string)
