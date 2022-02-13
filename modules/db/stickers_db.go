@@ -2,7 +2,7 @@ package db
 
 import (
 	"context"
-"fmt"
+	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -51,18 +51,18 @@ func Get_user_packs(user_id int64) []PACK {
 	for _, x := range []string{"png", "tgs", "webm"} {
 		f := bson.M{"user_id": user_id, "type": x}
 		st := stickers.FindOne(context.TODO(), f)
-                fmt.Println(st)
+		fmt.Println(st)
 		if st.Err() == nil {
 			var pk bson.M
 			st.Decode(&pk)
-                        if name, ok := pk["name"] ; ok {
-if title, ok := pk["title"] ; ok {
-s = append(s, PACK{name.(string), x, title.(string)})
-}
-}
+			if name, ok := pk["name"]; ok {
+				if title, ok := pk["title"]; ok {
+					s = append(s, PACK{name.(string), x, title.(string)})
+				}
+			}
 		}
 	}
-        fmt.Println(s)
+	fmt.Println(s)
 	return s
 }
 
