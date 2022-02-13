@@ -48,19 +48,19 @@ func AddSticker(c tb.Context) error {
 		title := fmt.Sprintf("%s's %s kang pack", c.Sender().FirstName, Prefix)
 		if !pack {
 			Name := fmt.Sprintf("%s%d_%d_by_missmikabot", PrePre, c.Sender().ID, 1)
-			err := UploadStick(c.Message().ReplyTo.Sticker.File, Ext, true, Name, title, Emoji, c.Sender().ID)
+			err, xt := UploadStick(c.Message().ReplyTo.Sticker.File, Ext, true, Name, title, Emoji, c.Sender().ID)
 			if err {
 				db.Add_sticker(c.Sender().ID, Name, title, Ext)
 				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", name))))
 				return c.Reply(fmt.Sprintf(Prefix+"Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
 			} else {
-				return c.Reply("Emrror")
+				return c.Reply(fmt.Sprint(xt))
 			}
 		} else if count <= 120 {
 			stickerset, _ := c.Bot().StickerSet(name)
-			err := UploadStick(c.Message().ReplyTo.Sticker.File, Ext, false, name, stickerset.Title, Emoji, c.Sender().ID)
+			err, xt := UploadStick(c.Message().ReplyTo.Sticker.File, Ext, false, name, stickerset.Title, Emoji, c.Sender().ID)
 			if !err {
-				return c.Reply("Emrror")
+				return c.Reply(fmt.Sprint(xt))
 			} else {
 				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", name))))
 				c.Reply(fmt.Sprintf("Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>"+Prefix+"Pack</a></b>\nEmoji is: %s", stickerset.Name, Emoji), sel)
@@ -69,9 +69,9 @@ func AddSticker(c tb.Context) error {
 			}
 		} else {
 			Name := fmt.Sprintf("%s%d_%d_by_missmikabot", PrePre, c.Sender().ID, count)
-			err := UploadStick(c.Message().ReplyTo.Sticker.File, Ext, true, Name, title, Emoji, c.Sender().ID)
+			err, xt := UploadStick(c.Message().ReplyTo.Sticker.File, Ext, true, Name, title, Emoji, c.Sender().ID)
 			if !err {
-				return c.Reply("Emror")
+				return c.Reply(fmt.Sprint(xt))
 			} else {
 				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", name))))
 				c.Reply(fmt.Sprintf(Prefix+" Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
@@ -165,14 +165,20 @@ func MyPacks(c tb.Context) error {
 		q := 0
 		for _, x := range packs {
 			q++
-			msg += fmt.Sprintf("\n<b>%d. ~</b> <a href='http://t.me/addstickers/%s'>%s</a>", q, x.Name, x.Title)
+                        Addon := ""
+                        if x.Ext == "tgs" {
+Addon = "- Animated"
+} else if x.Ext == "webm" {
+Addon = "- Video"
+}
+			msg += fmt.Sprintf("\n<b>%d. ~</b> <a href='http://t.me/addstickers/%s'>%s</a> %", q, x.Name, x.Title, Addon)
 		}
 		c.Reply(msg)
 	}
 	return nil
 }
 
-func UploadStick(F tb.File, ext string, new bool, name string, title string, emoji string, user_id int64) bool {
+func UploadStick(F tb.File, ext string, new bool, name string, title string, emoji string, user_id int64) (bool, mapType) {
 	b.Download(&F, "sticker."+ext)
 	var url string
 	if new {
@@ -210,13 +216,13 @@ func UploadStick(F tb.File, ext string, new bool, name string, title string, emo
 	resp, err := myClient.Post(url, writer.FormDataContentType(), pipeReader)
 	if err != nil {
 		pipeReader.CloseWithError(err)
-		return false
+		return false, nil
 	}
 	defer resp.Body.Close()
 	var d mapType
 	json.NewDecoder(resp.Body).Decode(&d)
-	fmt.Println(d)
-	return d["ok"].(bool)
+        fmt.Println(d)
+	return d["ok"].(bool), d
 }
 
 func addFileToWriter(writer *multipart.Writer, filename, field string, file interface{}) error {
@@ -242,3 +248,4 @@ func addFileToWriter(writer *multipart.Writer, filename, field string, file inte
 	_, err = io.Copy(part, reader)
 	return err
 }
+
