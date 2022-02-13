@@ -7,7 +7,15 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-var stickers = database.Collection("stick")
+var (
+stickers = database.Collection("stick")
+)
+
+type PACK struct {
+Name string
+Ext string
+Title string
+}
 
 func Add_sticker(user_id int64, name string, title string, _type string) {
 	filter := bson.M{"user_id": user_id, "type": _type}
@@ -39,23 +47,18 @@ func Get_user_pack(user_id int64, _type string) (bool, int32, string) {
 	}
 }
 
-func Get_user_packs(user_id int64) map[string]string {
-	var files []bson.M
-	filter := bson.M{"user_id": user_id}
-	r, _ := stickers.Find(context.TODO(), filter)
-	r.All(context.TODO(), &files)
-	fmt.Println(files)
-	if len(files) == 0 {
-		return nil
-	} else {
-		var Names = make(map[string]string)
-		for _, y := range files {
-			for _, x := range y["packs"].(bson.A) {
-				Names[x.(bson.M)["name"].(string)] = x.(bson.M)["title"].(string)
-			}
-		}
-		return Names
-	}
+func Get_user_packs(user_id int64) []PACK {
+	var s []PACK
+        for _, x := range []string{"png", "tgs", "webm"} {
+f := bson.M{"user_id": user_id, "type": x}
+st := stickers.FindOne(context.TODO(), f)
+if st.Err() == nil {
+var pk bson.M
+st.Decode(&pk)
+s = append (s, PACK{pk["name"].(string), x, pk["title"].(string)})
+}
+}
+return s
 }
 
 func Update_count(user_id int64, name string, _type string) {
