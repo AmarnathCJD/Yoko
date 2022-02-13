@@ -51,10 +51,10 @@ func Get_user_packs(user_id int64) []PACK {
 	for _, x := range []string{"png", "tgs", "webm"} {
 		f := bson.M{"user_id": user_id, "type": x}
 		st := stickers.FindOne(context.TODO(), f)
-		fmt.Println(st)
 		if st.Err() == nil {
 			var pk bson.M
 			st.Decode(&pk)
+                        fmt.Println(pk)
 			if name, ok := pk["name"]; ok {
 				if title, ok := pk["title"]; ok {
 					s = append(s, PACK{name.(string), x, title.(string)})
