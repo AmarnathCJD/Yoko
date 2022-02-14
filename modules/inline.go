@@ -61,7 +61,7 @@ func InlineMainMenu(c tb.Context) {
 		Results:   results,
 		CacheTime: 60,
 	})
-}
+} 
 
 func gsearch_inline(c tb.Context) {
 	query := c.Query().Text
@@ -180,6 +180,10 @@ func yt_search(c tb.Context) {
 	check(err)
 	results := make(tb.Results, 10)
 	for i, x := range resp.Items {
+                if i == 1 {
+d, _ := json.Marshal(x)
+fmt.Println(string(d))
+}
 		text := fmt.Sprintf("<b><a href='https://www.youtube.com/watch?v=%s'>%s</a></b>\n<b>%s</b>\n<b>Published:</b> %s\n\n <i>%s</i>", x.Id.VideoId, x.Snippet.Title, x.Snippet.ChannelTitle, x.Snippet.PublishedAt, x.Snippet.Description)
 		r := &tb.ArticleResult{ResultBase: tb.ResultBase{ReplyMarkup: inline_markup("yt"), Content: &tb.InputTextMessageContent{Text: text, DisablePreview: false}}, Title: x.Snippet.Title, Description: x.Snippet.ChannelTitle, ThumbURL: x.Snippet.Thumbnails.Medium.Url}
 		results[i] = r
