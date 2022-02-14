@@ -51,7 +51,7 @@ func AddSticker(c tb.Context) error {
 			err, xt := UploadStick(c.Message().ReplyTo.Sticker.File, Ext, true, Name, title, Emoji, c.Sender().ID)
 			if err {
 				db.Add_sticker(c.Sender().ID, Name, title, Ext)
-				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", name))))
+				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", Name))))
 				return c.Reply(fmt.Sprintf(Prefix+"Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
 			} else {
 				return c.Reply(fmt.Sprint(xt))
@@ -62,7 +62,7 @@ func AddSticker(c tb.Context) error {
 			if !err {
 				return c.Reply(fmt.Sprint(xt))
 			} else {
-				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", name))))
+				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", stickerset.Name))))
 				c.Reply(fmt.Sprintf("Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>"+Prefix+"Pack</a></b>\nEmoji is: %s", stickerset.Name, Emoji), sel)
 				db.Update_count(c.Sender().ID, stickerset.Name, Ext)
 				return nil
@@ -73,7 +73,7 @@ func AddSticker(c tb.Context) error {
 			if !err {
 				return c.Reply(fmt.Sprint(xt))
 			} else {
-				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", name))))
+				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", Name))))
 				c.Reply(fmt.Sprintf(Prefix+" Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
 				db.Add_sticker(c.Sender().ID, Name, title, Ext)
 				return nil
@@ -87,7 +87,7 @@ func AddSticker(c tb.Context) error {
 		err := c.Bot().CreateStickerSet(c.Sender(), tb.StickerSet{Name: Name, Title: fmt.Sprintf("%s's kang pack", c.Sender().FirstName), Stickers: []tb.Sticker{*c.Message().ReplyTo.Sticker}, PNG: &c.Message().ReplyTo.Sticker.File, Emojis: Emoji, Video: false, Animated: false})
 		if err == nil {
 			db.Add_sticker(c.Sender().ID, Name, title, "png")
-			sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", name))))
+			sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", Name))))
 			c.Reply(fmt.Sprintf("Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
 		} else {
 			c.Reply(err.Error())
@@ -98,7 +98,7 @@ func AddSticker(c tb.Context) error {
 		if err != nil {
 			c.Reply(err.Error())
 		} else {
-			sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", name))))
+			sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", stickerset.Name))))
 			c.Reply(fmt.Sprintf("Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", stickerset.Name, Emoji), sel)
 			db.Update_count(c.Sender().ID, stickerset.Name, "png")
 		}
@@ -108,7 +108,7 @@ func AddSticker(c tb.Context) error {
 		if err != nil {
 			c.Reply(err.Error())
 		} else {
-			sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", name))))
+			sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", Name))))
 			c.Reply(fmt.Sprintf("Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
 			db.Add_sticker(c.Sender().ID, Name, title, "png")
 		}
