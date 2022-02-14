@@ -34,12 +34,12 @@ func AddSticker(c tb.Context) error {
 		c.Reply("Yeah, I can't kang that.")
 		return nil
 	}
-        if Emoji == string("") {
-Emoji = c.Message().ReplyTo.Sticker.Emoji
-if Emoji == string("") {
-Emoji = "😙"
-}
-}
+	if Emoji == string("") {
+		Emoji = c.Message().ReplyTo.Sticker.Emoji
+		if Emoji == string("") {
+			Emoji = "😙"
+		}
+	}
 	Reply := c.Message().ReplyTo.Sticker
 	if Reply.Video || Reply.Animated {
 		var Ext = "webm"
