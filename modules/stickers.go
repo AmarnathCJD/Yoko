@@ -19,7 +19,7 @@ var (
 
 func AddSticker(c tb.Context) error {
 	pack, count, name := db.Get_user_pack(c.Sender().ID, "png")
-	Emoji := "😙"
+	var Emoji string
 	if c.Message().Payload != string("") {
 		Emoji = c.Message().Payload
 	}
@@ -34,6 +34,12 @@ func AddSticker(c tb.Context) error {
 		c.Reply("Yeah, I can't kang that.")
 		return nil
 	}
+        if Emoji == string("") {
+Emoji, ok = c.Message().ReplyTo.Sticker.Emoji
+if !ok {
+Emoji := "😙"
+}
+}
 	Reply := c.Message().ReplyTo.Sticker
 	if Reply.Video || Reply.Animated {
 		var Ext = "webm"
