@@ -38,11 +38,11 @@ func AddSticker(c tb.Context) error {
 	if Reply.Video || Reply.Animated {
 		var Ext = "webm"
 		var Prefix = "WebM"
-		var PrePre = "vi"
+		var PrePre = "vid"
 		if Reply.Animated {
 			Ext = "tgs"
 			Prefix = "Animated"
-			PrePre = "tg"
+			PrePre = "tgs"
 		}
 		pack, count, name = db.Get_user_pack(c.Sender().ID, Ext)
 		title := fmt.Sprintf("%s's %s kang pack", c.Sender().FirstName, Prefix)
@@ -171,7 +171,7 @@ func MyPacks(c tb.Context) error {
 			} else if x.Ext == "webm" {
 				Addon = "- Video"
 			}
-			msg += fmt.Sprintf("\n<b>%d. ~</b> <a href='http://t.me/addstickers/%s'>%s</a> %", q, x.Name, x.Title, Addon)
+			msg += fmt.Sprintf("\n<b>%d. ~</b> <a href='http://t.me/addstickers/%s'>%s</a> %s", q, x.Name, x.Title, Addon)
 		}
 		c.Reply(msg)
 	}
