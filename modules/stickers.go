@@ -37,7 +37,7 @@ func AddSticker(c tb.Context) error {
         if Emoji == string("") {
 Emoji = c.Message().ReplyTo.Sticker.Emoji
 if Emoji == string("") {
-Emoji := "😙"
+Emoji = "😙"
 }
 }
 	Reply := c.Message().ReplyTo.Sticker
