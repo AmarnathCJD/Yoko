@@ -38,11 +38,11 @@ func AddSticker(c tb.Context) error {
 	if Reply.Video || Reply.Animated {
 		var Ext = "webm"
 		var Prefix = "WebM"
-		var PrePre = "vid"
+		var PrePre = "vip"
 		if Reply.Animated {
 			Ext = "tgs"
 			Prefix = "Animated"
-			PrePre = "tgs"
+			PrePre = "tgp"
 		}
 		pack, count, name = db.Get_user_pack(c.Sender().ID, Ext)
 		title := fmt.Sprintf("%s's %s kang pack", c.Sender().FirstName, Prefix)
@@ -83,7 +83,7 @@ func AddSticker(c tb.Context) error {
 	}
 	title := fmt.Sprintf("%s's kang pack", c.Sender().FirstName)
 	if !pack {
-		Name := fmt.Sprintf("pn%d_%d_by_missmikabot", c.Sender().ID, 1)
+		Name := fmt.Sprintf("pns%d_%d_by_missmikabot", c.Sender().ID, 1)
 		err := c.Bot().CreateStickerSet(c.Sender(), tb.StickerSet{Name: Name, Title: fmt.Sprintf("%s's kang pack", c.Sender().FirstName), Stickers: []tb.Sticker{*c.Message().ReplyTo.Sticker}, PNG: &c.Message().ReplyTo.Sticker.File, Emojis: Emoji, Video: false, Animated: false})
 		if err == nil {
 			db.Add_sticker(c.Sender().ID, Name, title, "png")
@@ -103,7 +103,7 @@ func AddSticker(c tb.Context) error {
 			db.Update_count(c.Sender().ID, stickerset.Name, "png")
 		}
 	} else {
-		Name := fmt.Sprintf("pn%d_%d_by_missmikabot", c.Sender().ID, count)
+		Name := fmt.Sprintf("pns%d_%d_by_missmikabot", c.Sender().ID, count)
 		err := c.Bot().CreateStickerSet(c.Sender(), tb.StickerSet{Name: Name, Title: fmt.Sprintf("%s's kang pack", c.Sender().FirstName), Stickers: []tb.Sticker{*c.Message().ReplyTo.Sticker}, PNG: &c.Message().ReplyTo.Sticker.File, Emojis: Emoji})
 		if err != nil {
 			c.Reply(err.Error())
