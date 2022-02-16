@@ -3,6 +3,7 @@ package bot
 import (
 	"fmt"
 	tb "gopkg.in/telebot.v3"
+        "os"
 )
 
 func BotInit() tb.Bot {
@@ -10,9 +11,9 @@ func BotInit() tb.Bot {
 		URL:   "",
 		Token: "5181620060:AAF6FCOW9M6tbUPPtLs_b2UkXKGz7ksaggo",
 		Poller: &tb.Webhook{
-			Listen: "https://golang-yoko.herokuapp.com",
+			Listen: "https://golang-yoko.herokuapp.com:" + os.Getenv("PORT"),
 			Endpoint: &tb.WebhookEndpoint{
-				PublicURL: "https://golang-yoko.herokuapp.com/",
+				PublicURL: "https://golang-yoko.herokuapp.com/:" + os.Getenv("PORT"),
 			},
 			MaxConnections: 100,
 			AllowedUpdates: []string{"message", "chat_member", "inline_query", "callback_query"},
