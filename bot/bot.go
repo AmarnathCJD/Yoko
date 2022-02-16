@@ -2,7 +2,6 @@ package bot
 
 import (
 	"fmt"
-"os"
 	tb "gopkg.in/telebot.v3"
 )
 
