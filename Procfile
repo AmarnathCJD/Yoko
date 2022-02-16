@@ -1,1 +1,1 @@
-worker: ./bin/yoko
+web: ./bin/yoko
