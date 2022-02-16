@@ -10,10 +10,7 @@ func BotInit() tb.Bot {
 	b, _ := tb.NewBot(tb.Settings{
 		URL:   "",
 		Token: "5181620060:AAF6FCOW9M6tbUPPtLs_b2UkXKGz7ksaggo",
-		Poller: &tb.Webhook{
-			Listen: "",
-			AllowedUpdates: []string{"message", "chat_member", "inline_query", "callback_query"},
-		},
+		Poller: &tb.LongPoller{Timeout: 10, AllowedUpdates: []string{"message", "chat_member", "inline_query", "callback_query"}},
 		Synchronous: false,
 		Verbose:     false,
 		ParseMode:   "HTML",
