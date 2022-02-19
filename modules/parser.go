@@ -185,6 +185,7 @@ func GetUser(c tb.Context) (User, string, error) {
 	var user User
 	switch Obj.(type) {
 	case tb.User:
+		fmt.Println("user")
 		user = User{Obj.(tb.User).ID, Obj.(tb.User).Username, Obj.(tb.User).FirstName, Obj.(tb.User).LastName, "", 0, GetMention(Obj.(tb.User).ID, Obj.(tb.User).FirstName), err.Error(), false, "user"}
 	case tb.Chat:
 		if Obj.(tb.Chat).Title != string("") {
@@ -219,7 +220,7 @@ func ResolveUsername(u string) User {
 			user.ID = int64(id.(float64))
 		}
 		if username, ok := data["username"]; ok {
-			user.Username = username.(string)
+			user.Username = "@" + username.(string)
 		}
 		if first, ok := data["first_name"]; ok {
 			user.First = first.(string)
@@ -236,12 +237,12 @@ func ResolveUsername(u string) User {
 			user.DC = int64(dc.(float64))
 		}
 	} else if chat, ok := data["type"]; ok && chat == "channel" {
-		user.Type = "chammel"
+		user.Type = "channel"
 		if id, ok := data["id"]; ok {
 			user.ID = int64(id.(float64))
 		}
 		if username, ok := data["username"]; ok {
-			user.Username = username.(string)
+			user.Username = "@" + username.(string)
 		}
 		if first, ok := data["title"]; ok {
 			user.First = first.(string)
@@ -253,7 +254,6 @@ func ResolveUsername(u string) User {
 			user.DC = int64(dc.(float64))
 		}
 	}
-	fmt.Println(user)
 	return user
 
 }
