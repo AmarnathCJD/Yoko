@@ -153,12 +153,9 @@ func GetObj(c tb.Context) (interface{}, string, error) {
 		user := c.Message().ReplyTo.Sender
                 if user.ID == int64(136817688) {
 user := c.Message().ReplyTo.SenderChat
+return *user, c.Message().Payload, nil
 }
-		if c.Message().Payload != string("") {
-			return *user, c.Message().Payload, nil
-		} else {
-			return *user, "", nil
-		}
+		return *user, c.Message().Payload, nil
 	} else if c.Message().Payload != string("") {
 		Args := strings.SplitN(c.Message().Payload, " ", 1)
 		if isInt(Args[0]) {
