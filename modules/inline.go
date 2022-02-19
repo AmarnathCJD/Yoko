@@ -81,8 +81,10 @@ func gsearch_inline(c tb.Context) {
 		}
 	}
 	c.Bot().Answer(c.Query(), &tb.QueryResponse{
-		Results:   results,
-		CacheTime: 60,
+		Results:           results,
+		CacheTime:         60,
+		SwitchPMText:      "Mika",
+		SwitchPMParameter: "start",
 	})
 }
 
