@@ -191,18 +191,32 @@ func GetUser(c tb.Context) (User, string, error) {
 			Username: "@" + Obj.(tb.User).Username,
 			First:    Obj.(tb.User).FirstName,
 			Last:     Obj.(tb.User).LastName,
-			Full:     "",
 			DC:       5,
 			Mention:  GetMention(Obj.(tb.User).ID, Obj.(tb.User).FirstName),
-			Error:    "",
 			Giga:     false,
 			Type:     "user",
 		}
 	case tb.Chat:
 		if Obj.(tb.Chat).Title != string("") {
-			user = User{Obj.(tb.Chat).ID, Obj.(tb.Chat).Username, Obj.(tb.Chat).Title, "", "", 0, "", err.Error(), false, "chat"}
+			user = User{
+				ID:       Obj.(tb.Chat).ID,
+				Username: "@" + Obj.(tb.Chat).Username,
+				First:    Obj.(tb.Chat).Title,
+				DC:       5,
+				Giga:     false,
+				Type:     "chat",
+			}
 		} else {
-			user = User{Obj.(tb.User).ID, Obj.(tb.User).Username, Obj.(tb.User).FirstName, Obj.(tb.User).LastName, "", 0, GetMention(Obj.(tb.User).ID, Obj.(tb.User).FirstName), err.Error(), false, "user"}
+			user = User{
+				ID:       Obj.(tb.User).ID,
+				Username: "@" + Obj.(tb.User).Username,
+				First:    Obj.(tb.User).FirstName,
+				Last:     Obj.(tb.User).LastName,
+				DC:       5,
+				Mention:  GetMention(Obj.(tb.User).ID, Obj.(tb.User).FirstName),
+				Giga:     false,
+				Type:     "user",
+			}
 		}
 	case string:
 		user = ResolveUsername(Obj.(string))
