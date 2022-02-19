@@ -152,7 +152,7 @@ func GetObj(c tb.Context) (interface{}, string, error) {
 	if c.Message().IsReply() {
 		user := c.Message().ReplyTo.Sender
                 if user.ID == int64(136817688) {
-user := c.Message().SenderChat
+user := c.Message().ReplyTo.SenderChat
 }
 		if c.Message().Payload != string("") {
 			return *user, c.Message().Payload, nil
@@ -188,7 +188,6 @@ func GetMention(id int64, name string) string {
 
 func GetUser(c tb.Context) (User, string, error) {
 	Obj, Payload, err := GetObj(c)
-	fmt.Println("x", Obj, Payload, err)
 	var user User
 	switch Obj.(type) {
 	case tb.User:
