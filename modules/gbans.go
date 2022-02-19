@@ -1,6 +1,11 @@
 package modules
 
-import tb "gopkg.in/telebot.v3"
+import (
+	"fmt"
+
+	"github.com/amarnathcjd/yoko/modules/db"
+	tb "gopkg.in/telebot.v3"
+)
 
 func Gban(c tb.Context) error {
 	if !IsBotAdmin(c.Sender().ID) {
@@ -17,6 +22,7 @@ func Gban(c tb.Context) error {
 	} else if u.ID == BOT_ID {
 		return c.Reply("You are a funny one aren't you?, I not gonna gban myself!")
 	}
+	fmt.Println(db.GetAllChats())
 	return nil
 }
 
