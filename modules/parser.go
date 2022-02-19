@@ -186,7 +186,18 @@ func GetUser(c tb.Context) (User, string, error) {
 	switch Obj.(type) {
 	case tb.User:
 		fmt.Println("user")
-		user = User{Obj.(tb.User).ID, Obj.(tb.User).Username, Obj.(tb.User).FirstName, Obj.(tb.User).LastName, "", 0, GetMention(Obj.(tb.User).ID, Obj.(tb.User).FirstName), err.Error(), false, "user"}
+		user = User{
+			ID:       Obj.(tb.User).ID,
+			Username: "@" + Obj.(tb.User).Username,
+			First:    Obj.(tb.User).FirstName,
+			Last:     Obj.(tb.User).LastName,
+			Full:     "",
+			DC:       5,
+			Mention:  GetMention(Obj.(tb.User).ID, Obj.(tb.User).FirstName),
+			Error:    "",
+			Giga:     false,
+			Type:     "user",
+		}
 	case tb.Chat:
 		if Obj.(tb.Chat).Title != string("") {
 			user = User{Obj.(tb.Chat).ID, Obj.(tb.Chat).Username, Obj.(tb.Chat).Title, "", "", 0, "", err.Error(), false, "chat"}
