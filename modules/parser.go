@@ -185,7 +185,6 @@ func GetUser(c tb.Context) (User, string, error) {
 	var user User
 	switch Obj.(type) {
 	case tb.User:
-		fmt.Println("user")
 		user = User{
 			ID:       Obj.(tb.User).ID,
 			Username: "@" + Obj.(tb.User).Username,
