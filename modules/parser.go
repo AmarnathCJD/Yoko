@@ -184,7 +184,7 @@ func GetUser(c tb.Context) (User, string, error) {
 	fmt.Println(Obj, Payload, err)
 	var user User
 	switch Obj.(type) {
-	case *tb.User:
+	case tb.User:
 		user = User{Obj.(tb.User).ID, Obj.(tb.User).Username, Obj.(tb.User).FirstName, Obj.(tb.User).LastName, "", 0, GetMention(Obj.(tb.User).ID, Obj.(tb.User).FirstName), err.Error(), false, "user"}
 	case tb.Chat:
 		if Obj.(tb.Chat).Title != string("") {
@@ -193,6 +193,7 @@ func GetUser(c tb.Context) (User, string, error) {
 			user = User{Obj.(tb.User).ID, Obj.(tb.User).Username, Obj.(tb.User).FirstName, Obj.(tb.User).LastName, "", 0, GetMention(Obj.(tb.User).ID, Obj.(tb.User).FirstName), err.Error(), false, "user"}
 		}
 	case string:
+		fmt.Println(Obj.(string) + "hiaia")
 		user = ResolveUsername(Obj.(string))
 	}
 	return user, Payload, err
