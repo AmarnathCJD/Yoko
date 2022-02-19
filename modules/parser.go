@@ -148,9 +148,9 @@ func GetObj(c tb.Context) (interface{}, string, error) {
 	if c.Message().IsReply() {
 		user := c.Message().ReplyTo.Sender
 		if c.Message().Payload != string("") {
-			return user, c.Message().Payload, nil
+			return *user, c.Message().Payload, nil
 		} else {
-			return user, "", nil
+			return *user, "", nil
 		}
 	} else if c.Message().Payload != string("") {
 		Args := strings.SplitN(c.Message().Payload, " ", 1)
@@ -158,9 +158,9 @@ func GetObj(c tb.Context) (interface{}, string, error) {
 			id, _ := strconv.ParseInt(Args[0], 10, 64)
 			user, err := c.Bot().ChatByID(id)
 			if len(Args) > 1 {
-				return user, Args[1], err
+				return *user, Args[1], err
 			} else {
-				return user, "", err
+				return *user, "", err
 			}
 
 		} else {
@@ -184,7 +184,7 @@ func GetUser(c tb.Context) (User, string, error) {
 	fmt.Println(Obj, Payload, err)
 	var user User
 	switch Obj.(type) {
-	case tb.User:
+	case *tb.User:
 		user = User{Obj.(tb.User).ID, Obj.(tb.User).Username, Obj.(tb.User).FirstName, Obj.(tb.User).LastName, "", 0, GetMention(Obj.(tb.User).ID, Obj.(tb.User).FirstName), err.Error(), false, "user"}
 	case tb.Chat:
 		if Obj.(tb.Chat).Title != string("") {
