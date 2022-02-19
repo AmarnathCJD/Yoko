@@ -151,6 +151,9 @@ type User struct {
 func GetObj(c tb.Context) (interface{}, string, error) {
 	if c.Message().IsReply() {
 		user := c.Message().ReplyTo.Sender
+                if user.ID == int64(136817688) {
+user := c.Message().SenderChat
+}
 		if c.Message().Payload != string("") {
 			return *user, c.Message().Payload, nil
 		} else {
