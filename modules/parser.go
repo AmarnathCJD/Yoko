@@ -22,7 +22,7 @@ var (
 )
 
 func Te(c tb.Context) error {
-	r := c.Message().ReplyTo
+	r, _, _:= GetUser(c)
 	b, _ := json.Marshal(r)
 	fmt.Println(b)
 	log.Print(b)
