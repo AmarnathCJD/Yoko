@@ -1,7 +1,9 @@
 package modules
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"regexp"
 	"strconv"
 	"strings"
@@ -19,10 +21,9 @@ var (
 	Code      = regexp.MustCompile("`(.*?)`")
 )
 
-func PARSET(c tb.Context) error {
-
-	return c.Reply(ParseMD(c.Message().ReplyTo))
-
+func Te(c tb.Context) error {
+	fmt.Println(GetUser(c))
+	return nil
 }
 
 func ParseMD(c *tb.Message) string {
@@ -130,4 +131,146 @@ func ParseString(t string, c tb.Context) (string, bool) {
 func ParseFile() {
 }
 
-// Soon
+type User struct {
+	ID       int64
+	Username string
+	First    string
+	Last     string
+	Full     string
+	DC       int64
+	Mention  string
+	Error    string
+	Giga     bool
+	Type     string
+}
+
+func GetObj(c tb.Context) (interface{}, string, error) {
+	if c.Message().IsReply() {
+		user := c.Message().ReplyTo.Sender
+		if c.Message().Payload != string("") {
+			return user, c.Message().Payload, nil
+		} else {
+			return user, "", nil
+		}
+	} else if c.Message().Payload != string("") {
+		Args := strings.SplitN(c.Message().Payload, " ", 1)
+		if isInt(Args[0]) {
+			id, _ := strconv.ParseInt(Args[0], 10, 64)
+			user, err := c.Bot().ChatByID(id)
+			if len(Args) > 1 {
+				return user, Args[1], err
+			} else {
+				return user, "", err
+			}
+
+		} else {
+			if len(Args) > 1 {
+				return Args[0], Args[1], nil
+			} else {
+				return Args[0], "", nil
+			}
+		}
+	} else {
+		return nil, "", fmt.Errorf("You dont seem to be referring to a user or the ID specified is incorrect...")
+	}
+}
+
+func GetMention(id int64, name string) string {
+	return fmt.Sprintf("<a href='tg://user?id=%d'>%s</a>", id, name)
+}
+
+func GetUser(c tb.Context) (User, string, error) {
+	Obj, Payload, err := GetObj(c)
+	var user User
+	switch Obj.(type) {
+	case tb.User:
+		user = User{Obj.(tb.User).ID, Obj.(tb.User).Username, Obj.(tb.User).FirstName, Obj.(tb.User).LastName, "", 0, GetMention(Obj.(tb.User).ID, Obj.(tb.User).FirstName), err.Error(), false, "user"}
+	case tb.Chat:
+		if Obj.(tb.Chat).Title != string("") {
+			user = User{Obj.(tb.Chat).ID, Obj.(tb.Chat).Username, Obj.(tb.Chat).Title, "", "", 0, "", err.Error(), false, "chat"}
+		} else {
+			user = User{Obj.(tb.User).ID, Obj.(tb.User).Username, Obj.(tb.User).FirstName, Obj.(tb.User).LastName, "", 0, GetMention(Obj.(tb.User).ID, Obj.(tb.User).FirstName), err.Error(), false, "user"}
+		}
+	case string:
+		user = ResolveUsername(Obj.(string))
+	}
+	return user, Payload, err
+
+}
+
+func ResolveUsername(u string) User {
+	resp, err := myClient.Get(ResolveURL + u)
+
+	if err != nil {
+		log.Println(err)
+		return User{Error: "ResolveUsernameRequestError"}
+	}
+	defer resp.Body.Close()
+	var data mapType
+	json.NewDecoder(resp.Body).Decode(&data)
+	if err, ok := data["error"]; ok {
+		return User{Error: err.(string)}
+	}
+	var user User
+	if _type, ok := data["type"]; ok && _type == "user" {
+		user.Type = "user"
+		if id, ok := data["id"]; ok {
+			user.ID = id.(int64)
+		}
+		if username, ok := data["username"]; ok {
+			user.Username = username.(string)
+		}
+		if first, ok := data["first_name"]; ok {
+			user.First = first.(string)
+		}
+		if last, ok := data["last_name"]; ok {
+			user.Last = last.(string)
+		}
+		if user.Last != "" {
+			user.Full = user.First + " " + user.Last
+		} else {
+			user.Full = user.First
+		}
+		if dc, ok := data["dc_id"]; ok {
+			user.DC = dc.(int64)
+		}
+	} else if chat, ok := data["type"]; ok && chat == "channel" {
+		user.Type = "chammel"
+		if id, ok := data["id"]; ok {
+			user.ID = id.(int64)
+		}
+		if username, ok := data["username"]; ok {
+			user.Username = username.(string)
+		}
+		if first, ok := data["title"]; ok {
+			user.First = first.(string)
+		}
+		if giga, ok := data["gigagroup"]; ok {
+			user.Giga = giga.(bool)
+		}
+		if dc, ok := data["dc_id"]; ok {
+			user.DC = dc.(int64)
+		}
+	}
+	return user
+
+}
+
+func (user *User) User() tb.User {
+	return tb.User{
+		ID:           user.ID,
+		FirstName:    user.First,
+		LastName:     user.Last,
+		Username:     user.Username,
+		LanguageCode: "en",
+		IsBot:        false,
+	}
+}
+
+func (user *User) Chat() tb.Chat {
+	return tb.Chat{
+		ID:       user.ID,
+		Title:    user.First,
+		Username: user.Username,
+	}
+}
