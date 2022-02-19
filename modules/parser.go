@@ -181,6 +181,7 @@ func GetMention(id int64, name string) string {
 
 func GetUser(c tb.Context) (User, string, error) {
 	Obj, Payload, err := GetObj(c)
+	fmt.Println(Obj, Payload, err)
 	var user User
 	switch Obj.(type) {
 	case tb.User:
