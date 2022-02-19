@@ -12,13 +12,13 @@ import (
 var unwarn_btn = sel.Data("Remove warn (admin only)", "remove_user_warning")
 
 func WARN(c tb.Context) error {
-	cmd := strings.SplitN(c.Message().Text, " ", 2)[0][1:]
+	cmd := strings.SplitN(c.Message().Text, " ", 1)[0][1:]
 	if cmd == "dwarn" && !c.Message().IsReply() {
 		c.Reply("You have to reply to a message to delete it and warn the user.")
 		return nil
 	}
 	user, extra := get_user(c.Message())
-	if user.ID == int64(6) {
+	if user.ID == int64(BOT_ID) {
 		c.Reply("Do you really think I can do that to myself <b>:p</b>")
 		return nil
 	}
