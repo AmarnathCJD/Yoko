@@ -22,7 +22,7 @@ var (
 )
 
 func Te(c tb.Context) error {
-	fmt.Println(GetUser(c))
+	log.Println(GetUser(c))
 	return nil
 }
 
