@@ -26,7 +26,7 @@ func Te(c tb.Context) error {
 	b, _ := json.Marshal(r)
 	fmt.Println(b)
 	log.Print(b)
-	c.Reply(string(b))
+	c.Reply(string(fmt.Sprint(r)))
 	return nil
 }
 
