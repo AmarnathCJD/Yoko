@@ -181,7 +181,7 @@ func GetMention(id int64, name string) string {
 
 func GetUser(c tb.Context) (User, string, error) {
 	Obj, Payload, err := GetObj(c)
-	fmt.Println(Obj, Payload, err)
+	fmt.Println("x", Obj, Payload, err)
 	var user User
 	switch Obj.(type) {
 	case tb.User:
@@ -193,7 +193,6 @@ func GetUser(c tb.Context) (User, string, error) {
 			user = User{Obj.(tb.User).ID, Obj.(tb.User).Username, Obj.(tb.User).FirstName, Obj.(tb.User).LastName, "", 0, GetMention(Obj.(tb.User).ID, Obj.(tb.User).FirstName), err.Error(), false, "user"}
 		}
 	case string:
-		fmt.Println(Obj.(string) + "hiaia")
 		user = ResolveUsername(Obj.(string))
 	}
 	return user, Payload, err
@@ -217,7 +216,7 @@ func ResolveUsername(u string) User {
 	if _type, ok := data["type"]; ok && _type == "user" {
 		user.Type = "user"
 		if id, ok := data["id"]; ok {
-			user.ID = id.(int64)
+			user.ID = int64(id.(float64))
 		}
 		if username, ok := data["username"]; ok {
 			user.Username = username.(string)
@@ -234,12 +233,12 @@ func ResolveUsername(u string) User {
 			user.Full = user.First
 		}
 		if dc, ok := data["dc_id"]; ok {
-			user.DC = dc.(int64)
+			user.DC = int64(dc.(float64))
 		}
 	} else if chat, ok := data["type"]; ok && chat == "channel" {
 		user.Type = "chammel"
 		if id, ok := data["id"]; ok {
-			user.ID = id.(int64)
+			user.ID = int64(id.(float64))
 		}
 		if username, ok := data["username"]; ok {
 			user.Username = username.(string)
@@ -251,9 +250,10 @@ func ResolveUsername(u string) User {
 			user.Giga = giga.(bool)
 		}
 		if dc, ok := data["dc_id"]; ok {
-			user.DC = dc.(int64)
+			user.DC = int64(dc.(float64))
 		}
 	}
+	fmt.Println(user)
 	return user
 
 }
