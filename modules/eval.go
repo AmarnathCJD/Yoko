@@ -9,6 +9,11 @@ import (
 	tb "gopkg.in/telebot.v3"
 )
 
+import (
+	"github.com/traefik/yaegi/interp"
+	"github.com/traefik/yaegi/stdlib"
+)
+
 func Exec(c tb.Context) error {
 	if c.Sender().ID != int64(1833850637) {
 		return nil
@@ -68,4 +73,13 @@ func MediaInfo(c tb.Context) error {
 		return c.Reply("<code>" + string(b) + "</code>")
 	}
 
+}
+
+func Eval(c tb.Context) error {
+code := c.Message().Payload
+i := interp.New(interp.Options{})
+	i.Use(stdlib.Symbols)
+        fmt.Println("Evaltestpref")
+	x, err := i.Eval(code)
+        fmt.Println(x, err)
 }
