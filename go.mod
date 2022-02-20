@@ -4,6 +4,7 @@ go 1.17
 
 require (
 	github.com/StalkR/imdb v1.0.7
+	github.com/traefik/yaegi v0.11.2
 	go.mongodb.org/mongo-driver v1.8.2
 )
 

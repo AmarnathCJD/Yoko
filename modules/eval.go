@@ -76,11 +76,11 @@ func MediaInfo(c tb.Context) error {
 }
 
 func Eval(c tb.Context) error {
-code := c.Message().Payload
-i := interp.New(interp.Options{})
+	code := c.Message().Payload
+	i := interp.New(interp.Options{})
 	i.Use(stdlib.Symbols)
-        fmt.Println("Evaltestpref")
+	fmt.Println("Evaltestpref")
 	x, err := i.Eval(code)
-        fmt.Println(x, err)
-return nil
+	fmt.Println(x, err)
+	return nil
 }
