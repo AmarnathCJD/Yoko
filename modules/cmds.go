@@ -149,7 +149,7 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["logs"] = HANDLE{FUNC: Logs}
 	HANDLERS["ping"] = HANDLE{FUNC: Ping}
 	HANDLERS["pong"] = HANDLE{FUNC: Te}
-        HANDLERS["ev"] = HANDLE{FUNC: Eval}
+	HANDLERS["ev"] = HANDLE{FUNC: Eval}
 	return HANDLERS
 
 }
