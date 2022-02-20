@@ -82,4 +82,5 @@ i := interp.New(interp.Options{})
         fmt.Println("Evaltestpref")
 	x, err := i.Eval(code)
         fmt.Println(x, err)
+return nil
 }
