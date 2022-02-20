@@ -5,14 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"os/exec"
-
+        "os"
 	tb "gopkg.in/telebot.v3"
+	"github.com/cosmos72/gomacro/fast"
 )
 
-import (
-	"github.com/traefik/yaegi/interp"
-	"github.com/traefik/yaegi/stdlib"
-)
 
 func Exec(c tb.Context) error {
 	if c.Sender().ID != int64(1833850637) {
@@ -77,10 +74,20 @@ func MediaInfo(c tb.Context) error {
 
 func Eval(c tb.Context) error {
 	code := c.Message().Payload
-	i := interp.New(interp.Options{})
-	i.Use(stdlib.Symbols)
-	fmt.Println("Evaltestpref")
-	x, err := i.Eval(code)
-	fmt.Println(x, err)
+	fmt.Println(code)
 	return nil
+}
+
+func EvalCmd() {
+	interp := fast.New()
+	interp.DeclFunc("M", M)
+	rd := os.Stdout
+	r, w, _ := os.Pipe()
+	os.Stdout = w
+	interp.Eval(`import "fmt"
+		fmt.Println("Helo")`)
+	w.Close()
+	out, _ := ioutil.ReadAll(r)
+	os.Stdout = rd
+	fmt.Println(out)
 }
