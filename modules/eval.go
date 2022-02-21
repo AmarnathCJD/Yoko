@@ -72,14 +72,22 @@ func MediaInfo(c tb.Context) error {
 
 }
 
+var H tb.Context
+
 func Eval(c tb.Context) error {
 	code := c.Message().Payload
+        H = c
 	out := EvalCmd(code)
 	return c.Reply(fmt.Sprintf("Eval: %s\nOut: %s", code, out))
 }
 
-func EvalCmd(code string) string {
+func Hexa() {
+H.Reply("Hmm")
+}
+
+func EvalCmd(code stringc) string {
 	interp := fast.New()
+        interp.DeclFunc("Hexa", Hexa)
 	rd := os.Stdout
 	r, w, _ := os.Pipe()
 	os.Stdout = w
