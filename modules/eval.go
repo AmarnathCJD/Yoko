@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/cosmos72/gomacro/fast"
-        "github.com/cosmos72/gomacro/xreflect"
+	"github.com/cosmos72/gomacro/xreflect"
 	tb "gopkg.in/telebot.v3"
 	"io"
 	"os"
@@ -81,7 +81,7 @@ func Eval(c tb.Context) error {
 
 func RunGomacro(code string) string {
 	interp := fast.New()
-        interp.DeclConst("b", xreflect.NewUniverse().TypeOfInterface, b)
+	interp.DeclConst("b", xreflect.NewUniverse().TypeOfInterface, b)
 	outC := make(chan string)
 	go func() {
 		old := os.Stderr
