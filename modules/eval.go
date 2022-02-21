@@ -3,6 +3,7 @@ package modules
 import (
 	"bytes"
 	"encoding/json"
+        "ioutil"
 	"fmt"
 	"os/exec"
         "os"
@@ -74,20 +75,18 @@ func MediaInfo(c tb.Context) error {
 
 func Eval(c tb.Context) error {
 	code := c.Message().Payload
-	fmt.Println(code)
-	return nil
+	out := EvalCmd(code)
+	return c.Reply(fmt.Sprintf("Eval: %s\nOut: %s", code, out))
 }
 
-func EvalCmd() {
+func EvalCmd(code string) string {
 	interp := fast.New()
-	interp.DeclFunc("M", M)
 	rd := os.Stdout
 	r, w, _ := os.Pipe()
 	os.Stdout = w
-	interp.Eval(`import "fmt"
-		fmt.Println("Helo")`)
+	interp.Eval(code)
 	w.Close()
 	out, _ := ioutil.ReadAll(r)
 	os.Stdout = rd
-	fmt.Println(out)
+	return out
 }
