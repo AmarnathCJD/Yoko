@@ -85,7 +85,7 @@ func Hexa() {
 H.Reply("Hmm")
 }
 
-func EvalCmd(code stringc) string {
+func EvalCmd(code string) string {
 	interp := fast.New()
         interp.DeclFunc("Hexa", Hexa)
 	rd := os.Stdout
