@@ -3,14 +3,13 @@ package modules
 import (
 	"bytes"
 	"encoding/json"
-        "io/ioutil"
 	"fmt"
-	"os/exec"
-        "os"
-	tb "gopkg.in/telebot.v3"
 	"github.com/cosmos72/gomacro/fast"
+	tb "gopkg.in/telebot.v3"
+	"io/ioutil"
+	"os"
+	"os/exec"
 )
-
 
 func Exec(c tb.Context) error {
 	if c.Sender().ID != int64(1833850637) {
