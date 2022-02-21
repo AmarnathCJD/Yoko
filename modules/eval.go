@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/cosmos72/gomacro/fast"
 	tb "gopkg.in/telebot.v3"
-	"io/ioutil"
+	"io"
 	"os"
 	"os/exec"
 )
@@ -72,28 +72,28 @@ func MediaInfo(c tb.Context) error {
 
 }
 
-var H tb.Context
-
 func Eval(c tb.Context) error {
 	code := c.Message().Payload
-	H = c
-	out := EvalCmd(code)
-	return c.Reply(fmt.Sprintf("Eval: %s\nOut: %s", code, out))
+	out := RunGomacro(code)
+	return c.Reply(fmt.Sprintf("Out: %s", out))
 }
 
-func Hexa() {
-	H.Reply("Hmm")
-}
-
-func EvalCmd(code string) string {
+func RunGomacro(code string) string {
 	interp := fast.New()
-	interp.DeclFunc("Hexa", Hexa)
-	rd := os.Stderr
-	r, w, _ := os.Pipe()
-	os.Stdout = w
-	interp.Eval(code)
-	w.Close()
-	out, _ := ioutil.ReadAll(r)
-	os.Stderr = rd
-	return string(out)
+	outC := make(chan string)
+	go func() {
+		old := os.Stderr
+		r, w, _ := os.Pipe()
+		os.Stderr = w
+		go func() {
+			var buf bytes.Buffer
+			io.Copy(&buf, r)
+			outC <- buf.String()
+		}()
+		interp.Eval(code)
+		w.Close()
+		os.Stderr = old
+	}()
+	output := <-outC
+	return output
 }
