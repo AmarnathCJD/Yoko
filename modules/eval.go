@@ -3,7 +3,7 @@ package modules
 import (
 	"bytes"
 	"encoding/json"
-        "ioutil"
+        "io/ioutil"
 	"fmt"
 	"os/exec"
         "os"
