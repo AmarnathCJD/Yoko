@@ -88,5 +88,5 @@ func EvalCmd(code string) string {
 	w.Close()
 	out, _ := ioutil.ReadAll(r)
 	os.Stdout = rd
-	return out
+	return string(out)
 }
