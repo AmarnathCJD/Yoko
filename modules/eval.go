@@ -88,12 +88,12 @@ func Hexa() {
 func EvalCmd(code string) string {
 	interp := fast.New()
 	interp.DeclFunc("Hexa", Hexa)
-	rd := os.Stdout
+	rd := os.Stderr
 	r, w, _ := os.Pipe()
 	os.Stdout = w
 	interp.Eval(code)
 	w.Close()
 	out, _ := ioutil.ReadAll(r)
-	os.Stdout = rd
+	os.Stderr = rd
 	return string(out)
 }
