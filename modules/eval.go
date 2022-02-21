@@ -86,7 +86,6 @@ func EvalCmd(code string) string {
 	interp.Eval(code)
         w.Close()
 	out, _ := ioutil.ReadAll(r)
-	fmt.Println(out)
 	os.Stdout = rd
 	return string(out)
 }
