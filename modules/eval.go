@@ -84,8 +84,9 @@ func EvalCmd(code string) string {
 	r, w, _ := os.Pipe()
 	os.Stdout = w
 	interp.Eval(code)
-	w.Close()
+	defer w.Close()
 	out, _ := ioutil.ReadAll(r)
+        fmt.Println(fmt.Sprint(out))
 	os.Stdout = rd
 	return string(out)
 }
