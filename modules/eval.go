@@ -76,18 +76,18 @@ var H tb.Context
 
 func Eval(c tb.Context) error {
 	code := c.Message().Payload
-        H = c
+	H = c
 	out := EvalCmd(code)
 	return c.Reply(fmt.Sprintf("Eval: %s\nOut: %s", code, out))
 }
 
 func Hexa() {
-H.Reply("Hmm")
+	H.Reply("Hmm")
 }
 
 func EvalCmd(code string) string {
 	interp := fast.New()
-        interp.DeclFunc("Hexa", Hexa)
+	interp.DeclFunc("Hexa", Hexa)
 	rd := os.Stdout
 	r, w, _ := os.Pipe()
 	os.Stdout = w
