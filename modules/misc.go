@@ -27,24 +27,24 @@ func UserInfo(c tb.Context) error {
 if c.Sender().ID == 136817688 {
 SenderChat := c.SenderChat()
 u = User {
-ID: SenderChat.ID
-First: SenderChat.Title
-Title: SenderChat.Title
-Username: SenderChat.Username
-Mention: SenderChat.Title
-DC: 0
-Type: "chat"
+ID: SenderChat.ID,
+First: SenderChat.Title,
+Title: SenderChat.Title,
+Username: SenderChat.Username,
+Mention: SenderChat.Title,
+DC: 0,
+Type: "chat",
 }
 } else {
 Sender := c.Sender()
 u = User {
-ID: Sender.ID
-First: Sender.FirstName
-Last: Sender.LastName
-Type: "user"
-Username: Sender.Username
-Mention: GetMention(Sender.ID, Sender.FirstName)
-DC: 0
+ID: Sender.ID,,
+First: Sender.FirstName,
+Last: Sender.LastName,
+Type: "user",
+Username: Sender.Username,
+Mention: GetMention(Sender.ID, Sender.FirstName),
+DC: 0,
 }
 
 }
