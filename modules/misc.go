@@ -30,10 +30,10 @@ func UserInfo(c tb.Context) error {
 			SenderChat := c.Message().SenderChat
 			u = User{
 				ID:       SenderChat.ID,
-				First:    SenderChat.Title,
+				First:    EscapeHTML(SenderChat.Title),
 				Last:     "",
 				Username: SenderChat.Username,
-				Mention:  SenderChat.Title,
+				Mention:  "",
 				DC:       0,
 				Type:     "chat",
 			}
@@ -41,8 +41,8 @@ func UserInfo(c tb.Context) error {
 			Sender := c.Sender()
 			u = User{
 				ID:       Sender.ID,
-				First:    Sender.FirstName,
-				Last:     Sender.LastName,
+				First:    EscapeHTML(Sender.FirstName),
+				Last:     EscapeHTML(Sender.LastName),
 				Type:     "user",
 				Username: Sender.Username,
 				Mention:  GetMention(Sender.ID, Sender.FirstName),
@@ -79,7 +79,9 @@ func UserInfo(c tb.Context) error {
 	if u.DC != 0 {
 		Info += fmt.Sprintf("\n<b>DC ID:</b> <code>%d</code>", u.DC)
 	}
-	Info += fmt.Sprintf("\n<b>User Link:</b> %s", u.Mention)
+        if u.Type != "chat" {
+      	        Info += fmt.Sprintf("\n<b>User Link:</b> %s", u.Mention)
+        }
 	Info += "\n\n<b>Gbanned:</b> No"
 	return c.Reply(Info)
 
