@@ -25,8 +25,8 @@ func Start(c tb.Context) error {
 		menu.Inline(
 			menu.Row(menu.URL("Support", "t.me/roseloverx_support"), menu.URL("Updates", "t.me/roseloverx_support")),
 			menu.Row(menu.Data("Commands", "help_menu")),
-			menu.Row(menu.URL("Add me to your group", "https://t.me/missmikabot?startgroup=true")))
-		b.Send(m.Sender, "Hey there! I am <b>Mika</b>.\nIm an Anime themed Group Management Bot, feel free to add me to your groups!", menu)
+			menu.Row(menu.URL("Add me to your group", fmt.Sprintf("https://t.me/%s?startgroup=true", BOT_USERNAME))))
+		b.Send(m.Sender, fmt.Sprintf("Hey there! I am <b>%s</b>.\nIm an Anime themed Group Management Bot, feel free to add me to your groups!", BOT_NAME), menu)
 		return nil
 	}
 	b.Reply(m, "Hey I'm Alive.")
@@ -35,7 +35,7 @@ func Start(c tb.Context) error {
 
 func Help_Menu(c tb.Context) error {
 	if !c.Message().Private() {
-		sel.Inline(sel.Row(sel.URL("Click here", "https://t.me/missmikabot?start=help")))
+		sel.Inline(sel.Row(sel.URL("Click here", fmt.Sprintf("https://t.me/%s?start=help", BOT_USERNAME))))
 		c.Reply("Contact me at PM to get help.", sel)
 	} else {
 		gen_help_buttons(c, help_caption, true)
