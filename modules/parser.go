@@ -182,7 +182,7 @@ func GetObj(c tb.Context) (interface{}, string, error) {
 }
 
 func GetMention(id int64, name string) string {
-	return fmt.Sprintf("<a href='tg://user?id=%d'>%s</a>", id, name)
+	return fmt.Sprintf("<a href='tg://user?id=%d'>%s</a>", id, EscapeHTML(name))
 }
 
 func GetUser(c tb.Context) (User, string) {
@@ -197,8 +197,8 @@ func GetUser(c tb.Context) (User, string) {
 		user = User{
 			ID:       Obj.(tb.User).ID,
 			Username: "@" + Obj.(tb.User).Username,
-			First:    Obj.(tb.User).FirstName,
-			Last:     Obj.(tb.User).LastName,
+			First:    EscapeHTML(Obj.(tb.User).FirstName),
+			Last:     EscapeHTML(Obj.(tb.User).LastName),
 			DC:       0,
 			Mention:  GetMention(Obj.(tb.User).ID, Obj.(tb.User).FirstName),
 			Giga:     false,
@@ -209,9 +209,9 @@ func GetUser(c tb.Context) (User, string) {
 			user = User{
 				ID:       Obj.(tb.Chat).ID,
 				Username: "@" + Obj.(tb.Chat).Username,
-				First:    Obj.(tb.Chat).Title,
+				First:    EscapeHTML(Obj.(tb.Chat).Title),
 				DC:       0,
-				Mention:  Obj.(tb.Chat).Title,
+				Mention:  EscapeHTML(Obj.(tb.Chat).Title),
 				Giga:     false,
 				Type:     "chat",
 			}
@@ -219,8 +219,8 @@ func GetUser(c tb.Context) (User, string) {
 			user = User{
 				ID:       Obj.(tb.User).ID,
 				Username: "@" + Obj.(tb.User).Username,
-				First:    Obj.(tb.User).FirstName,
-				Last:     Obj.(tb.User).LastName,
+				First:    EscapeHTML(Obj.(tb.User).FirstName),
+				Last:     EscapeHTML(Obj.(tb.User).LastName),
 				DC:       0,
 				Mention:  GetMention(Obj.(tb.User).ID, Obj.(tb.User).FirstName),
 				Giga:     false,
@@ -261,11 +261,11 @@ func ResolveUsername(u string) User {
 			user.Username = "@" + username.(string)
 		}
 		if first, ok := data["first_name"]; ok {
-			user.First = first.(string)
+			user.First = EscapeHTML(first.(string))
 			user.Mention = GetMention(int64(data["id"].(float64)), first.(string))
 		}
 		if last, ok := data["last_name"]; ok {
-			user.Last = last.(string)
+			user.Last = EscapeHTML(last.(string))
 		}
 		if user.Last != "" {
 			user.Full = user.First + " " + user.Last
@@ -284,8 +284,8 @@ func ResolveUsername(u string) User {
 			user.Username = "@" + username.(string)
 		}
 		if first, ok := data["title"]; ok {
-			user.First = first.(string)
-			user.Mention = first.(string)
+			user.First = EscapeHTML(first.(string))
+			user.Mention = EscapeHTML(first.(string))
 		}
 		if giga, ok := data["gigagroup"]; ok {
 			user.Giga = giga.(bool)
@@ -315,4 +315,8 @@ func (user *User) Chat() *tb.Chat {
 		Title:    user.First,
 		Username: user.Username,
 	}
+}
+
+func EscapeHTML(s string) string {
+return strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(s, "<", "&lt;"), s, ">", "&gt;"), "&", "&amp;")
 }
