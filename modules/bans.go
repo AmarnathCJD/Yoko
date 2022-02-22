@@ -25,7 +25,7 @@ func Ban(c tb.Context) error {
 	until_date := 0
 	reason := xtra
 	if arg == "unban" {
-		err := c.Bot().Unban(c.Chat(), &user.User(), true)
+		err := c.Bot().Unban(c.Chat(), *user.User(), true)
 		if err != nil && err.Error() == "telegram: not enough rights to restrict/unrestrict chat member (400)" {
 			c.Reply("I haven't got the rights to do this.")
 			return nil
@@ -63,11 +63,11 @@ func Ban(c tb.Context) error {
 var err error
         if user.Type == "user"{
 	err = b.Ban(c.Message().Chat, &tb.ChatMember{
-		User:            &user.User(),
+		User:            *user.User(),
 		RestrictedUntil: int64(until_date),
 	})
 } else if user.Type=="chat" {
-err = b.BanSenderChat(c.Chat(), &user.Chat())
+err = b.BanSenderChat(c.Chat(), *user.Chat())
 }
 	if err == nil {
 		if string(reason) != string("") {
