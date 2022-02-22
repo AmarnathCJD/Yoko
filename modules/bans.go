@@ -60,15 +60,15 @@ func Ban(c tb.Context) error {
 	} else if arg == "sban" {
 		c.Bot().Delete(c.Message())
 	}
-var err error
-        if user.Type == "user"{
-	err = b.Ban(c.Message().Chat, &tb.ChatMember{
-		User:            user.User(),
-		RestrictedUntil: int64(until_date),
-	})
-} else if user.Type=="chat" {
-err = b.BanSenderChat(c.Chat(), user.Chat())
-}
+	var err error
+	if user.Type == "user" {
+		err = b.Ban(c.Message().Chat, &tb.ChatMember{
+			User:            user.User(),
+			RestrictedUntil: int64(until_date),
+		})
+	} else if user.Type == "chat" {
+		err = b.BanSenderChat(c.Chat(), user.Chat())
+	}
 	if err == nil {
 		if string(reason) != string("") {
 			if arg != "sban" {
