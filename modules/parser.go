@@ -293,7 +293,7 @@ func ResolveUsername(u string) User {
 }
 
 func (user *User) User() tb.User {
-	return tb.User{
+	return &tb.User{
 		ID:           user.ID,
 		FirstName:    user.First,
 		LastName:     user.Last,
@@ -304,7 +304,7 @@ func (user *User) User() tb.User {
 }
 
 func (user *User) Chat() tb.Chat {
-	return tb.Chat{
+	return &tb.Chat{
 		ID:       user.ID,
 		Title:    user.First,
 		Username: user.Username,
