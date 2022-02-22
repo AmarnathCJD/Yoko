@@ -4,11 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/cosmos72/gomacro/fast"
-	"github.com/cosmos72/gomacro/xreflect"
 	tb "gopkg.in/telebot.v3"
-	"io"
-	"os"
 	"os/exec"
 )
 
@@ -66,36 +62,10 @@ func MediaInfo(c tb.Context) error {
 		} else if Reply.VideoNote != nil {
 			b, _ = json.Marshal(Reply.VideoNote)
 		} else {
-			return c.Reply("Reply to a media!")
+			b, _ = json.Marshal(Reply)
 		}
 		return c.Reply("<code>" + string(b) + "</code>")
 	}
 
 }
 
-func Eval(c tb.Context) error {
-	code := c.Message().Payload
-	out := RunGomacro(code)
-	return c.Reply(fmt.Sprintf("Out: %s", out))
-}
-
-func RunGomacro(code string) string {
-	interp := fast.New()
-	interp.DeclConst("b", xreflect.NewUniverse().TypeOfInterface, b)
-	outC := make(chan string)
-	go func() {
-		old := os.Stderr
-		r, w, _ := os.Pipe()
-		os.Stderr = w
-		go func() {
-			var buf bytes.Buffer
-			io.Copy(&buf, r)
-			outC <- buf.String()
-		}()
-		interp.Eval(code)
-		w.Close()
-		os.Stderr = old
-	}()
-	output := <-outC
-	return output
-}
