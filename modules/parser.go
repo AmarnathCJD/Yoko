@@ -22,7 +22,7 @@ var (
 )
 
 func Te(c tb.Context) error {
-	r, _, _ := GetUser(c)
+	r, _ := GetUser(c)
 	b, _ := json.Marshal(r)
 	fmt.Println(b)
 	log.Print(b)
@@ -224,11 +224,11 @@ func GetUser(c tb.Context) (User, string) {
 	}
         if err != nil {
 c.Reply(err.Error())
-return nil, ""
+return User{}, ""
 
 } else if user.Error != string("") {
 c.Reply(user.Error)
-return nil, ""
+return User{}, ""
 }
 	return user, Payload
 
