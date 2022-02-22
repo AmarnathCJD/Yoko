@@ -13,8 +13,8 @@ func Ban(c tb.Context) error {
 		c.Reply("This command is made to be used in group chats.")
 		return nil
 	}
-	user, xtra := get_user(c.Message())
-	if user == nil {
+	user, xtra := GetUser(c)
+	if user.ID == 0 {
 		return nil
 	}
 	if user.ID == BOT_ID {
@@ -24,9 +24,8 @@ func Ban(c tb.Context) error {
 	arg := strings.SplitN(c.Message().Text, " ", 2)[0][1:]
 	until_date := 0
 	reason := xtra
-	fmt.Println(user)
 	if arg == "unban" {
-		err := c.Bot().Unban(c.Chat(), user, true)
+		err := c.Bot().Unban(c.Chat(), user.User(), true)
 		if err != nil && err.Error() == "telegram: not enough rights to restrict/unrestrict chat member (400)" {
 			c.Reply("I haven't got the rights to do this.")
 			return nil
@@ -61,10 +60,15 @@ func Ban(c tb.Context) error {
 	} else if arg == "sban" {
 		c.Bot().Delete(c.Message())
 	}
-	err := b.Ban(c.Message().Chat, &tb.ChatMember{
-		User:            user,
+var err error
+        if user.Type == "user"{
+	err = b.Ban(c.Message().Chat, &tb.ChatMember{
+		User:            user.User(),
 		RestrictedUntil: int64(until_date),
 	})
+} else if user.Type=="chat" {
+err = b.BanSenderChat(c.Chat(), user.Chat())
+}
 	if err == nil {
 		if string(reason) != string("") {
 			if arg != "sban" {
