@@ -26,6 +26,7 @@ func UserInfo(c tb.Context) error {
 	if !c.Message().IsReply() && c.Message().Payload == string("") {
 		if c.Sender().ID == 136817688 {
 			SenderChat := c.Message().SenderChat
+                        fmt.Println(SenderChat)
 			u = User{
 				ID:       SenderChat.ID,
 				First:    EscapeHTML(SenderChat.Title),
@@ -35,6 +36,7 @@ func UserInfo(c tb.Context) error {
 				DC:       0,
 				Type:     "chat",
 			}
+                        fmt.Println(u, "=")
 		} else {
 			Sender := c.Sender()
 			u = User{
@@ -51,7 +53,6 @@ func UserInfo(c tb.Context) error {
 	} else {
 		u, _ = GetUser(c)
 	}
-	fmt.Println(u)
 	if u.ID == 0 {
 		return nil
 	}
