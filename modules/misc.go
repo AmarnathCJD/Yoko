@@ -51,7 +51,7 @@ func UserInfo(c tb.Context) error {
 	} else {
 		u, _ = GetUser(c)
 	}
-        fmt.Println(u)
+	fmt.Println(u)
 	if u.ID == 0 {
 		return nil
 	}

@@ -1,8 +1,8 @@
 package modules
 
 import (
+	"fmt"
 	"strings"
-        "fmt"
 
 	tb "gopkg.in/telebot.v3"
 )
