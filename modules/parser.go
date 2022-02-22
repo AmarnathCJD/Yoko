@@ -198,8 +198,6 @@ func GetUser(c tb.Context) (User, string) {
 			Type:     "user",
 		}
 	case tb.Chat:
-                var mention string
-     
 		if Obj.(tb.Chat).Title != string("") {
 			user = User{
 				ID:       Obj.(tb.Chat).ID,
