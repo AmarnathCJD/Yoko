@@ -24,7 +24,7 @@ import (
 func UserInfo(c tb.Context) error {
 	var u User
 	if !c.Message().IsReply() && c.Message().Payload == string("") {
-		if c.Sender().ID == 136817688 {
+		if c.Sender().ID == 136817688 && c.Message().SenderChat != nil {
 			SenderChat := c.Message().SenderChat
 			fmt.Println(SenderChat)
 			u = User{
