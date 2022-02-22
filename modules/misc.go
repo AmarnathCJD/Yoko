@@ -79,9 +79,9 @@ func UserInfo(c tb.Context) error {
 	if u.DC != 0 {
 		Info += fmt.Sprintf("\n<b>DC ID:</b> <code>%d</code>", u.DC)
 	}
-        if u.Type != "chat" {
-      	        Info += fmt.Sprintf("\n<b>User Link:</b> %s", u.Mention)
-        }
+	if u.Type != "chat" {
+		Info += fmt.Sprintf("\n<b>User Link:</b> %s", u.Mention)
+	}
 	Info += "\n\n<b>Gbanned:</b> No"
 	return c.Reply(Info)
 
