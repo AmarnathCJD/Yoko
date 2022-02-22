@@ -6,8 +6,11 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
+// constants
 const BOT_ID = int64(5181620060)
 const OWNER_ID = int64(1833850637)
+const BOT_USERNAME = "@" + b.Me.Username
+const BOT_NAME = b.Me.FirstName
 const YOUTUBE_API_KEY = "AIzaSyAEz0eRkbsEE7TrHGKmd_iXh4AmYJlMKDs"
 const ResolveURL = "https://707c80624779.up.railway.app/username?username="
 
