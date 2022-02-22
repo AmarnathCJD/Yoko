@@ -192,18 +192,21 @@ func GetUser(c tb.Context) (User, string) {
 			Username: "@" + Obj.(tb.User).Username,
 			First:    Obj.(tb.User).FirstName,
 			Last:     Obj.(tb.User).LastName,
-			DC:       5,
+			DC:       0,
 			Mention:  GetMention(Obj.(tb.User).ID, Obj.(tb.User).FirstName),
 			Giga:     false,
 			Type:     "user",
 		}
 	case tb.Chat:
+                var mention string
+     
 		if Obj.(tb.Chat).Title != string("") {
 			user = User{
 				ID:       Obj.(tb.Chat).ID,
 				Username: "@" + Obj.(tb.Chat).Username,
 				First:    Obj.(tb.Chat).Title,
-				DC:       5,
+				DC:       0,
+                                Mention:  fmt.Sprintf("<a href='t.me/%s'>%s</a>", Obj.(tb.Chat).Username, Obj.(tb.Chat).Title)
 				Giga:     false,
 				Type:     "chat",
 			}
@@ -213,7 +216,7 @@ func GetUser(c tb.Context) (User, string) {
 				Username: "@" + Obj.(tb.User).Username,
 				First:    Obj.(tb.User).FirstName,
 				Last:     Obj.(tb.User).LastName,
-				DC:       5,
+				DC:       0,
 				Mention:  GetMention(Obj.(tb.User).ID, Obj.(tb.User).FirstName),
 				Giga:     false,
 				Type:     "user",
@@ -258,6 +261,7 @@ func ResolveUsername(u string) User {
 		}
 		if first, ok := data["first_name"]; ok {
 			user.First = first.(string)
+                        user.Mention = GetMention(int64(data["id"].(float64)), first.(string))
 		}
 		if last, ok := data["last_name"]; ok {
 			user.Last = last.(string)
@@ -280,6 +284,9 @@ func ResolveUsername(u string) User {
 		}
 		if first, ok := data["title"]; ok {
 			user.First = first.(string)
+                        if username, ok := data["username"]; ok {
+			user.Mention = fmt.Sprintf("<a href='t.me/%s'>%s</a>", username.(string), first.(string))
+		}
 		}
 		if giga, ok := data["gigagroup"]; ok {
 			user.Giga = giga.(bool)
