@@ -222,14 +222,14 @@ func GetUser(c tb.Context) (User, string) {
 	case string:
 		user = ResolveUsername(Obj.(string))
 	}
-        if err != nil {
-c.Reply(err.Error())
-return User{}, ""
+	if err != nil {
+		c.Reply(err.Error())
+		return User{}, ""
 
-} else if user.Error != string("") {
-c.Reply(user.Error)
-return User{}, ""
-}
+	} else if user.Error != string("") {
+		c.Reply(user.Error)
+		return User{}, ""
+	}
 	return user, Payload
 
 }
