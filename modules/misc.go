@@ -28,11 +28,11 @@ func UserInfo(c tb.Context) error {
 	}
 	Info := ""
 	if u.Type == "chat" {
-		Info += "<b>Chat/Channel</b> Info"
+		Info += "<b>Channel</b> Info"
 	} else {
 		Info += "<b>User Info</b>"
 	}
-	Info += "\n<b>ID:</b> %d"
+	Info += "\n<b>ID:</b> <code>%d</code>"
 	if u.First != string("") {
 		if u.Type == "chat" {
 			Info += fmt.Sprintf("\n<b>Title:</b> %s", u.ID)
@@ -47,7 +47,7 @@ func UserInfo(c tb.Context) error {
 		Info += fmt.Sprintf("\n<b>Username:</b> %s", u.Username)
 	}
 	if u.DC != 0 {
-		Info += fmt.Sprintf("\n<b>DC ID:</b> %d", u.DC)
+		Info += fmt.Sprintf("\n<b>DC ID:</b> <code>%d</code>", u.DC)
 	}
 	Info += fmt.Sprintf("\n<b>User Link:</b> %s", u.Mention)
 	Info += "\n\n<b>Gbanned:</b> No"
