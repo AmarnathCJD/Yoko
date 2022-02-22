@@ -206,7 +206,7 @@ func GetUser(c tb.Context) (User, string) {
 				Username: "@" + Obj.(tb.Chat).Username,
 				First:    Obj.(tb.Chat).Title,
 				DC:       0,
-                                Mention:  fmt.Sprintf("<a href='t.me/%s'>%s</a>", Obj.(tb.Chat).Username, Obj.(tb.Chat).Title)
+                                Mention:  fmt.Sprintf("<a href='t.me/%s'>%s</a>", Obj.(tb.Chat).Username, Obj.(tb.Chat).Title),
 				Giga:     false,
 				Type:     "chat",
 			}
