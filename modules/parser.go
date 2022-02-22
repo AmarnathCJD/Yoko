@@ -318,5 +318,5 @@ func (user *User) Chat() *tb.Chat {
 }
 
 func EscapeHTML(s string) string {
-return strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(s, "<", "&lt;"), ">", "&gt;"), "&", "&amp;")
+	return strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(s, "<", "&lt;"), ">", "&gt;"), "&", "&amp;")
 }
