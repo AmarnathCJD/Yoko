@@ -22,41 +22,38 @@ import (
 )
 
 func UserInfo(c tb.Context) error {
-u, _ := GetUser(c)
-if u.ID == 0 {
-return nil
-}
-Info := ""
-if u.Type == "chat"{
-Info += "<b>Chat/Channel</b> Info"
-} else {
-Info += "<b>User Info</b>"
-}
-Info += "\n<b>ID:</b> %d"
-if u.First != string("") {
-if u.Type == "chat" {
-Info += fmt.Sprintf("\n<b>Title:</b> %s", u.ID)
-} else {
-Info += fmt.Sprintf("\n<b>FirstName:</b> %s", u.First)
-}
-}
-if u.Last != string ("") {
-Info += fmt.Sprintf("\n<b>LastName:</b> %s", u.Last)
-}
-if u.Username != string("") {
-Info += fmt.Sprintf("\n<b>Username:</b> %s", u.Username)
-}
-if u.DC != 0 {
-Info += fmt.Sprintf("\n<b>DC ID:</b> %d", u.DC)
-}
-Info += fmt.Sprintf("\n<b>User Link:</b> %s", u.Mention)
-Info += "\n\n<b>Gbanned:</b> No"
-return c.Reply(Info)
+	u, _ := GetUser(c)
+	if u.ID == 0 {
+		return nil
+	}
+	Info := ""
+	if u.Type == "chat" {
+		Info += "<b>Chat/Channel</b> Info"
+	} else {
+		Info += "<b>User Info</b>"
+	}
+	Info += "\n<b>ID:</b> %d"
+	if u.First != string("") {
+		if u.Type == "chat" {
+			Info += fmt.Sprintf("\n<b>Title:</b> %s", u.ID)
+		} else {
+			Info += fmt.Sprintf("\n<b>FirstName:</b> %s", u.First)
+		}
+	}
+	if u.Last != string("") {
+		Info += fmt.Sprintf("\n<b>LastName:</b> %s", u.Last)
+	}
+	if u.Username != string("") {
+		Info += fmt.Sprintf("\n<b>Username:</b> %s", u.Username)
+	}
+	if u.DC != 0 {
+		Info += fmt.Sprintf("\n<b>DC ID:</b> %d", u.DC)
+	}
+	Info += fmt.Sprintf("\n<b>User Link:</b> %s", u.Mention)
+	Info += "\n\n<b>Gbanned:</b> No"
+	return c.Reply(Info)
 
-
 }
-
-
 
 var myClient = &http.Client{Timeout: 10 * time.Second}
 
