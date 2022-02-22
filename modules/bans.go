@@ -25,18 +25,18 @@ func Ban(c tb.Context) error {
 	until_date := 0
 	reason := xtra
 	if arg == "unban" {
-                var err error
-                if user.Type == "chat" {
-                err = c.Bot().UnbanSenderChat(c.Chat(), user.Chat())
-} else {
-		err = c.Bot().Unban(c.Chat(), user.User(), true)
-}
+		var err error
+		if user.Type == "chat" {
+			err = c.Bot().UnbanSenderChat(c.Chat(), user.Chat())
+		} else {
+			err = c.Bot().Unban(c.Chat(), user.User(), true)
+		}
 		if err != nil && err.Error() == "telegram: not enough rights to restrict/unrestrict chat member (400)" {
 			c.Reply("I haven't got the rights to do this.")
 			return nil
 		} else if err != nil {
-return c.Reply(err.Error())
-}
+			return c.Reply(err.Error())
+		}
 		if xtra == string("") {
 			c.Reply(fmt.Sprintf("✨ %s Permitted to Join the Chat <b>~</b>", user.Mention))
 		} else {
