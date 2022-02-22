@@ -38,13 +38,13 @@ Type: "chat",
 } else {
 Sender := c.Sender()
 u = User {
-ID: Sender.ID,,
+ID: Sender.ID,
 First: Sender.FirstName,
 Last: Sender.LastName,
 Type: "user",
 Username: Sender.Username,
 Mention: GetMention(Sender.ID, Sender.FirstName),
-DC: 0,
+DC: 0
 }
 
 }
