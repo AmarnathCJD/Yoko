@@ -22,34 +22,34 @@ import (
 )
 
 func UserInfo(c tb.Context) error {
-        var u User
-        if !c.Message().IsReply() && c.Message().Payload == string("") {
-if c.Sender().ID == 136817688 {
-SenderChat := c.Message().SenderChat
-u = User {
-ID: SenderChat.ID,
-First: SenderChat.Title,
-Username: SenderChat.Username,
-Mention: SenderChat.Title,
-DC: 0,
-Type: "chat",
-}
-} else {
-Sender := c.Sender()
-u = User {
-ID: Sender.ID,
-First: Sender.FirstName,
-Last: Sender.LastName,
-Type: "user",
-Username: Sender.Username,
-Mention: GetMention(Sender.ID, Sender.FirstName),
-DC: 0,
-}
+	var u User
+	if !c.Message().IsReply() && c.Message().Payload == string("") {
+		if c.Sender().ID == 136817688 {
+			SenderChat := c.Message().SenderChat
+			u = User{
+				ID:       SenderChat.ID,
+				First:    SenderChat.Title,
+				Username: SenderChat.Username,
+				Mention:  SenderChat.Title,
+				DC:       0,
+				Type:     "chat",
+			}
+		} else {
+			Sender := c.Sender()
+			u = User{
+				ID:       Sender.ID,
+				First:    Sender.FirstName,
+				Last:     Sender.LastName,
+				Type:     "user",
+				Username: Sender.Username,
+				Mention:  GetMention(Sender.ID, Sender.FirstName),
+				DC:       0,
+			}
 
-}
-} else {
-	u, _ = GetUser(c)
-}
+		}
+	} else {
+		u, _ = GetUser(c)
+	}
 	if u.ID == 0 {
 		return nil
 	}
