@@ -22,7 +22,35 @@ import (
 )
 
 func UserInfo(c tb.Context) error {
-	u, _ := GetUser(c)
+        var u User
+        if !c.Message().IsReply() && c.Message().Payload == string("") {
+if c.Sender().ID == 136817688 {
+SenderChat := c.SenderChat()
+u = User {
+ID: SenderChat.ID
+First: SenderChat.Title
+Title: SenderChat.Title
+Username: SenderChat.Username
+Mention: SenderChat.Title
+DC: 0
+Type: "chat"
+}
+} else {
+Sender := c.Sender()
+u = User {
+ID: Sender.ID
+First: Sender.FirstName
+Last: Sender.LastName
+Type: "user"
+Username: Sender.Username
+Mention: GetMention(Sender.ID, Sender.FirstName)
+DC: 0
+}
+
+}
+} else {
+	u, _ = GetUser(c)
+}
 	if u.ID == 0 {
 		return nil
 	}
@@ -32,7 +60,7 @@ func UserInfo(c tb.Context) error {
 	} else {
 		Info += "<b>User Info</b>"
 	}
-	Info += "\n<b>ID:</b> <code>%d</code>"
+	Info += fmt.Sprintf("\n<b>ID:</b> <code>%d</code>", u.ID)
 	if u.First != string("") {
 		if u.Type == "chat" {
 			Info += fmt.Sprintf("\n<b>Title:</b> %s", u.ID)
