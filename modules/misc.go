@@ -24,15 +24,13 @@ import (
 func UserInfo(c tb.Context) error {
 	var u User
 	if !c.Message().IsReply() && c.Message().Payload == string("") {
-		fmt.Println("t1")
 		if c.Sender().ID == 136817688 {
-			fmt.Println("t2")
 			SenderChat := c.Message().SenderChat
 			u = User{
 				ID:       SenderChat.ID,
 				First:    EscapeHTML(SenderChat.Title),
 				Last:     "",
-				Username: SenderChat.Username,
+				Username: "@" + SenderChat.Username,
 				Mention:  "",
 				DC:       0,
 				Type:     "chat",
@@ -44,7 +42,7 @@ func UserInfo(c tb.Context) error {
 				First:    EscapeHTML(Sender.FirstName),
 				Last:     EscapeHTML(Sender.LastName),
 				Type:     "user",
-				Username: Sender.Username,
+				Username: "@" + Sender.Username,
 				Mention:  GetMention(Sender.ID, Sender.FirstName),
 				DC:       0,
 			}
@@ -53,6 +51,7 @@ func UserInfo(c tb.Context) error {
 	} else {
 		u, _ = GetUser(c)
 	}
+        fmt.Println(u)
 	if u.ID == 0 {
 		return nil
 	}
