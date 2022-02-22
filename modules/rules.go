@@ -1,9 +1,9 @@
 package modules
 
 import (
- tb "gopkg.in/telebot.v3"
+	tb "gopkg.in/telebot.v3"
 )
 
 func SetRules(c tb.Context) error {
- return c.Reply("Soon")
+	return c.Reply("Soon")
 }
