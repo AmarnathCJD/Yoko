@@ -31,9 +31,9 @@ func Ban(c tb.Context) error {
 			return nil
 		}
 		if xtra == string("") {
-			c.Reply(fmt.Sprintf("✨ %s Permitted to Join the Chat <b>~</b>", user.FirstName))
+			c.Reply(fmt.Sprintf("✨ %s Permitted to Join the Chat <b>~</b>", user.Mention))
 		} else {
-			c.Reply(fmt.Sprintf("✨ %s Permitted to Join the Chat <b>~</b>\n<b>Reason:</b> %s", user.FirstName, reason))
+			c.Reply(fmt.Sprintf("✨ %s Permitted to Join the Chat <b>~</b>\n<b>Reason:</b> %s", user.Mention, reason))
 		}
 		return nil
 	}
@@ -63,21 +63,21 @@ func Ban(c tb.Context) error {
 var err error
         if user.Type == "user"{
 	err = b.Ban(c.Message().Chat, &tb.ChatMember{
-		User:            user.User(),
+		User:            *user.User(),
 		RestrictedUntil: int64(until_date),
 	})
 } else if user.Type=="chat" {
-err = b.BanSenderChat(c.Chat(), user.Chat())
+err = b.BanSenderChat(c.Chat(), *user.Chat())
 }
 	if err == nil {
 		if string(reason) != string("") {
 			if arg != "sban" {
-				c.Reply(fmt.Sprintf("<b>%s</b> was banned. ~\n<b>Reason:</b> %s", user.FirstName, reason))
+				c.Reply(fmt.Sprintf("<b>%s</b> was banned. ~\n<b>Reason:</b> %s", user.Mention, reason))
 			}
 			return nil
 		}
 		if arg != "sban" {
-			c.Reply(fmt.Sprintf("<b>%s</b> was banned. ~", user.FirstName))
+			c.Reply(fmt.Sprintf("<b>%s</b> was banned. ~", user.Mention))
 		}
 		return nil
 	} else if err.Error() == "telegram: not enough rights to restrict/unrestrict chat member (400)" {
