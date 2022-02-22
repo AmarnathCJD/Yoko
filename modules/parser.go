@@ -160,6 +160,9 @@ func GetObj(c tb.Context) (interface{}, string, error) {
 		if isInt(Args[0]) {
 			id, _ := strconv.ParseInt(Args[0], 10, 64)
 			user, err := c.Bot().ChatByID(id)
+                        if err != nil {
+return nil, "", err
+}
 			if len(Args) > 1 {
 				return *user, Args[1], err
 			} else {
@@ -184,6 +187,10 @@ func GetMention(id int64, name string) string {
 
 func GetUser(c tb.Context) (User, string) {
 	Obj, Payload, err := GetObj(c)
+        if err != nil {
+		c.Reply(err.Error())
+		return User{}, ""
+        } 
 	var user User
 	switch Obj.(type) {
 	case tb.User:
@@ -223,11 +230,7 @@ func GetUser(c tb.Context) (User, string) {
 	case string:
 		user = ResolveUsername(Obj.(string))
 	}
-	if err != nil {
-		c.Reply(err.Error())
-		return User{}, ""
-
-	} else if user.Error != string("") {
+        if user.Error != string("") {
 		c.Reply(user.Error)
 		return User{}, ""
 	}
