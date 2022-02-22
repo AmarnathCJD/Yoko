@@ -24,14 +24,14 @@ import (
 func UserInfo(c tb.Context) error {
 	var u User
 	if !c.Message().IsReply() && c.Message().Payload == string("") {
-                fmt.Println("t1")
+		fmt.Println("t1")
 		if c.Sender().ID == 136817688 {
-fmt.Println("t2")
+			fmt.Println("t2")
 			SenderChat := c.Message().SenderChat
 			u = User{
 				ID:       SenderChat.ID,
 				First:    SenderChat.Title,
-                                Last:     "",
+				Last:     "",
 				Username: SenderChat.Username,
 				Mention:  SenderChat.Title,
 				DC:       0,
