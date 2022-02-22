@@ -182,7 +182,7 @@ func GetMention(id int64, name string) string {
 	return fmt.Sprintf("<a href='tg://user?id=%d'>%s</a>", id, name)
 }
 
-func GetUser(c tb.Context) (User, string, error) {
+func GetUser(c tb.Context) (User, string) {
 	Obj, Payload, err := GetObj(c)
 	var user User
 	switch Obj.(type) {
@@ -222,7 +222,15 @@ func GetUser(c tb.Context) (User, string, error) {
 	case string:
 		user = ResolveUsername(Obj.(string))
 	}
-	return user, Payload, err
+        if err != nil {
+c.Reply(err.Error())
+return nil, ""
+
+} else if user.Error != string("") {
+c.Reply(user.Error)
+return nil, ""
+}
+	return user, Payload
 
 }
 
