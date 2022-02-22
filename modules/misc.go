@@ -25,11 +25,10 @@ func UserInfo(c tb.Context) error {
         var u User
         if !c.Message().IsReply() && c.Message().Payload == string("") {
 if c.Sender().ID == 136817688 {
-SenderChat := c.SenderChat()
+SenderChat := c.Message().SenderChat
 u = User {
 ID: SenderChat.ID,
 First: SenderChat.Title,
-Title: SenderChat.Title,
 Username: SenderChat.Username,
 Mention: SenderChat.Title,
 DC: 0,
