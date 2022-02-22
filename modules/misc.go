@@ -29,7 +29,7 @@ func UserInfo(c tb.Context) error {
 			u = User{
 				ID:       SenderChat.ID,
 				First:    SenderChat.Title,
-                                Last:     ""
+                                Last:     "",
 				Username: SenderChat.Username,
 				Mention:  SenderChat.Title,
 				DC:       0,
