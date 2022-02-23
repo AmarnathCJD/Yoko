@@ -114,8 +114,8 @@ u = User{ID: c.Chat().ID, First: c.Chat().Title, Type: "chat"}
 u, _ = GetUser(c)
 }
 if c.Message().IsReply() && c.Message().IsForwarded() {
-ID, FirstName := GetForwardID(c)
-u = User{ID: ID, First: FirstName}
+ID, FirstName, Type := GetForwardID(c)
+u = User{ID: ID, First: FirstName, Type: Type}
 }
 return nil
 }
