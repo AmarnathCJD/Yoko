@@ -544,6 +544,7 @@ func AddPayload(c tb.Context) tb.Context {
 		s := c.Bot().NewContext(tb.Update{ID: c.Message().ID,
 			Message: &tb.Message{
 				Sender:      c.Sender(),
+                                SenderChat:  c.Message().SenderChat,
 				Chat:        c.Message().Chat,
 				Payload:     Payload,
 				Text:        c.Message().Text,
