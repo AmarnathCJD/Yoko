@@ -97,7 +97,7 @@ func UserInfo(c tb.Context) error {
 
 }
 
-func GetID(c tb.Context) err {
+func GetID(c tb.Context) error {
 var u User
 if !c.Message().IsReply() && c.Message().Payload == string(""){
 if c.Sender().ID == 136817688 {
