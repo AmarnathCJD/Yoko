@@ -56,18 +56,18 @@ func UserInfo(c tb.Context) error {
 	if u.ID == 0 {
 		return nil
 	}
-        if u.ID == 1087968824 {
-Chat := c.Chat()
-u = User{
-ID:       Chat.ID,
-				First:    EscapeHTML(Chat.Title),
-				Last:     "",
-				Username: "@" + Chat.Username,
-				Mention:  "",
-				DC:       0,
-				Type:     "chat",
-}
-}
+	if u.ID == 1087968824 {
+		Chat := c.Chat()
+		u = User{
+			ID:       Chat.ID,
+			First:    EscapeHTML(Chat.Title),
+			Last:     "",
+			Username: "@" + Chat.Username,
+			Mention:  "",
+			DC:       0,
+			Type:     "chat",
+		}
+	}
 	Info := ""
 	if u.Type == "chat" {
 		Info += "<b>Channel Info</b>"
