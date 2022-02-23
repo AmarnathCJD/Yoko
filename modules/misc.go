@@ -98,27 +98,26 @@ func UserInfo(c tb.Context) error {
 }
 
 func GetID(c tb.Context) error {
-var u User
-if !c.Message().IsReply() && c.Message().Payload == string(""){
-if c.Sender().ID == 136817688 {
-u = User{ID: c.Message().SenderChat.ID,
-First: c.Message().SenderChat.FirstName,
-}
+	var u User
+	if !c.Message().IsReply() && c.Message().Payload == string("") {
+		if c.Sender().ID == 136817688 {
+			u = User{ID: c.Message().SenderChat.ID,
+				First: c.Message().SenderChat.FirstName,
+			}
 
-} else {
-u = User{ID: c.Chat().ID, First: c.Chat().Title, Type: "chat"}
-}
+		} else {
+			u = User{ID: c.Chat().ID, First: c.Chat().Title, Type: "chat"}
+		}
 
-
-} else {
-u, _ = GetUser(c)
-}
-if c.Message().IsReply() && c.Message().IsForwarded() {
-ID, FirstName, Type := GetForwardID(c)
-u = User{ID: ID, First: FirstName, Type: Type}
-}
-b, _ := json.Marshal(u)
-return c.Reply(string(b))
+	} else {
+		u, _ = GetUser(c)
+	}
+	if c.Message().IsReply() && c.Message().IsForwarded() {
+		ID, FirstName, Type := GetForwardID(c)
+		u = User{ID: ID, First: FirstName, Type: Type}
+	}
+	b, _ := json.Marshal(u)
+	return c.Reply(string(b))
 }
 
 var myClient = &http.Client{Timeout: 10 * time.Second}
