@@ -117,7 +117,8 @@ if c.Message().IsReply() && c.Message().IsForwarded() {
 ID, FirstName, Type := GetForwardID(c)
 u = User{ID: ID, First: FirstName, Type: Type}
 }
-return nil
+b, _ := json.Marshal(u)
+return c.Reply(string(b))
 }
 
 var myClient = &http.Client{Timeout: 10 * time.Second}
