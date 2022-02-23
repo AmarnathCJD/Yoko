@@ -346,5 +346,5 @@ func GetForwardID(c tb.Context) (int64, string, string) {
 	} else if Message.OriginalSenderName != string("") {
 		FirstName = Message.OriginalSenderName
 	}
-	return ID, FirstName
+	return ID, FirstName, Type
 }
