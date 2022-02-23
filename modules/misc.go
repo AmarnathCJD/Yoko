@@ -93,8 +93,8 @@ func UserInfo(c tb.Context) error {
 	}
 	if u.Type != "chat" {
 		Info += fmt.Sprintf("\n<b>User Link:</b> %s", u.Mention)
+                Info += "\n\n<b>Gbanned:</b> No"
 	}
-	Info += "\n\n<b>Gbanned:</b> No"
 	return c.Reply(Info)
 
 }
