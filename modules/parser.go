@@ -325,7 +325,7 @@ func GetForwardID(c tb.Context) (int64, string, string) {
 	Message := c.Message()
 	var ID int64
 	var FirstName string
-        var Type = "user"
+	var Type = "user"
 	if Message.OriginalSender != nil {
 		if Message.OriginalSender.ID != 0 {
 			ID = Message.OriginalSender.ID
@@ -340,7 +340,7 @@ func GetForwardID(c tb.Context) (int64, string, string) {
 		if Message.OriginalChat.Title != string("") {
 			FirstName = Message.OriginalChat.Title
 		}
-                Type = "chat"
+		Type = "chat"
 	} else if Message.OriginalSignature != string("") {
 		FirstName = Message.OriginalSignature
 	} else if Message.OriginalSenderName != string("") {
