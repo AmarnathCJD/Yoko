@@ -320,3 +320,29 @@ func (user *User) Chat() *tb.Chat {
 func EscapeHTML(s string) string {
 	return strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(s, "<", "&lt;"), ">", "&gt;"), "&", "&amp;")
 }
+
+func GetForwardID(c tb.Context) (int64, string) {
+ Message := c.Message()
+ var ID int64
+ var FirstName string
+ if Message.OriginalSender != nil {
+ if Message.OriginalSender.ID != 0 {
+ID = Message.OriginalSender.ID
+}
+if Message.OriginalSender.FirstName != string("") {
+FirstName = Message.OriginalSender.FirstName
+}
+} else if Message.OriginalChat != nil {
+if Message.OriginalChat.ID != 0 {
+ID = Message.OriginalChat.ID
+} 
+if Message.OriginalChat.Title != string ("") {
+FirstName = Message.OriginalChat.Title
+}
+} else if Message.OriginalSignature != string ("") {
+FirstName = Message.OriginalSignature
+} else if Message.OriginalSenderName != string("") {
+FirstName = Message.OriginalSenderName
+}
+return ID, FirstName
+}
