@@ -11,7 +11,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	tb "gopkg.in/telebot.v3"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -110,13 +109,11 @@ func GetID(c tb.Context) error {
 		u, _ = GetUser(c)
 	}
 	if c.Message().IsReply() && c.Message().ReplyTo.IsForwarded() {
-		log.Println("Hmm Fwd")
-		log.Println(c.Message().OriginalSender, c.Message().OriginalChat)
 		ID, FirstName, Type := GetForwardID(c)
-		u = User{ID: ID, First: FirstName, Type: Type}
+		user := User{ID: ID, First: FirstName, Type: Type}
+                return c.Reply(fmt.Sprintf("User %s ID is <code>%d</code>."\nThe forwarded %s, %s, has an ID of <code>%d</code>", u.ID, u.First, strings.Title(user.Type), user.First, user.ID))
 	}
-	b, _ := json.Marshal(u)
-	return c.Reply(string(b))
+	return c.Reply(fmt.Sprintf("User %s ID is <code>%d</code>.", u.First, u.ID))
 }
 
 var myClient = &http.Client{Timeout: 10 * time.Second}
