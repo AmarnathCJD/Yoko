@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 	"unicode"
-
+        "log"
 	"github.com/StalkR/imdb"
 	tg "github.com/TechMinerApps/telegraph"
 	"github.com/anaskhan96/soup"
@@ -110,6 +110,8 @@ func GetID(c tb.Context) error {
 		u, _ = GetUser(c)
 	}
 	if c.Message().IsReply() && c.Message().ReplyTo.IsForwarded() {
+                log.Println("Hmm Fwd")
+                log.Println(c.Message().OriginalSender, c.Message().OriginalChat)
 		ID, FirstName, Type := GetForwardID(c)
 		u = User{ID: ID, First: FirstName, Type: Type}
 	}
