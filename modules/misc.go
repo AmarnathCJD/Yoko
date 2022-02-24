@@ -128,7 +128,7 @@ func WikiPedia(c tb.Context) error {
 		return c.Reply("No results found.")
 	}
 	Title, Index, Extract, Thumb := "", "", "", ""
-	for _, v := range data["query"].(map[string]interface{})["pages"].([]interface{}) {
+	for _, v := range data["query"].(map[string]interface{})["pages"].(map[string]interface{}) {
 		for k, v := range v.(map[string]interface{}) {
 			if k == "title" {
 				Title = v.(string)
