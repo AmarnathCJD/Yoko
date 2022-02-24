@@ -4,7 +4,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/StalkR/imdb"
+	tg "github.com/TechMinerApps/telegraph"
+	"github.com/anaskhan96/soup"
+	yt "github.com/kkdai/youtube/v2"
+	"go.mongodb.org/mongo-driver/bson"
+	tb "gopkg.in/telebot.v3"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -12,13 +19,6 @@ import (
 	"strings"
 	"time"
 	"unicode"
-        "log"
-	"github.com/StalkR/imdb"
-	tg "github.com/TechMinerApps/telegraph"
-	"github.com/anaskhan96/soup"
-	yt "github.com/kkdai/youtube/v2"
-	"go.mongodb.org/mongo-driver/bson"
-	tb "gopkg.in/telebot.v3"
 )
 
 func UserInfo(c tb.Context) error {
@@ -110,8 +110,8 @@ func GetID(c tb.Context) error {
 		u, _ = GetUser(c)
 	}
 	if c.Message().IsReply() && c.Message().ReplyTo.IsForwarded() {
-                log.Println("Hmm Fwd")
-                log.Println(c.Message().OriginalSender, c.Message().OriginalChat)
+		log.Println("Hmm Fwd")
+		log.Println(c.Message().OriginalSender, c.Message().OriginalChat)
 		ID, FirstName, Type := GetForwardID(c)
 		u = User{ID: ID, First: FirstName, Type: Type}
 	}
