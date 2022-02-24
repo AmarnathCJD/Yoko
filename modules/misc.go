@@ -111,9 +111,9 @@ func GetID(c tb.Context) error {
 	if c.Message().IsReply() && c.Message().ReplyTo.IsForwarded() {
 		ID, FirstName, Type := GetForwardID(c)
 		user := User{ID: ID, First: FirstName, Type: Type}
-		return c.Reply(fmt.Sprintf("User %s ID is <code>%d</code>.\nThe forwarded %s, %s, has an ID of <code>%d</code>", u.First, u.ID, strings.Title(user.Type), user.First, user.ID))
+		return c.Reply(fmt.Sprintf("User %s's ID is <code>%d</code>.\nThe forwarded %s, %s, has an ID of <code>%d</code>", u.First, u.ID, strings.Title(user.Type), user.First, user.ID))
 	}
-	return c.Reply(fmt.Sprintf("User %s ID is <code>%d</code>.", u.First, u.ID))
+	return c.Reply(fmt.Sprintf("User %s's ID is <code>%d</code>.", u.First, u.ID))
 }
 
 var myClient = &http.Client{Timeout: 10 * time.Second}
