@@ -101,10 +101,7 @@ func GetID(c tb.Context) error {
 	var u User
 	if !c.Message().IsReply() && c.Message().Payload == string("") {
 		if c.Sender().ID == 136817688 {
-			u = User{ID: c.Message().SenderChat.ID,
-				First: c.Message().SenderChat.FirstName,
-			}
-
+			u = User{ID: c.Message().SenderChat.ID, First: c.Message().SenderChat.FirstName, Type: "user"}
 		} else {
 			u = User{ID: c.Chat().ID, First: c.Chat().Title, Type: "chat"}
 		}
@@ -112,7 +109,7 @@ func GetID(c tb.Context) error {
 	} else {
 		u, _ = GetUser(c)
 	}
-	if c.Message().IsReply() && c.Message().IsForwarded() {
+	if c.Message().IsReply() && c.Message().ReplyTo.IsForwarded() {
 		ID, FirstName, Type := GetForwardID(c)
 		u = User{ID: ID, First: FirstName, Type: Type}
 	}
