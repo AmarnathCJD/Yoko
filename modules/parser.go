@@ -322,7 +322,7 @@ func EscapeHTML(s string) string {
 }
 
 func GetForwardID(c tb.Context) (int64, string, string) {
-	Message := c.Message()
+	Message := c.Message().ReplyTo
 	var ID int64
 	var FirstName string
 	var Type = "user"
