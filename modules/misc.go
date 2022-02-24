@@ -102,7 +102,7 @@ func GetID(c tb.Context) error {
 		if c.Sender().ID == 136817688 {
 			u = User{ID: c.Message().SenderChat.ID, First: c.Message().SenderChat.FirstName, Type: "user"}
 		} else {
-			return c.Reply(fmt.Sprintf("<b>User ID:</b> <code>%d</code>,\n<b>Chat ID:</b> <code>%d</code>.", c.Sender().FirstName, c.Sender().ID, c.Chat().Title, c.Chat().ID))
+			return c.Reply(fmt.Sprintf("<b>User ID:</b> <code>%d</code>,\n<b>Chat ID:</b> <code>%d</code>.", c.Sender().ID, c.Chat().ID))
 		}
 
 	} else {
