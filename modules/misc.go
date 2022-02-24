@@ -102,7 +102,7 @@ func GetID(c tb.Context) error {
 		if c.Sender().ID == 136817688 {
 			u = User{ID: c.Message().SenderChat.ID, First: c.Message().SenderChat.FirstName, Type: "user"}
 		} else {
-			return c.Reply(fmt.Sprintf("User %s ID is <code>%d</code>,\nChat %s ID is <code>%d</code>.", c.Sender().FirstName, c.Sender().ID, c.Chat().Title, c.Chat().ID))
+			return c.Reply(fmt.Sprintf("<b>User ID:</b> <code>%d</code>,\n<b>Chat ID:</b> <code>%d</code>.", c.Sender().FirstName, c.Sender().ID, c.Chat().Title, c.Chat().ID))
 		}
 
 	} else {
@@ -111,7 +111,7 @@ func GetID(c tb.Context) error {
 	if c.Message().IsReply() && c.Message().ReplyTo.IsForwarded() {
 		ID, FirstName, Type := GetForwardID(c)
 		user := User{ID: ID, First: FirstName, Type: Type}
-		return c.Reply(fmt.Sprintf("User %s ID is <code>%d</code>.\nThe forwarded %s, %s, has an ID of <code>%d</code>", u.ID, u.First, strings.Title(user.Type), user.First, user.ID))
+		return c.Reply(fmt.Sprintf("User %s ID is <code>%d</code>.\nThe forwarded %s, %s, has an ID of <code>%d</code>", u.First, u.ID, strings.Title(user.Type), user.First, user.ID))
 	}
 	return c.Reply(fmt.Sprintf("User %s ID is <code>%d</code>.", u.First, u.ID))
 }
