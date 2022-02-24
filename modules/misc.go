@@ -4,12 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/StalkR/imdb"
-	tg "github.com/TechMinerApps/telegraph"
-	"github.com/anaskhan96/soup"
-	yt "github.com/kkdai/youtube/v2"
-	"go.mongodb.org/mongo-driver/bson"
-	tb "gopkg.in/telebot.v3"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -18,6 +12,13 @@ import (
 	"strings"
 	"time"
 	"unicode"
+
+	"github.com/StalkR/imdb"
+	tg "github.com/TechMinerApps/telegraph"
+	"github.com/anaskhan96/soup"
+	yt "github.com/kkdai/youtube/v2"
+	"go.mongodb.org/mongo-driver/bson"
+	tb "gopkg.in/telebot.v3"
 )
 
 func UserInfo(c tb.Context) error {
@@ -115,6 +116,52 @@ func GetID(c tb.Context) error {
 	}
 	return c.Reply(fmt.Sprintf("User %s's ID is <code>%d</code>.", u.First, u.ID))
 }
+
+func WikiPedia(c tb.Context) error {
+	Q := GetArgs(c)
+	WikiMedia := "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts|pageimages&exintro&explaintext&generator=search&gsrsearch=intitle:" + Q + "&gsrlimit=1&redirects=1"
+	res, _ := Client.Get(WikiMedia)
+	defer res.Body.Close()
+	var data map[string]interface{}
+	json.NewDecoder(res.Body).Decode(&data)
+	if data["query"] == nil {
+		return c.Reply("No results found.")
+	}
+	Title, Index, Extract, Thumb := "", "", "", ""
+	for _, v := range data["query"].(map[string]interface{})["pages"].([]interface{}) {
+		for k, v := range v.(map[string]interface{}) {
+			if k == "title" {
+				Title = v.(string)
+			}
+			if k == "pageid" {
+				Index = v.(string)
+			}
+			if k == "extract" {
+				Extract = v.(string)
+			}
+			if k == "thumbnail" {
+				Thumb = v.(map[string]interface{})["source"].(string)
+			}
+		}
+	}
+	fmt.Println(Title, Thumb, Index, Extract)
+	return nil
+}
+
+func FakeGen(c tb.Context) error {
+	Args := GetArgs(c)
+	if Args == "" {
+		Args = "US"
+	}
+	res, _ := Client.Get("https://randomuser.me/api?results=1&gender=&password=upper,lower,12&exc=register,picture,id&nat=" + Args)
+	defer res.Body.Close()
+	var Fake FakeID
+	json.NewDecoder(res.Body).Decode(&Fake)
+	fmt.Println(Fake)
+	return nil
+}
+
+////////////////////////////////// OLD-NEW /////////////////////////////////////////////
 
 var myClient = &http.Client{Timeout: 10 * time.Second}
 

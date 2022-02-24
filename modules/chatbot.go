@@ -25,6 +25,9 @@ var (
 )
 
 func Chat_bot(c tb.Context) error {
+	if !db.IsChatbot(c.Chat().ID) {
+		return nil
+	}
 	is_chat := false
 	replace_addition := false
 	if c.Message().IsReply() && c.Message().ReplyTo.Sender.ID == BOT_ID {
@@ -197,7 +200,7 @@ func ChatbotCB(c tb.Context) error {
 func Chatbot_mode(c tb.Context) error {
 	args := c.Message().Payload
 	if args == string("") {
-		mode := db.Get_chatbot_mode(c.Chat().ID)
+		mode := db.IsChatbot(c.Chat().ID)
 		if mode {
 			c.Reply("AI chatbot is currently <b>enabled</b> for this chat.")
 			return nil
@@ -208,10 +211,10 @@ func Chatbot_mode(c tb.Context) error {
 	}
 	if stringInSlice(strings.ToLower(args), []string{"enable", "on", "yes", "y"}) {
 		c.Reply("<b>Enabled</b> AI chatbot for this chat.")
-		db.Set_chatbot_mode(c.Chat().ID, true)
+		db.SetCHatBotMode(c.Chat().ID, true)
 	} else if stringInSlice(strings.ToLower(args), []string{"disable", "off", "no", "n"}) {
 		c.Reply("<b>Disabled</b> AI chatbot for this chat.")
-		db.Set_chatbot_mode(c.Chat().ID, false)
+		db.SetCHatBotMode(c.Chat().ID, false)
 	} else {
 		c.Reply("Your input was not recognised as one of: yes/no/y/n/on/off")
 	}

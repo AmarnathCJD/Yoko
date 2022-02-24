@@ -348,3 +348,19 @@ func GetForwardID(c tb.Context) (int64, string, string) {
 	}
 	return ID, FirstName, Type
 }
+
+func GetArgs(c tb.Context) string {
+	if c.Message().IsReply() {
+		if c.Message().ReplyTo.Text != "" {
+			return c.Message().ReplyTo.Text
+		} else {
+			return c.Message().ReplyTo.Caption
+		}
+	} else {
+		Args := strings.SplitN(c.Message().Text, " ", 2)
+		if len(Args) > 1 {
+			return Args[1]
+		}
+	}
+	return ""
+}

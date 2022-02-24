@@ -8,16 +8,7 @@ import (
 
 var cb = database.Collection("chatbot")
 
-var BL_CHATS = _load_chats()
-
-func removeInt64(s []int64, r int64) []int64 {
-	for i, v := range s {
-		if v == r {
-			return append(s[:i], s[i+1:]...)
-		}
-	}
-	return s
-}
+var CB_CHATS = _load_chats()
 
 func _load_chats() []int64 {
 	var files []bson.M
@@ -30,16 +21,16 @@ func _load_chats() []int64 {
 	return array
 }
 
-func Set_chatbot_mode(chat_id int64, mode bool) {
+func SetCHatBotMode(chat_id int64, mode bool) {
 	cb.UpdateOne(context.TODO(), bson.M{"chat_id": chat_id}, bson.M{"$set": bson.M{"mode": mode}}, opts)
-	if !mode {
-		BL_CHATS = append(BL_CHATS, chat_id)
+	if mode {
+		CB_CHATS = append(CB_CHATS, chat_id)
 	} else {
-		BL_CHATS = removeInt64(BL_CHATS, chat_id)
+		CB_CHATS = Remove(CB_CHATS, chat_id).([]int64)
 	}
 }
 
-func Get_chatbot_mode(chat_id int64) bool {
+func GetChatbotMode(chat_id int64) bool {
 	c := cb.FindOne(context.TODO(), bson.M{"chat_id": chat_id})
 	if c.Err() != nil {
 		return false
@@ -51,10 +42,10 @@ func Get_chatbot_mode(chat_id int64) bool {
 }
 
 func IsChatbot(chat_id int64) bool {
-	for _, x := range BL_CHATS {
+	for _, x := range CB_CHATS {
 		if x == chat_id {
-			return false
+			return true
 		}
 	}
-	return true
+	return false
 }

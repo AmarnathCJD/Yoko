@@ -16,3 +16,25 @@ func DBinit() *mongo.Client {
 }
 
 var db = DBinit()
+
+func Remove(array interface{}, s interface{}) interface{} {
+	switch array.(type) {
+	case []int64:
+		for i, v := range array.([]int64) {
+			array := array.([]int64)
+			if v == s.(int64) {
+				return append(array[:i], array[i+1:]...)
+			}
+		}
+	case []string:
+		for i, v := range array.([]string) {
+			array := array.([]string)
+			if v == s.(string) {
+				return append(array[:i], array[i+1:]...)
+			}
+		}
+	default:
+		return nil
+	}
+	return array
+}

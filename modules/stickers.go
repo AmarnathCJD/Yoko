@@ -3,14 +3,15 @@ package modules
 import (
 	"encoding/json"
 	"fmt"
-	db "github.com/amarnathcjd/yoko/modules/db"
-	"github.com/anaskhan96/soup"
-	tb "gopkg.in/telebot.v3"
 	"io"
 	"mime/multipart"
 	"net/http"
 	"os"
 	"strconv"
+
+	db "github.com/amarnathcjd/yoko/modules/db"
+	"github.com/anaskhan96/soup"
+	tb "gopkg.in/telebot.v3"
 )
 
 var (

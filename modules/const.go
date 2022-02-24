@@ -1,6 +1,7 @@
 package modules
 
 import (
+	"net/http"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -12,10 +13,52 @@ const YOUTUBE_API_KEY = "AIzaSyAEz0eRkbsEE7TrHGKmd_iXh4AmYJlMKDs"
 const ResolveURL = "https://707c80624779.up.railway.app/username?username="
 
 // vars
-var BOT_USERNAME = "@" + b.Me.Username
+var BOT_USERNAME = b.Me.Username
 var BOT_NAME = b.Me.FirstName
 var BOT_ID = b.Me.ID
 var StartTime = time.Now()
+var Client = http.Client{Timeout: time.Second * 10}
+
+type FakeID struct {
+	Results []struct {
+		Gender string `json:"gender"`
+		Name   struct {
+			Title string `json:"title"`
+			First string `json:"first"`
+			Last  string `json:"last"`
+		} `json:"name"`
+		Location struct {
+			Street struct {
+				Number int    `json:"number"`
+				Name   string `json:"name"`
+			} `json:"street"`
+			City        string `json:"city"`
+			State       string `json:"state"`
+			Country     string `json:"country"`
+			Postcode    int    `json:"postcode"`
+			Coordinates struct {
+				Latitude  string `json:"latitude"`
+				Longitude string `json:"longitude"`
+			} `json:"coordinates"`
+			Timezone struct {
+				Offset      string `json:"offset"`
+				Description string `json:"description"`
+			} `json:"timezone"`
+		} `json:"location"`
+		Email string `json:"email"`
+		Dob   struct {
+			Date time.Time `json:"date"`
+			Age  int       `json:"age"`
+		} `json:"dob"`
+		Registered struct {
+			Date time.Time `json:"date"`
+			Age  int       `json:"age"`
+		} `json:"registered"`
+		Phone string `json:"phone"`
+		Cell  string `json:"cell"`
+		Nat   string `json:"nat"`
+	} `json:"results"`
+}
 
 var notes_help = "✨ Here is the help for **Notes:**\n**Command for Members**\n**->** `/get notename`: get the note with this notename\n**-** #notename: same as /get\n**->** `/notes`: list all saved notes in this chat\n**Command for Admins**\n**->** `/save notename notedata`: saves notedata as a note with name notename, reply to a message or document to save it\n**->** `/clear notename`: clear note with this name\n**->** `/privatenote on/yes/off/no`: whether or not to send the note in PM. Write del besides on/off to delete hashtag message on group.\n**Note**\n **-** Only admins can use This module\n **-** To save a document (like photo, audio, etc.), reply to a document or media then type /save\n **-** Need help for parsing text? Check /markdownhelp\nSave data for future users with notes!\nNotes are great to save random tidbits of information; a phone number, a nice gif, a funny picture - anything!\nAlso you can save a text/document with buttons, you can even save it in here."
 

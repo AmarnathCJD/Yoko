@@ -100,9 +100,11 @@ func Mute(c tb.Context) error {
 		c.Reply("This command is made to be used in group chats.")
 		return nil
 	}
-	user, xtra := get_user(c.Message())
-	if user == nil {
+	user, xtra := GetUser(c)
+	if user.ID == 0 {
 		return nil
+	} else if user.Type == "chat" {
+		return c.Reply("You can't mute a group!")
 	}
 	if user.ID == BOT_ID {
 		c.Reply("You know what I'm not going to do? Mute myself.")
@@ -114,16 +116,16 @@ func Mute(c tb.Context) error {
 	if arg == "unmute" {
 		err := c.Bot().Restrict(c.Chat(), &tb.ChatMember{
 			Rights: tb.NoRestrictions(),
-			User:   user,
+			User:   user.User(),
 		})
 		if err != nil && err.Error() == "telegram: not enough rights to restrict/unrestrict chat member (400)" {
 			c.Reply("I haven't got the rights to do this.")
 			return nil
 		}
 		if xtra == string("") {
-			c.Reply(fmt.Sprintf("✨ %s was unmuted. <b>~</b>", user.FirstName))
+			c.Reply(fmt.Sprintf("✨ %s was unmuted. <b>~</b>", user.First))
 		} else {
-			c.Reply(fmt.Sprintf("✨ %s was unmuted. <b>~</b>\n<b>Reason:</b> %s", user.FirstName, reason))
+			c.Reply(fmt.Sprintf("✨ %s was unmuted. <b>~</b>\n<b>Reason:</b> %s", user.First, reason))
 		}
 		return nil
 	}
@@ -152,18 +154,18 @@ func Mute(c tb.Context) error {
 	}
 	err := b.Restrict(c.Message().Chat, &tb.ChatMember{
 		Rights:          tb.Rights{CanSendMessages: false},
-		User:            user,
+		User:            user.User(),
 		RestrictedUntil: int64(until_date),
 	})
 	if err == nil {
 		if string(reason) != string("") {
 			if arg != "smute" {
-				c.Reply(fmt.Sprintf("<b>%s</b> was muted. ~\n<b>Reason:</b> %s", user.FirstName, reason))
+				c.Reply(fmt.Sprintf("<b>%s</b> was muted. ~\n<b>Reason:</b> %s", user.First, reason))
 			}
 			return nil
 		}
 		if arg != "smute" {
-			c.Reply(fmt.Sprintf("<b>%s</b> was muted. ~", user.FirstName))
+			c.Reply(fmt.Sprintf("<b>%s</b> was muted. ~", user.First))
 		}
 		return nil
 	} else if err.Error() == "telegram: not enough rights to restrict/unrestrict chat member (400)" {
@@ -181,9 +183,11 @@ func Kick(c tb.Context) error {
 		c.Reply("This command is made to be used in group chats.")
 		return nil
 	}
-	user, xtra := get_user(c.Message())
-	if user == nil {
+	user, xtra := GetUser(c)
+	if user.ID == 0 {
 		return nil
+	} else if user.Type == "chat" {
+		return c.Reply("You can't kick a group!")
 	}
 	if user.ID == BOT_ID {
 		c.Reply("You know what I'm not going to do? Kick myself.")
@@ -191,7 +195,7 @@ func Kick(c tb.Context) error {
 	}
 	reason := xtra
 	arg := strings.SplitN(c.Message().Text, " ", 2)[0][1:]
-	err := c.Bot().Unban(c.Chat(), user, false)
+	err := c.Bot().Unban(c.Chat(), user.User(), false)
 	check(err)
 	if arg == "skick" {
 		c.Bot().Delete(c.Message())
@@ -203,11 +207,11 @@ func Kick(c tb.Context) error {
 	if err == nil {
 		if reason == string("") {
 			if arg != "skick" {
-				return c.Reply(fmt.Sprintf("I've kicked <a href='tg://user?id=%d'>%s</a> <b>~</b>", user.ID, user.FirstName))
+				return c.Reply(fmt.Sprintf("I've kicked <a href='tg://user?id=%d'>%s</a> <b>~</b>", user.ID, user.First))
 			}
 		} else {
 			if arg != "skick" {
-				return c.Reply(fmt.Sprintf("I've kicked <a href='tg://user?id=%d'>%s</a> <b>~</b>\n<b>Reason:</b> %s", user.ID, user.FirstName, reason))
+				return c.Reply(fmt.Sprintf("I've kicked <a href='tg://user?id=%d'>%s</a> <b>~</b>\n<b>Reason:</b> %s", user.ID, user.First, reason))
 			}
 		}
 	} else {
@@ -216,4 +220,18 @@ func Kick(c tb.Context) error {
 		}
 	}
 	return nil
+}
+
+func KickMe(c tb.Context) error {
+	if c.Message().Private() {
+		c.Reply("This command is made to be used in group chats.")
+		return nil
+	}
+	err := c.Bot().Unban(c.Chat(), c.Sender(), false)
+	check(err)
+	if err == nil {
+		return c.Reply("I've kicked you <b>~</b>")
+	} else {
+		return c.Reply("Failed to kick!")
+	}
 }

@@ -103,6 +103,7 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["kick"] = HANDLE{Kick, Ban_users}
 	HANDLERS["skick"] = HANDLE{Kick, Ban_users}
 	HANDLERS["dkick"] = HANDLE{Kick, Ban_users}
+	HANDLERS["kickme"] = HANDLE{FUNC: KickMe}
 	// feds.go
 	HANDLERS["newfed"] = HANDLE{FUNC: New_fed}
 	HANDLERS["delfed"] = HANDLE{FUNC: Delete_fed}
@@ -149,6 +150,12 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["logs"] = HANDLE{FUNC: Logs}
 	HANDLERS["ping"] = HANDLE{FUNC: Ping}
 	HANDLERS["pong"] = HANDLE{FUNC: Te}
+	// rules.go
+	HANDLERS["rules"] = HANDLE{FUNC: Rules}
+	HANDLERS["setrules"] = HANDLE{FUNC: SetRules}
+	HANDLERS["resetrules"] = HANDLE{FUNC: ResetRules}
+	HANDLERS["setrulesbutton"] = HANDLE{FUNC: SetRulesButton}
+	HANDLERS["resetsetrulesbutton"] = HANDLE{FUNC: ResetRulesButton}
 	return HANDLERS
 
 }

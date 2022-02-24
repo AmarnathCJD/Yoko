@@ -21,6 +21,8 @@ func Start(c tb.Context) error {
 		return PrivateStartNotes(c)
 	} else if strings.HasPrefix(m.Payload, "connect") {
 		return PrivateConnect(c)
+	} else if strings.HasPrefix(m.Payload, "rules") {
+		return SendPrivateRules(c)
 	}
 	if m.Private() {
 		menu.Inline(
