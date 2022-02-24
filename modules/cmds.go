@@ -38,6 +38,8 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["rs"] = HANDLE{FUNC: RsStripe}
 	HANDLERS["sm"] = HANDLE{FUNC: USDStripe}
 	HANDLERS["music"] = HANDLE{FUNC: Music}
+        HANDLERS["wiki"] = HANDLE{FUNC: WikiPedia}
+        HANDLERS["f2"] = HANDLE{FUNC: FakeGen}
 	// start.go
 	HANDLERS["start"] = HANDLE{FUNC: Start}
 	HANDLERS["help"] = HANDLE{FUNC: Help_Menu}
