@@ -120,7 +120,7 @@ func GetID(c tb.Context) error {
 
 func WikiPedia(c tb.Context) error {
 	Q := GetArgs(c)
-	WikiMedia := "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts|pageimages&exintro&explaintext&generator=search&gsrsearch=intitle:" + Q + "&gsrlimit=1&redirects=1"
+	WikiMedia := "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts|pageimages&exintro&explaintext&generator=search&gsrsearch=intitle:" + url.QueryEscape(query) + "&gsrlimit=1&redirects=1"
 	res, err := Client.Get(WikiMedia)
 	if err != nil {
 		log.Print(err)
