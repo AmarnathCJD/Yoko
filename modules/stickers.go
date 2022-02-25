@@ -19,9 +19,14 @@ var (
 	PACK_TYPES = []string{"png", "webm", "tgs"}
 )
 
+type KangError struct {
+Ok string `json:"result"`
+Result bool `json:"result"`
+Description string `json:"description"`
+Error int `json:"error_code"`
+}
+
 func AddSticker(c tb.Context) error {
-	b, _ := json.Marshal(c.Message().ReplyTo)
-	fmt.Println(string(b))
 	pack, count, name := db.Get_user_pack(c.Sender().ID, "png")
 	var Emoji string
 	if c.Message().Payload != string("") {
@@ -70,19 +75,19 @@ func AddSticker(c tb.Context) error {
 		title := fmt.Sprintf("%s's %s kang pack", c.Sender().FirstName, Prefix)
 		if !pack {
 			Name := fmt.Sprintf("%s%d_%d_by_missmikabot", PrePre, c.Sender().ID, 1)
-			err, xt := UploadStick(Sticker.File, Ext, true, Name, title, Emoji, c.Sender().ID)
+			err, er := UploadStick(Sticker.File, Ext, true, Name, title, Emoji, c.Sender().ID)
 			if err {
 				db.Add_sticker(c.Sender().ID, Name, title, Ext)
 				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", Name))))
 				return c.Reply(fmt.Sprintf("Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
 			} else {
-				return c.Reply(fmt.Sprint(xt))
+				return c.Reply("Failed to kang, "+er)
 			}
 		} else if count <= 120 {
 			stickerset, _ := c.Bot().StickerSet(name)
-			err, xt := UploadStick(Sticker.File, Ext, false, name, stickerset.Title, Emoji, c.Sender().ID)
+			err, er := UploadStick(Sticker.File, Ext, false, name, stickerset.Title, Emoji, c.Sender().ID)
 			if !err {
-				return c.Reply(fmt.Sprint(xt))
+				return c.Reply("Failed to kang, "+er)
 			} else {
 				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", stickerset.Name))))
 				c.Reply(fmt.Sprintf("Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", stickerset.Name, Emoji), sel)
@@ -91,9 +96,9 @@ func AddSticker(c tb.Context) error {
 			}
 		} else {
 			Name := fmt.Sprintf("%s%d_%d_by_missmikabot", PrePre, c.Sender().ID, count)
-			err, xt := UploadStick(Sticker.File, Ext, true, Name, title, Emoji, c.Sender().ID)
+			err, er := UploadStick(Sticker.File, Ext, true, Name, title, Emoji, c.Sender().ID)
 			if !err {
-				return c.Reply(fmt.Sprint(xt))
+				return c.Reply("Failed to kang, "+er)
 			} else {
 				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", Name))))
 				c.Reply(fmt.Sprintf("Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
@@ -200,7 +205,7 @@ func MyPacks(c tb.Context) error {
 	return nil
 }
 
-func UploadStick(F tb.File, ext string, new bool, name string, title string, emoji string, user_id int64) (bool, mapType) {
+func UploadStick(F tb.File, ext string, new bool, name string, title string, emoji string, user_id int64) (bool, string) {
 	b.Download(&F, "sticker."+ext)
 	var url string
 	if new {
@@ -241,10 +246,9 @@ func UploadStick(F tb.File, ext string, new bool, name string, title string, emo
 		return false, nil
 	}
 	defer resp.Body.Close()
-	var d mapType
+	var Resp KangError
 	json.NewDecoder(resp.Body).Decode(&d)
-	fmt.Println(d)
-	return d["ok"].(bool), d
+	return Resp.Ok, Resp.Error
 }
 
 func addFileToWriter(writer *multipart.Writer, filename, field string, file interface{}) error {
