@@ -247,7 +247,7 @@ func UploadStick(F tb.File, ext string, new bool, name string, title string, emo
 	defer resp.Body.Close()
 	var Resp KangError
 	json.NewDecoder(resp.Body).Decode(&Resp)
-        fmt.Println(Resp)
+	fmt.Println(Resp)
 	return Resp.Ok, Resp.Description
 }
 
