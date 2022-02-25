@@ -44,12 +44,12 @@ func AddSticker(c tb.Context) error {
 	Reply := c.Message().ReplyTo.Sticker
 	if Reply.Video || Reply.Animated {
 		var Ext = "webm"
-		var Prefix = "WebM"
 		var PrePre = "vip"
+                var Prefix = "Video"
 		if Reply.Animated {
 			Ext = "tgs"
-			Prefix = "Animated"
 			PrePre = "tgp"
+                        Prefix = "Animated"
 		}
 		pack, count, name = db.Get_user_pack(c.Sender().ID, Ext)
 		title := fmt.Sprintf("%s's %s kang pack", c.Sender().FirstName, Prefix)
@@ -59,7 +59,7 @@ func AddSticker(c tb.Context) error {
 			if err {
 				db.Add_sticker(c.Sender().ID, Name, title, Ext)
 				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", Name))))
-				return c.Reply(fmt.Sprintf(Prefix+"Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
+				return c.Reply(fmt.Sprintf(Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
 			} else {
 				return c.Reply(fmt.Sprint(xt))
 			}
@@ -70,7 +70,7 @@ func AddSticker(c tb.Context) error {
 				return c.Reply(fmt.Sprint(xt))
 			} else {
 				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", stickerset.Name))))
-				c.Reply(fmt.Sprintf("Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>"+Prefix+"Pack</a></b>\nEmoji is: %s", stickerset.Name, Emoji), sel)
+				c.Reply(fmt.Sprintf("Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", stickerset.Name, Emoji), sel)
 				db.Update_count(c.Sender().ID, stickerset.Name, Ext)
 				return nil
 			}
@@ -81,7 +81,7 @@ func AddSticker(c tb.Context) error {
 				return c.Reply(fmt.Sprint(xt))
 			} else {
 				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", Name))))
-				c.Reply(fmt.Sprintf(Prefix+" Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
+				c.Reply(fmt.Sprintf(Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
 				db.Add_sticker(c.Sender().ID, Name, title, Ext)
 				return nil
 			}
