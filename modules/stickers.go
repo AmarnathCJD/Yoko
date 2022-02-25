@@ -23,7 +23,7 @@ type KangError struct {
 	Ok          bool   `json:"result"`
 	Result      bool   `json:"result"`
 	Description string `json:"description"`
-	Error       int    `json:"error_code"`
+	ErrorCode   string `json:"error_code"`
 }
 
 func AddSticker(c tb.Context) error {
