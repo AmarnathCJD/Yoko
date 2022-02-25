@@ -193,11 +193,10 @@ func GetAllGbans() []Gban {
 
 func GatherStats() string {
 	Stats := "Mika (V1.3.2) Stats\n"
-	Stats += fmt.Sprintf("<b>%d</b> users\n", len(GetAllUsers()))
-	Stats += fmt.Sprintf("<b>%d</b> chats\n", len(GetAllChats()))
-	Stats += fmt.Sprintf("<b>%d</b> gbans\n", len(GetAllGbans()))
-	Stats += fmt.Sprintf("<b>%d</b> sudo\n", len(Sudos))
-	Stats += fmt.Sprintf("<b>%d</b> devs\n", len(Devs))
-	fmt.Println(db.Database("mika").RunCommand(context.TODO(), "dbstats", nil).DecodeBytes())
+	Stats += fmt.Sprintf("<b>•</b> Database structure version <code>{}</code>", "15")
+	Stats += fmt.Sprintf("<b>•</b> <code>%d</code> total users, in <code>%d</code> chats\n", len(GetAllUsers()), len(GetAllChats()))
+	fmt.Println(db.Database("mika").RunCommand(context.TODO(), bson.M{
+		"dbStats": 1,
+	}, nil).DecodeBytes())
 	return Stats
 }
