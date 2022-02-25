@@ -171,10 +171,10 @@ func FakeGen(c tb.Context) error {
 		FakeString += "Last Name: " + Fake.Name.Last + "\n"
 	}
 	FakeString += "Gender: " + Fake.Gender + "\n"
-	FakeString += "Street: " + string(Fake.Location.Street.Number) + ", " + Fake.Location.Street.Name + "\n"
+	FakeString += "Street: " + fmt.Sprint(Fake.Location.Street.Number) + ", " + Fake.Location.Street.Name + "\n"
 	FakeString += "City: " + Fake.Location.City + "\n"
 	FakeString += "State: " + Fake.Location.State + "\n"
-	FakeString += "Zip: " + string(Fake.Location.Postcode) + "\n"
+	FakeString += "Zip: " + fmt.Sprint(Fake.Location.Postcode) + "\n"
 	FakeString += "Email: " + Fake.Email + "\n"
 	FakeString += "Phone: " + Fake.Phone + "\n"
 	FakeString += "Cell: " + Fake.Cell + "\n"
