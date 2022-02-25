@@ -149,7 +149,7 @@ func FakeGen(c tb.Context) error {
 	defer res.Body.Close()
 	var FakeD FakeID
 	json.NewDecoder(res.Body).Decode(&FakeD)
-	FakeString := ""
+	FakeString := fmt.Sprintf("<b>Fake Generated (%s)</b>\n", Args)
 	Fake := FakeD.Results[0]
 	if Fake.Name.Title != "" {
 		FakeString += "<b>First Name:</b> <code>" + Fake.Name.Title + " " + Fake.Name.First + "</code>\n"
