@@ -131,24 +131,7 @@ func WikiPedia(c tb.Context) error {
 	if data["query"] == nil {
 		return c.Reply("No results found.")
 	}
-	Title, Index, Extract, Thumb := "", "", "", ""
-	for _, v := range data["query"].(map[string]interface{})["pages"].(map[string]interface{}) {
-		for k, v := range v.(map[string]interface{}) {
-			if k == "title" {
-				Title = v.(string)
-			}
-			if k == "pageid" {
-				Index = v.(string)
-			}
-			if k == "extract" {
-				Extract = v.(string)
-			}
-			if k == "thumbnail" {
-				Thumb = v.(map[string]interface{})["source"].(string)
-			}
-		}
-	}
-	fmt.Println(Title, Thumb, Index, Extract)
+	fmt.Println(data)
 	return nil
 }
 
@@ -167,19 +150,20 @@ func FakeGen(c tb.Context) error {
 	FakeString := ""
 	Fake := FakeD.Results[0]
 	if Fake.Name.Title != "" {
-		FakeString += "First Name: " + Fake.Name.Title + " " + Fake.Name.First + "\n"
-		FakeString += "Last Name: " + Fake.Name.Last + "\n"
+		FakeString += "<b>First Name:</b> <code>" + Fake.Name.Title + " " + Fake.Name.First + "</code>\n"
+		FakeString += "<b>Last Name:</b> <code>" + Fake.Name.Last + "</code>\n"
 	}
-	FakeString += "Gender: " + Fake.Gender + "\n"
-	FakeString += "Street: " + fmt.Sprint(Fake.Location.Street.Number) + ", " + Fake.Location.Street.Name + "\n"
-	FakeString += "City: " + Fake.Location.City + "\n"
-	FakeString += "State: " + Fake.Location.State + "\n"
-	FakeString += "Zip: " + fmt.Sprint(Fake.Location.Postcode) + "\n"
-	FakeString += "Email: " + Fake.Email + "\n"
-	FakeString += "Phone: " + Fake.Phone + "\n"
-	FakeString += "Cell: " + Fake.Cell + "\n"
-	FakeString += "Birthday: " + Fake.Dob.Date.String() + "\n"
-	FakeString += "Nat: " + Fake.Nat + "\n"
+	FakeString += "vGender:</b> <code>" + Fake.Gender + "</code>\n"
+	FakeString += "<b>Street:</b> <code>" + fmt.Sprint(Fake.Location.Street.Number) + ", " + Fake.Location.Street.Name + "</code>\n"
+	FakeString += "<b>City:</b> <code>" + Fake.Location.City + "</code>\n"
+	FakeString += "<b>State:</b> <code>" + Fake.Location.State + "</code>\n"
+	FakeString += "<b>Zip:</b> " + fmt.Sprint(Fake.Location.Postcode) + "</code>\n"
+	FakeString += "<b>Email:</b> <code>" + Fake.Email + "</code>\n"
+	FakeString += "<b>Phone:</b> <code>" + Fake.Phone + "</code>\n"
+	FakeString += "<b>Cell:</b> <code>" + Fake.Cell + "</code>\n"
+	FakeString += "<b>Age:</b> <code>" + fmt.Sprint(Fake.Dob.Age) + "</code>\n"
+	FakeString += "<b>Birthday:</b> <code>" + Fake.Dob.Date.String() + "</code>\n"
+	FakeString += "<b>Nat:</b> <code>" + Fake.Nat + "</code>\n"
 	return c.Reply(FakeString)
 }
 
