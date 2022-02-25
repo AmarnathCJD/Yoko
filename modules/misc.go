@@ -131,7 +131,9 @@ func WikiPedia(c tb.Context) error {
 	if data["query"] == nil {
 		return c.Reply("No results found.")
 	}
-	fmt.Println(data)
+	fmt.Println(data["query"].(map[string]interface{}))
+	pages := data["query"].(map[string]interface{})["pages"].(map[string]interface{})
+	fmt.Println(pages)
 	return nil
 }
 
