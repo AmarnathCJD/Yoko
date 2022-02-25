@@ -364,3 +364,15 @@ func GetArgs(c tb.Context) string {
 	}
 	return ""
 }
+
+func ParseCountry(s string) string {
+	for x, y := range COUNTRY_CODES {
+		if strings.ToLower(s) == strings.ToLower(x) {
+			return strings.ToUpper(y.(string))
+		}
+		if strings.ToLower(s) == strings.ToLower(y.(string)) {
+			return strings.ToUpper(y.(string))
+		}
+	}
+	return "US"
+}
