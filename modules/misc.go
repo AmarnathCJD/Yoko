@@ -136,11 +136,12 @@ func WikiPedia(c tb.Context) error {
 	for _, v := range pages {
 		page = v.(map[string]interface{})
 	}
-	Wiki := fmt.Sprintf("<b><u>%s -wiki</u></b>", page["title"].(string))
+	Wiki := fmt.Sprintf("<b><u>%s</u></b>", page["title"].(string))
 	Extract := page["extract"].(string)[:800]
 	chunks := strings.Split(Extract, ".")
 	description := strings.ReplaceAll(Extract, chunks[len(chunks)-1], "")
 	Wiki += "\n<i>" + description + "</i>\n -WikiPedia"
+        fmt.Println(page["thumnail"])
 	c.Reply(Wiki)
 	return nil
 }
