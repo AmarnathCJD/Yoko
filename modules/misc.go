@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -120,7 +121,10 @@ func GetID(c tb.Context) error {
 func WikiPedia(c tb.Context) error {
 	Q := GetArgs(c)
 	WikiMedia := "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts|pageimages&exintro&explaintext&generator=search&gsrsearch=intitle:" + Q + "&gsrlimit=1&redirects=1"
-	res, _ := Client.Get(WikiMedia)
+	res, err := Client.Get(WikiMedia)
+	if err != nil {
+		log.Print(err)
+	}
 	defer res.Body.Close()
 	var data map[string]interface{}
 	json.NewDecoder(res.Body).Decode(&data)
@@ -153,12 +157,30 @@ func FakeGen(c tb.Context) error {
 	if Args == "" {
 		Args = "US"
 	}
-	res, _ := Client.Get("https://randomuser.me/api?results=1&gender=&password=upper,lower,12&exc=register,picture,id&nat=" + Args)
+	res, err := Client.Get("https://randomuser.me/api?results=1&gender=&password=upper,lower,12&exc=register,picture,id&nat=" + Args)
+	if err != nil {
+		log.Print(err)
+	}
 	defer res.Body.Close()
-	var Fake FakeID
-	json.NewDecoder(res.Body).Decode(&Fake)
-	fmt.Println(Fake)
-	return nil
+	var FakeD FakeID
+	json.NewDecoder(res.Body).Decode(&FakeD)
+	FakeString := ""
+	Fake := FakeD.Results[0]
+	if Fake.Name.Title != "" {
+		FakeString += "First Name: " + Fake.Name.Title + " " + Fake.Name.First + "\n"
+		FakeString += "Last Name: " + Fake.Name.Last + "\n"
+	}
+	FakeString += "Gender: " + Fake.Gender + "\n"
+	FakeString += "Street: " + string(Fake.Location.Street.Number) + ", " + Fake.Location.Street.Name + "\n"
+	FakeString += "City: " + Fake.Location.City + "\n"
+	FakeString += "State: " + Fake.Location.State + "\n"
+	FakeString += "Zip: " + string(Fake.Location.Postcode) + "\n"
+	FakeString += "Email: " + Fake.Email + "\n"
+	FakeString += "Phone: " + Fake.Phone + "\n"
+	FakeString += "Cell: " + Fake.Cell + "\n"
+	FakeString += "Birthday: " + Fake.Dob.Date.String() + "\n"
+	FakeString += "Nat: " + Fake.Nat + "\n"
+	return c.Reply(FakeString)
 }
 
 ////////////////////////////////// OLD-NEW /////////////////////////////////////////////

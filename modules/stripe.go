@@ -186,8 +186,25 @@ func ParseCC(s string) (string, string, string, string) {
 
 }
 
-func Stripe2(c tb.Context) error {
-	return nil
+func RsStripe(c tb.Context) error {
+	d := strings.TrimSpace(c.Message().Payload)
+	cc, year, month, cvc := "", "", "", ""
+	for i, x := range strings.SplitN(d, "|", -1) {
+		if i == 0 {
+			cc = x
+		} else if i == 1 {
+			month = x
+		} else if i == 2 {
+			year = x
+		} else if i == 3 {
+			cvc = x
+		}
+	}
+	for _, x := range []string{cc, year, month, cvc} {
+		if x == string("") {
+			c.Reply("Invalid format, please send as <code>/st cc|mm|yy|cvv</code>")
+			return nil
+		}
+	}
+	return c.Reply(StripeRs(cc, year, month, cvc, c))
 }
-
-// soon

@@ -35,9 +35,8 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["webss"] = HANDLE{FUNC: WebSS}
 	HANDLERS["tr"] = HANDLE{FUNC: Tr2}
 	HANDLERS["chatinfo"] = HANDLE{FUNC: ChatInfo}
-	HANDLERS["rs"] = HANDLE{FUNC: RsStripe}
-	HANDLERS["sm"] = HANDLE{FUNC: USDStripe}
 	HANDLERS["music"] = HANDLE{FUNC: Music}
+	HANDLERS["rs"] = HANDLE{FUNC: RsStripe}
 	// start.go
 	HANDLERS["start"] = HANDLE{FUNC: Start}
 	HANDLERS["help"] = HANDLE{FUNC: Help_Menu}
@@ -239,34 +238,4 @@ func AddedToGroupHandler(c tb.Context) error {
 		db.AddChat(db.Chat{Id: c.Chat().ID, Title: c.Chat().Title})
 	}
 	return nil
-}
-
-func RsStripe(c tb.Context) error {
-	d := strings.TrimSpace(c.Message().Payload)
-	cc, year, month, cvc := "", "", "", ""
-	for i, x := range strings.SplitN(d, "|", -1) {
-		if i == 0 {
-			cc = x
-		} else if i == 1 {
-			month = x
-		} else if i == 2 {
-			year = x
-		} else if i == 3 {
-			cvc = x
-		}
-	}
-	for _, x := range []string{cc, year, month, cvc} {
-		if x == string("") {
-			c.Reply("Invalid format, please send as <code>/st cc|mm|yy|cvv</code>")
-			return nil
-		}
-	}
-	return c.Reply(StripeRs(cc, year, month, cvc, c))
-}
-
-func USDStripe(c tb.Context) error {
-	return c.Send(
-		"Input your new name:",
-		tb.Placeholder("John Doe"),
-	)
 }
