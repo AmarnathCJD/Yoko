@@ -13,8 +13,8 @@ func Promote(c tb.Context) error {
 		c.Reply("This command is made to be used in group chats.")
 		return nil
 	}
-	user, xtra := get_user(c.Message())
-	if user == nil {
+	user, xtra := GetUser(c)
+	if user.ID == 0 {
 		return nil
 	} else if user.ID == BOT_ID {
 		c.Reply("Pffff, I wish I could just promote myself.")
@@ -24,7 +24,7 @@ func Promote(c tb.Context) error {
 	if arg == "promote" {
 		err := c.Bot().Promote(c.Chat(), &tb.ChatMember{
 			Rights: tb.Rights{CanRestrictMembers: true, CanPinMessages: true, CanChangeInfo: false, CanDeleteMessages: true, CanInviteUsers: true},
-			User:   user,
+			User:   user.User(),
 		})
 		if err == nil {
 			c.Reply("✨ Successfully promoted! ~")
@@ -42,10 +42,10 @@ func Promote(c tb.Context) error {
 	} else if arg == "superpromote" {
 		err := c.Bot().Promote(c.Chat(), &tb.ChatMember{
 			Rights: tb.Rights{CanRestrictMembers: true, CanPinMessages: true, CanChangeInfo: true, CanDeleteMessages: true, CanInviteUsers: true, CanPromoteMembers: true, CanManageVoiceChats: true},
-			User:   user,
+			User:   user.User(),
 		})
 		if err == nil {
-			c.Reply(c.Message(), "✨ Successfully superpromoted! ~")
+			c.Reply("✨ Successfully superpromoted! ~")
 		} else if err.Error() == string("telegram: can't remove chat owner (400)") {
 			c.Reply("I would love to promote the chat creator, but... well, they already have all the power.")
 		} else if err.Error() == "telegram unknown: Bad Request: not enough rights (400)" {
@@ -59,7 +59,7 @@ func Promote(c tb.Context) error {
 		}
 	}
 	if xtra != string("") {
-		edit_title(c, user, xtra, true)
+		EditTitle(c, user.User(), xtra, true)
 	}
 	return nil
 }
@@ -69,8 +69,8 @@ func Demote(c tb.Context) error {
 		c.Reply("This command is made to be used in group chats.")
 		return nil
 	}
-	user, _ := get_user(c.Message())
-	if user == nil {
+	user, _ := GetUser(c)
+	if user.ID == 0 {
 		return nil
 	} else if user.ID == BOT_ID {
 		c.Reply("I am not going to demote myself.")
@@ -78,7 +78,7 @@ func Demote(c tb.Context) error {
 	}
 	err := c.Bot().Promote(c.Chat(), &tb.ChatMember{
 		Rights: tb.NoRestrictions(),
-		User:   user,
+		User:   user.User(),
 	})
 	if err == nil {
 		c.Reply("✨ Successfully demoted! ~")
@@ -112,8 +112,7 @@ func Adminlist(c tb.Context) error {
 		admins += fmt.Sprintf("\n<b>-</b> <a href='tg://user?id=%s'>%s</a>", ad[1], ad[0])
 	}
 	admins += fmt.Sprintf("\n\n<b>Admins Count:</b> %s", fmt.Sprint(len(admin)+1))
-	c.Reply(admins)
-	return nil
+	return c.Reply(admins)
 }
 
 func Set_title(c tb.Context) error {
@@ -121,8 +120,8 @@ func Set_title(c tb.Context) error {
 		c.Reply("This command is made to be used in group chats.")
 		return nil
 	}
-	user, title := get_user(c.Message())
-	if user == nil {
+	user, title := GetUser(c)
+	if user.ID == 0 {
 		return nil
 	} else if title == string("") {
 		return c.Reply("You need to give me a title name")
@@ -130,11 +129,11 @@ func Set_title(c tb.Context) error {
 	} else if user.ID == BOT_ID {
 		return c.Reply("I cannot edit my own Title!")
 	}
-	edit_title(c, user, title, false)
+	EditTitle(c, user.User(), title, false)
 	return nil
 }
 
-func edit_title(c tb.Context, user *tb.User, title string, promote bool) {
+func EditTitle(c tb.Context, user *tb.User, title string, promote bool) {
 	if promote {
 		time.Sleep(3 * time.Second)
 	}
