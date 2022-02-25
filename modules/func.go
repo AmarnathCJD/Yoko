@@ -176,7 +176,7 @@ func DeleteMessages(next tb.HandlerFunc) tb.HandlerFunc {
 		}
 		p, _ := b.ChatMemberOf(c.Chat(), c.Sender())
 		if p.Role == "member" {
-			b.Reply(c.Message(), "You need to be an admin to do this!")
+			c.Reply("You need to be an admin to do this!")
 			return nil
 		} else if p.Role == "creator" {
 			return next(c)
@@ -184,7 +184,7 @@ func DeleteMessages(next tb.HandlerFunc) tb.HandlerFunc {
 			if p.Rights.CanDeleteMessages {
 				return next(c)
 			} else {
-				b.Reply(c.Message(), "You are missing the following rights to use this command: CanDeleteMessages")
+				c.Reply("You are missing the following rights to use this command: CanDeleteMessages")
 				return nil
 			}
 		}
