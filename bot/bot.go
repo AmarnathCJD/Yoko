@@ -2,8 +2,8 @@ package bot
 
 import (
 	"fmt"
-        "log"
 	tb "gopkg.in/telebot.v3"
+	"log"
 )
 
 func BotInit() tb.Bot {
@@ -17,7 +17,7 @@ func BotInit() tb.Bot {
 		Offline:     false,
 		OnError: func(e error, c tb.Context) {
 			fmt.Println(e)
-                        log.Println(e)
+			log.Println(e)
 		},
 	})
 
