@@ -241,10 +241,10 @@ func UploadStick(F tb.File, ext string, new bool, name string, title string, emo
 	var Resp mapType
 	json.NewDecoder(resp.Body).Decode(&Resp)
 	var Error string
-        if d, ok := Resp["description"] ; ok {
+	if d, ok := Resp["description"]; ok {
 
-Error = d.(string)
-}
+		Error = d.(string)
+	}
 	return Resp["ok"].(bool), Error
 }
 
