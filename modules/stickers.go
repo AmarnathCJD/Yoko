@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
-        "strings"
+	"strings"
 
 	db "github.com/amarnathcjd/yoko/modules/db"
 	"github.com/anaskhan96/soup"
@@ -32,22 +32,22 @@ func AddSticker(c tb.Context) error {
 		c.Reply("sticker file can only be valid wepb files.")
 		return nil
 	}
-	if c.Message().ReplyTo.Sticker == nil{
-var IsVid = false
-                if c.Message().ReplyTo.Document != nil && strings.HasSuffix(c.Message().ReplyTo.Document.FileName, "webm") {
-IsVid = true
-}
-if !IsVid{
-		c.Reply("Yeah, I can't kang that.")
-		return nil
-}
+	if c.Message().ReplyTo.Sticker == nil {
+		var IsVid = false
+		if c.Message().ReplyTo.Document != nil && strings.HasSuffix(c.Message().ReplyTo.Document.FileName, "webm") {
+			IsVid = true
+		}
+		if !IsVid {
+			c.Reply("Yeah, I can't kang that.")
+			return nil
+		}
 	}
-var Sticker *tb.Sticker
-if c.Message().ReplyTo.Sticker != nil {
-Sticker = &tb.Sticker{File: tb.File{FileID: c.Message().Document.File.FileID}, Video: true, Animated: false, Emoji: ""}
-} else {
-Sticker = c.Message().ReplyTo.Sticker
-}
+	var Sticker *tb.Sticker
+	if c.Message().ReplyTo.Sticker != nil {
+		Sticker = &tb.Sticker{File: tb.File{FileID: c.Message().Document.File.FileID}, Video: true, Animated: false, Emoji: ""}
+	} else {
+		Sticker = c.Message().ReplyTo.Sticker
+	}
 	if Emoji == string("") {
 		Emoji = Sticker.Emoji
 		if Emoji == string("") {
