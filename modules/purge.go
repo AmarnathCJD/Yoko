@@ -2,7 +2,6 @@ package modules
 
 import (
 	tb "gopkg.in/telebot.v3"
-	"log"
 )
 
 func Purge(c tb.Context) error {
