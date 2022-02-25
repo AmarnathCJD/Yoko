@@ -48,7 +48,7 @@ func AddSticker(c tb.Context) error {
 	} else {
 		Sticker = c.Message().ReplyTo.Sticker
 	}
-        fmt.Println(Sticker)
+	fmt.Println(Sticker)
 	if Emoji == string("") {
 		Emoji = Sticker.Emoji
 		if Emoji == string("") {
