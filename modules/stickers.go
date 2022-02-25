@@ -45,11 +45,11 @@ func AddSticker(c tb.Context) error {
 	if Reply.Video || Reply.Animated {
 		var Ext = "webm"
 		var PrePre = "vip"
-                var Prefix = "Video"
+		var Prefix = "Video"
 		if Reply.Animated {
 			Ext = "tgs"
 			PrePre = "tgp"
-                        Prefix = "Animated"
+			Prefix = "Animated"
 		}
 		pack, count, name = db.Get_user_pack(c.Sender().ID, Ext)
 		title := fmt.Sprintf("%s's %s kang pack", c.Sender().FirstName, Prefix)
