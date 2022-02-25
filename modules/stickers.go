@@ -19,13 +19,6 @@ var (
 	PACK_TYPES = []string{"png", "webm", "tgs"}
 )
 
-type KangError struct {
-	Ok          bool   `json:"result"`
-	Result      bool   `json:"result"`
-	Description string `json:"description"`
-	ErrorCode   string `json:"error_code"`
-}
-
 func AddSticker(c tb.Context) error {
 	pack, count, name := db.Get_user_pack(c.Sender().ID, "png")
 	var Emoji string
@@ -247,8 +240,12 @@ func UploadStick(F tb.File, ext string, new bool, name string, title string, emo
 	defer resp.Body.Close()
 	var Resp mapType
 	json.NewDecoder(resp.Body).Decode(&Resp)
-	fmt.Println(Resp)
-	return Resp["ok"].(bool), "ht"
+	var Error string
+        if d, ok := Resp["description"] ; ok {
+
+Error = d.(string)
+}
+	return Resp["ok"].(bool), Error
 }
 
 func addFileToWriter(writer *multipart.Writer, filename, field string, file interface{}) error {
