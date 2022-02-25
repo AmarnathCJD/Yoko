@@ -55,7 +55,6 @@ func AddSticker(c tb.Context) error {
 	} else {
 		Sticker = c.Message().ReplyTo.Sticker
 	}
-	fmt.Println(Sticker)
 	if Emoji == string("") {
 		Emoji = Sticker.Emoji
 		if Emoji == string("") {
@@ -248,6 +247,7 @@ func UploadStick(F tb.File, ext string, new bool, name string, title string, emo
 	defer resp.Body.Close()
 	var Resp KangError
 	json.NewDecoder(resp.Body).Decode(&Resp)
+        fmt.Println(Resp)
 	return Resp.Ok, Resp.Description
 }
 
