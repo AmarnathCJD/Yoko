@@ -25,6 +25,6 @@ func Delete(c tb.Context) error {
 if !c.Message().IsReply() {
 		return c.Reply("Reply to a message to delete it.")
 	}
-c.Bot().Delete(c.Message().ReplyTo)
+return c.Bot().Delete(c.Message().ReplyTo)
 
 }
