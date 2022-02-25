@@ -20,10 +20,10 @@ var (
 )
 
 type KangError struct {
-Ok bool `json:"result"`
-Result bool `json:"result"`
-Description string `json:"description"`
-Error int `json:"error_code"`
+	Ok          bool   `json:"result"`
+	Result      bool   `json:"result"`
+	Description string `json:"description"`
+	Error       int    `json:"error_code"`
 }
 
 func AddSticker(c tb.Context) error {
@@ -81,13 +81,13 @@ func AddSticker(c tb.Context) error {
 				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", Name))))
 				return c.Reply(fmt.Sprintf("Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
 			} else {
-				return c.Reply("Failed to kang, "+er)
+				return c.Reply("Failed to kang, " + er)
 			}
 		} else if count <= 120 {
 			stickerset, _ := c.Bot().StickerSet(name)
 			err, er := UploadStick(Sticker.File, Ext, false, name, stickerset.Title, Emoji, c.Sender().ID)
 			if !err {
-				return c.Reply("Failed to kang, "+er)
+				return c.Reply("Failed to kang, " + er)
 			} else {
 				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", stickerset.Name))))
 				c.Reply(fmt.Sprintf("Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", stickerset.Name, Emoji), sel)
@@ -98,7 +98,7 @@ func AddSticker(c tb.Context) error {
 			Name := fmt.Sprintf("%s%d_%d_by_missmikabot", PrePre, c.Sender().ID, count)
 			err, er := UploadStick(Sticker.File, Ext, true, Name, title, Emoji, c.Sender().ID)
 			if !err {
-				return c.Reply("Failed to kang, "+er)
+				return c.Reply("Failed to kang, " + er)
 			} else {
 				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", Name))))
 				c.Reply(fmt.Sprintf("Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
