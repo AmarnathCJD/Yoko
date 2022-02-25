@@ -20,7 +20,7 @@ var (
 )
 
 type KangError struct {
-Ok string `json:"result"`
+Ok bool `json:"result"`
 Result bool `json:"result"`
 Description string `json:"description"`
 Error int `json:"error_code"`
@@ -248,7 +248,7 @@ func UploadStick(F tb.File, ext string, new bool, name string, title string, emo
 	defer resp.Body.Close()
 	var Resp KangError
 	json.NewDecoder(resp.Body).Decode(&d)
-	return Resp.Ok, Resp.Error
+	return Resp.Ok, Resp.Description
 }
 
 func addFileToWriter(writer *multipart.Writer, filename, field string, file interface{}) error {
