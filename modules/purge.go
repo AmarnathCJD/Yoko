@@ -1,7 +1,6 @@
 package modules
 
 import (
-	"strconv"
 
 	tb "gopkg.in/telebot.v3"
 )
