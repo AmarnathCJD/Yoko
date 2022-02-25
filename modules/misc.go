@@ -132,13 +132,13 @@ func WikiPedia(c tb.Context) error {
 		return c.Reply("No results found.")
 	}
 	pages := data["query"].(map[string]interface{})["pages"].(map[string]interface{})
-        var page map[string] interface {}
+	var page map[string]interface{}
 	for _, v := range pages {
 		page = v.(map[string]interface{})
 	}
-        Wiki := fmt.Sprintf("<b>%s -wiki</b>", page["title"].(string))
-        Wiki += "<b><i>" + page["extract"].(string)[:500] + "</i></b>"
-        c.Reply(Wiki)
+	Wiki := fmt.Sprintf("<b>%s -wiki</b>", page["title"].(string))
+	Wiki += "<b><i>" + page["extract"].(string)[:500] + "</i></b>"
+	c.Reply(Wiki)
 	return nil
 }
 
