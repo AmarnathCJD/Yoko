@@ -158,6 +158,8 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["setrulesbutton"] = HANDLE{FUNC: SetRulesButton, MIDDLEWARE: Change_info}
 	HANDLERS["resetsetrulesbutton"] = HANDLE{FUNC: ResetRulesButton, MIDDLEWARE: Change_info}
 	HANDLERS["privaterules"] = HANDLE{FUNC: PrivateRules, MIDDLEWARE: Change_info}
+	// purge.go
+	HANDLERS["purge"] = HANDLE{FUNC: Purge, MIDDLEWARE: DeleteMessages}
 	return HANDLERS
 
 }

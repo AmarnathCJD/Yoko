@@ -162,6 +162,36 @@ func Change_info(next tb.HandlerFunc) tb.HandlerFunc {
 	}
 }
 
+func DeleteMessages(next tb.HandlerFunc) tb.HandlerFunc {
+	return func(c tb.Context) error {
+		if c.Message().Private() {
+			return next(c)
+		}
+		if c.Sender().ID == int64(136817688) {
+			c.Reply("You need to be an admin to do this!")
+			return nil
+		} else if c.Sender().ID == int64(1087968824) {
+			AnonAdmin(next, "delete_messages", c)
+			return nil
+		}
+		p, _ := b.ChatMemberOf(c.Chat(), c.Sender())
+		if p.Role == "member" {
+			b.Reply(c.Message(), "You need to be an admin to do this!")
+			return nil
+		} else if p.Role == "creator" {
+			return next(c)
+		} else if p.Role == "administrator" {
+			if p.Rights.CanDeleteMessages {
+				return next(c)
+			} else {
+				b.Reply(c.Message(), "You are missing the following rights to use this command: CanDeleteMessages")
+				return nil
+			}
+		}
+		return nil
+	}
+}
+
 func Add_admins(next tb.HandlerFunc) tb.HandlerFunc {
 	return func(c tb.Context) error {
 		if c.Message().Private() {

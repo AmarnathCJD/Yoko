@@ -40,6 +40,8 @@ func AnonCB(c tb.Context) error {
 			return c.Edit("You are missing the following rights to use this command: CanPinMessages")
 		} else if update.Right == "add_admins" && !p.Rights.CanPromoteMembers {
 			return c.Edit("You are missing the following rights to use this command: CanPromoteMembers")
+		} else if update.Right == "delete_messages" && !p.Rights.CanDeleteMessages {
+			return c.Edit("You are missing the following rights to use this command: CanDeleteMessages")
 		}
 	}
 	s := c.Bot().NewContext(tb.Update{ID: update.C.Message().ID,
