@@ -20,6 +20,8 @@ var (
 )
 
 func AddSticker(c tb.Context) error {
+        b, _ := json.Marshal(c.Message().ReplyTo)
+        fmt.Println(string(b))
 	pack, count, name := db.Get_user_pack(c.Sender().ID, "png")
 	var Emoji string
 	if c.Message().Payload != string("") {
