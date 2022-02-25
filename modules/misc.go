@@ -159,7 +159,7 @@ func FakeGen(c tb.Context) error {
 	FakeString += "<b>Street:</b> <code>" + fmt.Sprint(Fake.Location.Street.Number) + ", " + Fake.Location.Street.Name + "</code>\n"
 	FakeString += "<b>City:</b> <code>" + Fake.Location.City + "</code>\n"
 	FakeString += "<b>State:</b> <code>" + Fake.Location.State + "</code>\n"
-	FakeString += "<b>Zip:</b> " + fmt.Sprint(Fake.Location.Postcode) + "</code>\n"
+	FakeString += "<b>Zip:</b> <code>" + fmt.Sprint(Fake.Location.Postcode) + "</code>\n"
 	FakeString += "<b>Email:</b> <code>" + Fake.Email + "</code>\n"
 	FakeString += "<b>Phone:</b> <code>" + Fake.Phone + "</code>\n"
 	FakeString += "<b>Cell:</b> <code>" + Fake.Cell + "</code>\n"
