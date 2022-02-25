@@ -243,7 +243,7 @@ func UploadStick(F tb.File, ext string, new bool, name string, title string, emo
 	resp, err := myClient.Post(url, writer.FormDataContentType(), pipeReader)
 	if err != nil {
 		pipeReader.CloseWithError(err)
-		return false, nil
+		return false, "Error with pipeReader."
 	}
 	defer resp.Body.Close()
 	var Resp KangError
