@@ -1,8 +1,8 @@
 package modules
 
 import (
-"log"
 	tb "gopkg.in/telebot.v3"
+	"log"
 )
 
 func Purge(c tb.Context) error {
@@ -13,7 +13,7 @@ func Purge(c tb.Context) error {
 		ID := i
 		go func() {
 			err := c.Bot().Delete(&tb.Message{ID: ID, Chat: c.Message().Chat})
-                        log.Println(err)
+			log.Println(err)
 		}()
 	}
 	c.Delete()
@@ -21,10 +21,10 @@ func Purge(c tb.Context) error {
 }
 
 func Delete(c tb.Context) error {
- 
-if !c.Message().IsReply() {
+
+	if !c.Message().IsReply() {
 		return c.Reply("Reply to a message to delete it.")
 	}
-return c.Bot().Delete(c.Message().ReplyTo)
+	return c.Bot().Delete(c.Message().ReplyTo)
 
 }
