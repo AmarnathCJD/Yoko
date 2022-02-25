@@ -137,7 +137,12 @@ func WikiPedia(c tb.Context) error {
 		page = v.(map[string]interface{})
 	}
 	Wiki := fmt.Sprintf("<b><u>%s</u></b>", page["title"].(string))
+        var Extract string
+        if len(page["extract"].(string)) >= 800{
 	Extract := page["extract"].(string)[:800]
+} else {
+Extract := page["extract"].(string)
+}
 	chunks := strings.Split(Extract, ".")
 	description := strings.ReplaceAll(Extract, chunks[len(chunks)-1], "")
 	Wiki += "\n<i>" + description + "</i>\n -WikiPedia"
