@@ -52,13 +52,15 @@ func ChatContext(c tb.Context) tb.Context {
 	if !c.Message().Private() {
 		return c
 	}
-	chat_id := db.GetChat(c.Sender().ID)
-	fmt.Println(chat_id)
+	chat_id := int64(0)
+	if chat_id == int64(0) {
+		return c
+	}
+	// chat_id := db.GetChat(c.Sender().ID)
 	if chat_id == int64(0) {
 		return c
 	}
 	cmd := strings.Split(c.Text(), " ")[0][1:]
-	fmt.Println(cmd)
 	if !stringInSlice(cmd, CNT) {
 		return c
 	}
