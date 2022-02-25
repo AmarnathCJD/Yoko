@@ -81,7 +81,7 @@ func AddSticker(c tb.Context) error {
 				return c.Reply(fmt.Sprint(xt))
 			} else {
 				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", Name))))
-				c.Reply(fmt.Sprintf(Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
+				c.Reply(fmt.Sprintf("Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
 				db.Add_sticker(c.Sender().ID, Name, title, Ext)
 				return nil
 			}
