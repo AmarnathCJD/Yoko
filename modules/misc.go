@@ -141,7 +141,7 @@ func WikiPedia(c tb.Context) error {
 	chunks := strings.Split(Extract, ".")
 	description := strings.ReplaceAll(Extract, chunks[len(chunks)-1], "")
 	Wiki += "\n<i>" + description + "</i>\n -WikiPedia"
-        fmt.Println(page)
+	fmt.Println(page)
 	c.Reply(Wiki)
 	return nil
 }
