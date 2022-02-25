@@ -139,6 +139,8 @@ func FakeGen(c tb.Context) error {
 	Args := GetArgs(c)
 	if Args == "" {
 		Args = "US"
+	} else {
+		Args = ParseCountry(Args)
 	}
 	res, err := Client.Get("https://randomuser.me/api?results=1&gender=&password=upper,lower,12&exc=register,picture,id&nat=" + Args)
 	if err != nil {
@@ -153,7 +155,7 @@ func FakeGen(c tb.Context) error {
 		FakeString += "<b>First Name:</b> <code>" + Fake.Name.Title + " " + Fake.Name.First + "</code>\n"
 		FakeString += "<b>Last Name:</b> <code>" + Fake.Name.Last + "</code>\n"
 	}
-	FakeString += "vGender:</b> <code>" + Fake.Gender + "</code>\n"
+	FakeString += "<b>Gender:</b> <code>" + Fake.Gender + "</code>\n"
 	FakeString += "<b>Street:</b> <code>" + fmt.Sprint(Fake.Location.Street.Number) + ", " + Fake.Location.Street.Name + "</code>\n"
 	FakeString += "<b>City:</b> <code>" + Fake.Location.City + "</code>\n"
 	FakeString += "<b>State:</b> <code>" + Fake.Location.State + "</code>\n"

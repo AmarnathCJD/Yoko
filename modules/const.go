@@ -19,6 +19,7 @@ var BOT_ID = b.Me.ID
 var StartTime = time.Now()
 var Client = http.Client{Timeout: time.Second * 10}
 
+//types
 type FakeID struct {
 	Results []struct {
 		Gender string `json:"gender"`
@@ -32,28 +33,16 @@ type FakeID struct {
 				Number int    `json:"number"`
 				Name   string `json:"name"`
 			} `json:"street"`
-			City        string `json:"city"`
-			State       string `json:"state"`
-			Country     string `json:"country"`
-			Postcode    int    `json:"postcode"`
-			Coordinates struct {
-				Latitude  string `json:"latitude"`
-				Longitude string `json:"longitude"`
-			} `json:"coordinates"`
-			Timezone struct {
-				Offset      string `json:"offset"`
-				Description string `json:"description"`
-			} `json:"timezone"`
+			City     string `json:"city"`
+			State    string `json:"state"`
+			Country  string `json:"country"`
+			Postcode int    `json:"postcode"`
 		} `json:"location"`
 		Email string `json:"email"`
 		Dob   struct {
 			Date time.Time `json:"date"`
 			Age  int       `json:"age"`
 		} `json:"dob"`
-		Registered struct {
-			Date time.Time `json:"date"`
-			Age  int       `json:"age"`
-		} `json:"registered"`
 		Phone string `json:"phone"`
 		Cell  string `json:"cell"`
 		Nat   string `json:"nat"`
@@ -73,9 +62,8 @@ I have lots of handy features.
 So what are you waiting for?
 Add me in your groups and give me full rights to make me function well.`
 
-var COUNTRY_CODES = bson.M{"Argentina": "ar", "Australia": "au", "Bangladesh": "bd", "Belgium": "be", "Brazil": "br", "Canada": "ca", "China": "cn", "Czech Republic": "cz", "France": "fr", "Germany": "de", "Greece": "gr", "Hungary": "hu", "India": "in", "Indonesia": "id", "Iran": "ir", "Italy": "it", "Japan": "jp", "Malaysia": "my", "Mexico": "mx", "Netherlands": "nl", "Nigeria": "ng", "Peru": "pe", "Philippines": "ph", "Poland": "pl", "Portugal": "pt", "Romania": "ro", "Russia": "ru", "Saudi Arabia": "sa", "Singapore": "sg", "South Africa": "za", "South Korea": "kr", "Spain": "es", "Sweden": "se", "Thailand": "th", "Turkey": "tr", "Uganda": "ug", "Ukraine": "ua", "United Kingdom": "uk", "United States": "us", "Vietnam": "vn"}
-var CODE_C = []string{"ar", "au", "bd", "be", "br", "ca", "cn", "cz", "fr", "de", "gr", "hu", "in", "id", "ir", "it", "jp", "my", "mx", "nl", "ng", "pe", "ph", "pl", "pt", "ro", "ru", "sa", "sg", "za", "kr", "es", "se", "th", "tr", "ug", "ua", "uk", "us", "vn"}
-
+var COUNTRY_CODES = bson.M{"Australia": "AU", "Brazil": "BR", "Canada": "CA", "Switzerland": "CH", "Germany": "DE", "France": "FR", "Netherlands": "NL", "Russia": "RU", "Spain": "ES", "Turkey": "TR", "United Kingdom": "GB", "United States": "US", "SK": "Sweden"}
+var CODE_C = []string{"AU", "BR", "CA", "CH", "DE", "DK", "ES", "FI", "FR", "GB", "IE", "IR", "NO", "NL", "NZ", "TR", "US"}
 var AFK_STR = []string{
 	"<b>%s</b> is here!",
 	"<b>%s</b> is back!",
