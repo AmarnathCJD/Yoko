@@ -41,9 +41,9 @@ if !IsVid{
 		return nil
 }
 	}
-var Sticker tb.Sticker
+var Sticker *tb.Sticker
 if c.Message().ReplyTo.Sticker != nil {
-Sticker = tb.Sticker{File: tb.File{FileID: c.Message().Document.File.FileID}, Video: true, Animated: false, Emoji: ""}
+Sticker = &tb.Sticker{File: tb.File{FileID: c.Message().Document.File.FileID}, Video: true, Animated: false, Emoji: ""}
 } else {
 Sticker = c.Message().ReplyTo.Sticker
 }
