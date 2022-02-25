@@ -245,10 +245,10 @@ func UploadStick(F tb.File, ext string, new bool, name string, title string, emo
 		return false, "Error with pipeReader."
 	}
 	defer resp.Body.Close()
-	var Resp KangError
+	var Resp mapType
 	json.NewDecoder(resp.Body).Decode(&Resp)
 	fmt.Println(Resp)
-	return Resp.Ok, Resp.Description
+	return Resp["ok"].(bool), "ht"
 }
 
 func addFileToWriter(writer *multipart.Writer, filename, field string, file interface{}) error {
