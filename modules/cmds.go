@@ -29,7 +29,6 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["telegraph"] = HANDLE{FUNC: telegraph}
 	HANDLERS["math"] = HANDLE{FUNC: Math}
 	HANDLERS["id"] = HANDLE{FUNC: GetID}
-	HANDLERS["fake"] = HANDLE{FUNC: Fake_gen}
 	HANDLERS["paste"] = HANDLE{FUNC: Paste}
 	HANDLERS["stat"] = HANDLE{FUNC: GroupStat}
 	HANDLERS["webss"] = HANDLE{FUNC: WebSS}
@@ -38,7 +37,7 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["music"] = HANDLE{FUNC: Music}
 	HANDLERS["rs"] = HANDLE{FUNC: RsStripe}
 	HANDLERS["wiki"] = HANDLE{FUNC: WikiPedia}
-	HANDLERS["f2"] = HANDLE{FUNC: FakeGen}
+	HANDLERS["fake"] = HANDLE{FUNC: FakeGen}
 	// start.go
 	HANDLERS["start"] = HANDLE{FUNC: Start}
 	HANDLERS["help"] = HANDLE{FUNC: Help_Menu}
@@ -150,13 +149,15 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["remsudo"] = HANDLE{FUNC: RemoveSudo}
 	HANDLERS["logs"] = HANDLE{FUNC: Logs}
 	HANDLERS["ping"] = HANDLE{FUNC: Ping}
+	HANDLERS["stats"] = HANDLE{FUNC: Stats}
 	HANDLERS["pong"] = HANDLE{FUNC: Te}
 	// rules.go
 	HANDLERS["rules"] = HANDLE{FUNC: Rules}
-	HANDLERS["setrules"] = HANDLE{FUNC: SetRules}
-	HANDLERS["resetrules"] = HANDLE{FUNC: ResetRules}
-	HANDLERS["setrulesbutton"] = HANDLE{FUNC: SetRulesButton}
-	HANDLERS["resetsetrulesbutton"] = HANDLE{FUNC: ResetRulesButton}
+	HANDLERS["setrules"] = HANDLE{FUNC: SetRules, MIDDLEWARE: Change_info}
+	HANDLERS["resetrules"] = HANDLE{FUNC: ResetRules, MIDDLEWARE: Change_info}
+	HANDLERS["setrulesbutton"] = HANDLE{FUNC: SetRulesButton, MIDDLEWARE: Change_info}
+	HANDLERS["resetsetrulesbutton"] = HANDLE{FUNC: ResetRulesButton, MIDDLEWARE: Change_info}
+	HANDLERS["privaterules"] = HANDLE{FUNC: PrivateRules, MIDDLEWARE: Change_info}
 	return HANDLERS
 
 }

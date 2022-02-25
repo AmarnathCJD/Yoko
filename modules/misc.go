@@ -169,6 +169,10 @@ func FakeGen(c tb.Context) error {
 	return c.Reply(FakeString)
 }
 
+func GroupStat(c tb.Context) error {
+	return c.Reply(fmt.Sprintf("<b>Total Messages in %s:</b> <code>%d</code>", c.Chat().Title, c.Message().ID))
+}
+
 ////////////////////////////////// OLD-NEW /////////////////////////////////////////////
 
 var myClient = &http.Client{Timeout: 10 * time.Second}
@@ -249,52 +253,6 @@ func getJson(url string) (mapType, error) {
 	var t mapType
 	json.NewDecoder(resp.Body).Decode(&t)
 	return t, err
-}
-
-func Info(c tb.Context) error {
-	m := c.Message()
-	if !m.IsReply() && string(m.Payload) == string("") {
-		user_obj := m.Sender
-		final_msg := fmt.Sprintf("<b>User info</b>\n<b>ID:</b> <code>%s</code>\n<b>First Name:</b> %s\n<b>Last Name:</b> %s\n<b>Username:</b> @%s\n<b>User Link:</b> <a href='tg://user?id=%s'>%s</a>\n\n<b>Gbanned:</b> %s", strconv.Itoa(int(user_obj.ID)), user_obj.FirstName, user_obj.LastName, user_obj.Username, strconv.Itoa(int(user_obj.ID)), "link", "No")
-		b.Reply(m, final_msg)
-	} else {
-		x := strings.SplitN(m.Payload, " ", 2)
-		if !m.IsReply() && len(x) > 0 && !isInt(x[0]) {
-			u, _ := getJson(strings.TrimPrefix(x[0], "@"))
-			if u == nil {
-				return nil
-			}
-			u_obj := &tb.User{ID: int64(u["id"].(float64)), Username: u["username"].(string), FirstName: u["first_name"].(string), LastName: u["last_name"].(string)}
-			c.Reply(fmt.Sprintf("<b>User info</b>\n<b>ID:</b> <code>%d</code>\n<b>First Name:</b> %s\n<b>Last Name:</b> %s\n<b>Username:</b> %s\n<b>DC ID:</b> <code>%d</code>\n<b>User Link:</b> <a href='tg://user?id=%d'>%s</a>\n\n<b>Gbanned:</b> %s", u_obj.ID, u_obj.FirstName, u_obj.LastName, u_obj.Username, int(u["dc_id"].(float64)), u_obj.ID, "link", "No"))
-			return nil
-		}
-		user_obj, _ := get_user(m)
-		final_msg := fmt.Sprintf("<b>User info</b>\n<b>ID:</b> <code>%s</code>\n<b>First Name:</b> %s\n<b>Last Name:</b> %s\n<b>Username:</b> @%s\n<b>User Link:</b> <a href='tg://user?id=%s'>%s</a>\n\n<b>Gbanned:</b> %s", strconv.Itoa(int(user_obj.ID)), user_obj.FirstName, user_obj.LastName, user_obj.Username, strconv.Itoa(int(user_obj.ID)), "link", "No")
-		b.Reply(m, final_msg)
-	}
-	return nil
-}
-
-func ID_info(c tb.Context) error {
-	if !c.Message().IsReply() && string(c.Message().Payload) == string("") {
-		c.Reply(fmt.Sprintf("This chat's ID is: <code>%d</code>", c.Chat().ID))
-		return nil
-	} else {
-		user_obj, _ := get_user(c.Message())
-		if c.Message().IsForwarded() {
-			if c.Message().FromChannel() {
-				c.Reply(fmt.Sprintf("User %s's ID is <code>%d</code>.\nThe forwarded channel, %s, has an id of <code>%d</code>.", user_obj.FirstName, user_obj.ID, c.Message().OriginalChat.Title, c.Message().OriginalChat.ID))
-				return nil
-			} else if c.Message().OriginalSender.ID != user_obj.ID {
-				err := c.Reply(fmt.Sprintf("User %s's ID is <code>%d</code>.\nThe forwarded user, %s, has an ID of <code>%d</code>", user_obj.FirstName, user_obj.ID, c.Message().OriginalSenderName, c.Message().OriginalSender.ID))
-				fmt.Println(err)
-				return nil
-			}
-		}
-		err := c.Reply(fmt.Sprintf("User %s's ID is <code>%d</code>", user_obj.FirstName, user_obj.ID))
-		fmt.Println(err)
-		return nil
-	}
 }
 
 func ChatInfo(c tb.Context) error {
@@ -569,54 +527,8 @@ func Paste(c tb.Context) error {
 	return nil
 }
 
-func Fake_gen(c tb.Context) error {
-	cq := Parse_country(strings.TrimSpace(c.Message().Payload))
-	if cq == string("") {
-		return nil
-	}
-	url := "https://www.fakexy.com/fake-address-generator-" + cq
-	resp, err := soup.Get(url)
-	if err != nil {
-		return nil
-	}
-	doc := soup.HTMLParse(resp)
-	tbody := doc.FindAll("tbody")
-	fname, bday, street, city, country, state, zip, num, gen := "", "", "", "", "", "", "", "", ""
-	for _, x := range tbody {
-		for _, y := range x.FindAll("tr") {
-			d := y.FindAll("td")
-			if d[0].Text() == "Street" {
-				street = d[1].Text()
-			} else if d[0].Text() == "City/Town" {
-				city = d[1].Text()
-			} else if d[0].Text() == "State/Province/Region" {
-				state = d[1].Text()
-			} else if d[0].Text() == "Zip/Postal Code" {
-				zip = d[1].Text()
-			} else if d[0].Text() == "Phone Number" {
-				num = d[1].Text()
-			} else if d[0].Text() == "Birthday" {
-				bday = d[1].Text()
-			} else if d[0].Text() == "Gender" {
-				gen = d[1].Text()
-			} else if d[0].Text() == "Full Name" {
-				fname = d[1].Text()
-			} else if d[0].Text() == "Country" {
-				country = d[1].Text()
-			}
-		}
-	}
-	msg := fmt.Sprintf("<b>Fake Address Gen</b>\n<b>Full Name:</b> <code>%s</code>\n<b>Gender:</b> <code>%s</code>\n<b>DOB:</b> <code>%s</code>\n<b>Street:</b> <code>%s</code>\n<b>City/Town:</b> <code>%s</code>\n<b>State:</b> <code>%s</code>\n<b>Zip:</b> <code>%s</code>\n<b>Country:</b> <code>%s</code>\n<b>Phone Number:</b> <code>%s</code>", fname, gen, bday, street, city, state, zip, country, num)
-	c.Reply(msg)
-	return nil
-}
-
 func YT_search(c tb.Context) error {
 	return nil
-}
-
-func GroupStat(c tb.Context) error {
-	return c.Reply(fmt.Sprintf("<b>Total Messages in %s:</b> <code>%d</code>", c.Chat().Title, c.Message().ID))
 }
 
 func WebSS(c tb.Context) error {

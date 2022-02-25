@@ -3,14 +3,24 @@ package db
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 )
+
+type Gban struct {
+	Id        int64  `json:"id"`
+	FirstName string `json:"first_name"`
+	Reason    string `json:"reason"`
+	Admin     int64  `json:"admin"`
+	Date      int64  `json:"date"`
+}
 
 var (
 	chats       = database.Collection("chats")
 	users       = database.Collection("users")
 	sudo        = database.Collection("sudo")
+	gbans       = database.Collection("gbans")
 	Devs, Sudos = __load_devs()
 )
 
@@ -145,4 +155,49 @@ func __load_devs() ([]User, []User) {
 		}
 	}
 	return d, s
+}
+
+func GbanUser(user_id int64, name string, reason string, banner int64) bool {
+	if gbans.FindOne(context.TODO(), Gban{Id: user_id}).Err() != nil {
+		gbans.InsertOne(context.TODO(), Gban{Id: user_id, FirstName: name, Reason: reason, Admin: banner, Date: time.Now().Unix()})
+		return true
+	} else {
+		gbans.UpdateOne(context.TODO(), Gban{Id: user_id}, bson.M{"$set": Gban{Id: user_id, FirstName: name, Reason: reason, Admin: banner, Date: time.Now().Unix()}}, opts)
+		return false
+	}
+}
+
+func UngbanUser(user_id int64) bool {
+	if gbans.FindOne(context.TODO(), Gban{Id: user_id}).Err() != nil {
+		return false
+	} else {
+		gbans.DeleteOne(context.TODO(), Gban{Id: user_id})
+		return true
+	}
+}
+
+func IsGbanned(user_id int64) bool {
+	if gbans.FindOne(context.TODO(), Gban{Id: user_id}).Err() != nil {
+		return false
+	} else {
+		return true
+	}
+}
+
+func GetAllGbans() []Gban {
+	var gban []Gban
+	cursor, _ := gbans.Find(context.TODO(), bson.M{})
+	cursor.All(context.TODO(), &gban)
+	return gban
+}
+
+func GatherStats() string {
+	Stats := "Mika (V1.3.2) Stats\n"
+	Stats += fmt.Sprintf("<b>%d</b> users\n", len(GetAllUsers()))
+	Stats += fmt.Sprintf("<b>%d</b> chats\n", len(GetAllChats()))
+	Stats += fmt.Sprintf("<b>%d</b> gbans\n", len(GetAllGbans()))
+	Stats += fmt.Sprintf("<b>%d</b> sudo\n", len(Sudos))
+	Stats += fmt.Sprintf("<b>%d</b> devs\n", len(Devs))
+	fmt.Println(db.Database("mika").RunCommand(context.TODO(), "dbstats", nil).DecodeBytes())
+	return Stats
 }

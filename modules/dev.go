@@ -121,3 +121,10 @@ func Ping(c tb.Context) error {
 	_, err := c.Bot().Edit(msg, fmt.Sprintf("<b>► Ping</b>: <code>%s</code>\n<b>► Uptime:</b> %s", b.Sub(a).String(), alive.Truncate(time.Second).String()))
 	return err
 }
+
+func Stats(c tb.Context) error {
+	if !IsBotAdmin(c.Sender().ID) {
+		return nil
+	}
+	return c.Reply(db.GatherStats())
+}
