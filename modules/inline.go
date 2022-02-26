@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 
@@ -232,14 +233,14 @@ func InstaGramSearch(c tb.Context) error {
 			text += fmt.Sprintf("<b>@%s</b>\n", User.Username)
 		}
 		if User.FullName != "" {
-			text += fmt.Sprintf("<b>FullName</b>%s\n", User.FullName)
+			text += fmt.Sprintf("<b>FullName: </b>%s\n", User.FullName)
 		}
-		text += fmt.Sprintf("<b>Pk</b>%s\n", User.Pk)
-		text += fmt.Sprintf("<b>Verified</b>%v\n", User.IsVerified)
-		text += fmt.Sprintf("<b>Private</b>%v\n", User.IsPrivate)
-		text += fmt.Sprintf("<b>HasAnonymousProfilePicture</b>%v\n", User.HasAnonymousProfilePicture)
-		text += fmt.Sprintf("<b>Seen</b>%d\n", User.Seen)
-		text += fmt.Sprintf("<b>HasHighlightReels</b>%v\n", User.HasHighlightReels)
+		text += fmt.Sprintf("<b>Pk: </b>%s\n", User.Pk)
+		text += fmt.Sprintf("<b>Verified: </b>%v\n", User.IsVerified)
+		text += fmt.Sprintf("<b>Private: </b>%v\n", User.IsPrivate)
+		text += fmt.Sprintf("<b>HasAnonymousProfilePicture: </b>%v\n", User.HasAnonymousProfilePicture)
+		text += fmt.Sprintf("<b>Seen: </b>%d\n", User.Seen)
+		text += fmt.Sprintf("<b>HasHighlightReels: </b>%v\n", User.HasHighlightReels)
 		r := &tb.ArticleResult{ResultBase: tb.ResultBase{ReplyMarkup: inline_markup("insta"), Content: &tb.InputTextMessageContent{Text: text, DisablePreview: false}}, Title: User.Username, Description: User.FullName}
 		results[i] = r
 		results[i].SetResultID(strconv.Itoa(i))
@@ -248,4 +249,26 @@ func InstaGramSearch(c tb.Context) error {
 		Results:   results,
 		CacheTime: 60,
 	})
+}
+
+func PinterestSearch(c tb.Context) error {
+	args := GetArgs(c)
+	PinUrl := `https://www.pinterest.com/resource/BaseSearchResource/get/?source_url=%2Fsearch%2Fpins%2F%3Frs%3Dac%26len%3D2%26q%3D` + url.QueryEscape(args) + `%26eq%3Dearth%26etslf%3D2206%26term_meta%5B%5D%3Dearth%257Cautocomplete%257C0&data=%7B%22options%22%3A%7B%22article%22%3Anull%2C%22appliedProductFilters%22%3A%22---%22%2C%22auto_correction_disabled%22%3Afalse%2C%22corpus%22%3Anull%2C%22customized_rerank_type%22%3Anull%2C%22filters%22%3Anull%2C%22query%22%3A%22earth%22%2C%22query_pin_sigs%22%3Anull%2C%22redux_normalize_feed%22%3Atrue%2C%22rs%22%3A%22ac%22%2C%22scope%22%3A%22pins%22%2C%22source_id%22%3Anull%2C%22no_fetch_context_on_resource%22%3Afalse%7D%2C%22context%22%3A%7B%7D%7D&_=1645889981167`
+	req, _ := http.NewRequest("GET", PinUrl, nil)
+	req.Header.Add("cookie", PinterestCookies)
+	resp, err := Client.Do(req)
+	if err != nil {
+		log.Print(err)
+	}
+	defer resp.Body.Close()
+	var data PintrestResp
+	json.NewDecoder(resp.Body).Decode(&data)
+	fmt.Println(data)
+	if data.ResourceResponse.Status != "success" {
+		return c.Reply("No results found")
+	} else {
+		b, _ := json.Marshal(data.ResourceResponse.Data.Results[0].Objects[0].RecentPinImages)
+		return c.Reply(string(b))
+	}
+
 }

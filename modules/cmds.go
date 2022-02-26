@@ -163,6 +163,7 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["del"] = HANDLE{FUNC: Delete, MIDDLEWARE: DeleteMessages}
 	HANDLERS["purgefrom"] = HANDLE{FUNC: PurgeFrom, MIDDLEWARE: DeleteMessages}
 	HANDLERS["purgeto"] = HANDLE{FUNC: PurgeTo, MIDDLEWARE: DeleteMessages}
+	HANDLERS["pinterest"] = HANDLE{FUNC: PinterestSearch}
 	return HANDLERS
 
 }
