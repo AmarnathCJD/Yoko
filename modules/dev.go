@@ -12,8 +12,8 @@ func AddSudo(c tb.Context) error {
 	if !IsDev(c.Sender().ID) && c.Sender().ID != OWNER_ID {
 		return c.Reply("You dont have access to use this !")
 	}
-	u, _ := get_user(c.Message())
-	if u == nil {
+	u, _ := GetUser(c)
+	if u.ID == 0 {
 		return nil
 	}
 	if IsSudo(u.ID) {
@@ -23,7 +23,7 @@ func AddSudo(c tb.Context) error {
 	} else if u.ID == BOT_ID {
 		return c.Reply("You are a funny one aren't you?, I not gonna add myself to the bot admin list!")
 	}
-	db.AddSudo(u.ID, u.FirstName)
+	db.AddSudo(u.ID, u.First)
 	return c.Reply("Added user to sudo list !")
 }
 
@@ -31,8 +31,8 @@ func AddDev(c tb.Context) error {
 	if c.Sender().ID != OWNER_ID {
 		return c.Reply("You dont have access to use this !")
 	}
-	u, _ := get_user(c.Message())
-	if u == nil {
+	u, _ := GetUser(c)
+	if u.ID == 0 {
 		return nil
 	}
 	if IsDev(u.ID) {
@@ -42,7 +42,7 @@ func AddDev(c tb.Context) error {
 	} else if u.ID == BOT_ID {
 		return c.Reply("You are a funny one aren't you?, I not gonna add myself to the dev list!")
 	}
-	db.AddDev(u.ID, u.FirstName)
+	db.AddDev(u.ID, u.First)
 	return c.Reply("Added user to dev list !")
 }
 
@@ -64,8 +64,8 @@ func RemoveSudo(c tb.Context) error {
 	if !IsDev(c.Sender().ID) && c.Sender().ID != OWNER_ID {
 		return c.Reply("You dont have access to use this !")
 	}
-	u, _ := get_user(c.Message())
-	if u == nil {
+	u, _ := GetUser(c)
+	if u.ID == 0 {
 		return nil
 	}
 	if !IsSudo(u.ID) {
@@ -83,8 +83,8 @@ func RemoveDev(c tb.Context) error {
 	if c.Sender().ID != OWNER_ID {
 		return c.Reply("You dont have access to use this !")
 	}
-	u, _ := get_user(c.Message())
-	if u == nil {
+	u, _ := GetUser(c)
+	if u.ID == 0 {
 		return nil
 	}
 	if !IsDev(u.ID) {

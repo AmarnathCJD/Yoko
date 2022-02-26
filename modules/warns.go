@@ -17,12 +17,15 @@ func WARN(c tb.Context) error {
 		c.Reply("You have to reply to a message to delete it and warn the user.")
 		return nil
 	}
-	user, extra := get_user(c.Message())
+	user, extra := GetUser(c)
+	if user.ID == 0 {
+		return nil
+	}
 	if user.ID == int64(BOT_ID) {
 		c.Reply("Do you really think I can do that to myself <b>:p</b>")
 		return nil
 	}
-	p, err := c.Bot().ChatMemberOf(c.Chat(), user)
+	p, err := c.Bot().ChatMemberOf(c.Chat(), user.User())
 	if err != nil {
 		c.Reply(err.Error())
 		return nil
@@ -38,7 +41,7 @@ func WARN(c tb.Context) error {
 	if !exceeded && cmd != "swarn" {
 		unwarn_btn.Data = strconv.Itoa(int(user.ID))
 		sel.Inline(sel.Row(unwarn_btn))
-		c.Reply(fmt.Sprintf("User <a href='tg://user?id=%d'>%s</a> has %d/%d warnings; be careful!\n<b>Reason</b>: %s", user.ID, user.FirstName, count, limit, extra), sel)
+		c.Reply(fmt.Sprintf("User <a href='tg://user?id=%d'>%s</a> has %d/%d warnings; be careful!\n<b>Reason</b>: %s", user.ID, user.First, count, limit, extra), sel)
 		return nil
 	}
 	return nil

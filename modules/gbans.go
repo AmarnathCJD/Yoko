@@ -11,8 +11,8 @@ func Gban(c tb.Context) error {
 	if !IsBotAdmin(c.Sender().ID) {
 		return nil
 	}
-	u, _ := get_user(c.Message())
-	if u == nil {
+	u, _ := GetUser(c)
+	if u.ID == 0 {
 		return nil
 	}
 	if IsBotAdmin(u.ID) {

@@ -118,6 +118,53 @@ func GetID(c tb.Context) error {
 	return c.Reply(fmt.Sprintf("User %s's ID is <code>%d</code>.", u.First, u.ID))
 }
 
+func ChatInfo(c tb.Context) error {
+	var chat *tb.Chat
+	if c.Message().IsReply() && c.Message().ReplyTo.FromChannel() {
+		chat_id := c.Message().ReplyTo.SenderChat.ID
+		chat, _ = c.Bot().ChatByID(chat_id)
+	} else if c.Message().Payload != string("") {
+		if isInt(c.Message().Payload) {
+			chat_, _ := strconv.Atoi(c.Message().Payload)
+			chat, _ = c.Bot().ChatByID(int64(chat_))
+		} else {
+			chat, _ = c.Bot().ChatByUsername(c.Message().Payload)
+		}
+	} else {
+		chat, _ = c.Bot().ChatByID(c.Chat().ID)
+	}
+	if chat != nil {
+		msg := fmt.Sprintf("<b>Chat info</b>\n<b>ID:</b> <code>%d</code>\n<b>Title:</b> %s", chat.ID, chat.Title)
+		if chat.Username != "" {
+			msg += fmt.Sprintf("\n<b>Username:</b> @%s", chat.Username)
+		}
+		msg += fmt.Sprintf("\n<b>Link:</b> <a href='tg://resolve?domain=%s'>%s</a>", chat.Username, "link")
+		if chat.Description != "" {
+			msg += fmt.Sprintf("\n<b>Description:</b> <code>%s</code>", chat.Description)
+		}
+		if chat.LinkedChatID != 0 {
+			msg += fmt.Sprintf("\n<b>Linked Chat ID:</b> %d", chat.LinkedChatID)
+		}
+		if chat.InviteLink != "" {
+			msg += fmt.Sprintf("\n<b>Invite Link:</b> <a href='%s'>%s</a>", chat.InviteLink, "link")
+		}
+		if chat.PinnedMessage != nil {
+			msg += fmt.Sprintf("\n<b>Pinned Message:</b> <code>%s</code>", chat.PinnedMessage.Text)
+		}
+		if chat.StickerSet != "" {
+			msg += fmt.Sprintf("\n<b>Sticker Set Name:</b> %s", chat.StickerSet)
+		}
+		if chat.SlowMode != 0 {
+			msg += fmt.Sprintf("\n<b>Slow Mode Delay:</b> %d", chat.SlowMode)
+		}
+		c.Reply(msg, &tb.SendOptions{DisableWebPagePreview: true})
+		return nil
+	} else {
+		c.Reply("Invalid chat")
+		return nil
+	}
+}
+
 func WikiPedia(c tb.Context) error {
 	Q := GetArgs(c)
 	WikiMedia := "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts|pageimages&exintro&explaintext&generator=search&gsrsearch=intitle:" + url.QueryEscape(Q) + "&gsrlimit=1&redirects=1"
@@ -137,16 +184,15 @@ func WikiPedia(c tb.Context) error {
 		page = v.(map[string]interface{})
 	}
 	Wiki := fmt.Sprintf("<b><u>%s</u></b>", page["title"].(string))
-	var Extract string
+	var Description string
 	if len(page["extract"].(string)) >= 800 {
-		Extract = page["extract"].(string)[:800]
+		Extract := page["extract"].(string)[:800]
+		chunks := strings.Split(Extract, ".")
+		Description = strings.ReplaceAll(Extract, chunks[len(chunks)-1], "")
 	} else {
-		Extract = page["extract"].(string)
+		Description = page["extract"].(string)
 	}
-	chunks := strings.Split(Extract, ".")
-	description := strings.ReplaceAll(Extract, chunks[len(chunks)-1], "")
-	Wiki += "\n<i>" + description + "</i>\n -WikiPedia"
-	fmt.Println(page)
+	Wiki += "\n<i>" + Description + "</i>\n -WikiPedia"
 	c.Reply(Wiki)
 	return nil
 }
@@ -211,103 +257,7 @@ func stringInSlice(a string, list []string) bool {
 	return false
 }
 
-func get_user(m *tb.Message) (*tb.User, string) {
-	if m.IsReply() {
-		user_obj := m.ReplyTo.Sender
-		if len(m.Payload) != 0 {
-			return user_obj, m.Payload
-		} else {
-			return user_obj, ""
-		}
-	} else if len(m.Payload) != 0 {
-		x := strings.SplitN(m.Payload, " ", 2)
-		if isInt(x[0]) {
-			user_id, _ := strconv.ParseInt(x[0], 10, 64)
-			user_obj, err := b.ChatByID(user_id)
-			if err != nil {
-				b.Reply(m, "Looks like I don't have control over that user, or the ID isn't a valid one. If you reply to one of their messages, I'll be able to interact with them.")
-				return nil, ""
-			}
-			user := &tb.User{ID: int64((user_obj.ID)), FirstName: user_obj.FirstName, LastName: user_obj.LastName, Username: user_obj.Username}
-			if len(x) > 1 {
-				return user, x[1]
-			} else {
-				return user, ""
-			}
-		} else {
-			u, err := getJson(strings.TrimPrefix(x[0], "@"))
-			if e, ok := u["error"]; ok {
-				b.Reply(m, e.(string))
-				return nil, ""
-			}
-			if err != nil {
-				b.Reply(m, fmt.Sprint(err.Error()))
-				return nil, ""
-			}
-			user_obj := &tb.User{ID: int64(u["id"].(float64)), Username: u["username"].(string), FirstName: u["first_name"].(string), LastName: u["last_name"].(string)}
-			if len(x) > 1 {
-				return user_obj, x[1]
-			} else {
-				return user_obj, ""
-			}
-		}
-	} else {
-		b.Reply(m, "You dont seem to be referring to a user or the ID specified is incorrect..")
-		return nil, ""
-	}
-}
-
 type mapType map[string]interface{}
-
-func getJson(url string) (mapType, error) {
-	resp, err := myClient.Get("https://polar-refuge-17864.herokuapp.com/username?username=" + url)
-	if err != nil {
-		fmt.Println("No response from request")
-		return nil, err
-	}
-	defer resp.Body.Close()
-	var t mapType
-	json.NewDecoder(resp.Body).Decode(&t)
-	return t, err
-}
-
-func ChatInfo(c tb.Context) error {
-	var chat *tb.Chat
-	if c.Message().IsReply() && c.Message().ReplyTo.FromChannel() {
-		chat_id := c.Message().ReplyTo.SenderChat.ID
-		chat, _ = c.Bot().ChatByID(chat_id)
-	} else if c.Message().Payload != string("") {
-		if isInt(c.Message().Payload) {
-			chat_, _ := strconv.Atoi(c.Message().Payload)
-			chat, _ = c.Bot().ChatByID(int64(chat_))
-		} else {
-			chat, _ = c.Bot().ChatByUsername(c.Message().Payload)
-		}
-	} else {
-		chat, _ = c.Bot().ChatByID(c.Chat().ID)
-	}
-	if chat != nil {
-		msg := fmt.Sprintf("<b>Chat info</b>\n<b>ID:</b> <code>%d</code>\n<b>Title:</b> %s", chat.ID, chat.Title)
-		if chat.Username != "" {
-			msg += fmt.Sprintf("\n<b>Username:</b> @%s", chat.Username)
-		}
-		msg += fmt.Sprintf("\n<b>Link:</b> <a href='tg://resolve?domain=%s'>%s</a>", chat.Username, "link")
-		if chat.Description != "" {
-			msg += fmt.Sprintf("\n<b>Description:</b> <code>%s</code>", chat.Description)
-		}
-		if chat.LinkedChatID != 0 {
-			msg += fmt.Sprintf("\n<b>Linked Chat ID:</b> %d", chat.LinkedChatID)
-		}
-		if chat.InviteLink != "" {
-			msg += fmt.Sprintf("\n<b>Invite Link:</b> <a href='%s'>%s</a>", chat.InviteLink, "link")
-		}
-		c.Reply(msg, &tb.SendOptions{DisableWebPagePreview: true})
-		return nil
-	} else {
-		c.Reply("Invalid chat")
-		return nil
-	}
-}
 
 func IMDb(c tb.Context) error {
 	client := http.DefaultClient

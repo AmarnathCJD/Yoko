@@ -2,6 +2,7 @@ package modules
 
 import (
 	"fmt"
+	"log"
 	"math/rand"
 	"strings"
 	"time"
@@ -36,9 +37,9 @@ func AFK(c tb.Context) bool {
 			for _, e := range c.Message().Entities {
 				if e.Type == tb.EntityMention || e.Type == tb.EntityTMention {
 					if e.User == nil {
-						u, _ := getJson(c.Message().EntityText(e))
-						if id, ok := u["id"]; ok {
-							user_id = int64(id.(float64))
+						u := ResolveUsername(c.Message().EntityText(e))
+						if u.ID != 0 {
+							user_id = u.ID
 						} else {
 							return false
 						}
@@ -57,7 +58,7 @@ func AFK(c tb.Context) bool {
 				}
 				since := get_readable_time(time.Unix(int64(a["time"].(int64)), 0), time.Now())
 				if err := c.Reply(fmt.Sprintf("<b>%s</b> is AFK !\nLast Seen: %s ago.%s", a["fname"].(string), since.Truncate(time.Second).String(), reason)); err != nil {
-					fmt.Println(err)
+					log.Println(err)
 				}
 				return true
 			}

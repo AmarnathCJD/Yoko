@@ -172,8 +172,8 @@ func Fpromote(c tb.Context) error {
 		c.Reply("This command is made to be used in group chats, not in pm!")
 		return nil
 	}
-	user, _ := get_user(c.Message())
-	if user == nil {
+	user, _ := GetUser(c)
+	if user.ID == 0 {
 		return nil
 	}
 	fed, fed_id, fedname := db.Get_fed_by_owner(c.Sender().ID)
@@ -189,17 +189,17 @@ func Fpromote(c tb.Context) error {
 		if reason != string("") {
 			reason = fmt.Sprintf("\nReason: %s", reason)
 		}
-		c.Reply(fmt.Sprintf("User <a href='tg://user?id=%d'>%s</a> is fbanned in %s. You should unfban them before promoting.%s", user.ID, user.FirstName, fedname, reason))
+		c.Reply(fmt.Sprintf("User %s is fbanned in %s. You should unfban them before promoting.%s", user.Mention, fedname, reason))
 		return nil
 	}
 	if db.Is_user_fed_admin(user.ID, fed_id) {
-		c.Reply(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a> is already an admin in %s!", user.ID, user.FirstName, fedname))
+		c.Reply(fmt.Sprintf("%s is already an admin in %s!", user.Mention, fedname))
 		return nil
 	}
 	accept_fpromote.Data = strconv.Itoa(int(c.Sender().ID)) + "|" + strconv.Itoa(int(user.ID))
 	deny_fpromote.Data = strconv.Itoa(int(c.Sender().ID)) + "|" + strconv.Itoa(int(user.ID))
 	sel.Inline(sel.Row(accept_fpromote, deny_fpromote))
-	c.Reply(fmt.Sprintf("Please get <a href='tg://user?id=%d'>%s</a> to confirm that they would like to be fed admin for %s", user.ID, user.FirstName, fedname), sel)
+	c.Reply(fmt.Sprintf("Please get %s to confirm that they would like to be fed admin for %s", user.Mention, fedname), sel)
 	return nil
 }
 
@@ -242,8 +242,8 @@ func Fdemote(c tb.Context) error {
 		c.Reply("This command is made to be used in group chats, not in pm!")
 		return nil
 	}
-	user, _ := get_user(c.Message())
-	if user == nil {
+	user, _ := GetUser(c)
+	if user.ID == 0 {
 		return nil
 	}
 	fed, fed_id, fedname := db.Get_fed_by_owner(c.Sender().ID)
@@ -259,7 +259,7 @@ func Fdemote(c tb.Context) error {
 		return nil
 	}
 	db.User_leave_fed(fed_id, user.ID)
-	c.Reply(fmt.Sprintf("User <a href='tg://user?id=%d'>%s</a> is no longer an admin of %s (<code>%s</code>)", user.ID, user.FirstName, fedname, fed_id))
+	c.Reply(fmt.Sprintf("User %s is no longer an admin of %s (<code>%s</code>)", user.Mention, fedname, fed_id))
 	return nil
 }
 
@@ -268,8 +268,8 @@ func Transfer_fed_user(c tb.Context) error {
 		c.Reply("This command is made to be used in group chats, not in pm!")
 		return nil
 	}
-	user, _ := get_user(c.Message())
-	if user == nil {
+	user, _ := GetUser(c)
+	if user.ID == 0 {
 		return nil
 	}
 	fed, fed_id, fedname := db.Get_fed_by_owner(c.Sender().ID)
@@ -283,17 +283,17 @@ func Transfer_fed_user(c tb.Context) error {
 	}
 	fed_2, _, _ := db.Get_fed_by_owner(user.ID)
 	if fed_2 {
-		c.Reply(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a> already owns a federation - they can't own another.", user.ID, user.FirstName))
+		c.Reply(fmt.Sprintf("%s already owns a federation - they can't own another.", user.Mention))
 		return nil
 	}
 	if !db.Is_user_fed_admin(user.ID, fed_id) {
-		c.Reply(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a> isn't an admin in %s - you can only give your fed to other admins.", user.ID, user.FirstName, fedname))
+		c.Reply(fmt.Sprintf("%s isn't an admin in %s - you can only give your fed to other admins.", user.Mention, fedname))
 		return nil
 	}
 	accept_ftransfer.Data = strconv.Itoa(int(c.Sender().ID)) + "|" + strconv.Itoa(int(user.ID))
 	deny_ftransfer.Data = strconv.Itoa(int(c.Sender().ID)) + "|" + strconv.Itoa(int(user.ID))
 	sel.Inline(sel.Row(accept_ftransfer, deny_ftransfer))
-	c.Reply(fmt.Sprintf("<a href='tg://user?id=%d'>%s</a>, please confirm you would like to receive fed %s (<code>%s</code>) from <a href='tg://user?id=%d'>%s</a>", user.ID, user.FirstName, fedname, fed_id, c.Sender().ID, c.Sender().FirstName), sel)
+	c.Reply(fmt.Sprintf("%s, please confirm you would like to receive fed %s (<code>%s</code>) from <a href='tg://user?id=%d'>%s</a>", user.Mention, fedname, fed_id, c.Sender().ID, c.Sender().FirstName), sel)
 	return nil
 }
 
@@ -385,8 +385,8 @@ func Fban(c tb.Context) error {
 			return nil
 		}
 	}
-	u, x := get_user(c.Message())
-	if u == nil {
+	u, x := GetUser(c)
+	if u.ID == 0 {
 		return nil
 	}
 	if len(x) > 1024 {
@@ -405,25 +405,25 @@ func Fban(c tb.Context) error {
 	}
 	is_banned, r := db.Is_Fbanned(u.ID, fed_id)
 	if is_banned && x == string("") && r == string("") {
-		return c.Reply(fmt.Sprintf("User <a href='tg://user?id=%d'>%s</a> is already banned in %s. There is no reason set for their fedban yet, so feel free to set one.", u.ID, u.FirstName, fedname))
+		return c.Reply(fmt.Sprintf("User <a href='tg://user?id=%d'>%s</a> is already banned in %s. There is no reason set for their fedban yet, so feel free to set one.", u.ID, u.First, fedname))
 	} else if is_banned && x == r {
-		return c.Reply(fmt.Sprintf("User <a href='tg://user?id=%d'>%s</a> has already been fbanned, with the exact same reason.", u.ID, u.FirstName))
+		return c.Reply(fmt.Sprintf("User <a href='tg://user?id=%d'>%s</a> has already been fbanned, with the exact same reason.", u.ID, u.First))
 	} else if is_banned && x == string("") {
 		if r == string("") {
-			c.Reply(fmt.Sprintf("User <a href='tg://user?id=%d'>%s</a> is already banned in %s.", u.ID, u.FirstName, fedname))
+			c.Reply(fmt.Sprintf("User <a href='tg://user?id=%d'>%s</a> is already banned in %s.", u.ID, u.First, fedname))
 		} else {
-			c.Reply(fmt.Sprintf("User <a href='tg://user?id=%d'>%s</a> is already banned in %s, with reason:\n<code>%s</code>.", u.ID, u.FirstName, fedname, r))
+			c.Reply(fmt.Sprintf("User <a href='tg://user?id=%d'>%s</a> is already banned in %s, with reason:\n<code>%s</code>.", u.ID, u.First, fedname, r))
 		}
 		return nil
 	}
-	db.Fban_user(u.ID, fed_id, x, u.FirstName, time.Now().Unix(), c.Sender().ID)
+	db.Fban_user(u.ID, fed_id, x, u.First, time.Now().Unix(), c.Sender().ID)
 	if !is_banned {
-		fban_msg = fmt.Sprintf("<b>New FedBan</b>\n<b>Fed:</b> %s\n<b>FedAdmin:</b> <a href='tg://user?id=%d'>%s</a>\n<b>User:</b> <a href='tg://user?id=%d'>%s</a>\n<b>User ID:</b> <code>%d</code>", fedname, c.Sender().ID, c.Sender().FirstName, u.ID, u.FirstName, u.ID)
+		fban_msg = fmt.Sprintf("<b>New FedBan</b>\n<b>Fed:</b> %s\n<b>FedAdmin:</b> <a href='tg://user?id=%d'>%s</a>\n<b>User:</b> <a href='tg://user?id=%d'>%s</a>\n<b>User ID:</b> <code>%d</code>", fedname, c.Sender().ID, c.Sender().FirstName, u.ID, u.First, u.ID)
 		if x != string("") {
 			fban_msg += fmt.Sprintf("\n<b>Reason:</b> %s", x)
 		}
 	} else {
-		fban_msg = fmt.Sprintf("<b>FedBan Reason Update</b>\n<b>Fed:</b> %s\n<b>FedAdmin:</b> <a href='tg://user?id=%d'>%s</a>\n<b>User:</b> <a href='tg://user?id=%d'>%s</a>\n<b>User ID:</b> <code>%d</code>", fedname, c.Sender().ID, c.Sender().FirstName, u.ID, u.FirstName, u.ID)
+		fban_msg = fmt.Sprintf("<b>FedBan Reason Update</b>\n<b>Fed:</b> %s\n<b>FedAdmin:</b> <a href='tg://user?id=%d'>%s</a>\n<b>User:</b> <a href='tg://user?id=%d'>%s</a>\n<b>User ID:</b> <code>%d</code>", fedname, c.Sender().ID, c.Sender().FirstName, u.ID, u.First, u.ID)
 		if r != string("") {
 			fban_msg += fmt.Sprintf("\n<b>Previous Reason:</b> %s", r)
 		}
@@ -441,13 +441,13 @@ func Fban(c tb.Context) error {
 	fedchats := fed["chats"].(bson.A)
 	if len(fedchats) != 0 {
 		for _, x := range fedchats {
-			c.Bot().Ban(&tb.Chat{ID: x.(int64)}, &tb.ChatMember{User: u})
+			c.Bot().Ban(&tb.Chat{ID: x.(int64)}, &tb.ChatMember{User: u.User()})
 		}
 	}
 	subs := db.Get_fed_subs(fed_id)
 	if len(subs) != 0 {
 		for _, xd := range subs {
-			db.Fban_user(u.ID, xd.(string), x, u.FirstName, time.Now().Unix(), c.Sender().ID)
+			db.Fban_user(u.ID, xd.(string), x, u.First, time.Now().Unix(), c.Sender().ID)
 		}
 	}
 	return nil
@@ -473,8 +473,8 @@ func Unfban(c tb.Context) error {
 			return nil
 		}
 	}
-	u, x := get_user(c.Message())
-	if u == nil {
+	u, x := GetUser(c)
+	if u.ID == 0 {
 		return nil
 	}
 	if len(x) > 1024 {
@@ -496,7 +496,7 @@ func Unfban(c tb.Context) error {
 		c.Reply(fmt.Sprintf("This user isn't banned in the current federation, %s. (<code>%s</code>)", fed_id, fedname))
 		return nil
 	}
-	unfban_msg := fmt.Sprintf("<b>New un-FedBan</b>\n<b>Fed:</b> %s\n<b>FedAdmin:</b> <a href='tg://user?id=%d'>%s</a>\n<b>User:</b> <a href='tg://user?id=%d'>%s</a>\n<b>User ID:</b> <code>%d</code>", fedname, c.Sender().ID, c.Sender().FirstName, u.ID, u.FirstName, u.ID)
+	unfban_msg := fmt.Sprintf("<b>New un-FedBan</b>\n<b>Fed:</b> %s\n<b>FedAdmin:</b> <a href='tg://user?id=%d'>%s</a>\n<b>User:</b> <a href='tg://user?id=%d'>%s</a>\n<b>User ID:</b> <code>%d</code>", fedname, c.Sender().ID, c.Sender().FirstName, u.ID, u.First, u.ID)
 	if x != string("") {
 		unfban_msg += fmt.Sprintf("\n<b>Reason:</b> %s", x)
 	}
@@ -617,9 +617,9 @@ func fed_info(c tb.Context) error {
 
 func Check_f_admins_cb(c tb.Context) error {
 	if !c.Message().Private() {
-		b, err := c.Bot().ChatMemberOf(c.Chat(), c.Sender())
+		p, err := c.Bot().ChatMemberOf(c.Chat(), c.Sender())
 		check(err)
-		if b.Role == tb.Member {
+		if p.Role == tb.Member {
 			c.Respond(&tb.CallbackResponse{Text: "This command can only be used in private.", ShowAlert: true})
 			return nil
 		}
