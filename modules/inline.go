@@ -253,7 +253,7 @@ func InstaGramSearch(c tb.Context) error {
 
 func PinterestSearch(c tb.Context) error {
 	args := GetArgs(c)
-	PinUrl := `https://www.pinterest.com/resource/BaseSearchResource/get/?source_url=%2Fsearch%2Fpins%2F%3Frs%3Dac%26len%3D2%26q%3D` + url.QueryEscape(args) + `%26eq%3Dearth%26etslf%3D2206%26term_meta%5B%5D%3Dearth%257Cautocomplete%257C0&data=%7B%22options%22%3A%7B%22article%22%3Anull%2C%22appliedProductFilters%22%3A%22---%22%2C%22auto_correction_disabled%22%3Afalse%2C%22corpus%22%3Anull%2C%22customized_rerank_type%22%3Anull%2C%22filters%22%3Anull%2C%22query%22%3A%22earth%22%2C%22query_pin_sigs%22%3Anull%2C%22redux_normalize_feed%22%3Atrue%2C%22rs%22%3A%22ac%22%2C%22scope%22%3A%22pins%22%2C%22source_id%22%3Anull%2C%22no_fetch_context_on_resource%22%3Afalse%7D%2C%22context%22%3A%7B%7D%7D&_=1645889981167`
+	PinUrl := `https://www.pinterest.com/resource/BaseSearchResource/get/?source_url=%2Fsearch%2Fpins%2F%3Frs%3Dac%26len%3D2%26q%3D` + url.QueryEscape(args) + `%26eq%3D` + url.QueryEscape(args) + `%26etslf%3D2206%26term_meta%5B%5D%3Dearth%257Cautocomplete%257C0&data=%7B%22options%22%3A%7B%22article%22%3Anull%2C%22appliedProductFilters%22%3A%22---%22%2C%22auto_correction_disabled%22%3Afalse%2C%22corpus%22%3Anull%2C%22customized_rerank_type%22%3Anull%2C%22filters%22%3Anull%2C%22query%22%3A%22earth%22%2C%22query_pin_sigs%22%3Anull%2C%22redux_normalize_feed%22%3Atrue%2C%22rs%22%3A%22ac%22%2C%22scope%22%3A%22pins%22%2C%22source_id%22%3Anull%2C%22no_fetch_context_on_resource%22%3Afalse%7D%2C%22context%22%3A%7B%7D%7D&_=1645889981167`
 	req, _ := http.NewRequest("GET", PinUrl, nil)
 	req.Header.Add("cookie", PinterestCookies)
 	resp, err := Client.Do(req)
