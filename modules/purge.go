@@ -12,7 +12,7 @@ func Purge(c tb.Context) error {
 		ID := i
 		go func() {
 			err := c.Bot().Delete(&tb.Message{ID: ID, Chat: c.Message().Chat})
-                        check (err)
+			check(err)
 		}()
 	}
 	c.Delete()
@@ -24,7 +24,7 @@ func Delete(c tb.Context) error {
 		return c.Reply("Reply to a message to delete it.")
 	}
 	c.Bot().Delete(c.Message().ReplyTo)
-        return c.Delete()
+	return c.Delete()
 }
 
 func PurgeFrom() {
