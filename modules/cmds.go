@@ -161,6 +161,8 @@ func GatherHandlers() map[string]HANDLE {
 	// purge.go
 	HANDLERS["purge"] = HANDLE{FUNC: Purge, MIDDLEWARE: DeleteMessages}
 	HANDLERS["del"] = HANDLE{FUNC: Delete, MIDDLEWARE: DeleteMessages}
+	HANDLERS["purgefrom"] = HANDLE{FUNC: PurgeFrom, MIDDLEWARE: DeleteMessages}
+	HANDLERS["purgeto"] = HANDLE{FUNC: PurgeTo, MIDDLEWARE: DeleteMessages}
 	return HANDLERS
 
 }
