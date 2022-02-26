@@ -215,13 +215,17 @@ func InstaGramSearch(c tb.Context) error {
 	defer resp.Body.Close()
 	var data InstSearch
 	json.NewDecoder(resp.Body).Decode(&data)
-	results := make(tb.Results, 10)
+	Len := len(data.Users)
+	if Len > 10 {
+		Len = 10
+	}
+	results := make(tb.Results, Len)
 	qd := 0
 	for i, x := range data.Users {
-		qd++
-		if qd >= 10 {
+		if qd > 10 {
 			break
 		}
+		qd++
 		text := ""
 		User := x.User
 		if User.Username != "" {
