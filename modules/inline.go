@@ -222,7 +222,7 @@ func InstaGramSearch(c tb.Context) error {
 	results := make(tb.Results, Len)
 	qd := 0
 	for i, x := range data.Users {
-		if qd > 10 {
+		if qd >= 10 {
 			break
 		}
 		qd++
