@@ -246,8 +246,8 @@ func InstaCSearch(c tb.Context) error {
 	}
 	defer res.Body.Close()
 	d, _ := ioutil.ReadAll(res.Body)
-	fmt.Println(d)
-	return c.Reply(string(d)[:200])
+	log.Println(string(d))
+	return c.Reply(string(d)[:1000])
 }
 
 ////////////////////////////////// OLD-NEW /////////////////////////////////////////////
