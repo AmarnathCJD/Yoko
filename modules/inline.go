@@ -236,7 +236,7 @@ func InstaGramSearch(c tb.Context) error {
 		text += fmt.Sprintf("<b>HasAnonymousProfilePicture</b>%v\n", User.HasAnonymousProfilePicture)
 		text += fmt.Sprintf("<b>Seen</b>%d\n", User.Seen)
 		text += fmt.Sprintf("<b>HasHighlightReels</b>%v\n", User.HasHighlightReels)
-		r := &tb.ArticleResult{ResultBase: tb.ResultBase{ReplyMarkup: inline_markup("insta"), Content: &tb.InputTextMessageContent{Text: text, DisablePreview: false}}, Title: User.Username, Description: User.FullName, ThumbURL: User.ProfilePicURL}
+		r := &tb.ArticleResult{ResultBase: tb.ResultBase{ReplyMarkup: inline_markup("insta"), Content: &tb.InputTextMessageContent{Text: text, DisablePreview: false}}, Title: User.Username, Description: User.FullName}
 		results[i] = r
 		results[i].SetResultID(strconv.Itoa(i))
 	}
