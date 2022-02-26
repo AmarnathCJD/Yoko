@@ -11,7 +11,8 @@ func Purge(c tb.Context) error {
 	for i := c.Message().ReplyTo.ID; i <= c.Message().ID; i++ {
 		ID := i
 		go func() {
-			c.Bot().Delete(&tb.Message{ID: ID, Chat: c.Message().Chat})
+			err := c.Bot().Delete(&tb.Message{ID: ID, Chat: c.Message().Chat})
+                        check (err)
 		}()
 	}
 	c.Delete()
@@ -22,7 +23,8 @@ func Delete(c tb.Context) error {
 	if !c.Message().IsReply() {
 		return c.Reply("Reply to a message to delete it.")
 	}
-	return c.Bot().Delete(c.Message().ReplyTo)
+	c.Bot().Delete(c.Message().ReplyTo)
+        return c.Delete()
 }
 
 func PurgeFrom() {
