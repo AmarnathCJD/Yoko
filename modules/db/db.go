@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -33,8 +34,45 @@ func Remove(array interface{}, s interface{}) interface{} {
 				return append(array[:i], array[i+1:]...)
 			}
 		}
+	case bson.A:
+		switch s.(type) {
+		case int64:
+			for i, v := range array.(bson.A) {
+				array := array.(bson.A)
+				if v == s.(int64) {
+					return append(array[:i], array[i+1:]...)
+				}
+			}
+		case string:
+			for i, v := range array.(bson.A) {
+				array := array.(bson.A)
+				if v == s.(string) {
+					return append(array[:i], array[i+1:]...)
+				}
+			}
+		}
 	default:
-		return nil
+		return array
 	}
 	return array
+}
+
+func IndexInSlice(list bson.A, index string, value interface{}) (bool, int) {
+	switch value.(type) {
+	case int64:
+		for i, v := range list {
+			if v.(bson.M)[index].(int64) == value.(int64) {
+				return true, i
+			}
+		}
+	case string:
+		for i, v := range list {
+			if v.(bson.M)[index].(string) == value.(string) {
+				return true, i
+			}
+		}
+	default:
+		return false, 0
+	}
+	return false, 0
 }

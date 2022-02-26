@@ -155,7 +155,7 @@ func User_leave_fed(fed_id string, user_id int64) {
 	if a.Err() == nil {
 		var fg bson.M
 		a.Decode(&fg)
-		feds_up := remove(fg["feds"].(bson.A), fed_id)
+		feds_up := Remove(fg["feds"].(bson.A), fed_id)
 		feds.UpdateOne(context.TODO(), bson.M{"user_id": user_id}, bson.D{{Key: "$set", Value: bson.D{{Key: "fadmins", Value: feds_up}}}}, opts)
 	}
 }
@@ -294,7 +294,7 @@ func UNSUB_fed(fed_id string, my_fed string) {
 		if ok {
 			subs := subst.(bson.A)
 			if stringInSliceA(fed_id, subs) {
-				subs = remove(subs, fed_id)
+				subs = Remove(subs, fed_id).(bson.A)
 			}
 			mysubs.UpdateOne(context.TODO(), bson.M{"fed_id": my_fed}, bson.D{{Key: "$set", Value: bson.D{{Key: "my_subs", Value: subs}}}}, opts)
 		}
@@ -307,7 +307,7 @@ func UNSUB_fed(fed_id string, my_fed string) {
 		if ok {
 			subs := subst.(bson.A)
 			if stringInSliceA(my_fed, subs) {
-				subs = remove(subs, my_fed)
+				subs = Remove(subs, my_fed).(bson.A)
 			}
 			mysubs.UpdateOne(context.TODO(), bson.M{"fed_id": fed_id}, bson.D{{Key: "$set", Value: bson.D{{Key: "fed_subs", Value: subs}}}}, opts)
 		}

@@ -17,15 +17,6 @@ func IsTrue(a string, list bson.A) bool {
 	return false
 }
 
-func remove(s bson.A, r string) bson.A {
-	for i, v := range s {
-		if v == r {
-			return append(s[:i], s[i+1:]...)
-		}
-	}
-	return s
-}
-
 func Lock_item(chat_id int64, items []string) bool {
 	filter := bson.M{"chat_id": chat_id}
 	locked := locks_db.FindOne(context.TODO(), filter)
@@ -54,7 +45,7 @@ func Unlock_item(chat_id int64, items []string) bool {
 		locked.Decode(&lock_list)
 		new_lock := lock_list["locks"].(bson.A)
 		for _, lock := range items {
-			new_lock = remove(new_lock, lock)
+			new_lock = Remove(new_lock, lock).(bson.A)
 		}
 		locks_db.UpdateOne(context.TODO(), filter, bson.D{{Key: "$set", Value: bson.D{{Key: "locks", Value: new_lock}}}}, opts)
 	}

@@ -22,15 +22,6 @@ func __load_warn_settings() bson.A {
 	return array
 }
 
-func IndexInSlice(list bson.A, index string, value int64) (bool, int) {
-	for i, x := range list {
-		if x.(bson.M)[index] == value {
-			return true, i
-		}
-	}
-	return false, 0
-}
-
 var WARN_SETTINGS = __load_warn_settings()
 
 func Warn_user(chat_id int64, user_id int64, reason string) (bool, int32, int32) {
