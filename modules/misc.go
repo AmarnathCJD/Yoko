@@ -235,6 +235,22 @@ func GroupStat(c tb.Context) error {
 	return c.Reply(fmt.Sprintf("<b>Total Messages in %s:</b> <code>%d</code>", c.Chat().Title, c.Message().ID))
 }
 
+func InstaSearch(c tb.Context) error {
+	Q := GetArgs(c)
+	base_url := `https://www.instagram.com/web/search/topsearch/?context=blended&query=` + Q + `&rank_token=0.29359664635546645&include_reel=true`
+	req, _ := http.NewRequest("GET", base_url, nil)
+	req.Header.Add("cookie", InstagramCookies)
+	resp, err := Client.Do(req)
+	if err != nil {
+		log.Print(err)
+	}
+	defer resp.Body.Close()
+	var data InstSearch
+	json.NewDecoder(resp.Body).Decode(&data)
+	b, _ := json.Marshal(data.Users[0])
+	return c.Reply(string(b))
+}
+
 ////////////////////////////////// OLD-NEW /////////////////////////////////////////////
 
 var myClient = &http.Client{Timeout: 10 * time.Second}

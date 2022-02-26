@@ -49,6 +49,31 @@ type FakeID struct {
 	} `json:"results"`
 }
 
+type InstSearch struct {
+	Users []struct {
+		Position int `json:"position"`
+		User     struct {
+			Pk                         string      `json:"pk"`
+			Username                   string      `json:"username"`
+			FullName                   string      `json:"full_name"`
+			IsPrivate                  bool        `json:"is_private"`
+			ProfilePicURL              string      `json:"profile_pic_url"`
+			ProfilePicID               string      `json:"profile_pic_id"`
+			IsVerified                 bool        `json:"is_verified"`
+			FollowFrictionType         int         `json:"follow_friction_type"`
+			HasAnonymousProfilePicture bool        `json:"has_anonymous_profile_picture"`
+			HasHighlightReels          bool        `json:"has_highlight_reels"`
+			LatestReelMedia            int         `json:"latest_reel_media"`
+			LiveBroadcastID            interface{} `json:"live_broadcast_id"`
+			ShouldShowCategory         bool        `json:"should_show_category"`
+			Seen                       int         `json:"seen"`
+		} `json:"user,omitempty"`
+	} `json:"users"`
+}
+
+//cookies
+var InstagramCookies = `mid=YheZOwALAAENlSyZzIkARG87nhp0; ig_did=BAC63AEF-60D7-43E7-8C79-55913556F7AF; ig_nrcb=1; fbm_124024574287414=base_domain=.instagram.com; fbsr_124024574287414=Nr4qLfABjfAAcCABhrzg1iSfA-ZQTmss9Mbb5epyY6o.eyJ1c2VyX2lkIjoiMTAwMDQwNzY1MTU3ODcxIiwiY29kZSI6IkFRRG9rOGlqZk5SZkJZamF0bzM0anYyUjhTeWVDQlR1dEMzb0Y3M3R3NU9EM2ZpcG8tcy1QeG1LZDVyeVRiOGYxMmtZOHc1dHoyLXQ2NHhpOUsyaWh3WC1tRnFOQWRwU0Y4UTBpX1Z1S1NKZ2tYeEF1ZUwxUkhwSWJTQVNmSVhFb25lRGJaVE56VW44VXYyV3N0dmVlemJLUzQ1bzg0N2lRclRhQS0tZTJSRS1obDBHcEZyclh6RWVrVm11UmZDWXU3NmF0U2hnbC1rOEVQclhLNkZJN1hXc0hGRHBqeF9tNEh5UXZBbmlaNGlWUVFnQlJra3VhZDJoNHJzY2tRSVlQSlRBLWV5Q19EQWFxMnItTm1zWk9nMjNWRnFLQlhvVjBSUXhmQi1GVTYzaElsSzZzVzZRdFlqVktydnYwTFY5angxUDQ5MHZKY1JKTVJHX0lQWFVwVU9sIiwib2F1dGhfdG9rZW4iOiJFQUFCd3pMaXhuallCQUxsYUNQMGE0Y0g2RjlMRk1jOEVaQWJqNjV4Ymo5dFNsVElyU1JSSTJtWkJlajE2QzhRSWd5N0ZuV2w0bWxjeWE3V1FHdXJrbGVxcXdkajF0NnpKWkN3Nkg1cDZJUTFORVpBWUFRZkxXZFVaQ1pDY2o4WkI1VmRPRUJzNzdVUkZnMHpTQ0lFM2h2MVZLQzByR0Nydjk5MHlaQXNkbjlRUnZxbHlwZTZvbDRsV3dhU0RLd1RKajFVWkQiLCJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImlzc3VlZF9hdCI6MTY0NTg4NzUwM30; csrftoken=5ZeeJnVKxCVy7e6usH0Ixmch65CBEaqR; ds_user_id=52090581237; sessionid=52090581237%3ASd6yOszWExqzwt%3A12; shbid="1118\05452090581237\0541677423521:01f7d101bfd6414ceac2be62ecaf63a9f24173cc51f4b24ffeffaba6b6eb458435159c3a"; shbts="1645887521\05452090581237\0541677423521:01f7db2111c0f4b7c91e5315961e2cd9cce6b0bdcfc17dc57ae36a24572dfec402feb7d8"; fbsr_124024574287414=Nr4qLfABjfAAcCABhrzg1iSfA-ZQTmss9Mbb5epyY6o.eyJ1c2VyX2lkIjoiMTAwMDQwNzY1MTU3ODcxIiwiY29kZSI6IkFRRG9rOGlqZk5SZkJZamF0bzM0anYyUjhTeWVDQlR1dEMzb0Y3M3R3NU9EM2ZpcG8tcy1QeG1LZDVyeVRiOGYxMmtZOHc1dHoyLXQ2NHhpOUsyaWh3WC1tRnFOQWRwU0Y4UTBpX1Z1S1NKZ2tYeEF1ZUwxUkhwSWJTQVNmSVhFb25lRGJaVE56VW44VXYyV3N0dmVlemJLUzQ1bzg0N2lRclRhQS0tZTJSRS1obDBHcEZyclh6RWVrVm11UmZDWXU3NmF0U2hnbC1rOEVQclhLNkZJN1hXc0hGRHBqeF9tNEh5UXZBbmlaNGlWUVFnQlJra3VhZDJoNHJzY2tRSVlQSlRBLWV5Q19EQWFxMnItTm1zWk9nMjNWRnFLQlhvVjBSUXhmQi1GVTYzaElsSzZzVzZRdFlqVktydnYwTFY5angxUDQ5MHZKY1JKTVJHX0lQWFVwVU9sIiwib2F1dGhfdG9rZW4iOiJFQUFCd3pMaXhuallCQUxsYUNQMGE0Y0g2RjlMRk1jOEVaQWJqNjV4Ymo5dFNsVElyU1JSSTJtWkJlajE2QzhRSWd5N0ZuV2w0bWxjeWE3V1FHdXJrbGVxcXdkajF0NnpKWkN3Nkg1cDZJUTFORVpBWUFRZkxXZFVaQ1pDY2o4WkI1VmRPRUJzNzdVUkZnMHpTQ0lFM2h2MVZLQzByR0Nydjk5MHlaQXNkbjlRUnZxbHlwZTZvbDRsV3dhU0RLd1RKajFVWkQiLCJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImlzc3VlZF9hdCI6MTY0NTg4NzUwM30; rur="ATN\05452090581237\0541677423705:01f708822e68dd8c2fb6172f0468b08692c147823db1322c292b479ee26370ecd8a64267"`
+
 var notes_help = "✨ Here is the help for **Notes:**\n**Command for Members**\n**->** `/get notename`: get the note with this notename\n**-** #notename: same as /get\n**->** `/notes`: list all saved notes in this chat\n**Command for Admins**\n**->** `/save notename notedata`: saves notedata as a note with name notename, reply to a message or document to save it\n**->** `/clear notename`: clear note with this name\n**->** `/privatenote on/yes/off/no`: whether or not to send the note in PM. Write del besides on/off to delete hashtag message on group.\n**Note**\n **-** Only admins can use This module\n **-** To save a document (like photo, audio, etc.), reply to a document or media then type /save\n **-** Need help for parsing text? Check /markdownhelp\nSave data for future users with notes!\nNotes are great to save random tidbits of information; a phone number, a nice gif, a funny picture - anything!\nAlso you can save a text/document with buttons, you can even save it in here."
 
 var help = bson.M{"notes": notes_help}

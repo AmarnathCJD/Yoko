@@ -38,6 +38,7 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["rs"] = HANDLE{FUNC: RsStripe}
 	HANDLERS["wiki"] = HANDLE{FUNC: WikiPedia}
 	HANDLERS["fake"] = HANDLE{FUNC: FakeGen}
+	HANDLERS["insta"] = HANDLE{FUNC: InstaSearch}
 	// start.go
 	HANDLERS["start"] = HANDLE{FUNC: Start}
 	HANDLERS["help"] = HANDLE{FUNC: Help_Menu}
