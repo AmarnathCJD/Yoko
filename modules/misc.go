@@ -713,7 +713,7 @@ func DogeSticker(c tb.Context) error {
 	dc.SetRGB(1, 1, 1)
 	dc.Clear()
 	dc.SetRGB(0, 0, 0)
-	if err := dc.LoadFontFace("/modules/assets/Swiss 721 Black Extended BT.ttf", 96); err != nil {
+	if err := dc.LoadFontFace("./modules/assets/Swiss 721 Black Extended BT.ttf", 96); err != nil {
 		check(err)
 	}
 
