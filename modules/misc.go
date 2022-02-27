@@ -707,7 +707,11 @@ func Music(c tb.Context) error {
 
 func DogeSticker(c tb.Context) error {
 	Args := GetArgs(c)
-	Args = Wrap(Args, 10)
+        if len(Args) > 10 {
+A := string(Args[10])
+B := strings.SplitN(Args, A, 2)
+Args = B[0] + "\n" + B[1]
+}
 	im, err := gg.LoadImage("./modules/assets/IMG_20220227_202434_649_cleanup.jpg")
 	check(err)
 	dc := gg.NewContext(461, 512)
@@ -717,13 +721,12 @@ func DogeSticker(c tb.Context) error {
 	if err := dc.LoadFontFace("./modules/assets/Swiss 721 Black Extended BT.ttf", 85); err != nil {
 		check(err)
 	}
-
 	dc.DrawStringAnchored(Args, (461/2)-40, (512/3*3/4)-20, 0.5, 0.5)
 	dc.DrawRoundedRectangle(0, 0, 461, 512, 0)
 	dc.DrawImage(im, 0, 0)
 	dc.DrawStringAnchored(Args, (461/2)-40, (512/3*3/4)-20, 0.5, 0.5)
 	dc.Clip()
-	dc.SavePNG("out.png")
+	dc.SavePNG("out.webp")
 	c.Reply("Sucess")
-	return c.Reply(&tb.Photo{File: tb.File{FileLocal: "out.png"}})
+	return c.Reply(&tb.Photo{File: tb.File{FileLocal: "out.webp"}})
 }
