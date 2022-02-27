@@ -707,7 +707,7 @@ func Music(c tb.Context) error {
 
 func DogeSticker(c tb.Context) error {
 	Args := GetArgs(c)
-        Args = Wrap(Args, 10)
+	Args = Wrap(Args, 10)
 	im, err := gg.LoadImage("./modules/assets/IMG_20220227_202434_649_cleanup.jpg")
 	check(err)
 	dc := gg.NewContext(461, 512)

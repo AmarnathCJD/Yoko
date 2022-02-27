@@ -618,33 +618,33 @@ func ConnectFunc(next tb.HandlerFunc) tb.HandlerFunc {
 
 func Wrap(s string, limit int) string {
 
- if strings.TrimSpace(s) == "" {
- return s
- }
+	if strings.TrimSpace(s) == "" {
+		return s
+	}
 
- // convert string to slice
- strSlice := strings.Fields(s)
+	// convert string to slice
+	strSlice := strings.Fields(s)
 
- var result string = ""
+	var result string = ""
 
- for len(strSlice) >= 1 {
- // convert slice/array back to string
- // but insert \r\n at specified limit
+	for len(strSlice) >= 1 {
+		// convert slice/array back to string
+		// but insert \r\n at specified limit
 
- result = result + strings.Join(strSlice[:limit], " ") + "\r\n"
+		result = result + strings.Join(strSlice[:limit], " ") + "\r\n"
 
- // discard the elements that were copied over to result
- strSlice = strSlice[limit:]
+		// discard the elements that were copied over to result
+		strSlice = strSlice[limit:]
 
- // change the limit
- // to cater for the last few words in
- //
- if len(strSlice) < limit {
- limit = len(strSlice)
- }
+		// change the limit
+		// to cater for the last few words in
+		//
+		if len(strSlice) < limit {
+			limit = len(strSlice)
+		}
 
- }
+	}
 
- return result
+	return result
 
- }
+}
