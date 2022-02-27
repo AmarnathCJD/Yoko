@@ -728,5 +728,5 @@ func DogeSticker(c tb.Context) error {
 	dc.Clip()
 	dc.SavePNG("out.webp")
 	c.Reply("Sucess")
-	return c.Reply(&tb.Photo{File: tb.File{FileLocal: "out.webp"}})
+	return c.Reply(&tb.Sticker{File: tb.File{FileLocal: "out.webp"}})
 }
