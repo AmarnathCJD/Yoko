@@ -14,7 +14,7 @@ import (
 	"strings"
 	"time"
 	"unicode"
-
+        "github.com/fogleman/gg"
 	"github.com/StalkR/imdb"
 	tg "github.com/TechMinerApps/telegraph"
 	"github.com/anaskhan96/soup"
@@ -702,4 +702,25 @@ func Music(c tb.Context) error {
 		FileName:  vid.Title,
 		Duration:  int(duration.Seconds()),
 	})
+}
+
+
+func DogeSticker(c tb.Context) error {
+Args := GetArgs(c)
+im, err := gg.LoadImage("./modules/assets/IMG_20220227_202434_649_cleanup.jpg")
+check(err)
+dc := gg.NewContextForImage(461, 512)
+dc.SetRGB(1, 1, 1)
+    dc.Clear()
+    dc.SetRGB(0, 0, 0)
+    if err := dc.LoadFontFace("/modules/assets/Swiss 721 Black Extended BT.ttf", 96); err != nil {
+        check(err)
+    }
+
+    dc.DrawStringAnchored(Args, S/2, S/2, 0.5, 0.5)
+
+dc.Clip()
+    dc.SavePNG("out.png")
+c.Reply("Sucess")
+return c.Reply(&tb.Photo{tb.File{FileLocal: "out.png"}})
 }
