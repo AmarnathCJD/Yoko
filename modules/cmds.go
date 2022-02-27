@@ -41,7 +41,7 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["insta"] = HANDLE{FUNC: InstaCSearch}
 	HANDLERS["roll"] = HANDLE{FUNC: Roll}
 	HANDLERS["json"] = HANDLE{FUNC: Json}
-        HANDLERS["doge"] = HANDLE{FUNC: DogeSticker}
+	HANDLERS["doge"] = HANDLE{FUNC: DogeSticker}
 	// start.go
 	HANDLERS["start"] = HANDLE{FUNC: Start}
 	HANDLERS["help"] = HANDLE{FUNC: Help_Menu}
