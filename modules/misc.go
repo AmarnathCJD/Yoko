@@ -709,7 +709,7 @@ func DogeSticker(c tb.Context) error {
 Args := GetArgs(c)
 im, err := gg.LoadImage("./modules/assets/IMG_20220227_202434_649_cleanup.jpg")
 check(err)
-dc := gg.NewContextForImage(461, 512)
+dc := gg.NewContext(461, 512)
 dc.SetRGB(1, 1, 1)
     dc.Clear()
     dc.SetRGB(0, 0, 0)
@@ -717,10 +717,10 @@ dc.SetRGB(1, 1, 1)
         check(err)
     }
 
-    dc.DrawStringAnchored(Args, S/2, S/2, 0.5, 0.5)
+    dc.DrawStringAnchored(Args, 461/2, 512/2, 0.5, 0.5)
 
 dc.Clip()
     dc.SavePNG("out.png")
 c.Reply("Sucess")
-return c.Reply(&tb.Photo{tb.File{FileLocal: "out.png"}})
+return c.Reply(&tb.Photo{File: tb.File{FileLocal: "out.png"}})
 }
