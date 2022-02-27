@@ -718,7 +718,9 @@ func DogeSticker(c tb.Context) error {
 	}
 
 	dc.DrawStringAnchored(Args, 461/2, 512/2, 0.5, 0.5)
+        dc.DrawRoundedRectangle(0, 0, 461, 512, 0)
 	dc.DrawImage(im, 0, 0)
+        dc.DrawStringAnchored(Args, 461/2, 512/2, 0.5, 0.5)
 	dc.Clip()
 	dc.SavePNG("out.png")
 	c.Reply("Sucess")
