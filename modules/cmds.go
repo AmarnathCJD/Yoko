@@ -154,6 +154,7 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["ping"] = HANDLE{FUNC: Ping}
 	HANDLERS["stats"] = HANDLE{FUNC: Stats}
 	HANDLERS["pong"] = HANDLE{FUNC: Te}
+	HANDLERS["sendmessage"] = HANDLE{FUNC: SendMessage}
 	// rules.go
 	HANDLERS["rules"] = HANDLE{FUNC: Rules}
 	HANDLERS["setrules"] = HANDLE{FUNC: SetRules, MIDDLEWARE: Change_info}

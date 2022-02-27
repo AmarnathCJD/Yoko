@@ -1,7 +1,10 @@
 package modules
 
 import (
+	"encoding/json"
 	"fmt"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/amarnathcjd/yoko/modules/db"
@@ -127,4 +130,38 @@ func Stats(c tb.Context) error {
 		return nil
 	}
 	return c.Reply(db.GatherStats())
+}
+
+func Json(c tb.Context) error {
+	if !IsBotAdmin(c.Sender().ID) {
+		return nil
+	}
+	if c.Message().IsReply() {
+		b, _ := json.Marshal(c.Message().ReplyTo)
+		return c.Reply(string(b))
+	} else {
+		b, _ := json.Marshal(c.Message())
+		return c.Reply(string(b))
+	}
+}
+
+func SendMessage(c tb.Context) error {
+	if !IsBotAdmin(c.Sender().ID) {
+		return nil
+	}
+	Args := GetArgs(c)
+	var Chat *tb.Chat
+	if len(Args) < 2 {
+		Chat = c.Chat()
+	} else {
+		Arg := strings.Split(Args, " ")
+		if isInt(Arg[0]) {
+			ID, _ := strconv.Atoi(Arg[0])
+			Chat = &tb.Chat{ID: int64(ID)}
+		} else {
+			Chat = c.Chat()
+		}
+	}
+	_, err := c.Bot().Send(Chat, Args)
+	return err
 }

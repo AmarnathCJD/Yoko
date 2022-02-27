@@ -343,19 +343,6 @@ func Roll(c tb.Context) error {
 	return c.Reply(&tb.Dice{Type: "🎲", Value: rand.Intn(6)})
 }
 
-func Json(c tb.Context) error {
-	if !IsBotAdmin(c.Sender().ID) {
-		return nil
-	}
-	if c.Message().IsReply() {
-		b, _ := json.Marshal(c.Message().ReplyTo)
-		return c.Reply(string(b))
-	} else {
-		b, _ := json.Marshal(c.Message())
-		return c.Reply(string(b))
-	}
-}
-
 ////////////////////////////////// OLD-NEW /////////////////////////////////////////////
 
 var myClient = &http.Client{Timeout: 10 * time.Second}
