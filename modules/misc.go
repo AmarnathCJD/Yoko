@@ -247,9 +247,9 @@ func InstaCSearch(c tb.Context) error {
 	defer res.Body.Close()
 	var d map[string]interface{}
 	json.NewDecoder(res.Body).Decode(&d)
-        if _, ok := d["graphql"] ; !ok {
-                return c.Reply("No such username found in Instagram.")
-        }
+	if _, ok := d["graphql"]; !ok {
+		return c.Reply("No such username found in Instagram.")
+	}
 	GraphQL := d["graphql"].(map[string]interface{})["user"].(map[string]interface{})
 	var U = ""
 	if name, ok := GraphQL["full_name"]; ok {
