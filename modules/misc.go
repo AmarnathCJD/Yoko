@@ -315,7 +315,9 @@ func InstaCSearch(c tb.Context) error {
 	}
 	GraphQL := d["graphql"].(map[string]interface{})["user"].(map[string]interface{})
 	var U = ""
-	U += "<b>ID:</b> <code>" + GraphQL["id"].(string) + "</code>\n"
+        if ID, ok := GraphQL["id"] ; ok {
+	U += "<b>ID:</b> <code>" + ID.(string) + "</code>\n"
+}
 	if name, ok := GraphQL["full_name"]; ok {
 		U += "<b>FullName:</b> " + EscapeHTML(name.(string)) + "\n"
 	}
@@ -328,9 +330,11 @@ func InstaCSearch(c tb.Context) error {
 	Followers := GraphQL["edge_followed_by"].(map[string]interface{})["count"].(float64)
 	Following := GraphQL["edge_follow"].(map[string]interface{})["count"].(float64)
 	if bio, ok := GraphQL["biography"]; ok && bio.(string) != "" {
-		U += "<b>Biography:</b> " + EscapeHTML(bio.(string)) + "\n"
+		U += "<b>Bio:</b> " + EscapeHTML(bio.(string)) + "\n"
 	}
-	U += "<b>Verified:</b> " + fmt.Sprint(GraphQL["is_verified"]) + "\n"
+        if Vf, ok := GraphQL["is_verified"] ; ok {
+	U += "<b>Verified:</b> " + fmt.Sprint(Vf) + "\n"
+}
 	U += "<b>Following:</b> " + fmt.Sprint(Following) + "\n"
 	U += "<b>Followers:</b> " + fmt.Sprint(Followers)
 	if pfp, ok := GraphQL["profile_pic_url_hd"]; ok {
