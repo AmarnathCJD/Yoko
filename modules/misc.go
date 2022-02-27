@@ -337,7 +337,7 @@ func InstaCSearch(c tb.Context) error {
 	}
 	U += "<b>Following:</b> " + fmt.Sprint(Following) + "\n"
 	U += "<b>Followers:</b> " + fmt.Sprint(Followers)
-        sel.Inline(sel.Row(sel.URL(GraphQL["username"].(string), "https://instagram.com/" + GraphQL["username"].(string))))
+	sel.Inline(sel.Row(sel.URL(GraphQL["username"].(string), "https://instagram.com/"+GraphQL["username"].(string))))
 	if pfp, ok := GraphQL["profile_pic_url_hd"]; ok {
 		return c.Reply(&tb.Photo{File: tb.FromURL(pfp.(string)), Caption: U}, &tb.SendOptions{DisableWebPagePreview: true, ReplyMarkup: sel})
 	}
