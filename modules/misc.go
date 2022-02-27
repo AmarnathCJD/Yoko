@@ -247,6 +247,9 @@ func InstaCSearch(c tb.Context) error {
 	defer res.Body.Close()
 	var d map[string]interface{}
 	json.NewDecoder(res.Body).Decode(&d)
+        if _, ok := d["graphql"] ; !ok {
+                return c.Reply("No such username found in Instagram.")
+        }
 	GraphQL := d["graphql"].(map[string]interface{})["user"].(map[string]interface{})
 	var U = ""
 	if name, ok := GraphQL["full_name"]; ok {
@@ -256,8 +259,8 @@ func InstaCSearch(c tb.Context) error {
 		U += "<b>Username:</b> " + strings.Title(uname.(string)) + "\n"
 	}
 	U += "<b>ID:</b> <code>" + GraphQL["id"].(string) + "</code>\n"
-	Followers := GraphQL["edge_followed_by"].(map[string]interface{})["count"].(int)
-	Following := GraphQL["edge_follow"].(map[string]interface{})["count"].(int)
+	Followers := GraphQL["edge_followed_by"].(map[string]interface{})["count"].(float64)
+	Following := GraphQL["edge_follow"].(map[string]interface{})["count"].(float64)
 	U += "<b>Following:</b> " + fmt.Sprint(Following) + "\n"
 	U += "<b>Followers:</b> " + fmt.Sprint(Followers) + "\n"
 	if bio, ok := GraphQL["biography"]; ok {
