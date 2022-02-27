@@ -259,17 +259,20 @@ func InstaCSearch(c tb.Context) error {
 	if uname, ok := GraphQL["username"]; ok {
 		U += "<b>Username:</b> @" + strings.Title(uname.(string)) + "\n"
 	}
+	if site, ok := GraphQL["external_url"]; ok {
+		U += "<b>Website:</b> <code>" + EscapeHTML(site.(string)) + "</code>\n"
+	}
 	Followers := GraphQL["edge_followed_by"].(map[string]interface{})["count"].(float64)
 	Following := GraphQL["edge_follow"].(map[string]interface{})["count"].(float64)
-	U += "<b>Following:</b> " + fmt.Sprint(Following) + "\n"
-	U += "<b>Followers:</b> " + fmt.Sprint(Followers) + "\n"
-	if bio, ok := GraphQL["biography"]; ok {
+	if bio, ok := GraphQL["biography"]; ok && bio.(string) != "" {
 		U += "<b>Biography:</b> " + EscapeHTML(bio.(string))
 	}
+	U += "<b>Following:</b> " + fmt.Sprint(Following) + "\n"
+	U += "<b>Followers:</b> " + fmt.Sprint(Followers) + "\n"
 	if pfp, ok := GraphQL["profile_pic_url_hd"]; ok {
-		return c.Reply(&tb.Photo{File: tb.FromURL(pfp.(string)), Caption: U})
+		return c.Reply(&tb.Photo{File: tb.FromURL(pfp.(string)), Caption: U}, &tb.SendOptions{DisableWebPagePreview: true})
 	}
-	return c.Reply(U)
+	return c.Reply(U, &tb.SendOptions{DisableWebPagePreview: true})
 }
 
 ////////////////////////////////// OLD-NEW /////////////////////////////////////////////
