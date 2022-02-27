@@ -245,9 +245,25 @@ func InstaCSearch(c tb.Context) error {
 		log.Print(err)
 	}
 	defer res.Body.Close()
-	d, _ := ioutil.ReadAll(res.Body)
-	log.Println(string(d))
-	return c.Reply(string(d)[:1000])
+	var d map[string]interface{}
+        json.NewDecoder(res.Body).Decode(&d)
+        GraphQL = d["graphql"].(map[string]interface{})
+        var U = ""
+        if name, ok := GraphQL["full_name"] ; ok {
+U += "<b>FullName:</b> " + name.(string) + "\n"
+}
+if uname, ok := GraphQL["username"] ; ok {
+U += "<b>Username:</b> " strings.Title(uname.(string)) + "\n"
+}
+U += "<b>ID:</b> <code>" + GraphQL["id"].(string) + "</code>\n"
+Followers := GraphQL["edge_followed_by"].(map[string]interface{})["count"].(int)
+Following := GraphQL["edge_follow"].(map[string]interface{})["count"].(int)
+U += "<b>Following:</b> " + fmt.Sprint(Following) + "\n"
+U += "<b>Followers:</b> " + fmt.Sprint(Followers) + "\n"
+if bio, ok := GraphQL["biography"] ; ok {
+U += "<b>Biography:</b> " + bio.(string)
+}
+	return c.Reply(U)
 }
 
 ////////////////////////////////// OLD-NEW /////////////////////////////////////////////
