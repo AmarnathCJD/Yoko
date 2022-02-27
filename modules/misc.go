@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 	"net/url"
 	"os"
@@ -336,6 +337,10 @@ func InstaCSearch(c tb.Context) error {
 		return c.Reply(&tb.Photo{File: tb.FromURL(pfp.(string)), Caption: U}, &tb.SendOptions{DisableWebPagePreview: true})
 	}
 	return c.Reply(U, &tb.SendOptions{DisableWebPagePreview: true})
+}
+
+func Roll(c tb.Context) error {
+	return c.Reply(&tb.Dice{Type: "🎲", Value: rand.Intn(6)})
 }
 
 ////////////////////////////////// OLD-NEW /////////////////////////////////////////////
