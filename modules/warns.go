@@ -141,13 +141,13 @@ func UnWarnCb(c tb.Context) error {
 	user_id := int64(user)
 	r := db.Remove_warn(c.Chat().ID, user_id)
 	if !r {
-		return c.Reply("This warning has already been removed.")
+		return c.Respond(&tb.CallbackResponse{Text: "This warning has already been removed.", ShowAlert: true})
 	} else {
 		name := "User"
 		us, err := c.Bot().ChatByID(user_id)
 		if err == nil {
 			name = us.FirstName
 		}
-		return c.Reply(fmt.Sprintf("Admin %s has removed %s's warning.", c.Sender().FirstName, name))
+		return c.Edit(fmt.Sprintf("Admin %s has removed %s's warning.", c.Sender().FirstName, name))
 	}
 }
