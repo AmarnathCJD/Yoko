@@ -324,7 +324,7 @@ func InstaCSearch(c tb.Context) error {
 	if uname, ok := GraphQL["username"]; ok {
 		U += "<b>Username:</b> @" + strings.Title(uname.(string)) + "\n"
 	}
-	if site, ok := GraphQL["external_url"]; ok {
+	if site, ok := GraphQL["external_url"]; ok && site != nil {
 		U += "<b>Website:</b> <code>" + EscapeHTML(site.(string)) + "</code>\n"
 	}
 	Followers := GraphQL["edge_followed_by"].(map[string]interface{})["count"].(float64)
