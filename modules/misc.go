@@ -252,13 +252,13 @@ func InstaCSearch(c tb.Context) error {
 	}
 	GraphQL := d["graphql"].(map[string]interface{})["user"].(map[string]interface{})
 	var U = ""
+	U += "<b>ID:</b> <code>" + GraphQL["id"].(string) + "</code>\n"
 	if name, ok := GraphQL["full_name"]; ok {
 		U += "<b>FullName:</b> " + EscapeHTML(name.(string)) + "\n"
 	}
 	if uname, ok := GraphQL["username"]; ok {
-		U += "<b>Username:</b> " + strings.Title(uname.(string)) + "\n"
+		U += "<b>Username:</b> @" + strings.Title(uname.(string)) + "\n"
 	}
-	U += "<b>ID:</b> <code>" + GraphQL["id"].(string) + "</code>\n"
 	Followers := GraphQL["edge_followed_by"].(map[string]interface{})["count"].(float64)
 	Following := GraphQL["edge_follow"].(map[string]interface{})["count"].(float64)
 	U += "<b>Following:</b> " + fmt.Sprint(Following) + "\n"
