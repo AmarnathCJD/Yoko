@@ -322,7 +322,7 @@ func InstaCSearch(c tb.Context) error {
 		U += "<b>FullName:</b> " + EscapeHTML(name.(string)) + "\n"
 	}
 	if uname, ok := GraphQL["username"]; ok {
-		U += "<b>Username:</b> @" + strings.Title(uname.(string)) + "\n"
+		U += "<b>Username:</b> <a href='http://instagram.com/" + uname.(string) + "'>" + strings.Title(uname.(string)) + "</a>\n"
 	}
 	if site, ok := GraphQL["external_url"]; ok && site != nil {
 		U += "<b>Website:</b> <code>" + EscapeHTML(site.(string)) + "</code>\n"
