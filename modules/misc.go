@@ -335,8 +335,8 @@ func InstaCSearch(c tb.Context) error {
 	if Vf, ok := GraphQL["is_verified"]; ok {
 		U += "<b>Verified:</b> " + fmt.Sprint(Vf) + "\n"
 	}
-	U += "<b>Following:</b> " + fmt.Sprint(int(Following)) + "\n"
-	U += "<b>Followers:</b> " + fmt.Sprint(int(Followers))
+	U += "<b>Following:</b> <code>" + fmt.Sprint(int(Following)) + "</code>\n"
+	U += "<b>Followers:</b> <code>" + fmt.Sprint(int(Followers)) + "</code>"
 	sel.Inline(sel.Row(sel.URL(GraphQL["username"].(string), "https://instagram.com/"+GraphQL["username"].(string))))
 	if pfp, ok := GraphQL["profile_pic_url_hd"]; ok {
 		return c.Reply(&tb.Photo{File: tb.FromURL(pfp.(string)), Caption: U}, &tb.SendOptions{DisableWebPagePreview: true, ReplyMarkup: sel})
