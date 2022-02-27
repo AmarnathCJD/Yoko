@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/fogleman/gg"
 	"io/ioutil"
 	"log"
 	"math/rand"
@@ -14,7 +15,6 @@ import (
 	"strings"
 	"time"
 	"unicode"
-        "github.com/fogleman/gg"
 
 	"github.com/StalkR/imdb"
 	tg "github.com/TechMinerApps/telegraph"
@@ -705,23 +705,22 @@ func Music(c tb.Context) error {
 	})
 }
 
-
 func DogeSticker(c tb.Context) error {
-Args := GetArgs(c)
-im, err := gg.LoadImage("./modules/assets/IMG_20220227_202434_649_cleanup.jpg")
-check(err)
-dc := gg.NewContext(461, 512)
-dc.SetRGB(1, 1, 1)
-    dc.Clear()
-    dc.SetRGB(0, 0, 0)
-    if err := dc.LoadFontFace("/modules/assets/Swiss 721 Black Extended BT.ttf", 96); err != nil {
-        check(err)
-    }
+	Args := GetArgs(c)
+	im, err := gg.LoadImage("./modules/assets/IMG_20220227_202434_649_cleanup.jpg")
+	check(err)
+	dc := gg.NewContext(461, 512)
+	dc.SetRGB(1, 1, 1)
+	dc.Clear()
+	dc.SetRGB(0, 0, 0)
+	if err := dc.LoadFontFace("/modules/assets/Swiss 721 Black Extended BT.ttf", 96); err != nil {
+		check(err)
+	}
 
-    dc.DrawStringAnchored(Args, 461/2, 512/2, 0.5, 0.5)
-dc.DrawImage(im, 0, 0)
-dc.Clip()
-    dc.SavePNG("out.png")
-c.Reply("Sucess")
-return c.Reply(&tb.Photo{File: tb.File{FileLocal: "out.png"}})
+	dc.DrawStringAnchored(Args, 461/2, 512/2, 0.5, 0.5)
+	dc.DrawImage(im, 0, 0)
+	dc.Clip()
+	dc.SavePNG("out.png")
+	c.Reply("Sucess")
+	return c.Reply(&tb.Photo{File: tb.File{FileLocal: "out.png"}})
 }
