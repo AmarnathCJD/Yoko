@@ -318,7 +318,11 @@ func (user *User) Chat() *tb.Chat {
 }
 
 func EscapeHTML(s string) string {
-	return strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(s, "<", "&lt;"), ">", "&gt;"), "&", "&amp;")
+        for x, y := range map[string]string{"<": "&lt;", ">": "&gt;", "&": "&amp;"} {
+s = strings.ReplaceAll(s, x, y)
+}
+
+	return s
 }
 
 func GetForwardID(c tb.Context) (int64, string, string) {
