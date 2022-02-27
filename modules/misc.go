@@ -718,7 +718,7 @@ dc.SetRGB(1, 1, 1)
     }
 
     dc.DrawStringAnchored(Args, 461/2, 512/2, 0.5, 0.5)
-
+dc.DrawImage(im, 0, 0)
 dc.Clip()
     dc.SavePNG("out.png")
 c.Reply("Sucess")
