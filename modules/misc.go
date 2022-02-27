@@ -247,7 +247,7 @@ func InstaCSearch(c tb.Context) error {
 	defer res.Body.Close()
 	var d map[string]interface{}
 	json.NewDecoder(res.Body).Decode(&d)
-	GraphQL := d["seo_category_infos"].(map[string]interface{})["graphql"].(map[string]interface{})
+	GraphQL := d["graphql"].(map[string]interface{})["user"].(map[string]interface{})
 	var U = ""
 	if name, ok := GraphQL["full_name"]; ok {
 		U += "<b>FullName:</b> " + name.(string) + "\n"
