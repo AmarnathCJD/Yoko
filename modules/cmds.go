@@ -21,7 +21,7 @@ func GatherHandlers() map[string]HANDLE {
 	var HANDLERS = make(map[string]HANDLE)
 	// misc.go
 	HANDLERS["info"] = HANDLE{FUNC: UserInfo}
-	HANDLERS["imdb"] = HANDLE{FUNC: IMDb}
+	HANDLERS["imdb"] = HANDLE{FUNC: Imdb}
 	HANDLERS["crypto"] = HANDLE{FUNC: Crypto}
 	HANDLERS["translate"] = HANDLE{FUNC: Translate}
 	HANDLERS["ud"] = HANDLE{FUNC: Ud}

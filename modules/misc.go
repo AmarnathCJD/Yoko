@@ -235,6 +235,68 @@ func GroupStat(c tb.Context) error {
 	return c.Reply(fmt.Sprintf("<b>Total Messages in %s:</b> <code>%d</code>", c.Chat().Title, c.Message().ID))
 }
 
+func Imdb(c tb.Context) error {
+	Args := GetArgs(c)
+	results, err := imdb.SearchTitle(&Client, Args)
+	if err != nil {
+		log.Print(err)
+		return c.Reply("No results found.")
+	}
+	if len(results) == 0 {
+		return c.Reply("No results found.")
+	}
+	Title, err := imdb.NewTitle(&Client, results[0].ID)
+	if err != nil {
+		log.Print(err)
+		return c.Reply("No results found.")
+	}
+	var Movie string
+	if Title.Name != "" {
+		Movie = "<b>" + Title.Name + "</b>\n"
+	}
+	var Genres string
+	var Directors string
+	var AKA string
+	var Actors string
+	for _, x := range Title.Genres {
+		Genres += x + ", "
+	}
+	for _, x := range Title.Directors {
+		Directors += x.FullName + ", "
+	}
+	q := 1
+	for _, x := range Title.AKA {
+		q++
+		if q > 4 {
+			break
+		}
+		AKA += x + ", "
+	}
+	for _, x := range Title.Actors {
+		Actors += x.FullName + ", "
+	}
+	Genres = strings.TrimSuffix(Genres, ", ")
+	Directors = strings.TrimSuffix(Directors, ", ")
+	AKA = strings.TrimSuffix(AKA, ", ")
+	Actors = strings.TrimSuffix(Actors, ", ")
+	Movie += "<b>Year:</b> <code>" + fmt.Sprint(Title.Year) + "</code>\n"
+	Movie += "<b>Rating:</b> <code>" + fmt.Sprint(Title.Rating) + "</code>\n"
+	Movie += "<b>Genre:</b> " + Genres + "\n"
+	Movie += "<b>Runtime:</b> <code>" + fmt.Sprint(Title.Duration) + "</code>\n"
+	Movie += "<b>Actors:</b> " + Actors + "\n"
+	Movie += "<b>Directors:</b> " + Directors + "\n"
+	Movie += "<b>Plot:</b> <i>" + Title.Description + "</i>\n"
+	Movie += "<b>AKA:</b> " + AKA + "\n"
+	if Title.Poster.URL != "" {
+		return c.Reply(&tb.Photo{File: tb.FromURL(Title.Poster.URL), Caption: Movie})
+	}
+	return c.Reply(Movie)
+}
+
+//movie := fmt.Sprintf("<b><u>%s</u></b>\n<b>Type:</b> %s\n<b>Year:</b> %s\n<b>AKA:</b> %s\n<b>Duration:</b> %s\n<b>Rating:</b> %s/10\n<b>Genre:</b> %s\n\n<code>%s</code>\n<b>Source ---> IMDb</b>", title.Name, title.Type, strconv.Itoa(title.Year), title.AKA[0], title.Duration, title.Rating, strings.Join(title.Genres, ", "), title.Description)
+//menu.Inline(menu.Row(menu.URL("ImDB", fmt.Sprintf("https://m.imdb.com/title/%s/", title.ID))))
+//return c.Reply(&tb.Photo{File: tb.FromURL(title.Poster.URL), Caption: movie}, menu)
+
 func InstaCSearch(c tb.Context) error {
 	Username := GetArgs(c)
 	ApiUrl := `https://www.instagram.com/` + Username + `/?__a=1`
@@ -265,10 +327,11 @@ func InstaCSearch(c tb.Context) error {
 	Followers := GraphQL["edge_followed_by"].(map[string]interface{})["count"].(float64)
 	Following := GraphQL["edge_follow"].(map[string]interface{})["count"].(float64)
 	if bio, ok := GraphQL["biography"]; ok && bio.(string) != "" {
-		U += "<b>Biography:</b> " + EscapeHTML(bio.(string))
+		U += "<b>Biography:</b> " + EscapeHTML(bio.(string)) + "\n"
 	}
+	U += "<b>Verified:</b> " + fmt.Sprint(GraphQL["is_verified"]) + "\n"
 	U += "<b>Following:</b> " + fmt.Sprint(Following) + "\n"
-	U += "<b>Followers:</b> " + fmt.Sprint(Followers) + "\n"
+	U += "<b>Followers:</b> " + fmt.Sprint(Followers)
 	if pfp, ok := GraphQL["profile_pic_url_hd"]; ok {
 		return c.Reply(&tb.Photo{File: tb.FromURL(pfp.(string)), Caption: U}, &tb.SendOptions{DisableWebPagePreview: true})
 	}
@@ -298,18 +361,6 @@ func stringInSlice(a string, list []string) bool {
 }
 
 type mapType map[string]interface{}
-
-func IMDb(c tb.Context) error {
-	client := http.DefaultClient
-	results, _ := imdb.SearchTitle(client, c.Message().Payload)
-	if len(results) == 0 {
-		return c.Reply("No results found!")
-	}
-	title, _ := imdb.NewTitle(client, results[0].ID)
-	movie := fmt.Sprintf("<b><u>%s</u></b>\n<b>Type:</b> %s\n<b>Year:</b> %s\n<b>AKA:</b> %s\n<b>Duration:</b> %s\n<b>Rating:</b> %s/10\n<b>Genre:</b> %s\n\n<code>%s</code>\n<b>Source ---> IMDb</b>", title.Name, title.Type, strconv.Itoa(title.Year), title.AKA[0], title.Duration, title.Rating, strings.Join(title.Genres, ", "), title.Description)
-	menu.Inline(menu.Row(menu.URL("ImDB", fmt.Sprintf("https://m.imdb.com/title/%s/", title.ID))))
-	return c.Reply(&tb.Photo{File: tb.FromURL(title.Poster.URL), Caption: movie}, menu)
-}
 
 func Crypto(c tb.Context) error {
 	resp, err := myClient.Get("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Clitecoin%2Cdogecoin%2Cbabydoge%2Cethereum%2Cxrp&vs_currencies=usd%2Cinr")
