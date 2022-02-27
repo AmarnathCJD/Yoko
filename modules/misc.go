@@ -713,14 +713,14 @@ func DogeSticker(c tb.Context) error {
 	dc.SetRGB(1, 1, 1)
 	dc.Clear()
 	dc.SetRGB(0, 0, 0)
-	if err := dc.LoadFontFace("./modules/assets/Swiss 721 Black Extended BT.ttf", 60); err != nil {
+	if err := dc.LoadFontFace("./modules/assets/Swiss 721 Black Extended BT.ttf", 85); err != nil {
 		check(err)
 	}
 
-	dc.DrawStringAnchored(Args, 461/2, 512/3*3/4, 0.5, 0.5)
+	dc.DrawStringAnchored(Args, (461/2)-40, (512/3*3/4)-20, 0.5, 0.5)
 	dc.DrawRoundedRectangle(0, 0, 461, 512, 0)
 	dc.DrawImage(im, 0, 0)
-	dc.DrawStringAnchored(Args, 461/2, 512/3*3/4, 0.5, 0.5)
+	dc.DrawStringAnchored(Args, (461/2)-40, (512/3*3/4)-20, 0.5, 0.5)
 	dc.Clip()
 	dc.SavePNG("out.png")
 	c.Reply("Sucess")
