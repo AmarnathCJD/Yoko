@@ -137,10 +137,10 @@ func Json(c tb.Context) error {
 		return nil
 	}
 	if c.Message().IsReply() {
-		b, _ := json.Marshal(c.Message().ReplyTo)
+		b, _ := json.MarshalIndent(c.Message().ReplyTo, "", "    ")
 		return c.Reply(string(b))
 	} else {
-		b, _ := json.Marshal(c.Message())
+		b, _ := json.MarshalIndent(c.Message(), "", "    ")
 		return c.Reply(string(b))
 	}
 }
