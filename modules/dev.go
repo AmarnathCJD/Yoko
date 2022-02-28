@@ -136,12 +136,12 @@ func Stats(c tb.Context) error {
 	var Stats = db.GatherStats()
 	Stats += "\n\n"
 	Sys := GetSystemDetails()
-	Stats += "📊 <b>CPU</b>" + Sys.CPU + "\n"
-	Stats += "📊 <b>RAM</b>" + Sys.Memory + "\n"
-	Stats += "📊 <b>Disk</b>" + Sys.Disk + "\n"
-	Stats += "📊 <b>Hostname</b>" + Sys.Hostname + "\n"
-	Stats += "📊 <b>OS</b>" + Sys.Platform + "\n"
-	Stats += "📊 <b>Uptime</b>" + fmt.Sprint(Sys.Uptime) + "\n"
+	Stats += "<b>CPU:</b> " + Sys.CPU + "\n"
+	Stats += "<b>RAM:</b> " + Sys.Memory + "\n"
+	Stats += "<b>Disk:</b> " + Sys.Disk + "\n"
+	Stats += "<b>Hostname:</b> " + Sys.Hostname + "\n"
+	Stats += "<b>OS:</b> " + Sys.Platform + "\n"
+	Stats += "<b>Uptime:</b> " + fmt.Sprint() + "\n"
 	return c.Reply(Stats)
 }
 
@@ -182,7 +182,7 @@ func SendMessage(c tb.Context) error {
 type SysInfo struct {
 	Hostname string
 	Platform string
-	Uptime   uint64
+	Uptime   string
 	CPU      string
 	Memory   string
 	Disk     string
@@ -194,11 +194,11 @@ func GetSystemDetails() SysInfo {
 	vmStat, _ := mem.VirtualMemory()
 	diskStat, _ := disk.Usage("/")
 	return SysInfo{
-		Hostname: hostStat.Hostname,
+		Hostname: hostStat.HostID,
 		Platform: hostStat.Platform,
-		Uptime:   hostStat.Uptime,
+		Uptime:   time.Now().Sub(time.Unix(int64(hostStat.BootTime), 0)).String(),
 		CPU:      cpuStat[0].ModelName + "(" + fmt.Sprint(cpuStat[0].Cores) + ")",
-		Memory:   fmt.Sprintf("%v/%v", vmStat.UsedPercent, vmStat.Total),
-		Disk:     fmt.Sprintf("%v/%v", diskStat.UsedPercent, diskStat.Total),
+		Memory:   fmt.Sprintf("%v/%v", ByteCount(int64(vmStat.Used)), ByteCount(int64(vmStat.Total))),
+		Disk:     fmt.Sprintf("%v/%v", ByteCount(int64(diskStat.Used)), ByteCount(int64(diskStat.Total))),
 	}
 }
