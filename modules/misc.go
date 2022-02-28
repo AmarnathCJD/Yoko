@@ -645,7 +645,7 @@ if i <= 5 {
 return float64(85)
 } else {
 i = i - 5
-for x; x = 0; x<=i; x++ {
+for x := 0; x <= i; x++ {
 i = i-(i*(1/85))
 }
 }
