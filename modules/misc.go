@@ -641,13 +641,13 @@ func DogeSticker(c tb.Context) error {
 }
 
 func GetDimension(i int) float64 {
-if i <= 5 {
-return float64(85)
-} else {
-i = i - 5
-for x := 0; x <= i; x++ {
-i = i-(i*(1/85))
-}
-}
-return float64 (i)
+	if i <= 5 {
+		return float64(85)
+	} else {
+		i = i - 5
+		for x := 0; x <= i; x++ {
+			i = i - (i * (1 / 85))
+		}
+	}
+	return float64(i)
 }
