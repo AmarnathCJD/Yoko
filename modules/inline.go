@@ -100,7 +100,7 @@ func ud_inline(c tb.Context) {
 		return
 	}
 	api := fmt.Sprint("http://api.urbandictionary.com/v0/define?term=", qarg[1])
-	resp, _ := myClient.Get(api)
+	resp, _ := Client.Get(api)
 	var v mapType
 	defer resp.Body.Close()
 	json.NewDecoder(resp.Body).Decode(&v)
@@ -134,7 +134,7 @@ func imdb_inline(c tb.Context) {
 		return
 	}
 	arg := args[1]
-	search, _ := imdb.SearchTitle(myClient, arg)
+	search, _ := imdb.SearchTitle(&Client, arg)
 	results := make(tb.Results, 10)
 	qb := 0
 	for i, result := range search {
@@ -167,7 +167,7 @@ func imdb_inline(c tb.Context) {
 
 func ImdbCB(c tb.Context) error {
 	d := strings.Split(c.Callback().Data, "_")
-	title, err := imdb.NewTitle(myClient, d[2])
+	title, err := imdb.NewTitle(&Client, d[2])
 	check(err)
 	movie := fmt.Sprintf("<b><u>%s</u></b>\n<b>Type:</b> %s\n<b>Year:</b> %s\n<b>AKA:</b> %s\n<b>Duration:</b> %s\n<b>Rating:</b> %s/10\n<b>Genre:</b> %s\n\n<code>%s</code>\n<b>Source ---> IMDb</b>", title.Name, title.Type, strconv.Itoa(title.Year), title.AKA[0], title.Duration, title.Rating, strings.Join(title.Genres, ", "), title.Description)
 	sel.Inline(sel.Row(sel.QueryChat("Search again", "imdb ")))

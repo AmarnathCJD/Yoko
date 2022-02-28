@@ -239,7 +239,7 @@ func GetUser(c tb.Context) (User, string) {
 }
 
 func ResolveUsername(u string) User {
-	resp, err := myClient.Get(ResolveURL + u)
+	resp, err := Client.Get(ResolveURL + u)
 
 	if err != nil {
 		log.Println(err)
