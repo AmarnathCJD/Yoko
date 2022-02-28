@@ -646,10 +646,10 @@ func GetDimension(i int) float64 {
 	} else {
 		p := i + 80
 		for x := 0; x <= i; x++ {
-			p = p - 4
+			p = p - 3
 		}
                 if p < 50 {
-                        p = 50
+                        p = 45
                 }
 		return float64(p)
 	}
