@@ -707,18 +707,13 @@ func Music(c tb.Context) error {
 
 func DogeSticker(c tb.Context) error {
 	Args := GetArgs(c)
-	if len(Args) > 10 {
-		A := string(Args[10])
-		B := strings.SplitN(Args, A, 2)
-		Args = B[0] + "\n" + B[1]
-	}
 	im, err := gg.LoadImage("./modules/assets/IMG_20220227_202434_649_cleanup.jpg")
 	check(err)
 	dc := gg.NewContext(461, 512)
 	dc.SetRGB(1, 1, 1)
 	dc.Clear()
 	dc.SetRGB(0, 0, 0)
-	if err := dc.LoadFontFace("./modules/assets/Swiss 721 Black Extended BT.ttf", 85); err != nil {
+	if err := dc.LoadFontFace("./modules/assets/Swiss 721 Black Extended BT.ttf", 85*(5/len(Args))); err != nil {
 		check(err)
 	}
 	dc.DrawStringAnchored(Args, (461/2)-40, (512/3*3/4)-20, 0.5, 0.5)
