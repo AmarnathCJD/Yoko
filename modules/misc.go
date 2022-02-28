@@ -644,7 +644,7 @@ func GetDimension(i int) float64 {
 	if i <= 5 {
 		return float64(85)
 	} else {
-		p = i + 80
+		p := i + 80
 		for x := 0; x <= i; x++ {
 			p = p - (i * (1 / 85))
 		}
