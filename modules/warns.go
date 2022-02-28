@@ -12,7 +12,6 @@ import (
 var unwarn_btn = sel.Data("Remove warn (admin only)", "remove_user_warning")
 
 func WARN(c tb.Context) error {
-	return c.Reply("soon!")
 	cmd := strings.SplitN(c.Message().Text, " ", 1)[0][1:]
 	if cmd == "dwarn" && !c.Message().IsReply() {
 		c.Reply("You have to reply to a message to delete it and warn the user.")
@@ -23,19 +22,16 @@ func WARN(c tb.Context) error {
 		return nil
 	}
 	if user.ID == int64(BOT_ID) {
-		c.Reply("Do you really think I can do that to myself <b>:p</b>")
-		return nil
+		return c.Reply("Do you really think I can do that to myself <b>:p</b>")
 	}
 	p, err := c.Bot().ChatMemberOf(c.Chat(), user.User())
 	if err != nil {
-		c.Reply(err.Error())
-		return nil
+		return c.Reply(err.Error())
 	}
-	if stringInSlice(string(p.Role), []string{"administrator", "creator"}) {
-		c.Reply("✨ I'm not going to warn an admin!")
-		return nil
+	if p.Role == tb.Administrator || p.Role == tb.Creator {
+		return c.Reply("✨ I'm not going to warn an admin!")
 	}
-	exceeded, limit, count := db.Warn_user(c.Chat().ID, user.ID, extra)
+	exceeded, limit, count := db.WarnUser(c.Chat().ID, user.ID, extra)
 	if extra == string("") {
 		extra = "No reason given."
 	}
@@ -56,11 +52,11 @@ func Set_warn_mode_hn(c tb.Context) error {
 	arg, ctime := c.Message().Payload, int64(0)
 	args := strings.SplitN(arg, " ", 2)
 	if arg == string("") && strings.SplitN(c.Message().Text, " ", 2)[0][1:] == "warnmode" {
-		_, mode, time := db.Get_warn_settings(c.Chat().ID)
+		Settings := db.GetSettings(c.Chat().ID)
 		c.Reply(fmt.Sprintf(`Users who go over the warning limit are currently: <code>%s</code>
 
 To change the warn mode, use this command again, with one of ban/kick/mute/tban/tmute.
-eg: <code>/warnmode ban</code>`, Convert_action(mode, time)))
+eg: <code>/warnmode ban</code>`, Convert_action(Settings.Mode, Settings.Time)))
 		return nil
 	} else if arg == string("") {
 		c.Reply("You need to specify an action to take upon too many warns.")
@@ -81,7 +77,7 @@ eg: <code>/warnmode ban</code>`, Convert_action(mode, time)))
 		return nil
 	}
 	c.Reply(fmt.Sprintf("✨ Updated warning mode to: %s", Convert_action(args[0], int32(ctime))))
-	db.Set_warn_mode(c.Chat().ID, args[0], int(ctime))
+	db.SetWarnMode(c.Chat().ID, args[0], int(ctime))
 	return nil
 }
 
@@ -92,12 +88,12 @@ func Set_warn_limit(c tb.Context) error {
 	}
 	arg := c.Message().Payload
 	if arg == string("") && strings.SplitN(c.Message().Text, " ", 2)[0][1:] == "warnlimit" {
-		limit, mode, time := db.Get_warn_settings(c.Chat().ID)
+		Settings := db.GetWarnSettings(c.Chat().ID)
 		c.Reply(fmt.Sprintf(`The current warn limit is: <code>%d</code>
 After this is exceeded, users will be %s.
 		
 To change the warn limit, use this command again, specifying the amount of warns.
-eg: <code>/warnlimit 6</code>`, limit, Convert_action(mode, time)))
+eg: <code>/warnlimit 6</code>`, Settings.Limit, Convert_action(Settings.Mode, Settings.Time)))
 	} else if arg == string("") {
 		return c.Reply("Please specify how many warns a user should be allowed to receive before being acted upon.")
 	}
@@ -112,7 +108,7 @@ eg: <code>/warnlimit 6</code>`, limit, Convert_action(mode, time)))
 	} else {
 		c.Reply(fmt.Sprintf("Warn limit settings have been updated to <b>%d</b>.", arg))
 		fmt.Println(arg)
-		db.Set_warn_limit(c.Chat().ID, arg)
+		db.SetWarnLimit(c.Chat().ID, arg)
 		return nil
 	}
 }
@@ -122,8 +118,8 @@ func Warnings_info(c tb.Context) error {
 		c.Reply("This command is made to be used in group chats!")
 		return nil
 	}
-	limit, mode, time := db.Get_warn_settings(c.Chat().ID)
-	c.Reply(fmt.Sprintf("There is a %d warning limit in %s. When that limit has been exceeded, the user will be %s.", limit, c.Chat().Title, Convert_action(mode, time)))
+	Settings := db.GetWarnSettings(c.Chat().ID)
+	c.Reply(fmt.Sprintf("There is a %d warning limit in %s. When that limit has been exceeded, the user will be %s.", Settings.Limit, c.Chat().Title, Convert_action(Settings.Mode, Settings.Time)))
 	return nil
 }
 
@@ -140,7 +136,7 @@ func UnWarnCb(c tb.Context) error {
 	data := c.Callback().Data
 	user, _ := strconv.Atoi(data)
 	user_id := int64(user)
-	r := db.Remove_warn(c.Chat().ID, user_id)
+	r := db.RemoveWarn(c.Chat().ID, user_id)
 	if !r {
 		return c.Respond(&tb.CallbackResponse{Text: "This warning has already been removed.", ShowAlert: true})
 	} else {
@@ -151,4 +147,24 @@ func UnWarnCb(c tb.Context) error {
 		}
 		return c.Edit(fmt.Sprintf("Admin %s has removed %s's warning.", c.Sender().FirstName, name))
 	}
+}
+
+func ResetWarns(c tb.Context) error {
+	if c.Message().Private() {
+		c.Reply("This command is made to be used in group chats!")
+		return nil
+	}
+	User, Arg := GetUser(c)
+	if Arg != string("") {
+		Arg = "\n<b>Reason:</b> " + Arg
+	}
+	if Success := db.ResetWarns(c.Chat().ID, User.ID); Success {
+		return c.Reply(fmt.Sprintf("Admin %s has reset %s's warnings.%s", c.Sender().FirstName, User.Mention, Arg))
+	} else {
+		return c.Reply("This user has no warnings to reset.")
+	}
+}
+
+func ResetChatWarns(c tb.Context) error {
+	return c.Reply("soon!")
 }

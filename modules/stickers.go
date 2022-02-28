@@ -141,7 +141,7 @@ func CombotSticker(c tb.Context) error {
 	q := req.URL.Query()
 	q.Add("q", query)
 	req.URL.RawQuery = q.Encode()
-	resp, err := myClient.Do(req)
+	resp, err := Client.Do(req)
 	check(err)
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
@@ -232,7 +232,7 @@ func UploadStick(F tb.File, ext string, new bool, name string, title string, emo
 			return
 		}
 	}()
-	resp, err := myClient.Post(url, writer.FormDataContentType(), pipeReader)
+	resp, err := Client.Post(url, writer.FormDataContentType(), pipeReader)
 	if err != nil {
 		pipeReader.CloseWithError(err)
 		return false, "Error with pipeReader."

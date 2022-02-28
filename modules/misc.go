@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/fogleman/gg"
 	"io/ioutil"
 	"log"
 	"math/rand"
@@ -15,6 +14,8 @@ import (
 	"strings"
 	"time"
 	"unicode"
+
+	"github.com/fogleman/gg"
 
 	"github.com/StalkR/imdb"
 	tg "github.com/TechMinerApps/telegraph"
@@ -295,10 +296,6 @@ func Imdb(c tb.Context) error {
 	return c.Reply(Movie)
 }
 
-//movie := fmt.Sprintf("<b><u>%s</u></b>\n<b>Type:</b> %s\n<b>Year:</b> %s\n<b>AKA:</b> %s\n<b>Duration:</b> %s\n<b>Rating:</b> %s/10\n<b>Genre:</b> %s\n\n<code>%s</code>\n<b>Source ---> IMDb</b>", title.Name, title.Type, strconv.Itoa(title.Year), title.AKA[0], title.Duration, title.Rating, strings.Join(title.Genres, ", "), title.Description)
-//menu.Inline(menu.Row(menu.URL("ImDB", fmt.Sprintf("https://m.imdb.com/title/%s/", title.ID))))
-//return c.Reply(&tb.Photo{File: tb.FromURL(title.Poster.URL), Caption: movie}, menu)
-
 func InstaCSearch(c tb.Context) error {
 	Username := GetArgs(c)
 	ApiUrl := `https://www.instagram.com/` + Username + `/?__a=1`
@@ -351,8 +348,6 @@ func Roll(c tb.Context) error {
 
 ////////////////////////////////// OLD-NEW /////////////////////////////////////////////
 
-var myClient = &http.Client{Timeout: 10 * time.Second}
-
 func isInt(s string) bool {
 	for _, c := range s {
 		if !unicode.IsDigit(c) {
@@ -373,56 +368,9 @@ func stringInSlice(a string, list []string) bool {
 
 type mapType map[string]interface{}
 
-func Crypto(c tb.Context) error {
-	resp, err := myClient.Get("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Clitecoin%2Cdogecoin%2Cbabydoge%2Cethereum%2Cxrp&vs_currencies=usd%2Cinr")
-	if err != nil {
-		c.Reply(err.Error())
-		return nil
-	}
-	defer resp.Body.Close()
-	var r mapType
-	json.NewDecoder(resp.Body).Decode(&r)
-	crypto := fmt.Sprintf("<b>Crypto Prices</b>\n%s: %d$\n%s: %d$\n%s: %f$\n%s: %d$\n%s: %f$", "Bitcoin", int(r["bitcoin"].(map[string]interface{})["usd"].(float64)), "Ethereum", int(r["ethereum"].(map[string]interface{})["usd"].(float64)), "Dogecoin", r["dogecoin"].(map[string]interface{})["usd"].(float64), "Litecoin", int(r["litecoin"].(map[string]interface{})["usd"].(float64)), "Babydoge", r["babydoge"].(map[string]interface{})["usd"].(float64))
-	c.Reply(crypto)
-	return nil
-}
-
-func Translate(c tb.Context) error {
-	text, lang := "", "en"
-	if !c.Message().IsReply() && c.Message().Payload == string("") {
-		c.Reply("Provide the text to be translated!")
-		return nil
-	} else if c.Message().IsReply() {
-		text = c.Message().ReplyTo.Text
-		if c.Message().Payload != string("") {
-			lang = strings.SplitN(c.Message().Payload, " ", 2)[0]
-		}
-	} else if c.Message().Payload != string("") {
-		args := strings.SplitN(c.Message().Payload, " ", 2)
-		if len(args) == 2 && len([]rune(args[0])) == 2 {
-			lang, text = args[0], args[1]
-		} else {
-			text = c.Message().Payload
-		}
-	}
-	url_d := "https://script.google.com/macros/s/AKfycbzFXVfjwX_RB6XkjLpwlMIXl_IVeoqaYnfhRf774xknBAcV00Ef3OPK89uS7TBFppwfVg/exec"
-	data := url.Values{"text": {text}, "source": {""}, "target": {lang}}
-	rq, err := http.PostForm(url_d, data)
-	if err != nil {
-		c.Reply(err.Error())
-		return nil
-	}
-	defer rq.Body.Close()
-	var r mapType
-	json.NewDecoder(rq.Body).Decode(&r)
-	translated := fmt.Sprintf("<b>translated to %s:</b>\n<code>%s</code>", lang, r["result"].(string))
-	c.Reply(translated)
-	return nil
-}
-
 func Ud(c tb.Context) error {
 	api := fmt.Sprint("http://api.urbandictionary.com/v0/define?term=", c.Message().Payload)
-	resp, _ := myClient.Get(api)
+	resp, _ := Client.Get(api)
 	var v mapType
 	defer resp.Body.Close()
 	json.NewDecoder(resp.Body).Decode(&v)
@@ -564,7 +512,7 @@ func Paste(c tb.Context) error {
 	if strings.Contains(c.Message().Payload, "-h") {
 		uri := "https://www.toptal.com/developers/hastebin/documents"
 		req, _ := http.NewRequest("POST", uri, bytes.NewBufferString(strings.ReplaceAll(text, "-h", "")))
-		r, err := myClient.Do(req)
+		r, err := Client.Do(req)
 		check(err)
 		defer r.Body.Close()
 		var bd bson.M
@@ -599,40 +547,7 @@ func YT_search(c tb.Context) error {
 	return nil
 }
 
-func WebSS(c tb.Context) error {
-	query := c.Message().Payload
-	body := strings.NewReader(fmt.Sprintf("url=%s&cookies=0&proxy=0&delay=0&captchaToken=false&device=1&platform=1&browser=1&fFormat=1&width=1280&height=800&uid=NaN", url.QueryEscape(query)))
-	req, err := http.NewRequest("POST", "https://onlinescreenshot.com/", body)
-	check(err)
-	req.Header.Set("Authority", "onlinescreenshot.com")
-	req.Header.Set("Sec-Ch-Ua", "\"Chromium\";v=\"96\", \"Opera\";v=\"82\", \";Not A Brand\";v=\"99\"")
-	req.Header.Set("Accept", "*/*")
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
-	req.Header.Set("X-Requested-With", "XMLHttpRequest")
-	req.Header.Set("Sec-Ch-Ua-Mobile", "?0")
-	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36 OPR/82.0.4227.58")
-	req.Header.Set("Sec-Ch-Ua-Platform", "\"Linux\"")
-	req.Header.Set("Origin", "https://onlinescreenshot.com")
-	req.Header.Set("Sec-Fetch-Site", "same-origin")
-	req.Header.Set("Sec-Fetch-Mode", "cors")
-	req.Header.Set("Sec-Fetch-Dest", "empty")
-	req.Header.Set("Referer", "https://onlinescreenshot.com/")
-	req.Header.Set("Accept-Language", "en-US,en;q=0.9")
-	resp, err := http.DefaultClient.Do(req)
-	check(err)
-	defer resp.Body.Close()
-	var res mapType
-	json.NewDecoder(resp.Body).Decode(&res)
-	if img_url, ok := res["imgUrl"]; ok {
-		if _, ok := img_url.(bool); ok {
-			c.Reply(res["msg"].(string))
-		}
-		return c.Reply(&tb.Photo{File: tb.FromURL(img_url.(string))})
-	}
-	return nil
-}
-
-func Tr2(c tb.Context) error {
+func Translate(c tb.Context) error {
 	text, lang := "", "en"
 	if !c.Message().IsReply() && c.Message().Payload == string("") {
 		c.Reply("Provide the text to be translated!")
@@ -686,7 +601,7 @@ func Music(c tb.Context) error {
 	r, _ := SearchYT(c.Message().Payload, 2)
 	fmt.Println(r.Items[0])
 	ID := r.Items[0].Id.VideoId
-	y := yt.Client{HTTPClient: myClient}
+	y := yt.Client{HTTPClient: &Client}
 	vid, err := y.GetVideo("https://www.youtube.com/watch?v=" + ID)
 	format := vid.Formats.FindByQuality("tiny")
 	stream, _, _ := y.GetStream(vid, format)

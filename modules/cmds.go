@@ -22,7 +22,6 @@ func GatherHandlers() map[string]HANDLE {
 	// misc.go
 	HANDLERS["info"] = HANDLE{FUNC: UserInfo}
 	HANDLERS["imdb"] = HANDLE{FUNC: Imdb}
-	HANDLERS["crypto"] = HANDLE{FUNC: Crypto}
 	HANDLERS["translate"] = HANDLE{FUNC: Translate}
 	HANDLERS["ud"] = HANDLE{FUNC: Ud}
 	HANDLERS["bin"] = HANDLE{FUNC: Bin_check}
@@ -31,8 +30,7 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["id"] = HANDLE{FUNC: GetID}
 	HANDLERS["paste"] = HANDLE{FUNC: Paste}
 	HANDLERS["stat"] = HANDLE{FUNC: GroupStat}
-	HANDLERS["webss"] = HANDLE{FUNC: WebSS}
-	HANDLERS["tr"] = HANDLE{FUNC: Tr2}
+	HANDLERS["tr"] = HANDLE{FUNC: Translate}
 	HANDLERS["chatinfo"] = HANDLE{FUNC: ChatInfo}
 	HANDLERS["music"] = HANDLE{FUNC: Music}
 	HANDLERS["rs"] = HANDLE{FUNC: RsStripe}
