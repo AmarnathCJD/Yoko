@@ -722,6 +722,5 @@ func DogeSticker(c tb.Context) error {
 	dc.DrawStringAnchored(Args, (461/2)-40, (512/3*3/4)-20, 0.5, 0.5)
 	dc.Clip()
 	dc.SavePNG("out.webp")
-	c.Reply("Sucess")
 	return c.Reply(&tb.Sticker{File: tb.File{FileLocal: "out.webp"}})
 }
