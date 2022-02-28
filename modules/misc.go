@@ -631,10 +631,10 @@ func DogeSticker(c tb.Context) error {
 	if err := dc.LoadFontFace("./modules/assets/Swiss 721 Black Extended BT.ttf", GetDimension(len(Args))); err != nil {
 		check(err)
 	}
-	dc.DrawStringAnchored(Args, (461/2)-40, (512/3*3/4)-20, 0.5, 0.5)
+	dc.DrawStringAnchored(Args, (461/2)-44, (512/3*3/4)-20, 0.5, 0.5)
 	dc.DrawRoundedRectangle(0, 0, 461, 512, 0)
 	dc.DrawImage(im, 0, 0)
-	dc.DrawStringAnchored(Args, (461/2)-40, (512/3*3/4)-20, 0.5, 0.5)
+	dc.DrawStringAnchored(Args, (461/2)-44, (512/3*3/4)-20, 0.5, 0.5)
 	dc.Clip()
 	dc.SavePNG("out.webp")
 	return c.Reply(&tb.Sticker{File: tb.File{FileLocal: "out.webp"}})
@@ -646,10 +646,10 @@ func GetDimension(i int) float64 {
 	} else {
 		p := i + 80
 		for x := 0; x <= i; x++ {
-			p = p - 3
+			p = p - 4
 		}
 		if p < 50 {
-			p = 45
+			p = 48
 		}
 		return float64(p)
 	}
