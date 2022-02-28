@@ -196,7 +196,7 @@ func GetSystemDetails() SysInfo {
 	return SysInfo{
 		Hostname: hostStat.HostID,
 		Platform: hostStat.Platform,
-		Uptime:   time.Now().Sub(time.Unix(int64(hostStat.BootTime), 0)).String(),
+		Uptime:   time.Now().Sub(time.Unix(int64(hostStat.Uptime), 0)).String(),
 		CPU:      cpuStat[0].ModelName + "(" + fmt.Sprint(cpuStat[0].Cores) + ")",
 		Memory:   fmt.Sprintf("%v/%v", ByteCount(int64(vmStat.Used)), ByteCount(int64(vmStat.Total))),
 		Disk:     fmt.Sprintf("%v/%v", ByteCount(int64(diskStat.Used)), ByteCount(int64(diskStat.Total))),

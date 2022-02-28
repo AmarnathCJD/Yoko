@@ -4,8 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	tb "gopkg.in/telebot.v3"
 	"os/exec"
+
+	tb "gopkg.in/telebot.v3"
 )
 
 func Exec(c tb.Context) error {
@@ -42,27 +43,27 @@ func MediaInfo(c tb.Context) error {
 		var b []byte
 		Reply := c.Message().ReplyTo
 		if Reply.Audio != nil {
-			b, _ = json.Marshal(Reply.Audio)
+			b, _ = json.MarshalIndent(Reply.Audio, "", "    ")
 		} else if Reply.Document != nil {
-			b, _ = json.Marshal(Reply.Document)
+			b, _ = json.MarshalIndent(Reply.Document, "", "    ")
 		} else if Reply.Animation != nil {
-			b, _ = json.Marshal(Reply.Animation)
+			b, _ = json.MarshalIndent(Reply.Animation, "", "    ")
 		} else if Reply.Video != nil {
-			b, _ = json.Marshal(Reply.Video)
+			b, _ = json.MarshalIndent(Reply.Video, "", "    ")
 		} else if Reply.Photo != nil {
-			b, _ = json.Marshal(Reply.Photo)
+			b, _ = json.MarshalIndent(Reply.Photo, "", "    ")
 		} else if Reply.Sticker != nil {
-			b, _ = json.Marshal(Reply.Sticker)
+			b, _ = json.MarshalIndent(Reply.Sticker, "", "    ")
 		} else if Reply.Voice != nil {
-			b, _ = json.Marshal(Reply.Voice)
+			b, _ = json.MarshalIndent(Reply.Voice, "", "    ")
 		} else if Reply.Contact != nil {
-			b, _ = json.Marshal(Reply.Voice)
+			b, _ = json.MarshalIndent(Reply.Voice, "", "    ")
 		} else if Reply.Location != nil {
-			b, _ = json.Marshal(Reply.Voice)
+			b, _ = json.MarshalIndent(Reply.Voice, "", "    ")
 		} else if Reply.VideoNote != nil {
-			b, _ = json.Marshal(Reply.VideoNote)
+			b, _ = json.MarshalIndent(Reply.VideoNote, "", "    ")
 		} else {
-			b, _ = json.Marshal(Reply)
+			b, _ = json.MarshalIndent(Reply, "", "    ")
 		}
 		return c.Reply("<code>" + string(b) + "</code>")
 	}
