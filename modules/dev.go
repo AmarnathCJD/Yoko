@@ -8,6 +8,10 @@ import (
 	"time"
 
 	"github.com/amarnathcjd/yoko/modules/db"
+	"github.com/shirou/gopsutil/cpu"
+	"github.com/shirou/gopsutil/disk"
+	"github.com/shirou/gopsutil/host"
+	"github.com/shirou/gopsutil/mem"
 	tb "gopkg.in/telebot.v3"
 )
 
@@ -129,7 +133,16 @@ func Stats(c tb.Context) error {
 	if !IsBotAdmin(c.Sender().ID) {
 		return nil
 	}
-	return c.Reply(db.GatherStats())
+	var Stats = db.GatherStats()
+	Stats += "\n\n"
+	Sys := GetSystemDetails()
+	Stats += "📊 <b>CPU</b>" + Sys.CPU + "\n"
+	Stats += "📊 <b>RAM</b>" + Sys.Memory + "\n"
+	Stats += "📊 <b>Disk</b>" + Sys.Disk + "\n"
+	Stats += "📊 <b>Hostname</b>" + Sys.Hostname + "\n"
+	Stats += "📊 <b>OS</b>" + Sys.Platform + "\n"
+	Stats += "📊 <b>Uptime</b>" + fmt.Sprint(Sys.Uptime) + "\n"
+	return c.Reply(Stats)
 }
 
 func Json(c tb.Context) error {
@@ -164,4 +177,28 @@ func SendMessage(c tb.Context) error {
 	}
 	_, err := c.Bot().Send(Chat, Args)
 	return err
+}
+
+type SysInfo struct {
+	Hostname string
+	Platform string
+	Uptime   uint64
+	CPU      string
+	Memory   string
+	Disk     string
+}
+
+func GetSystemDetails() SysInfo {
+	hostStat, _ := host.Info()
+	cpuStat, _ := cpu.Info()
+	vmStat, _ := mem.VirtualMemory()
+	diskStat, _ := disk.Usage("/")
+	return SysInfo{
+		Hostname: hostStat.Hostname,
+		Platform: hostStat.Platform,
+		Uptime:   hostStat.Uptime,
+		CPU:      cpuStat[0].ModelName + "(" + fmt.Sprint(cpuStat[0].Cores) + ")",
+		Memory:   fmt.Sprintf("%v/%v", vmStat.UsedPercent, vmStat.Total),
+		Disk:     fmt.Sprintf("%v/%v", diskStat.UsedPercent, diskStat.Total),
+	}
 }
