@@ -600,6 +600,8 @@ func Music(c tb.Context) error {
 	if len(r.Items) == 0 {
 		return c.Reply("No Results found.")
 	}
+        D, _ := json.MarshalIndent(r.Items[0], "", "   ")
+        c.Reply(string(D))
 	ID := r.Items[0].Id.VideoId
 	y := yt.Client{HTTPClient: &Client}
 	vid, err := y.GetVideo("https://www.youtube.com/watch?v=" + ID)
