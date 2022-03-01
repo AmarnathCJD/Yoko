@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"math/rand"
@@ -606,11 +607,14 @@ func Music(c tb.Context) error {
 	format := vid.Formats.FindByQuality("tiny")
 	stream, _, err := y.GetStream(vid, format)
 	defer stream.Close()
+	outFile, err := os.Create("out.mp3")
+	defer outFile.Close()
+	_, err = io.Copy(outFile, stream)
 	check(err)
 	duration, _ := time.ParseDuration(vid.Duration.String())
 	c.Bot().Notify(c.Chat(), "upload_voice")
 	return c.Reply(&tb.Audio{
-		File:      tb.File{FileReader: stream},
+		File:      tb.File{FileLocal: "out.mp3"},
 		Title:     vid.Title,
 		Performer: vid.Author,
 		FileName:  vid.Title,
