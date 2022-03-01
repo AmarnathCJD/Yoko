@@ -610,7 +610,7 @@ func Music(c tb.Context) error {
 	check(err)
 	duration, _ := time.ParseDuration(vid.Duration.String())
 	c.Bot().Notify(c.Chat(), "upload_voice")
-        sel.Inline(sel.Row(sel.URL("🎶 Play on Youtube", "https://www.youtube.com/watch?v="+ID)))
+	sel.Inline(sel.Row(sel.URL("🎶 Play on Youtube", "https://www.youtube.com/watch?v="+ID)))
 	return c.Reply(&tb.Audio{
 		File:      tb.File{FileLocal: "out.mp3"},
 		Title:     vid.Title,
