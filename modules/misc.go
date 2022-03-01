@@ -600,8 +600,6 @@ func Music(c tb.Context) error {
 	if len(r.Items) == 0 {
 		return c.Reply("No Results found.")
 	}
-	D, _ := json.MarshalIndent(r.Items[0], "", "   ")
-	c.Reply(string(D))
 	ID := r.Items[0].Id.VideoId
 	y := yt.Client{HTTPClient: &Client}
 	vid, err := y.GetVideo("https://www.youtube.com/watch?v=" + ID)
@@ -612,6 +610,7 @@ func Music(c tb.Context) error {
 	defer outFile.Close()
 	_, err = io.Copy(outFile, stream)
 	check(err)
+        fmt.Println(vid.Thumbnails[0].URL)
 	duration, _ := time.ParseDuration(vid.Duration.String())
 	c.Bot().Notify(c.Chat(), "upload_voice")
 	sel.Inline(sel.Row(sel.URL("🎶 Play on Youtube", "https://www.youtube.com/watch?v="+ID)))
@@ -621,7 +620,7 @@ func Music(c tb.Context) error {
 		Performer: vid.Author,
 		FileName:  vid.Title,
 		Duration:  int(duration.Seconds()),
-		Thumbnail: &tb.Photo{File: tb.FromURL(r.Items[0].Thumbnails.Default.Url)},
+		Thumbnail: &tb.Photo{File: tb.FromURL(vid.Thumbnails[0].URL)},
 		Caption:   vid.Title,
 	}, sel)
 }
