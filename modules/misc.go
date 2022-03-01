@@ -597,7 +597,9 @@ func Translate(c tb.Context) error {
 
 func Music(c tb.Context) error {
 	r, _ := SearchYT(c.Message().Payload, 2)
-	fmt.Println(r.Items[0])
+	if len(r) == 0 {
+return c.Reply("No Results found.")
+}
 	ID := r.Items[0].Id.VideoId
 	y := yt.Client{HTTPClient: &Client}
 	vid, err := y.GetVideo("https://www.youtube.com/watch?v=" + ID)
@@ -617,7 +619,7 @@ func Music(c tb.Context) error {
 		Performer: vid.Author,
 		FileName:  vid.Title,
 		Duration:  int(duration.Seconds()),
-		Thumbnail: tb.Photo{File: tb.FromURL(vid.Thumbnails[0].URL)},
+		Thumbnail: &tb.Photo{File: tb.FromURL(vid.Thumbnails[0].URL)},
 		Caption:   vid.Title,
 	}, sel)
 }
