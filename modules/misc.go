@@ -152,9 +152,6 @@ func ChatInfo(c tb.Context) error {
 		if chat.InviteLink != "" {
 			msg += fmt.Sprintf("\n<b>Invite Link:</b> <a href='%s'>%s</a>", chat.InviteLink, "link")
 		}
-		if chat.PinnedMessage != nil {
-			msg += fmt.Sprintf("\n<b>Pinned Message:</b> <code>%s</code>", chat.PinnedMessage.Text)
-		}
 		if chat.StickerSet != "" {
 			msg += fmt.Sprintf("\n<b>Sticker Set Name:</b> %s", chat.StickerSet)
 		}
