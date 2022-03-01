@@ -655,5 +655,4 @@ func GetDimension(i int) float64 {
 		}
 		return float64(p)
 	}
-	return float64(i)
 }
