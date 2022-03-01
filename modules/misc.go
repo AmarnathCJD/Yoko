@@ -597,7 +597,7 @@ func Translate(c tb.Context) error {
 
 func Music(c tb.Context) error {
 	r, _ := SearchYT(c.Message().Payload, 2)
-	if len(r) == 0 {
+	if len(r.Items) == 0 {
 return c.Reply("No Results found.")
 }
 	ID := r.Items[0].Id.VideoId
