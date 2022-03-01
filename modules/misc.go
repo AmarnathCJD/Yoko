@@ -604,15 +604,13 @@ func Music(c tb.Context) error {
 	y := yt.Client{HTTPClient: &Client}
 	vid, err := y.GetVideo("https://www.youtube.com/watch?v=" + ID)
 	format := vid.Formats.FindByQuality("tiny")
-	stream, _, _ := y.GetStream(vid, format)
-	b, _ := ioutil.ReadAll(stream)
-	ioutil.WriteFile("t.mp3", b, 0666)
-	stream.Close()
+	stream, _, err := y.GetStream(vid, format)
+	defer stream.Close()
 	check(err)
 	duration, _ := time.ParseDuration(vid.Duration.String())
 	c.Bot().Notify(c.Chat(), "upload_voice")
 	return c.Reply(&tb.Audio{
-		File:      tb.File{FileLocal: "t.mp3"},
+		File:      tb.File{FileReader: stream},
 		Title:     vid.Title,
 		Performer: vid.Author,
 		FileName:  vid.Title,
