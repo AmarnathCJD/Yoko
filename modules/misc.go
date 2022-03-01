@@ -610,16 +610,16 @@ func Music(c tb.Context) error {
 	check(err)
 	duration, _ := time.ParseDuration(vid.Duration.String())
 	c.Bot().Notify(c.Chat(), "upload_voice")
-	fmt.Println(vid.Thumbnails)
+        sel.Inline(sel.Row(sel.URL("🎶 Play on Youtube", "https://www.youtube.com/watch?v="+ID)))
 	return c.Reply(&tb.Audio{
 		File:      tb.File{FileLocal: "out.mp3"},
 		Title:     vid.Title,
 		Performer: vid.Author,
 		FileName:  vid.Title,
 		Duration:  int(duration.Seconds()),
-		Thumbnail: &tb.Photo{File: tb.FromURL(vid.Thumbnails[len(vid.Thumbnails)-1].URL)},
+		Thumbnail: &tb.Photo{File: tb.FromURL(vid.Thumbnails[0].URL)},
 		Caption:   vid.Title,
-	})
+	}, sel)
 }
 
 func DogeSticker(c tb.Context) error {
