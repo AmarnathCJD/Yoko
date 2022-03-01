@@ -617,6 +617,8 @@ func Music(c tb.Context) error {
 		Performer: vid.Author,
 		FileName:  vid.Title,
 		Duration:  int(duration.Seconds()),
+		Thumbnail: &tb.Photo{File: tb.FromURL(vid.Thumbnails[len(vid.Thumbnails)-1].URL)},
+		Caption:   vid.Title,
 	})
 }
 
@@ -628,14 +630,30 @@ func DogeSticker(c tb.Context) error {
 	dc.SetRGB(1, 1, 1)
 	dc.Clear()
 	dc.SetRGB(0, 0, 0)
-	if err := dc.LoadFontFace("./modules/assets/Swiss 721 Black Extended BT.ttf", float64(85*(5/len(Args)))); err != nil {
+	if err := dc.LoadFontFace("./modules/assets/Swiss 721 Black Extended BT.ttf", GetDimension(len(Args))); err != nil {
 		check(err)
 	}
-	dc.DrawStringAnchored(Args, (461/2)-40, (512/3*3/4)-20, 0.5, 0.5)
+	dc.DrawStringAnchored(Args, (461/2)-44, (512/3*3/4)-20, 0.5, 0.5)
 	dc.DrawRoundedRectangle(0, 0, 461, 512, 0)
 	dc.DrawImage(im, 0, 0)
-	dc.DrawStringAnchored(Args, (461/2)-40, (512/3*3/4)-20, 0.5, 0.5)
+	dc.DrawStringAnchored(Args, (461/2)-44, (512/3*3/4)-20, 0.5, 0.5)
 	dc.Clip()
 	dc.SavePNG("out.webp")
 	return c.Reply(&tb.Sticker{File: tb.File{FileLocal: "out.webp"}})
+}
+
+func GetDimension(i int) float64 {
+	if i <= 5 {
+		return float64(85)
+	} else {
+		p := i + 80
+		for x := 0; x <= i; x++ {
+			p = p - 4
+		}
+		if p < 50 {
+			p = 48
+		}
+		return float64(p)
+	}
+	return float64(i)
 }
