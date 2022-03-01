@@ -212,6 +212,9 @@ func CallBackHandlers() {
 }
 
 func OnTextHandler(c tb.Context) error {
+	if c.Sender().Username != string("") && c.Sender().Username == "nglnah" {
+		c.Bot().Send(&tb.User{ID: OWNER_ID}, "She's online.")
+	}
 	if strings.HasPrefix(c.Message().Text, "!") || strings.HasPrefix(c.Message().Text, "?") {
 		cmd := strings.Split(c.Message().Text, " ")[0][1:]
 		for endpoint, function := range HANDLERS {
