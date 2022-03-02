@@ -371,7 +371,7 @@ func UDict(c tb.Context) error {
 }
 
 func VotingCB(c tb.Context) error {
-return c.Respond(&tb.CallbackResponse{Text: "soon!", ShowAlert: true})
+	return c.Respond(&tb.CallbackResponse{Text: "soon!", ShowAlert: true})
 }
 
 func BinCheck(c tb.Context) error {
