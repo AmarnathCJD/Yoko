@@ -370,6 +370,10 @@ func UDict(c tb.Context) error {
 	return c.Reply(U, sel)
 }
 
+func VotingCB(c tb.Context) error {
+return c.Respond(&tb.CallbackResponse{Text: "soon!", ShowAlert: true})
+}
+
 func BinCheck(c tb.Context) error {
 	Args := GetArgs(c)
 	if Args == "" {
