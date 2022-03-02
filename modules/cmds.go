@@ -23,7 +23,7 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["info"] = HANDLE{FUNC: UserInfo}
 	HANDLERS["imdb"] = HANDLE{FUNC: Imdb}
 	HANDLERS["translate"] = HANDLE{FUNC: Translate}
-	HANDLERS["ud"] = HANDLE{FUNC: Ud}
+	HANDLERS["ud"] = HANDLE{FUNC: UDict}
 	HANDLERS["bin"] = HANDLE{FUNC: Bin_check}
 	HANDLERS["telegraph"] = HANDLE{FUNC: telegraph}
 	HANDLERS["math"] = HANDLE{FUNC: Math}

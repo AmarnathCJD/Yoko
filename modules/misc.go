@@ -344,6 +344,30 @@ func Roll(c tb.Context) error {
 	return c.Reply(&tb.Dice{Type: "🎲", Value: rand.Intn(6)})
 }
 
+func UDict(c tb.Context) error {
+	Args := GetArgs(c)
+	if Args == "" {
+		return c.Reply("Please specify a word.")
+	}
+	ApiUrl := "https://api.urbandictionary.com/v0/define?term=" + url.QueryEscape(Args)
+	req, _ := http.NewRequest("GET", ApiUrl, nil)
+	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36")
+	res, err := Client.Do(req)
+	check(err)
+	defer res.Body.Close()
+	var d UrbanDict
+	json.NewDecoder(res.Body).Decode(&d)
+	if d.List == nil {
+		return c.Reply("No such word found.")
+	}
+	var U = ""
+	U += "<b>Word:</b> " + d.List[0].Word + "\n"
+	U += "<b>Definition:</b> " + d.List[0].Definition + "\n"
+	U += "<b>Example:</b> " + d.List[0].Example
+	return c.Reply(U)
+
+}
+
 ////////////////////////////////// OLD-NEW /////////////////////////////////////////////
 
 func isInt(s string) bool {
@@ -366,7 +390,7 @@ func stringInSlice(a string, list []string) bool {
 
 type mapType map[string]interface{}
 
-func Ud(c tb.Context) error {
+func Usd(c tb.Context) error {
 	api := fmt.Sprint("http://api.urbandictionary.com/v0/define?term=", c.Message().Payload)
 	resp, _ := Client.Get(api)
 	var v mapType
