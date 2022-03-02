@@ -34,7 +34,7 @@ func AFK(c tb.Context) bool {
 		if c.Message().IsReply() {
 			user_id = int64(c.Message().ReplyTo.Sender.ID)
 		} else {
-                        if c.Media() != nil {
+                        if c.Text() == string("") {
 return false
 }
 			for _, e := range c.Message().Entities {
