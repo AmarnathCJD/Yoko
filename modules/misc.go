@@ -415,7 +415,7 @@ func Telegraph(c tb.Context) error {
 	switch ToUpload.(type) {
 	case string:
 		ApiUrl := "https://api.telegra.ph/createPage"
-		req, _ := http.NewRequest("POST", ApiUrl, strings.NewReader(`{"access_token":"`+TelegraphToken+`","title":"`+c.Message().Sender.Username+`","author_name":"`+c.Message().Sender.Username+`","content":"`+ToUpload.(string)+`"}`))
+		req, _ := http.NewRequest("GET", ApiUrl, strings.NewReader(`{"access_token":"`+TelegraphToken+`","title":"`+c.Message().Sender.Username+`","author_name":"`+c.Message().Sender.Username+`","content":"`+ToUpload.(string)+`"}`))
 		req.Header.Add("Content-Type", "application/json")
 		resp, err := Client.Do(req)
 		check(err)
