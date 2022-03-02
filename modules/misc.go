@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"log"
 	"math/rand"
+	"mime/multipart"
 	"net/http"
 	"net/url"
 	"os"
@@ -425,6 +426,36 @@ func Telegraph(c tb.Context) error {
 	case tb.File:
 		return c.Reply(ToUpload.(tb.File).FileID)
 	}
+	return nil
+}
+
+func AuddIO(c tb.Context) error {
+	if !c.Message().IsReply() {
+		return c.Reply("reply to an audio message!")
+	} else if c.Message().ReplyTo.Audio == nil {
+		return c.Reply("reply to an audio message!")
+	}
+	c.Bot().Download(&c.Message().ReplyTo.Audio.File, "audio.mp3")
+	pipeReader, pipeWriter := io.Pipe()
+	writer := multipart.NewWriter(pipeWriter)
+	go func() {
+		defer pipeWriter.Close()
+		if err := addFileToWriter(writer, "audio", "audio.mp3", "audio.mp3"); err != nil {
+			pipeWriter.CloseWithError(err)
+		}
+		writer.WriteField("api_token", "test")
+		writer.WriteField("return", "apple_music,spotify")
+		writer.Close()
+	}()
+	resp, err := Client.Post("https://api.audd.io", writer.FormDataContentType(), pipeReader)
+	if err != nil {
+		return c.Reply(err.Error())
+	}
+	defer resp.Body.Close()
+	var d mapType
+	json.NewDecoder(resp.Body).Decode(&d)
+	fmt.Println(d)
+
 	return nil
 }
 

@@ -40,6 +40,7 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["roll"] = HANDLE{FUNC: Roll}
 	HANDLERS["json"] = HANDLE{FUNC: Json}
 	HANDLERS["doge"] = HANDLE{FUNC: DogeSticker}
+	HANDLERS["audd"] = HANDLE{FUNC: AuddIO}
 	// start.go
 	HANDLERS["start"] = HANDLE{FUNC: Start}
 	HANDLERS["help"] = HANDLE{FUNC: Help_Menu}
