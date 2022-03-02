@@ -15,8 +15,10 @@ func Purge(c tb.Context) error {
 		ID := i
 		go func() {
 			err := c.Bot().Delete(&tb.Message{ID: ID, Chat: c.Message().Chat})
-			if err.Error() == "telegram: message can't be deleted (400)" {
-				CanDelete = false
+			if err != nil {
+				if err.Error() == "telegram: message can't be deleted (400)" {
+					CanDelete = false
+				}
 			}
 		}()
 	}
@@ -58,8 +60,10 @@ func PurgeTo(c tb.Context) error {
 		ID := i
 		go func() {
 			err := c.Bot().Delete(&tb.Message{ID: ID, Chat: c.Message().Chat})
-			if err.Error() == "telegram: message can't be deleted (400)" {
-				CanDelete = false
+			if err != nil {
+				if err.Error() == "telegram: message can't be deleted (400)" {
+					CanDelete = false
+				}
 			}
 		}()
 	}
