@@ -419,7 +419,7 @@ func Telegraph(c tb.Context) error {
 		resp, err := Client.Do(req)
 		check(err)
 		defer resp.Body.Close()
-		var d TGraph
+		var d mapType
 		json.NewDecoder(resp.Body).Decode(&d)
 		fmt.Println(d)
 	case tb.File:
