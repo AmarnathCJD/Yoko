@@ -139,9 +139,8 @@ func Stats(c tb.Context) error {
 	Stats += "<b>CPU:</b> " + Sys.CPU + "\n"
 	Stats += "<b>RAM:</b> " + Sys.Memory + "\n"
 	Stats += "<b>Disk:</b> " + Sys.Disk + "\n"
-	Stats += "<b>Hostname:</b> " + Sys.Hostname + "\n"
+	Stats += "<b>Hostname:</b> heroku" + Sys.Hostname + "\n"
 	Stats += "<b>OS:</b> " + Sys.Platform + "\n"
-	Stats += "<b>Uptime:</b> " + fmt.Sprint() + "\n"
 	return c.Reply(Stats)
 }
 
