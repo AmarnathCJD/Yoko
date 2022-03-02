@@ -422,7 +422,7 @@ func Telegraph(c tb.Context) error {
 		defer resp.Body.Close()
 		var d TGraph
 		json.NewDecoder(resp.Body).Decode(&d)
-		return c.Reply(d.Result.URL)
+		fmt.Println(d)
 	case tb.File:
 		return c.Reply(ToUpload.(tb.File).FileID)
 	}
