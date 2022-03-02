@@ -20,7 +20,7 @@ var (
 )
 
 func AddSticker(c tb.Context) error {
-	pack, count, name := db.Get_user_pack(c.Sender().ID, "png")
+	Pack, Count := db.GetPack(c.Sender().ID, "png")
 	var Emoji string
 	if c.Message().Payload != string("") {
 		Emoji = c.Message().Payload
@@ -63,73 +63,73 @@ func AddSticker(c tb.Context) error {
 			PrePre = "tgp"
 			Prefix = "Animated"
 		}
-		pack, count, name = db.Get_user_pack(c.Sender().ID, Ext)
+		Pack, Count = db.GetPack(c.Sender().ID, Ext)
 		title := fmt.Sprintf("%s's %s kang pack", c.Sender().FirstName, Prefix)
-		if !pack {
+		if Pack.Name == "" {
 			Name := fmt.Sprintf("%s%d_%d_by_missmikabot", PrePre, c.Sender().ID, 1)
 			err, er := UploadStick(Sticker.File, Ext, true, Name, title, Emoji, c.Sender().ID)
 			if err {
-				db.Add_sticker(c.Sender().ID, Name, title, Ext)
+				db.AddSticker(c.Sender().ID, Name, title, Ext)
 				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", Name))))
 				return c.Reply(fmt.Sprintf("Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
 			} else {
 				return c.Reply("Failed to kang, " + er)
 			}
-		} else if count <= 120 {
-			stickerset, _ := c.Bot().StickerSet(name)
-			err, er := UploadStick(Sticker.File, Ext, false, name, stickerset.Title, Emoji, c.Sender().ID)
+		} else if Pack.Count <= 120 {
+			stickerset, _ := c.Bot().StickerSet(Pack.Name)
+			err, er := UploadStick(Sticker.File, Ext, false, Pack.Name, stickerset.Title, Emoji, c.Sender().ID)
 			if !err {
 				return c.Reply("Failed to kang, " + er)
 			} else {
 				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", stickerset.Name))))
 				c.Reply(fmt.Sprintf("Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", stickerset.Name, Emoji), sel)
-				db.Update_count(c.Sender().ID, stickerset.Name, Ext)
+				db.UpdateCount(c.Sender().ID, Pack.Type)
 				return nil
 			}
 		} else {
-			Name := fmt.Sprintf("%s%d_%d_by_missmikabot", PrePre, c.Sender().ID, count)
+			Name := fmt.Sprintf("%s%d_%d_by_missmikabot", PrePre, c.Sender().ID, Count)
 			err, er := UploadStick(Sticker.File, Ext, true, Name, title, Emoji, c.Sender().ID)
 			if !err {
 				return c.Reply("Failed to kang, " + er)
 			} else {
 				sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", Name))))
 				c.Reply(fmt.Sprintf("Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
-				db.Add_sticker(c.Sender().ID, Name, title, Ext)
+				db.AddSticker(c.Sender().ID, Name, title, Ext)
 				return nil
 			}
 		}
 
 	}
 	title := fmt.Sprintf("%s's kang pack", c.Sender().FirstName)
-	if !pack {
+	if Pack.Name == "" {
 		Name := fmt.Sprintf("pns%d_%d_by_missmikabot", c.Sender().ID, 1)
 		err := c.Bot().CreateStickerSet(c.Sender(), tb.StickerSet{Name: Name, Title: fmt.Sprintf("%s's kang pack", c.Sender().FirstName), Stickers: []tb.Sticker{*Sticker}, PNG: &Sticker.File, Emojis: Emoji, Video: false, Animated: false})
 		if err == nil {
-			db.Add_sticker(c.Sender().ID, Name, title, "png")
+			db.AddSticker(c.Sender().ID, Name, title, "png")
 			sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", Name))))
 			c.Reply(fmt.Sprintf("Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
 		} else {
 			c.Reply(err.Error())
 		}
-	} else if count <= 120 {
-		stickerset, _ := c.Bot().StickerSet(name)
-		err := c.Bot().AddSticker(c.Sender(), tb.StickerSet{Name: name, Title: stickerset.Title, Stickers: stickerset.Stickers, PNG: &Sticker.File, Emojis: Emoji})
+	} else if Pack.Count <= 120 {
+		stickerset, _ := c.Bot().StickerSet(Pack.Name)
+		err := c.Bot().AddSticker(c.Sender(), tb.StickerSet{Name: Pack.Name, Title: stickerset.Title, Stickers: stickerset.Stickers, PNG: &Sticker.File, Emojis: Emoji})
 		if err != nil {
 			c.Reply(err.Error())
 		} else {
 			sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", stickerset.Name))))
 			c.Reply(fmt.Sprintf("Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", stickerset.Name, Emoji), sel)
-			db.Update_count(c.Sender().ID, stickerset.Name, "png")
+			db.UpdateCount(c.Sender().ID, "png")
 		}
 	} else {
-		Name := fmt.Sprintf("pns%d_%d_by_missmikabot", c.Sender().ID, count)
+		Name := fmt.Sprintf("pns%d_%d_by_missmikabot", c.Sender().ID, Count)
 		err := c.Bot().CreateStickerSet(c.Sender(), tb.StickerSet{Name: Name, Title: fmt.Sprintf("%s's kang pack", c.Sender().FirstName), Stickers: []tb.Sticker{*Sticker}, PNG: &Sticker.File, Emojis: Emoji})
 		if err != nil {
 			c.Reply(err.Error())
 		} else {
 			sel.Inline(sel.Row(sel.URL("View Pack", fmt.Sprintf("http://t.me/addstickers/%s", Name))))
 			c.Reply(fmt.Sprintf("Sticker successfully added to <b><a href='http://t.me/addstickers/%s'>Pack</a></b>\nEmoji is: %s", Name, Emoji), sel)
-			db.Add_sticker(c.Sender().ID, Name, title, "png")
+			db.AddSticker(c.Sender().ID, Name, title, "png")
 		}
 	}
 	return nil
@@ -174,23 +174,16 @@ func CombotSticker(c tb.Context) error {
 }
 
 func MyPacks(c tb.Context) error {
-	packs := db.Get_user_packs(c.Sender().ID)
+	packs := db.GetUserPacks(c.Sender().ID)
 	if len(packs) == 0 {
 		c.Reply("You have not created any sticker packs, use <code>/kang</code> to save stickers!")
 		return nil
 	} else {
-		fmt.Println(packs)
 		msg := "<b>Here are your kang packs.</b>"
 		q := 0
 		for _, x := range packs {
 			q++
-			Addon := ""
-			if x.Ext == "tgs" {
-				Addon = "- Animated"
-			} else if x.Ext == "webm" {
-				Addon = "- Video"
-			}
-			msg += fmt.Sprintf("\n<b>%d. ~</b> <a href='http://t.me/addstickers/%s'>%s</a> %s", q, x.Name, x.Title, Addon)
+			msg += fmt.Sprintf("\n<b>%d. ~</b> <a href='http://t.me/addstickers/%s'>%s</a>", q, x.Name, x.Title)
 		}
 		c.Reply(msg)
 	}

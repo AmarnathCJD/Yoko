@@ -539,10 +539,6 @@ func Paste(c tb.Context) error {
 	return nil
 }
 
-func YT_search(c tb.Context) error {
-	return nil
-}
-
 func Translate(c tb.Context) error {
 	text, lang := "", "en"
 	if !c.Message().IsReply() && c.Message().Payload == string("") {
