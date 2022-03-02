@@ -22,11 +22,11 @@ import (
 	tb "gopkg.in/telebot.v3"
 )
 
-var(
- b = bot.Bot
- BOT_SUDO = []int{}
- upvote = sel.Data("upvoteing", "thumbs_up")
- downvote = sel.Data("downvoteing", "thumbs_down")
+var (
+	b        = bot.Bot
+	BOT_SUDO = []int{}
+	upvote   = sel.Data("upvoteing", "thumbs_up")
+	downvote = sel.Data("downvoteing", "thumbs_down")
 )
 
 type FF struct {
