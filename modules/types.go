@@ -144,6 +144,9 @@ type AuddApi struct {
 					URL    string `json:"url"`
 				} `json:"images"`
 			} `json:"album"`
+			ExternalUrls struct {
+				Spotify string `json:"spotify"`
+			} `json:"external_urls"`
 		} `json:"spotify"`
 	} `json:"result"`
 }

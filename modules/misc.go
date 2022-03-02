@@ -454,21 +454,25 @@ func AuddIO(c tb.Context) error {
 	defer resp.Body.Close()
 	var d AuddApi
 	json.NewDecoder(resp.Body).Decode(&d)
+	fmt.Println(d)
 	var U = ""
 	U += "<b>Title:</b> " + d.Result.Title + "\n"
 	U += "<b>Artist:</b> " + d.Result.Artist + "\n"
 	U += "<b>Album:</b> " + d.Result.Album + "\n"
 	U += "<b>Release Date:</b> " + d.Result.ReleaseDate + "\n"
 	U += "<b>Label:</b> " + d.Result.Label + "\n"
+	if d.Result.Spotify.ExternalUrls.Spotify != "" {
+		sel.Inline(sel.Row(sel.URL(d.Result.Spotify.Album.Name, d.Result.Spotify.ExternalUrls.Spotify)))
+	}
 	if d.Result.Spotify.Album.Name != "" {
-		return c.Reply(&tb.Photo{File: tb.FromURL(d.Result.Spotify.Album.Images[0].URL), Caption: U})
+		return c.Reply(&tb.Photo{File: tb.FromURL(d.Result.Spotify.Album.Images[0].URL), Caption: U}, sel)
 	} else if d.Result.AppleMusic.Artwork.URL != "" {
 		Url := d.Result.AppleMusic.Artwork.URL
 		Url = strings.Replace(Url, "{w}", fmt.Sprint(d.Result.AppleMusic.Artwork.Width), 1)
 		Url = strings.Replace(Url, "{h}", fmt.Sprint(d.Result.AppleMusic.Artwork.Height), 1)
-		return c.Reply(&tb.Photo{File: tb.FromURL(Url), Caption: U})
+		return c.Reply(&tb.Photo{File: tb.FromURL(Url), Caption: U}, sel)
 	} else {
-		return c.Reply(U)
+		return c.Reply(U, sel)
 	}
 
 }
