@@ -12,7 +12,7 @@ import (
 )
 
 func AFK(c tb.Context) bool {
-	if c.Sender() == nil && c.Message().SenderChat() == nil {
+	if c.Sender() == nil && c.Message().SenderChat== nil {
 		return false
 	}
 	prefix := strings.SplitN(c.Text(), " ", 2)
