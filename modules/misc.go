@@ -610,7 +610,7 @@ func Music(c tb.Context) error {
 	defer outFile.Close()
 	_, err = io.Copy(outFile, stream)
 	check(err)
-	fmt.Println(vid.Thumbnails[0].URL)
+	fmt.Println(r.Items[0].Snippet.Thumbnails.Default.Url)
 	duration, _ := time.ParseDuration(vid.Duration.String())
 	c.Bot().Notify(c.Chat(), "upload_voice")
 	sel.Inline(sel.Row(sel.URL("🎶 Play on Youtube", "https://www.youtube.com/watch?v="+ID)))
