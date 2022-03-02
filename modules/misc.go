@@ -436,7 +436,7 @@ func Telegraph(c tb.Context) error {
 func AuddIO(c tb.Context) error {
 	if !c.Message().IsReply() {
 		return c.Reply("reply to an audio message!")
-	} else if c.Message().ReplyTo.Audio == nil || c.Message().ReplyTo.Video == nil {
+	} else if c.Message().ReplyTo.Audio == nil && c.Message().ReplyTo.Video == nil {
 		return c.Reply("reply to an audio/video message!")
 	}
 	if c.Message().ReplyTo.Audio != nil {
