@@ -12,11 +12,11 @@ import (
 )
 
 func AFK(c tb.Context) bool {
-	if c.Sender() == nil {
+	if c.Sender() == nil && c.SenderChat() == nil {
 		return false
 	}
 	prefix := strings.SplitN(c.Text(), " ", 2)
-	if stringInSlice(strings.ToLower(prefix[0]), []string{"/afk", "brb"}) {
+	if c.Text() != string("") && stringInSlice(strings.ToLower(prefix[0]), []string{"/afk", "brb"}) {
 		reason := ""
 		if len(prefix) == 2 {
 			reason = prefix[1]
@@ -34,6 +34,9 @@ func AFK(c tb.Context) bool {
 		if c.Message().IsReply() {
 			user_id = int64(c.Message().ReplyTo.Sender.ID)
 		} else {
+                        if c.Media() != nil {
+return false
+}
 			for _, e := range c.Message().Entities {
 				if e.Type == tb.EntityMention || e.Type == tb.EntityTMention {
 					if e.User == nil {
