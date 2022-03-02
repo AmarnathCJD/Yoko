@@ -464,7 +464,7 @@ func AuddIO(c tb.Context) error {
 	U += "<b>Release Date:</b> " + d.Result.ReleaseDate + "\n"
 	U += "<b>Label:</b> " + d.Result.Label + "\n"
 	if d.Result.Spotify.ExternalUrls.Spotify != "" {
-		sel.Inline(sel.Row(sel.URL(d.Result.Spotify.Album.Name, d.Result.Spotify.ExternalUrls.Spotify)))
+		sel.Inline(sel.Row(sel.URL("🎶 Open in Spotify", d.Result.Spotify.ExternalUrls.Spotify)))
 	}
 	if d.Result.Spotify.Album.Name != "" {
 		return c.Reply(&tb.Photo{File: tb.FromURL(d.Result.Spotify.Album.Images[0].URL), Caption: U}, sel)
