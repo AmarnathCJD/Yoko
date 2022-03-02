@@ -209,6 +209,8 @@ func CallBackHandlers() {
 	bot.Bot.Handle(&imdb_btn, ImdbCB)
 	bot.Bot.Handle(&ChatBTN, ChatbotCB)
 	bot.Bot.Handle(&anon_button, AnonCB)
+        bot.Bot.Handle(&upvote, VotingCB)
+        bot.Bot.Handle(&downvote, VotingCB)
 	bot.Bot.Handle(tb.OnAddedToGroup, AddedToGroupHandler)
 }
 
