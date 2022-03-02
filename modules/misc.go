@@ -440,7 +440,7 @@ func AuddIO(c tb.Context) error {
 	writer := multipart.NewWriter(pipeWriter)
 	go func() {
 		defer pipeWriter.Close()
-		if err := addFileToWriter(writer, "audio", "audio.mp3", "audio.mp3"); err != nil {
+		if err := addFileToWriter(writer, "audio.mp3", "file", "audio.mp3"); err != nil {
 			pipeWriter.CloseWithError(err)
 		}
 		writer.WriteField("api_token", "test")
