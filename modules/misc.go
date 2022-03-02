@@ -394,6 +394,41 @@ func BinCheck(c tb.Context) error {
 	return c.Reply(U)
 }
 
+func Telegraph(c tb.Context) error {
+	var ToUpload interface{}
+	Args := GetArgs(c)
+	if Args == "" {
+		if c.Message().ReplyTo.Photo != nil {
+			ToUpload = c.Message().ReplyTo.Photo.File
+		} else if c.Message().ReplyTo.Document != nil {
+			ToUpload = c.Message().ReplyTo.Document.File
+		} else if c.Message().ReplyTo.Sticker != nil {
+			ToUpload = c.Message().ReplyTo.Sticker.File
+		} else if c.Message().ReplyTo.Video != nil {
+			ToUpload = c.Message().ReplyTo.Video.File
+		} else {
+			return c.Reply("Please specify a file to upload.")
+		}
+	} else {
+		ToUpload = Args
+	}
+	switch ToUpload.(type) {
+	case string:
+		ApiUrl := "https://api.telegra.ph/createPage"
+		req, _ := http.NewRequest("POST", ApiUrl, strings.NewReader(`{"access_token":"`+TelegraphToken+`","title":"`+c.Message().Sender.Username+`","author_name":"`+c.Message().Sender.Username+`","content":"`+ToUpload.(string)+`"}`))
+		req.Header.Add("Content-Type", "application/json")
+		resp, err := Client.Do(req)
+		check(err)
+		defer resp.Body.Close()
+		var d TGraph
+		json.NewDecoder(resp.Body).Decode(&d)
+		return c.Reply(d.Result.URL)
+	case tb.File:
+		return c.Reply(ToUpload.(tb.File).FileID)
+	}
+	return nil
+}
+
 ////////////////////////////////// OLD-NEW /////////////////////////////////////////////
 
 func isInt(s string) bool {
@@ -416,7 +451,7 @@ func stringInSlice(a string, list []string) bool {
 
 type mapType map[string]interface{}
 
-func telegraph(c tb.Context) error {
+func telesgraph(c tb.Context) error {
 	text := c.Message().Payload
 	title := time.Now().Format("01-02-2006 15:04:05 Monday")
 	if c.Message().IsReply() {
