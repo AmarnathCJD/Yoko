@@ -362,10 +362,11 @@ func UDict(c tb.Context) error {
 	}
 	var U = ""
 	U += "<b>Word:</b> " + d.List[0].Word + "\n"
-	U += "<b>Definition:</b> " + d.List[0].Definition + "\n"
-	U += "<b>Example:</b> " + d.List[0].Example
-	return c.Reply(U)
-
+	U += "<b>Definition:</b> " + d.List[0].Definition + "\n\n"
+	U += "<b>Example:</b> " + d.List[0].Example + "\n"
+	U += "\n<b>Author:</b> " + d.List[0].Author
+	sel.Inline(sel.Row(sel.Data("👍"+fmt.Sprint(d.List[0].ThumbsUp), "thumbs_up"), sel.Data("👎"+fmt.Sprint(d.List[0].ThumbsDown), "thumbs_down")))
+	return c.Reply(U, sel)
 }
 
 ////////////////////////////////// OLD-NEW /////////////////////////////////////////////
