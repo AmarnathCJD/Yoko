@@ -24,7 +24,7 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["imdb"] = HANDLE{FUNC: Imdb}
 	HANDLERS["translate"] = HANDLE{FUNC: Translate}
 	HANDLERS["ud"] = HANDLE{FUNC: UDict}
-	HANDLERS["bin"] = HANDLE{FUNC: Bin_check}
+	HANDLERS["bin"] = HANDLE{FUNC: BinCheck}
 	HANDLERS["telegraph"] = HANDLE{FUNC: telegraph}
 	HANDLERS["math"] = HANDLE{FUNC: Math}
 	HANDLERS["id"] = HANDLE{FUNC: GetID}

@@ -369,6 +369,31 @@ func UDict(c tb.Context) error {
 	return c.Reply(U, sel)
 }
 
+func BinCheck(c tb.Context) error {
+	Args := GetArgs(c)
+	if Args == "" {
+		return c.Reply("Please specify a bin.")
+	}
+	ApiUrl := "https://lookup.binlist.net/" + Args
+	req, _ := http.NewRequest("GET", ApiUrl, nil)
+	resp, err := Client.Do(req)
+	if err != nil {
+		return c.Reply("No such bin found.")
+	}
+	defer resp.Body.Close()
+	var d Bin
+	json.NewDecoder(resp.Body).Decode(&d)
+	var U = ""
+	U += "<b>Bin:</b> " + Args + d.Country.Emoji + "\n"
+	U += "<b>Bank:</b> " + d.Bank.Name + "\n"
+	U += "<b>Country:</b> " + d.Country.Name + "(" + d.Country.Alpha2 + " - $" + d.Country.Currency + ")" + "\n"
+	U += "<b>Type:</b> " + d.Type + "\n"
+	U += "<b>Scheme:</b> " + d.Scheme + "\n"
+	U += "<b>Brand:</b> " + d.Brand + "\n"
+	U += "<b>Phone:</b> " + d.Bank.Phone + "\n"
+	return c.Reply(U)
+}
+
 ////////////////////////////////// OLD-NEW /////////////////////////////////////////////
 
 func isInt(s string) bool {
@@ -390,58 +415,6 @@ func stringInSlice(a string, list []string) bool {
 }
 
 type mapType map[string]interface{}
-
-func Usd(c tb.Context) error {
-	api := fmt.Sprint("http://api.urbandictionary.com/v0/define?term=", c.Message().Payload)
-	resp, _ := Client.Get(api)
-	var v mapType
-	defer resp.Body.Close()
-	json.NewDecoder(resp.Body).Decode(&v)
-	res := v["list"].([]interface{})
-	if len(res) == 0 {
-		b.Reply(c.Message(), "No results found.")
-		return nil
-	}
-	b.Reply(c.Message(), fmt.Sprintf("<b>%s:</b>\n\n%s\n\n<i>%s</i>", c.Message().Payload, res[0].(map[string]interface{})["definition"], res[0].(map[string]interface{})["example"]))
-	return nil
-}
-
-func Bin_check(c tb.Context) error {
-	bin := c.Message().Payload
-	url := "https://lookup.binlist.net/%s"
-	resp, _ := http.Get(fmt.Sprintf(url, bin))
-	var v bson.M
-	defer resp.Body.Close()
-	json.NewDecoder(resp.Body).Decode(&v)
-	country := v["country"].(map[string]interface{})
-	bank := v["bank"].(map[string]interface{})
-	out_str := fmt.Sprintf("<b>BIN/IIN:</b> <code>%s</code> %s", bin, country["emoji"])
-	if scheme, f := v["scheme"]; f {
-		out_str += fmt.Sprintf("\n<b>Card Brand:</b> %s", strings.Title(scheme.(string)))
-	}
-	if ctype, f := v["type"]; f {
-		out_str += fmt.Sprintf("\n<b>Card Type:</b> %s", strings.Title(ctype.(string)))
-	}
-	if brand, f := v["brand"]; f {
-		out_str += fmt.Sprintf("\n<b>Card Level:</b> %s", strings.Title(brand.(string)))
-	}
-	if prepaid, f := v["prepaid"]; f {
-		out_str += fmt.Sprintf("\n<b>Prepaid:</b> %s", strings.Title(strconv.FormatBool(prepaid.(bool))))
-	}
-	if name, f := bank["name"]; f {
-		out_str += fmt.Sprintf("\n<b>Bank:</b> %s", strings.Title(name.(string)))
-	}
-	if ctry, f := country["name"]; f {
-		out_str += fmt.Sprintf("\n<b>Country:</b> %s - %s - $%s", strings.Title(ctry.(string)), country["alpha2"], country["currency"])
-	}
-	if url, f := bank["url"]; f {
-		out_str += fmt.Sprintf("\n<b>Website:</b> <code>%s</code>", url)
-	}
-	out_str += "\n<b>━━━━━━━━━━━━━</b>"
-	out_str += fmt.Sprintf("\nChecked by <a href='tg://user?id=%s'>%s</a>", strconv.Itoa(int(c.Message().Sender.ID)), c.Message().Sender.FirstName)
-	c.Reply(out_str)
-	return nil
-}
 
 func telegraph(c tb.Context) error {
 	text := c.Message().Payload
