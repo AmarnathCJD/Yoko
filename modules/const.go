@@ -145,12 +145,19 @@ type AuddApi struct {
 				URL string `json:"url"`
 			} `json:"previews"`
 			Artwork struct {
-				URL string `json:"url"`
+				Width  int    `json:"width"`
+				Height int    `json:"height"`
+				URL    string `json:"url"`
 			} `json:"artwork"`
 		} `json:"apple_music"`
 		Spotify struct {
 			Album struct {
-				Name string `json:"name"`
+				Name   string `json:"name"`
+				Images []struct {
+					Width  int    `json:"width"`
+					Height int    `json:"height"`
+					URL    string `json:"url"`
+				} `json:"images"`
 			} `json:"album"`
 		} `json:"spotify"`
 	} `json:"result"`
