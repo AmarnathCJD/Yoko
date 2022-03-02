@@ -212,15 +212,15 @@ func CallBackHandlers() {
 	bot.Bot.Handle(&upvote, VotingCB)
 	bot.Bot.Handle(&downvote, VotingCB)
 	bot.Bot.Handle(tb.OnAddedToGroup, AddedToGroupHandler)
-        bot.Bot.Handle(tb.OnMedia, OnMediaHandler)
+	bot.Bot.Handle(tb.OnMedia, OnMediaHandler)
 }
 
-func OnMediaHandler (c tb.Context) error {
+func OnMediaHandler(c tb.Context) error {
 
-if afk := AFK(c); afk {
+	if afk := AFK(c); afk {
 		return nil
 	}
-return nil
+	return nil
 
 }
 
