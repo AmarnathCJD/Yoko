@@ -452,9 +452,11 @@ func AuddIO(c tb.Context) error {
 		return c.Reply(err.Error())
 	}
 	defer resp.Body.Close()
-	var d mapType
+	var d AuddApi
 	json.NewDecoder(resp.Body).Decode(&d)
-	return c.Reply(fmt.Sprint(d)[:900])
+	b, _ := json.MarshalIndent(d, "", "    ")
+	fmt.Println(string(b))
+	return c.Reply(string(b))
 }
 
 ////////////////////////////////// OLD-NEW /////////////////////////////////////////////
