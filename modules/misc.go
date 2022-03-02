@@ -115,9 +115,9 @@ func GetID(c tb.Context) error {
 	} else {
 		u, _ = GetUser(c)
 	}
-        if u.ID == 0 {
-return nil
-}
+	if u.ID == 0 {
+		return nil
+	}
 	if c.Message().IsReply() && c.Message().ReplyTo.IsForwarded() {
 		ID, FirstName, Type := GetForwardID(c)
 		user := User{ID: ID, First: FirstName, Type: Type}
