@@ -454,9 +454,7 @@ func AuddIO(c tb.Context) error {
 	defer resp.Body.Close()
 	var d mapType
 	json.NewDecoder(resp.Body).Decode(&d)
-	fmt.Println(d)
-
-	return nil
+	return c.Reply(fmt.Sprint(d)[:900])
 }
 
 ////////////////////////////////// OLD-NEW /////////////////////////////////////////////
