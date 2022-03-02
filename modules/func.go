@@ -26,7 +26,7 @@ var(
  b = bot.Bot
  BOT_SUDO = []int{}
  upvote = sel.Data("upvoteing", "thumbs_up")
- downvote = sel.Data("downvoteing" "thumbs_down")
+ downvote = sel.Data("downvoteing", "thumbs_down")
 )
 
 type FF struct {
