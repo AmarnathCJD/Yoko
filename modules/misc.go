@@ -454,9 +454,23 @@ func AuddIO(c tb.Context) error {
 	defer resp.Body.Close()
 	var d AuddApi
 	json.NewDecoder(resp.Body).Decode(&d)
-	b, _ := json.MarshalIndent(d, "", "    ")
-	fmt.Println(string(b))
-	return c.Reply(string(b))
+	var U = ""
+	U += "<b>Title:</b> " + d.Result.Title + "\n"
+	U += "<b>Artist:</b> " + d.Result.Artist + "\n"
+	U += "<b>Album:</b> " + d.Result.Album + "\n"
+	U += "<b>Release Date:</b> " + d.Result.ReleaseDate + "\n"
+	U += "<b>Label:</b> " + d.Result.Label + "\n"
+	if d.Result.Spotify.Album.Name != "" {
+		return c.Reply(&tb.Photo{File: tb.FromURL(d.Result.Spotify.Album.Images[0].URL), Caption: U})
+	} else if d.Result.AppleMusic.Artwork.URL != "" {
+		Url := d.Result.AppleMusic.Artwork.URL
+		Url = strings.Replace(Url, "{w}", fmt.Sprint(d.Result.AppleMusic.Artwork.Width), 1)
+		Url = strings.Replace(Url, "{h}", fmt.Sprint(d.Result.AppleMusic.Artwork.Height), 1)
+		return c.Reply(&tb.Photo{File: tb.FromURL(Url), Caption: U})
+	} else {
+		return c.Reply(U)
+	}
+
 }
 
 ////////////////////////////////// OLD-NEW /////////////////////////////////////////////
