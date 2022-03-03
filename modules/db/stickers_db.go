@@ -12,7 +12,7 @@ var (
 
 type Pack struct {
 	Name  string `json:"name"`
-	Count int32 `json:"count"`
+	Count int32  `json:"count"`
 	Title string `json:"title"`
 	Type  string `json:"type"`
 }
@@ -27,7 +27,7 @@ func GetUserPacks(user_id int64) []Pack {
 	var s []Pack
 	if packs := stickers.FindOne(context.TODO(), bson.M{"user_id": user_id}); packs.Err() == nil {
 		packs.Decode(&s)
-                fmt.Println(packs.DecodeBytes())
+		fmt.Println(packs.DecodeBytes())
 	}
 	fmt.Println(s)
 	return s
