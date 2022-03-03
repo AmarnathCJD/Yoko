@@ -18,8 +18,8 @@ type Pack struct {
 }
 
 type Packs struct {
-UserID int64
-Packs []Pack
+	UserID int64
+	Packs  []Pack
 }
 
 func AddSticker(user_id int64, name string, title string, _type string) {
