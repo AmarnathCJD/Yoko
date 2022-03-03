@@ -29,7 +29,7 @@ func AddSticker(user_id int64, name string, title string, _type string) {
 }
 
 func GetUserPacks(user_id int64) []Pack {
-	var s []Packs
+	var s Packs
 	if packs := stickers.FindOne(context.TODO(), bson.M{"user_id": user_id}); packs.Err() == nil {
 		packs.Decode(&s)
 	}
