@@ -17,6 +17,11 @@ type Pack struct {
 	Type  string `json:"type"`
 }
 
+type Packs struct {
+UserID int64
+Packs []Pack
+}
+
 func AddSticker(user_id int64, name string, title string, _type string) {
 	Packs := GetUserPacks(user_id)
 	Packs = append(Packs, Pack{name, 1, title, _type})
@@ -24,13 +29,12 @@ func AddSticker(user_id int64, name string, title string, _type string) {
 }
 
 func GetUserPacks(user_id int64) []Pack {
-	var s []Pack
+	var s []Packs
 	if packs := stickers.FindOne(context.TODO(), bson.M{"user_id": user_id}); packs.Err() == nil {
 		packs.Decode(&s)
-		fmt.Println(packs.DecodeBytes())
 	}
 	fmt.Println(s)
-	return s
+	return s.Packs
 }
 
 func GetPack(user_id int64, _type string) (Pack, int) {
