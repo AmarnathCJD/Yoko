@@ -50,7 +50,7 @@ func Ban(c tb.Context) error {
 			return nil
 		}
 		args := strings.SplitN(xtra, " ", 2)
-		until_date = int(Extract_time(c, args[0]))
+		until_date = int(ExtractTime(c, args[0]))
 		if until_date == 0 {
 			return nil
 		}
@@ -135,7 +135,7 @@ func Mute(c tb.Context) error {
 			return nil
 		}
 		args := strings.SplitN(xtra, " ", 2)
-		until_date = int(Extract_time(c, args[0]))
+		until_date = int(ExtractTime(c, args[0]))
 		if until_date == 0 {
 			return nil
 		}

@@ -45,40 +45,40 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["start"] = HANDLE{FUNC: Start}
 	HANDLERS["help"] = HANDLE{FUNC: Help_Menu}
 	// notes.go
-	HANDLERS["save"] = HANDLE{FUNC: Save, MIDDLEWARE: Change_info}
+	HANDLERS["save"] = HANDLE{FUNC: Save, MIDDLEWARE: ChangeInfo}
 	HANDLERS["saved"] = HANDLE{FUNC: All_notes}
 	HANDLERS["notes"] = HANDLE{FUNC: All_notes}
 	HANDLERS["get"] = HANDLE{FUNC: Gnote}
-	HANDLERS["clear"] = HANDLE{FUNC: clear_note, MIDDLEWARE: Change_info}
-	HANDLERS["clearall"] = HANDLE{FUNC: clear_all, MIDDLEWARE: Change_info}
-	HANDLERS["privatenotes"] = HANDLE{FUNC: private_notes, MIDDLEWARE: Change_info}
+	HANDLERS["clear"] = HANDLE{FUNC: clear_note, MIDDLEWARE: ChangeInfo}
+	HANDLERS["clearall"] = HANDLE{FUNC: clear_all, MIDDLEWARE: ChangeInfo}
+	HANDLERS["privatenotes"] = HANDLE{FUNC: private_notes, MIDDLEWARE: ChangeInfo}
 	// locks.go
-	HANDLERS["lock"] = HANDLE{FUNC: Lock, MIDDLEWARE: Change_info}
+	HANDLERS["lock"] = HANDLE{FUNC: Lock, MIDDLEWARE: ChangeInfo}
 	HANDLERS["locks"] = HANDLE{FUNC: Check_locks}
 	HANDLERS["locktypes"] = HANDLE{FUNC: Locktypes}
-	HANDLERS["unlock"] = HANDLE{FUNC: Unlock, MIDDLEWARE: Change_info}
+	HANDLERS["unlock"] = HANDLE{FUNC: Unlock, MIDDLEWARE: ChangeInfo}
 	// admin.go
-	HANDLERS["promote"] = HANDLE{FUNC: Promote, MIDDLEWARE: Add_admins}
-	HANDLERS["demote"] = HANDLE{FUNC: Demote, MIDDLEWARE: Add_admins}
-	HANDLERS["superpromote"] = HANDLE{FUNC: Promote, MIDDLEWARE: Add_admins}
-	HANDLERS["settitle"] = HANDLE{FUNC: Set_title, MIDDLEWARE: Add_admins}
-	HANDLERS["title"] = HANDLE{FUNC: Set_title, MIDDLEWARE: Add_admins}
+	HANDLERS["promote"] = HANDLE{FUNC: Promote, MIDDLEWARE: AddAdmins}
+	HANDLERS["demote"] = HANDLE{FUNC: Demote, MIDDLEWARE: AddAdmins}
+	HANDLERS["superpromote"] = HANDLE{FUNC: Promote, MIDDLEWARE: AddAdmins}
+	HANDLERS["settitle"] = HANDLE{FUNC: Set_title, MIDDLEWARE: AddAdmins}
+	HANDLERS["title"] = HANDLE{FUNC: Set_title, MIDDLEWARE: AddAdmins}
 	HANDLERS["adminlist"] = HANDLE{FUNC: Adminlist}
 	// chatbot.go
-	HANDLERS["chatbot"] = HANDLE{FUNC: Chatbot_mode, MIDDLEWARE: Change_info}
+	HANDLERS["chatbot"] = HANDLE{FUNC: Chatbot_mode, MIDDLEWARE: ChangeInfo}
 	// connect.go
 	HANDLERS["connect"] = HANDLE{FUNC: ConnectChat}
 	// greetings.go
-	HANDLERS["welcome"] = HANDLE{Welcome_set, Change_info}
-	HANDLERS["setwelcome"] = HANDLE{Set_welcome, Change_info}
-	HANDLERS["resetwelcome"] = HANDLE{ResetWelcome, Change_info}
+	HANDLERS["welcome"] = HANDLE{Welcome_set, ChangeInfo}
+	HANDLERS["setwelcome"] = HANDLE{Set_welcome, ChangeInfo}
+	HANDLERS["resetwelcome"] = HANDLE{ResetWelcome, ChangeInfo}
 	// warnings.go
-	HANDLERS["warn"] = HANDLE{WARN, Ban_users}
-	HANDLERS["setwarnmode"] = HANDLE{Set_warn_mode_hn, Ban_users}
-	HANDLERS["warnmode"] = HANDLE{Set_warn_mode_hn, Ban_users}
-	HANDLERS["setwarnlimit"] = HANDLE{Set_warn_limit, Change_info}
-	HANDLERS["warnlimit"] = HANDLE{Set_warn_limit, Change_info}
-	HANDLERS["warnings"] = HANDLE{FUNC: Warnings_info}
+	HANDLERS["warn"] = HANDLE{WarnUser, BanUsers}
+	HANDLERS["setwarnmode"] = HANDLE{SetWarnMode, BanUsers}
+	HANDLERS["warnmode"] = HANDLE{SetWarnMode, BanUsers}
+	HANDLERS["setwarnlimit"] = HANDLE{SetWarnLimit, ChangeInfo}
+	HANDLERS["warnlimit"] = HANDLE{SetWarnLimit, ChangeInfo}
+	HANDLERS["warnings"] = HANDLE{FUNC: WarningsInfo}
 	// eval.go
 	HANDLERS["sh"] = HANDLE{FUNC: Exec}
 	HANDLERS["media"] = HANDLE{FUNC: MediaInfo}
@@ -88,24 +88,24 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["mypacks"] = HANDLE{FUNC: MyPacks}
 	HANDLERS["stickers"] = HANDLE{FUNC: CombotSticker}
 	// pin.go
-	HANDLERS["pin"] = HANDLE{pin_message, Pin_messages}
-	HANDLERS["unpin"] = HANDLE{unpin_msg, Pin_messages}
+	HANDLERS["pin"] = HANDLE{pin_message, PinMessages}
+	HANDLERS["unpin"] = HANDLE{unpin_msg, PinMessages}
 	HANDLERS["pinned"] = HANDLE{FUNC: pinned_msg}
-	HANDLERS["permapin"] = HANDLE{PermaPin, Pin_messages}
+	HANDLERS["permapin"] = HANDLE{PermaPin, PinMessages}
 	// ban.go
-	HANDLERS["ban"] = HANDLE{Ban, Ban_users}
-	HANDLERS["dban"] = HANDLE{Ban, Ban_users}
-	HANDLERS["sban"] = HANDLE{Ban, Ban_users}
-	HANDLERS["tban"] = HANDLE{Ban, Ban_users}
-	HANDLERS["unban"] = HANDLE{Ban, Ban_users}
-	HANDLERS["mute"] = HANDLE{Mute, Ban_users}
-	HANDLERS["tmute"] = HANDLE{Mute, Ban_users}
-	HANDLERS["dmute"] = HANDLE{Mute, Ban_users}
-	HANDLERS["smute"] = HANDLE{Mute, Ban_users}
-	HANDLERS["unmute"] = HANDLE{Mute, Ban_users}
-	HANDLERS["kick"] = HANDLE{Kick, Ban_users}
-	HANDLERS["skick"] = HANDLE{Kick, Ban_users}
-	HANDLERS["dkick"] = HANDLE{Kick, Ban_users}
+	HANDLERS["ban"] = HANDLE{Ban, BanUsers}
+	HANDLERS["dban"] = HANDLE{Ban, BanUsers}
+	HANDLERS["sban"] = HANDLE{Ban, BanUsers}
+	HANDLERS["tban"] = HANDLE{Ban, BanUsers}
+	HANDLERS["unban"] = HANDLE{Ban, BanUsers}
+	HANDLERS["mute"] = HANDLE{Mute, BanUsers}
+	HANDLERS["tmute"] = HANDLE{Mute, BanUsers}
+	HANDLERS["dmute"] = HANDLE{Mute, BanUsers}
+	HANDLERS["smute"] = HANDLE{Mute, BanUsers}
+	HANDLERS["unmute"] = HANDLE{Mute, BanUsers}
+	HANDLERS["kick"] = HANDLE{Kick, BanUsers}
+	HANDLERS["skick"] = HANDLE{Kick, BanUsers}
+	HANDLERS["dkick"] = HANDLE{Kick, BanUsers}
 	HANDLERS["kickme"] = HANDLE{FUNC: KickMe}
 	// feds.go
 	HANDLERS["newfed"] = HANDLE{FUNC: New_fed}
@@ -133,14 +133,14 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["fedinfo"] = HANDLE{FUNC: fed_info}
 	HANDLERS["chatfed"] = HANDLE{FUNC: Chat_fed}
 	// filters.go
-	HANDLERS["filter"] = HANDLE{FUNC: SaveFilter, MIDDLEWARE: Change_info}
+	HANDLERS["filter"] = HANDLE{FUNC: SaveFilter, MIDDLEWARE: ChangeInfo}
 	HANDLERS["filters"] = HANDLE{FUNC: AllFilters}
-	HANDLERS["stop"] = HANDLE{StopFilter, Change_info}
-	HANDLERS["stopall"] = HANDLE{StopAllFIlters, Change_info}
+	HANDLERS["stop"] = HANDLE{StopFilter, ChangeInfo}
+	HANDLERS["stopall"] = HANDLE{StopAllFIlters, ChangeInfo}
 	// antiflood.go
 	HANDLERS["flood"] = HANDLE{FUNC: Flood}
-	HANDLERS["setflood"] = HANDLE{SetFlood, Ban_users}
-	HANDLERS["setfloodmode"] = HANDLE{SetFloodMode, Ban_users}
+	HANDLERS["setflood"] = HANDLE{SetFlood, BanUsers}
+	HANDLERS["setfloodmode"] = HANDLE{SetFloodMode, BanUsers}
 	// gbans.go
 	HANDLERS["gban"] = HANDLE{FUNC: Gban}
 	// devs.go
@@ -157,11 +157,11 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["sendmessage"] = HANDLE{FUNC: SendMessage}
 	// rules.go
 	HANDLERS["rules"] = HANDLE{FUNC: Rules}
-	HANDLERS["setrules"] = HANDLE{FUNC: SetRules, MIDDLEWARE: Change_info}
-	HANDLERS["resetrules"] = HANDLE{FUNC: ResetRules, MIDDLEWARE: Change_info}
-	HANDLERS["setrulesbutton"] = HANDLE{FUNC: SetRulesButton, MIDDLEWARE: Change_info}
-	HANDLERS["resetsetrulesbutton"] = HANDLE{FUNC: ResetRulesButton, MIDDLEWARE: Change_info}
-	HANDLERS["privaterules"] = HANDLE{FUNC: PrivateRules, MIDDLEWARE: Change_info}
+	HANDLERS["setrules"] = HANDLE{FUNC: SetRules, MIDDLEWARE: ChangeInfo}
+	HANDLERS["resetrules"] = HANDLE{FUNC: ResetRules, MIDDLEWARE: ChangeInfo}
+	HANDLERS["setrulesbutton"] = HANDLE{FUNC: SetRulesButton, MIDDLEWARE: ChangeInfo}
+	HANDLERS["resetsetrulesbutton"] = HANDLE{FUNC: ResetRulesButton, MIDDLEWARE: ChangeInfo}
+	HANDLERS["privaterules"] = HANDLE{FUNC: PrivateRules, MIDDLEWARE: ChangeInfo}
 	// purge.go
 	HANDLERS["purge"] = HANDLE{FUNC: Purge, MIDDLEWARE: DeleteMessages}
 	HANDLERS["del"] = HANDLE{FUNC: Delete, MIDDLEWARE: DeleteMessages}

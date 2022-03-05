@@ -132,7 +132,7 @@ func button_parser(text string) (string, *tb.ReplyMarkup) {
 	return note, btns
 }
 
-func Change_info(next tb.HandlerFunc) tb.HandlerFunc {
+func ChangeInfo(next tb.HandlerFunc) tb.HandlerFunc {
 	return func(c tb.Context) error {
 		if c.Message().Private() {
 			return next(c)
@@ -192,7 +192,7 @@ func DeleteMessages(next tb.HandlerFunc) tb.HandlerFunc {
 	}
 }
 
-func Add_admins(next tb.HandlerFunc) tb.HandlerFunc {
+func AddAdmins(next tb.HandlerFunc) tb.HandlerFunc {
 	return func(c tb.Context) error {
 		if c.Message().Private() {
 			return next(c)
@@ -222,7 +222,7 @@ func Add_admins(next tb.HandlerFunc) tb.HandlerFunc {
 	}
 }
 
-func Ban_users(next tb.HandlerFunc) tb.HandlerFunc {
+func BanUsers(next tb.HandlerFunc) tb.HandlerFunc {
 	return func(c tb.Context) error {
 		if c.Message().Private() {
 			return next(c)
@@ -252,7 +252,7 @@ func Ban_users(next tb.HandlerFunc) tb.HandlerFunc {
 	}
 }
 
-func Pin_messages(next tb.HandlerFunc) tb.HandlerFunc {
+func PinMessages(next tb.HandlerFunc) tb.HandlerFunc {
 	return func(c tb.Context) error {
 		if c.Message().Private() {
 			return next(c)
@@ -282,7 +282,7 @@ func Pin_messages(next tb.HandlerFunc) tb.HandlerFunc {
 	}
 }
 
-func Extract_time(c tb.Context, time_val string) int64 {
+func ExtractTime(c tb.Context, time_val string) int64 {
 	has_suffix := false
 	for _, arg := range []string{"m", "h", "d", "w"} {
 		if strings.HasSuffix(time_val, arg) {
@@ -511,7 +511,7 @@ func get_time_value(x int32) string {
 	}
 }
 
-func take_action(action string, t int32, user tb.User, chat tb.Chat) error {
+func TakeAction(action string, t int32, user tb.User, chat tb.Chat) error {
 	until_date := 0
 	if stringInSlice(action, []string{"ban", "tban"}) {
 		if t != 0 {

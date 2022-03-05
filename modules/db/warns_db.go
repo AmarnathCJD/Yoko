@@ -36,7 +36,7 @@ func LoadWarnSettings() []Settings {
 	return settings
 }
 
-var WARN_SETTINGS = LoadWarnSettings()
+var WarnSettings = LoadWarnSettings()
 
 func WarnUser(chat_id int64, user_id int64, reason string) (bool, int32, int32) {
 	Prev := GetWarns(chat_id, user_id)
@@ -63,7 +63,7 @@ func WarnUser(chat_id int64, user_id int64, reason string) (bool, int32, int32) 
 }
 
 func GetSettings(chat_id int64) Settings {
-	for _, s := range WARN_SETTINGS {
+	for _, s := range WarnSettings {
 		if s.Chat_id == chat_id {
 			return s
 		}
@@ -104,7 +104,7 @@ func GetWarns(chat_id int64, user_id int64) Warn {
 }
 
 func ResetChatWarns(chat_id int64) {
-	warns.DeleteMany(context.TODO(), bson.M{"chat_id": chat_id})
+	warns.DeleteMany(context.TODO(), Warn{Chat_id: chat_id})
 }
 
 func SetWarnLimit(chat_id int64, limit int) {
@@ -114,6 +114,7 @@ func SetWarnLimit(chat_id int64, limit int) {
 	}
 	Set.Limit = int32(limit)
 	settings.UpdateOne(context.TODO(), bson.M{"chat_id": chat_id}, bson.D{{Key: "$set", Value: Set}}, opts)
+	WarnSettings[chat_id] = Set
 }
 
 func SetWarnMode(chat_id int64, mode string, time int) {
@@ -124,7 +125,7 @@ func SetWarnMode(chat_id int64, mode string, time int) {
 	Set.Mode = mode
 	Set.Time = int32(time)
 	settings.UpdateOne(context.TODO(), bson.M{"chat_id": chat_id}, bson.D{{Key: "$set", Value: Set}}, opts)
-
+	WarnSettings[chat_id] = Set
 }
 
 func GetWarnSettings(chat_id int64) Settings {

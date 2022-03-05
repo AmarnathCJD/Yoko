@@ -73,7 +73,7 @@ func SetFloodMode(c tb.Context) error {
 						c.Reply("It looks like you tried to set time value for antiflood but you didn't specified time; Try, <code>/setfloodmode [tban/tmute] <timevalue></code>.\n<b>Examples of time value:</b> <code>4m = 4 minutes</code>, <code>3h = 3 hours</code>, <code>6d = 6 days</code>, <code>5w = 5 weeks</code>.")
 						return nil
 					}
-					ctime = Extract_time(c, args[1])
+					ctime = ExtractTime(c, args[1])
 					if ctime == 0 {
 						return nil
 					}
@@ -115,7 +115,7 @@ func FLOOD_EV(c tb.Context) bool {
 				return false
 			}
 			reset_flood(chat_id, 0)
-			err := take_action(f.MODE, f.TIME, *c.Sender(), *c.Chat())
+			err := TakeAction(f.MODE, f.TIME, *c.Sender(), *c.Chat())
 			if err != nil {
 				log.Print(err)
 				return true
