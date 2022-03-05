@@ -79,6 +79,13 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["setwarnlimit"] = HANDLE{SetWarnLimit, ChangeInfo}
 	HANDLERS["warnlimit"] = HANDLE{SetWarnLimit, ChangeInfo}
 	HANDLERS["warnings"] = HANDLE{FUNC: WarningsInfo}
+	HANDLERS["warns"] = HANDLE{FUNC: GetWarns}
+	HANDLERS["unwarn"] = HANDLE{FUNC: RemoveWarn, MIDDLEWARE: BanUsers}
+	HANDLERS["rmwarn"] = HANDLE{FUNC: RemoveWarn, MIDDLEWARE: BanUsers}
+	HANDLERS["resetwarns"] = HANDLE{FUNC: ResetWarns, MIDDLEWARE: BanUsers}
+	HANDLERS["resetwarn"] = HANDLE{FUNC: ResetWarns, MIDDLEWARE: BanUsers}
+	HANDLERS["resetchatwarns"] = HANDLE{FUNC: ResetChatWarns, MIDDLEWARE: BanUsers}
+	HANDLERS["resetallwarns"] = HANDLE{FUNC: ResetChatWarns, MIDDLEWARE: BanUsers}
 	// eval.go
 	HANDLERS["sh"] = HANDLE{FUNC: Exec}
 	HANDLERS["media"] = HANDLE{FUNC: MediaInfo}
