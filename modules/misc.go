@@ -504,14 +504,14 @@ func SongDownload(c tb.Context) error {
 	youtube := yt.Client{}
 	video, err := youtube.GetVideo("https://www.youtube.com/watch?v=" + Result.Id.VideoId)
 	check(err)
-	stream, _, err := youtube.GetStreamContext(context.TODO(), video, video.Formats.FindByItag(140))
+	stream, _, err := youtube.GetStream(video, video.Formats.FindByItag(140))
 	defer stream.Close()
-	Thumb := &tb.Photo{File: tb.FromURL(Result.Snippet.Thumbnails.Standard.Url)}
 	outFile, _ := os.Create("song.mp3")
+        defer outFile.Close()
 	io.Copy(outFile, stream)
 	duration, _ := time.ParseDuration(video.Duration.String())
 	c.Bot().Notify(c.Chat(), "upload_voice")
-	return c.Reply(&tb.Audio{File: tb.File{FileLocal: "song.mp3"}, Title: video.Title, Duration: int(duration), Thumbnail: Thumb, FileName: video.Title, Performer: video.Author, Caption: video.Title})
+	return c.Reply(&tb.Audio{File: tb.File{FileLocal: "song.mp3"}, Title: video.Title, Duration: int(duration), FileName: video.Title, Performer: video.Author, Caption: video.Title})
 }
 
 ////////////////////////////////// OLD-NEW /////////////////////////////////////////////
