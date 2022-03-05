@@ -2,7 +2,6 @@ package modules
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 	"fmt"
 	"io"
