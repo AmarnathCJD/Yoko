@@ -2,6 +2,7 @@ package modules
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -490,6 +491,29 @@ func AuddIO(c tb.Context) error {
 
 }
 
+func SongDownload(c tb.Context) error {
+	Args := GetArgs(c)
+	search, err := YoutubeSearch(Args, 1)
+	if err != nil {
+		return c.Reply(err.Error())
+	}
+	if len(search.Items) == 0 {
+		return c.Reply("No results found.")
+	}
+	Result := search.Items[0]
+	youtube := yt.Client{}
+	video, err := youtube.GetVideo("https://www.youtube.com/watch?v=" + Result.Id.VideoId)
+	check(err)
+	stream, _, err := youtube.GetStreamContext(context.TODO(), video, video.Formats.FindByItag(140))
+	defer stream.Close()
+	Thumb := &tb.Photo{File: tb.FromURL(Result.Snippet.Thumbnails.Standard.Url)}
+	outFile, _ := os.Create("song.mp3")
+	io.Copy(outFile, stream)
+	duration, _ := time.ParseDuration(video.Duration.String())
+	c.Bot().Notify(c.Chat(), "upload_voice")
+	return c.Reply(&tb.Audio{File: tb.File{FileLocal: "song.mp3"}, Title: video.Title, Duration: int(duration), Thumbnail: Thumb, FileName: video.Title, Performer: video.Author, Caption: video.Title, MIME: "audio/mp3"})
+}
+
 ////////////////////////////////// OLD-NEW /////////////////////////////////////////////
 
 func isInt(s string) bool {
@@ -683,36 +707,6 @@ func Translate(c tb.Context) error {
 	g := x.Find("span", "id", "tw-answ-target-text")
 	c.Reply(fmt.Sprint(g.Text()))
 	return nil
-}
-
-func Music(c tb.Context) error {
-	r, _ := SearchYT(c.Message().Payload, 2)
-	if len(r.Items) == 0 {
-		return c.Reply("No Results found.")
-	}
-	ID := r.Items[0].Id.VideoId
-	y := yt.Client{HTTPClient: &Client}
-	vid, err := y.GetVideo("https://www.youtube.com/watch?v=" + ID)
-	format := vid.Formats.FindByQuality("tiny")
-	stream, _, err := y.GetStream(vid, format)
-	defer stream.Close()
-	outFile, err := os.Create("out.mp3")
-	defer outFile.Close()
-	_, err = io.Copy(outFile, stream)
-	check(err)
-	fmt.Println(r.Items[0].Snippet.Thumbnails.Default.Url)
-	duration, _ := time.ParseDuration(vid.Duration.String())
-	c.Bot().Notify(c.Chat(), "upload_voice")
-	sel.Inline(sel.Row(sel.URL("🎶 Play on Youtube", "https://www.youtube.com/watch?v="+ID)))
-	return c.Reply(&tb.Audio{
-		File:      tb.File{FileLocal: "out.mp3"},
-		Title:     vid.Title,
-		Performer: vid.Author,
-		FileName:  vid.Title,
-		Duration:  int(duration.Seconds()),
-		Thumbnail: &tb.Photo{File: tb.FromURL(r.Items[0].Snippet.Thumbnails.Default.Url)},
-		Caption:   vid.Title,
-	}, sel)
 }
 
 func DogeSticker(c tb.Context) error {

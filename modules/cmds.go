@@ -32,7 +32,7 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["stat"] = HANDLE{FUNC: GroupStat}
 	HANDLERS["tr"] = HANDLE{FUNC: Translate}
 	HANDLERS["chatinfo"] = HANDLE{FUNC: ChatInfo}
-	HANDLERS["music"] = HANDLE{FUNC: Music}
+	HANDLERS["song"] = HANDLE{FUNC: SongDownload}
 	HANDLERS["rs"] = HANDLE{FUNC: RsStripe}
 	HANDLERS["wiki"] = HANDLE{FUNC: WikiPedia}
 	HANDLERS["fake"] = HANDLE{FUNC: FakeGen}
