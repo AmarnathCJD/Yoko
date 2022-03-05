@@ -513,7 +513,7 @@ func SongDownload(c tb.Context) error {
         defer ThumbBytes.Body.Close()
         ThumbFile, _ := os.Create("thumb.jpg")
         defer ThumbFile.Close()
-        io.Copy(ThumbF, ThumbBytes.Body)
+        io.Copy(ThumbFile, ThumbBytes.Body)
 	c.Bot().Notify(c.Chat(), "upload_voice")
 	Thumb := &tb.Photo{File: tb.File{FileLocal: "thumb.jpg"}}
 	sendErr := c.Reply(&tb.Audio{File: tb.File{FileLocal: "song.mp3"}, Title: video.Title, Duration: int(duration), FileName: video.Title, Performer: video.Author, Caption: video.Title, Thumbnail: Thumb})
