@@ -312,28 +312,6 @@ func ExtractTime(c tb.Context, time_val string) int64 {
 	return int64(bantime)
 }
 
-func Parse_country(t string) string {
-	tp := t
-	if t == string("") {
-		return "us"
-	}
-	t = strings.ToLower(t)
-	if len(t) == 2 {
-		if stringInSlice(t, CODE_C) {
-			return t
-		} else {
-			return "us"
-		}
-	} else {
-		c, ok := COUNTRY_CODES[tp]
-		if ok {
-			return c.(string)
-		} else {
-			return "us"
-		}
-	}
-}
-
 func IsSudo(user_id int64) bool {
 	for _, id := range db.Sudos {
 		if id.Id == user_id {
@@ -594,7 +572,7 @@ func AddPayload(c tb.Context) tb.Context {
 	return c
 }
 
-func SearchYT(q string, limit int64) (*youtube.SearchListResponse, error) {
+func YoutubeSearch(q string, limit int64) (*youtube.SearchListResponse, error) {
 	client, _ := youtube.NewService(context.TODO(), option.WithAPIKey(YOUTUBE_API_KEY))
 	call := client.Search.List([]string{"snippet"}).Q(q).MaxResults(limit)
 	return call.Do()
