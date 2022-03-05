@@ -1,8 +1,6 @@
 package modules
 
 import (
-	"fmt"
-
 	"github.com/amarnathcjd/yoko/modules/db"
 	tb "gopkg.in/telebot.v3"
 )
@@ -11,7 +9,7 @@ func Gban(c tb.Context) error {
 	if !IsBotAdmin(c.Sender().ID) {
 		return nil
 	}
-	u, _ := GetUser(c)
+	u, x := GetUser(c)
 	if u.ID == 0 {
 		return nil
 	}
@@ -22,7 +20,11 @@ func Gban(c tb.Context) error {
 	} else if u.ID == BOT_ID {
 		return c.Reply("You are a funny one aren't you?, I not gonna gban myself!")
 	}
-	fmt.Println(db.GetAllChats())
+	c.Reply("Snaps the ban hammer!")
+	db.GbanUser(u.ID, u.First, x, c.Sender().ID)
+	for _, x := range db.GetAllChats() {
+		c.Bot().Ban(&tb.Chat{ID: x.Id}, &tb.ChatMember{User: u.User()})
+	}
 	return nil
 }
 
