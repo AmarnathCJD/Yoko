@@ -511,7 +511,7 @@ func SongDownload(c tb.Context) error {
 	io.Copy(outFile, stream)
 	duration, _ := time.ParseDuration(video.Duration.String())
 	c.Bot().Notify(c.Chat(), "upload_voice")
-	return c.Reply(&tb.Audio{File: tb.File{FileLocal: "song.mp3"}, Title: video.Title, Duration: int(duration), Thumbnail: Thumb, FileName: video.Title, Performer: video.Author, Caption: video.Title, MIME: "audio/mp3"})
+	return c.Reply(&tb.Audio{File: tb.File{FileLocal: "song.mp3"}, Title: video.Title, Duration: int(duration), Thumbnail: Thumb, FileName: video.Title, Performer: video.Author, Caption: video.Title})
 }
 
 ////////////////////////////////// OLD-NEW /////////////////////////////////////////////
