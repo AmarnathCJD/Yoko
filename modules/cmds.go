@@ -209,13 +209,22 @@ func CallBackHandlers() {
 	bot.Bot.Handle(&imdb_btn, ImdbCB)
 	bot.Bot.Handle(&ChatBTN, ChatbotCB)
 	bot.Bot.Handle(&anon_button, AnonCB)
+	bot.Bot.Handle(&upvote, VotingCB)
+	bot.Bot.Handle(&downvote, VotingCB)
 	bot.Bot.Handle(tb.OnAddedToGroup, AddedToGroupHandler)
+	bot.Bot.Handle(tb.OnMedia, OnMediaHandler)
+}
+
+func OnMediaHandler(c tb.Context) error {
+
+	if afk := AFK(c); afk {
+		return nil
+	}
+	return nil
+
 }
 
 func OnTextHandler(c tb.Context) error {
-	if c.Sender().Username != string("") && c.Sender().Username == "nglnah" {
-		c.Bot().Send(&tb.User{ID: OWNER_ID}, "She's online.")
-	}
 	if strings.HasPrefix(c.Message().Text, "!") || strings.HasPrefix(c.Message().Text, "?") {
 		cmd := strings.Split(c.Message().Text, " ")[0][1:]
 		for endpoint, function := range HANDLERS {

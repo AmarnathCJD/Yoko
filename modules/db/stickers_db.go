@@ -2,7 +2,7 @@ package db
 
 import (
 	"context"
-
+	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -11,10 +11,15 @@ var (
 )
 
 type Pack struct {
-	Name  string
-	Count int32
-	Title string
-	Type  string
+	Name  string `json:"name"`
+	Count int32  `json:"count"`
+	Title string `json:"title"`
+	Type  string `json:"type"`
+}
+
+type Packs struct {
+	UserID int64
+	Packs  []Pack
 }
 
 func AddSticker(user_id int64, name string, title string, _type string) {
@@ -24,11 +29,12 @@ func AddSticker(user_id int64, name string, title string, _type string) {
 }
 
 func GetUserPacks(user_id int64) []Pack {
-	var s []Pack
+	var s Packs
 	if packs := stickers.FindOne(context.TODO(), bson.M{"user_id": user_id}); packs.Err() == nil {
 		packs.Decode(&s)
 	}
-	return s
+	fmt.Println(s)
+	return s.Packs
 }
 
 func GetPack(user_id int64, _type string) (Pack, int) {

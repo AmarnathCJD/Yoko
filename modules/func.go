@@ -22,16 +22,13 @@ import (
 	tb "gopkg.in/telebot.v3"
 )
 
-var b = bot.Bot
-var BOT_SUDO = []int{}
+var (
+	b        = bot.Bot
+	BOT_SUDO = []int{}
+	upvote   = sel.Data("upvoteing", "thumbs_up")
+	downvote = sel.Data("downvoteing", "thumbs_down")
+)
 
-type ENTITY struct {
-	ID        int64  `json:"id"`
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Username  string `json:"username"`
-	DC_ID     int32  `json:"dc_id"`
-}
 type FF struct {
 	F     string
 	INDEX int
@@ -373,10 +370,6 @@ func check(err error) {
 	if err != nil {
 		log.Print(err)
 	}
-}
-
-func Get_entity(u interface{}) {
-	fmt.Println(u)
 }
 
 func GetBin(bin string, m int) string {
