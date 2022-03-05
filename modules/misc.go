@@ -506,7 +506,7 @@ func SongDownload(c tb.Context) error {
 	stream, _, err := youtube.GetStream(video, video.Formats.FindByItag(140))
 	defer stream.Close()
 	outFile, _ := os.Create("song.mp3")
-        defer outFile.Close()
+	defer outFile.Close()
 	io.Copy(outFile, stream)
 	duration, _ := time.ParseDuration(video.Duration.String())
 	c.Bot().Notify(c.Chat(), "upload_voice")
