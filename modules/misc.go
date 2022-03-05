@@ -509,9 +509,15 @@ func SongDownload(c tb.Context) error {
 	defer outFile.Close()
 	io.Copy(outFile, stream)
 	duration, _ := time.ParseDuration(video.Duration.String())
+        ThumbBytes, _ := Client.Get(Result.Snippet.Thumbnails.Default.Url)
+        defer ThumbBytes.Body.Close()
+        ThumbFile, _ := os.Create("thumb.jpg")
+        defer ThumbFile.Close()
+        io.Copy(ThumbF, ThumbBytes.Body)
 	c.Bot().Notify(c.Chat(), "upload_voice")
-	Thumb := &tb.Photo{File: tb.FromURL(Result.Snippet.Thumbnails.Default.Url)}
-	return c.Reply(&tb.Audio{File: tb.File{FileLocal: "song.mp3"}, Title: video.Title, Duration: int(duration), FileName: video.Title, Performer: video.Author, Caption: video.Title, Thumbnail: Thumb})
+	Thumb := &tb.Photo{File: tb.File{FileLocal: "thumb.jpg"}}
+	sendErr := c.Reply(&tb.Audio{File: tb.File{FileLocal: "song.mp3"}, Title: video.Title, Duration: int(duration), FileName: video.Title, Performer: video.Author, Caption: video.Title, Thumbnail: Thumb})
+        return sendErr
 }
 
 ////////////////////////////////// OLD-NEW /////////////////////////////////////////////
