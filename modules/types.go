@@ -207,4 +207,3 @@ type YoutubeVideo struct {
 		Duration  string
 		Views     string
 	}
-}
