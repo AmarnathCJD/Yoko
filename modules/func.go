@@ -605,14 +605,14 @@ func SearchVideos(query string, limit int) (YoutubeResult, error) {
 	var YouTubeApi = "https://www.youtube.com/youtubei/v1/search?key=AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
 	var Payload = strings.NewReader(`{"context":{"client":{"clientName":"WEB","clientVersion":"2.20220303.06.01"}},"query":"` + query + `"}`)
 	req, err := http.NewRequest("POST", YouTubeApi, Payload)
-        if err != nil {
-return YoutubeResult{}, err
-}
+	if err != nil {
+		return YoutubeResult{}, err
+	}
 	req.Header.Set("content-type", "application/json")
 	resp, err := Client.Do(req)
-if err != nil {
-return YoutubeResult{}, err
-}
+	if err != nil {
+		return YoutubeResult{}, err
+	}
 	defer resp.Body.Close()
 	var result YoutubeResult
 	json.NewDecoder(resp.Body).Decode(&result)

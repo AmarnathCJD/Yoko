@@ -493,9 +493,9 @@ func AuddIO(c tb.Context) error {
 func SongDownload(c tb.Context) error {
 	Args := GetArgs(c)
 	result, err := SearchVideos(Args, 1)
-        if err != nil {
-return c.Reply(err.Error())
-}
+	if err != nil {
+		return c.Reply(err.Error())
+	}
 	Items := result.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Contents[0].ItemSectionRenderer.Contents
 	if len(Items) == 0 {
 		return c.Reply("No results found.")
