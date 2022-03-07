@@ -626,4 +626,5 @@ break
 results = append(results, YoutubeVideo{Title: "Hello"})
 }
 log.Println(results)
+return result
 }
