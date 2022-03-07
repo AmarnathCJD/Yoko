@@ -603,12 +603,12 @@ func ByteCount(b int64) string {
 
 func SearchVideos(query string, limit int) {
 	var YouTubeApi = "https://www.youtube.com/youtubei/v1/search?key=AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
-	var Payload = strings.NewReader(`{"context":{"client":{"clientName":"WEB","clientVersion":"2.20220303.06.01"}},"query":` + query + `}`)
+	var Payload = strings.NewReader(`{"context":{"client":{"clientName":"WEB","clientVersion":"2.20220303.06.01"}},"query":"` + query + `"}`)
 	req, _ := http.NewRequest("POST", YouTubeApi, Payload)
 	req.Header.Set("content-type", "application/json")
 	resp, _ := Client.Do(req)
 	defer resp.Body.Close()
-	var r mapType
+	var r YoutubeResult
 	json.NewDecoder(resp.Body).Decode(&r)
 	b, _ := json.Marshal(r)
 	log.Println(string(b))
