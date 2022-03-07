@@ -171,7 +171,7 @@ type YoutubeResult struct {
                   } 
                   Title struct {
                     Runs []struct {
-                      Text string json:"text"
+                      Text string 
                     }
                                     }
                                 }
