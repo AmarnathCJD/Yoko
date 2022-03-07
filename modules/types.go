@@ -198,8 +198,7 @@ type YoutubeResult struct {
 	}
 }
 
-type YoutubeResults []struct {
-	Result struct {
+type YoutubeVideo struct {
 		Title     string
 		ID        string
 		Thumbnail string
