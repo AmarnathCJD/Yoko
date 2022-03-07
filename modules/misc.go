@@ -492,7 +492,7 @@ func AuddIO(c tb.Context) error {
 
 func SongDownload(c tb.Context) error {
 	Args := GetArgs(c)
-        SearchVideos(Args, 1)
+	SearchVideos(Args, 1)
 	search, err := YoutubeSearch(Args, 1)
 	if err != nil {
 		return c.Reply(err.Error())
