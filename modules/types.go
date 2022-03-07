@@ -199,11 +199,11 @@ type YoutubeResult struct {
 }
 
 type YoutubeVideo struct {
-		Title     string
-		ID        string
-		Thumbnail string
-		Author    string
-		Published string
-		Duration  string
-		Views     string
-	}
+	Title     string
+	ID        string
+	Thumbnail string
+	Author    string
+	Published string
+	Duration  string
+	Views     string
+}
