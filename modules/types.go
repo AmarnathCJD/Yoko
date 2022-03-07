@@ -174,6 +174,20 @@ type YoutubeResult struct {
 											Text string
 										}
 									}
+LongByLineText struct {
+Runs []struct {
+Text string 
+}
+}
+PublishedTimeText struct {
+SimpleText string
+}
+LengthText struct {
+SimpleText string
+}
+ViewCountText struct {
+SimpleText string 
+}
 								}
 							}
 						}
@@ -189,5 +203,9 @@ type YoutubeResults []struct {
 		Title     string
 		ID        string
 		Thumbnail string
+                Author    string
+                Published string
+                Duration  string
+                Views     string
 	}
 }
