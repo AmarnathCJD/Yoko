@@ -616,13 +616,14 @@ func SearchVideos(query string, limit int) (YoutubeResult, error) {
 	defer resp.Body.Close()
 	var result YoutubeResult
 	json.NewDecoder(resp.Body).Decode(&result)
-        Items, ok := result.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Contents[0].ItemSectionRenderer.Contents
-        var results = make(YoutubeResults, limit)
+        Items := result.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Contents[0].ItemSectionRenderer.Contents
+        var results []YoutubeVideo
         for i, vd := range Items {
+fmt.Println(vd)
         if i+1>=limit{
 break
 }
-results [i] = YoutubeResults.Result{Title: "Hello"}
+results = append(results, YoutubeVideo{Title: "Hello"})
 }
 log.Println(results)
 }
