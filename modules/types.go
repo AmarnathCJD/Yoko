@@ -185,11 +185,11 @@ type YoutubeResult struct {
 }
 
 type YtResults struct {
- Results [] struct {
- Title string
- ID string
- Thumbnail struct {
-URL string
-}
-}
+	Results []struct {
+		Title     string
+		ID        string
+		Thumbnail struct {
+			URL string
+		}
+	}
 }
