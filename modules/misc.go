@@ -492,9 +492,12 @@ func AuddIO(c tb.Context) error {
 
 func SongDownload(c tb.Context) error {
 	Args := GetArgs(c)
-	result := SearchVideos(Args, 1)
+	result, err := SearchVideos(Args, 1)
+        if err != nil {
+return c.Reply(err.Error())
+}
 	Items := result.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Contents[0].ItemSectionRenderer.Contents
-	if len(items) == 0 {
+	if len(Items) == 0 {
 		return c.Reply("No results found.")
 	}
 	Result := Items[0]
@@ -507,7 +510,7 @@ func SongDownload(c tb.Context) error {
 	defer outFile.Close()
 	io.Copy(outFile, stream)
 	duration, _ := time.ParseDuration(video.Duration.String())
-	ThumbBytes, _ := Client.Get(Result.Thumbnail.Thumbnails[0].URL)
+	ThumbBytes, _ := Client.Get(Result.VideoRenderer.Thumbnail.Thumbnails[0].URL)
 	defer ThumbBytes.Body.Close()
 	ThumbFile, _ := os.Create("thumb.jpg")
 	defer ThumbFile.Close()
