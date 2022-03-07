@@ -492,17 +492,14 @@ func AuddIO(c tb.Context) error {
 
 func SongDownload(c tb.Context) error {
 	Args := GetArgs(c)
-	SearchVideos(Args, 1)
-	search, err := YoutubeSearch(Args, 1)
-	if err != nil {
-		return c.Reply(err.Error())
-	}
-	if len(search.Items) == 0 {
+	result := SearchVideos(Args, 1)
+	Items := result.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Contents[0].ItemSectionRenderer.Contents
+	if len(items) == 0 {
 		return c.Reply("No results found.")
 	}
-	Result := search.Items[0]
+	Result := Items[0]
 	youtube := yt.Client{}
-	video, err := youtube.GetVideo("https://www.youtube.com/watch?v=" + Result.Id.VideoId)
+	video, err := youtube.GetVideo("https://www.youtube.com/watch?v=" + Result.VideoRenderer.VideoID)
 	check(err)
 	stream, _, err := youtube.GetStream(video, video.Formats.FindByItag(140))
 	defer stream.Close()
@@ -510,7 +507,7 @@ func SongDownload(c tb.Context) error {
 	defer outFile.Close()
 	io.Copy(outFile, stream)
 	duration, _ := time.ParseDuration(video.Duration.String())
-	ThumbBytes, _ := Client.Get(Result.Snippet.Thumbnails.Default.Url)
+	ThumbBytes, _ := Client.Get(Result.Thumbnail.Thumbnails[0].URL)
 	defer ThumbBytes.Body.Close()
 	ThumbFile, _ := os.Create("thumb.jpg")
 	defer ThumbFile.Close()
