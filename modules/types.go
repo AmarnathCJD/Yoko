@@ -152,34 +152,34 @@ type AuddApi struct {
 }
 
 type YoutubeResult struct {
-  EstimatedResults string 
-  Contents         struct {
-    TwoColumnSearchResultsRenderer struct {
-      PrimaryContents struct {
-        SectionListRenderer struct {
-          Contents []struct {
-            ItemSectionRenderer struct {
-              Contents []struct {
-                VideoRenderer struct {
-                  VideoID   string
-                  Thumbnail struct {
-                    Thumbnails []struct {
-                      URL    string 
-                      Width  int    
-                      Height int    
-                    }
-                  } 
-                  Title struct {
-                    Runs []struct {
-                      Text string 
-                    }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+	EstimatedResults string
+	Contents         struct {
+		TwoColumnSearchResultsRenderer struct {
+			PrimaryContents struct {
+				SectionListRenderer struct {
+					Contents []struct {
+						ItemSectionRenderer struct {
+							Contents []struct {
+								VideoRenderer struct {
+									VideoID   string
+									Thumbnail struct {
+										Thumbnails []struct {
+											URL    string
+											Width  int
+											Height int
+										}
+									}
+									Title struct {
+										Runs []struct {
+											Text string
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
