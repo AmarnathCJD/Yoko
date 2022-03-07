@@ -615,6 +615,6 @@ return YoutubeResult{}, err
 }
 	defer resp.Body.Close()
 	var result YoutubeResult
-	json.NewDecoder(resp.Body).Decode(&r)
+	json.NewDecoder(resp.Body).Decode(&result)
 	return result, nil
 }
