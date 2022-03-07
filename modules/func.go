@@ -608,7 +608,8 @@ func SearchVideos(query string, limit int) {
 	req.Header.Set("content-type", "application/json")
 	resp, _ := Client.Do(req)
 	defer resp.Body.Close()
-	var r mapType
+	var r YoutubeResult
 	json.NewDecoder(resp.Body).Decode(&r)
-	fmt.Println(r)
+	b, _ := json.Marshal(r)
+        log.Println(b)
 }
