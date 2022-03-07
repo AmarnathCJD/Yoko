@@ -611,5 +611,5 @@ func SearchVideos(query string, limit int) {
 	var r YoutubeResult
 	json.NewDecoder(resp.Body).Decode(&r)
 	b, _ := json.Marshal(r)
-	log.Println(b)
+	log.Println(string(b))
 }
