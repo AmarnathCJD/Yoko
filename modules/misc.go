@@ -526,7 +526,7 @@ func IPLookup(c tb.Context) error {
 	if Args == "" {
 		return c.Reply("Please specify an IP address.")
 	}
-	url := "https://ipinfo.io/" + Args + "json?token=a25e6bc6a305c7"
+	url := "https://ipinfo.io/" + Args + "/json?token=a25e6bc6a305c7"
 	resp, err := Client.Get(url)
 	check(err)
 	defer resp.Body.Close()
