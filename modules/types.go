@@ -151,59 +151,24 @@ type AuddApi struct {
 	} `json:"result"`
 }
 
-type YoutubeResult struct {
-	EstimatedResults string
-	Contents         struct {
-		TwoColumnSearchResultsRenderer struct {
-			PrimaryContents struct {
-				SectionListRenderer struct {
-					Contents []struct {
-						ItemSectionRenderer struct {
-							Contents []struct {
-								VideoRenderer struct {
-									VideoID   string
-									Thumbnail struct {
-										Thumbnails []struct {
-											URL    string
-											Width  int
-											Height int
-										}
-									}
-									Title struct {
-										Runs []struct {
-											Text string
-										}
-									}
-									LongByLineText struct {
-										Runs []struct {
-											Text string
-										}
-									}
-									PublishedTimeText struct {
-										SimpleText string
-									}
-									LengthText struct {
-										SimpleText string
-									}
-									ViewCountText struct {
-										SimpleText string
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
 type YoutubeVideo struct {
-	Title     string
-	ID        string
-	Thumbnail string
-	Author    string
-	Published string
-	Duration  string
-	Views     string
+	Title     string `json:"title,omitempty"`
+	ID        string `json:"id,omitempty"`
+	Thumbnail string `json:"thumbnail,omitempty"`
+	Author    string `json:"author,omitempty"`
+	Published string `json:"published,omitempty"`
+	Duration  string `json:"duration,omitempty"`
+	Views     string `json:"views,omitempty"`
+}
+type IPData struct {
+	IP       string `json:"ip"`
+	Hostname string `json:"hostname"`
+	City     string `json:"city"`
+	Region   string `json:"region"`
+	Country  string `json:"country"`
+	Loc      string `json:"loc"`
+	Org      string `json:"org"`
+	Postal   string `json:"postal"`
+	Timezone string `json:"timezone"`
+	Error    string `json:"error,omitempty"`
 }

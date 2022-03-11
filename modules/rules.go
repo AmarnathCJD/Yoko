@@ -25,7 +25,7 @@ func Rules(c tb.Context) error {
 		return c.Reply("The group admins haven't set any rules for this chat yet.\nThis probably doesn't mean it's lawless though...!")
 	} else {
 		Private := db.PrivateRules(c.Chat().ID)
-		if Private == true {
+		if Private {
 			sel.Inline(sel.Row(sel.URL(btns, fmt.Sprintf("t.me/%s?start=rules_%d", BOT_USERNAME, c.Chat().ID))))
 			return c.Reply("Tap here to view the rules in your private chat.", sel)
 		} else {
@@ -58,7 +58,7 @@ func PrivateRules(c tb.Context) error {
 	Private := GetArgs(c)
 	if Private == "" {
 		P := db.PrivateRules(c.Chat().ID)
-		if P == true {
+		if P {
 			return c.Reply("Private rules are currently enabled!")
 		} else {
 			return c.Reply("Private rules are currently disabled!")

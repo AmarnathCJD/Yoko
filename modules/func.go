@@ -601,30 +601,35 @@ func ByteCount(b int64) string {
 		float64(b)/float64(div), "kMGTPE"[exp])
 }
 
-func SearchVideos(query string, limit int) (YoutubeResult, error) {
+func SearchVideos(query string, limit int) ([]YoutubeVideo, error) {
 	var YouTubeApi = "https://www.youtube.com/youtubei/v1/search?key=AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
 	var Payload = strings.NewReader(`{"context":{"client":{"clientName":"WEB","clientVersion":"2.20220303.06.01"}},"query":"` + query + `"}`)
 	req, err := http.NewRequest("POST", YouTubeApi, Payload)
 	if err != nil {
-		return YoutubeResult{}, err
+		return []YoutubeVideo{}, err
 	}
 	req.Header.Set("content-type", "application/json")
 	resp, err := Client.Do(req)
 	if err != nil {
-		return YoutubeResult{}, err
+		return []YoutubeVideo{}, err
 	}
 	defer resp.Body.Close()
-	var result YoutubeResult
+	var result map[string]interface{}
 	json.NewDecoder(resp.Body).Decode(&result)
-	Items := result.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Contents[0].ItemSectionRenderer.Contents
-	var results []YoutubeVideo
-	for i, vd := range Items {
-		fmt.Println(vd)
-		if i+1 >= limit {
+	re := result["contents"].(map[string]interface{})["twoColumnSearchResultsRenderer"].(map[string]interface{})["primaryContents"].(map[string]interface{})["sectionListRenderer"].(map[string]interface{})["contents"].([]interface{})[0].(map[string]interface{})["itemSectionRenderer"].(map[string]interface{})["contents"].([]interface{})
+	d, _ := json.MarshalIndent(re[0].(map[string]interface{}), "", "  ")
+	f, _ := os.Create("test.json")
+	f.Write(d)
+	f.Close()
+	var results = make([]YoutubeVideo, limit)
+	for i, vd := range re {
+		vd := vd.(map[string]interface{})
+		if i+1 >= limit && i != 0 {
 			break
 		}
-		results = append(results, YoutubeVideo{Title: "Hello"})
+		log.Println(vd["videoId"])
+		results = append(results, YoutubeVideo{ID: vd["videoId"].(string), Title: vd["title"].(map[string]interface{})["runs"].([]interface{})[0].(map[string]interface{})["text"].(string)})
 	}
 	log.Println(results)
-	return result, err
+	return results, nil
 }

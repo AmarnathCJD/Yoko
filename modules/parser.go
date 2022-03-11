@@ -177,7 +177,7 @@ func GetObj(c tb.Context) (interface{}, string, error) {
 			}
 		}
 	} else {
-		return nil, "", fmt.Errorf("You dont seem to be referring to a user or the ID specified is incorrect...")
+		return nil, "", fmt.Errorf("you dont seem to be referring to a user or the ID specified is incorrect...")
 	}
 }
 
@@ -371,10 +371,10 @@ func GetArgs(c tb.Context) string {
 
 func ParseCountry(s string) string {
 	for x, y := range COUNTRY_CODES {
-		if strings.ToLower(s) == strings.ToLower(x) {
+		if strings.EqualFold(s, x) {
 			return strings.ToUpper(y.(string))
 		}
-		if strings.ToLower(s) == strings.ToLower(y.(string)) {
+		if strings.EqualFold(s, y.(string)) {
 			return strings.ToUpper(y.(string))
 		}
 	}

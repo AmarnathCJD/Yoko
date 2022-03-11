@@ -496,21 +496,22 @@ func SongDownload(c tb.Context) error {
 	if err != nil {
 		return c.Reply(err.Error())
 	}
-	Items := result.Contents.TwoColumnSearchResultsRenderer.PrimaryContents.SectionListRenderer.Contents[0].ItemSectionRenderer.Contents
-	if len(Items) == 0 {
+	if len(result) == 0 {
 		return c.Reply("No results found.")
 	}
-	Result := Items[0]
+	Result := result[0]
 	youtube := yt.Client{}
-	video, err := youtube.GetVideo("https://www.youtube.com/watch?v=" + Result.VideoRenderer.VideoID)
+	video, err := youtube.GetVideo("https://www.youtube.com/watch?v=" + Result.ID)
 	check(err)
 	stream, _, err := youtube.GetStream(video, video.Formats.FindByItag(140))
+	check(err)
 	defer stream.Close()
 	outFile, _ := os.Create("song.mp3")
 	defer outFile.Close()
 	io.Copy(outFile, stream)
 	duration, _ := time.ParseDuration(video.Duration.String())
-	ThumbBytes, _ := Client.Get(Result.VideoRenderer.Thumbnail.Thumbnails[0].URL)
+	ThumbBytes, err := Client.Get(Result.Thumbnail)
+	check(err)
 	defer ThumbBytes.Body.Close()
 	ThumbFile, _ := os.Create("thumb.jpg")
 	defer ThumbFile.Close()
@@ -519,6 +520,32 @@ func SongDownload(c tb.Context) error {
 	Thumb := &tb.Photo{File: tb.File{FileLocal: "thumb.jpg"}}
 	sendErr := c.Reply(&tb.Audio{File: tb.File{FileLocal: "song.mp3"}, Title: video.Title, Duration: int(duration.Seconds()), FileName: video.Title, Performer: video.Author, Caption: video.Title, Thumbnail: Thumb})
 	return sendErr
+}
+
+func IPLookup(c tb.Context) error {
+	Args := GetArgs(c)
+	if Args == "" {
+		return c.Reply("Please specify an IP address.")
+	}
+	url := "https://ipinfo.io/" + Args + "json?token=a25e6bc6a305c7"
+	resp, err := Client.Get(url)
+	check(err)
+	defer resp.Body.Close()
+	var d IPData
+	json.NewDecoder(resp.Body).Decode(&d)
+	if d.Error != "" {
+		return c.Reply(d.Error)
+	}
+	var U = ""
+	U += "<b>IP:</b> " + d.IP + "\n"
+	U += "<b>City:</b> " + d.City + "\n"
+	U += "<b>Region:</b> " + d.Region + "\n"
+	U += "<b>Country:</b> " + d.Country + "\n"
+	U += "<b>Postal:</b> " + d.Postal + "\n"
+	U += "<b>Loc:</b> " + d.Loc + "\n"
+	U += "<b>Org:</b> " + d.Org + "\n"
+	return c.Reply(U)
+
 }
 
 ////////////////////////////////// OLD-NEW /////////////////////////////////////////////

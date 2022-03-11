@@ -33,6 +33,8 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca // indirect
 	github.com/temoto/robotstxt v1.1.1 // indirect
+	github.com/tidwall/match v1.1.1 // indirect
+	github.com/tidwall/pretty v1.2.0 // indirect
 	github.com/tklauser/go-sysconf v0.3.9 // indirect
 	github.com/tklauser/numcpus v0.3.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
@@ -63,6 +65,7 @@ require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/kkdai/youtube/v2 v2.7.10
 	github.com/rocketlaunchr/google-search v1.1.4
+	github.com/tidwall/gjson v1.14.0
 	github.com/valyala/fasthttp v1.31.0 // indirect
 	github.com/youmark/pkcs8 v0.0.0-20201027041543-1326539a0a0a // indirect
 	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3 // indirect
