@@ -503,8 +503,12 @@ func SongDownload(c tb.Context) error {
 	youtube := yt.Client{}
 	video, err := youtube.GetVideo("https://www.youtube.com/watch?v=" + Result.ID)
 	check(err)
+<<<<<<< HEAD
 	stream, _, err := youtube.GetStream(video, video.Formats.FindByItag(140))
 	check(err)
+=======
+	stream, _, err := youtube.GetStream(video, video.Formats.FindByQuality("tiny"))
+>>>>>>> e6a68b94f24931f4c35ac8d4e946dfd1326dc4a6
 	defer stream.Close()
 	outFile, _ := os.Create("song.mp3")
 	defer outFile.Close()
