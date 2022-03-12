@@ -564,14 +564,25 @@ func PinterestSearch(c tb.Context) error {
 	defer resp.Body.Close()
 	var p Pins
 	json.NewDecoder(resp.Body).Decode(&p)
+	URLS := []string{}
 	for _, v := range p.ResourceResponse.Data.Results {
 		for _, g := range v.Objects {
 			if g.Images.Orig.URL != "" {
-				fmt.Println(g.Images.Orig.URL)
+				URLS = append(URLS, g.Images.Orig.URL)
 			}
 		}
 	}
-	return nil
+	var Error error
+	for i, v := range URLS {
+		if i > 3 {
+			break
+		}
+		Photo := &tb.Photo{File: tb.FromURL(v)}
+		if err := c.Reply(Photo); err != nil {
+			Error = err
+		}
+	}
+	return Error
 }
 
 ////////////////////////////////// OLD-NEW /////////////////////////////////////////////
