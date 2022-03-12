@@ -27,11 +27,6 @@ var (
 	downvote = sel.Data("downvoteing", "thumbs_down")
 )
 
-type FF struct {
-	F     string
-	INDEX int
-}
-
 func parse_message(m *tb.Message) (string, string, []string) {
 	if m.IsReply() {
 		file_id, file_type := get_file(m.ReplyTo)
@@ -350,7 +345,7 @@ func check(err error) {
 
 func GetBin(bin string, m int) string {
 	resp, _ := http.Get(fmt.Sprintf("https://lookup.binlist.net/%s", bin))
-	var v bson.M
+	var v mapType
 	defer resp.Body.Close()
 	json.NewDecoder(resp.Body).Decode(&v)
 	if v == nil {
