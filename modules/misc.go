@@ -492,17 +492,16 @@ func AuddIO(c tb.Context) error {
 
 func SongDownload(c tb.Context) error {
 	Args := GetArgs(c)
-	result, err := SearchVideos(Args, 1)
-	if err != nil {
-		return c.Reply(err.Error())
-	}
+	result := SearchVideos(Args, 1)
 	if len(result) == 0 {
 		return c.Reply("No results found.")
 	}
 	Result := result[0]
 	youtube := yt.Client{}
 	video, err := youtube.GetVideo("https://www.youtube.com/watch?v=" + Result.ID)
-	check(err)
+	if err != nil {
+		return c.Reply(err.Error())
+	}
 	stream, _, err := youtube.GetStream(video, video.Formats.FindByQuality("tiny"))
 	defer stream.Close()
 	outFile, _ := os.Create("song.mp3")
@@ -518,6 +517,7 @@ func SongDownload(c tb.Context) error {
 	c.Bot().Notify(c.Chat(), "upload_voice")
 	Thumb := &tb.Photo{File: tb.File{FileLocal: "thumb.jpg"}}
 	sendErr := c.Reply(&tb.Audio{File: tb.File{FileLocal: "song.mp3"}, Title: video.Title, Duration: int(duration.Seconds()), FileName: video.Title, Performer: video.Author, Caption: video.Title, Thumbnail: Thumb})
+	os.Remove("song.mp3")
 	return sendErr
 }
 

@@ -3,6 +3,7 @@ module github.com/amarnathcjd/yoko
 go 1.17
 
 require (
+	github.com/SherlockYigit/youtube-go v1.0.0
 	github.com/StalkR/imdb v1.0.7
 	github.com/fogleman/gg v1.3.0
 	github.com/shirou/gopsutil v3.21.11+incompatible

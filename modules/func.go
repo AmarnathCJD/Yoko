@@ -1,7 +1,6 @@
 package modules
 
 import (
-	"context"
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
@@ -14,11 +13,10 @@ import (
 	"time"
 	"unicode"
 
+	yt "github.com/SherlockYigit/youtube-go"
 	"github.com/amarnathcjd/yoko/bot"
 	"github.com/amarnathcjd/yoko/modules/db"
 	"go.mongodb.org/mongo-driver/bson"
-	"google.golang.org/api/option"
-	youtube "google.golang.org/api/youtube/v3"
 	tb "gopkg.in/telebot.v3"
 )
 
@@ -572,12 +570,6 @@ func AddPayload(c tb.Context) tb.Context {
 	return c
 }
 
-func YoutubeSearch(q string, limit int64) (*youtube.SearchListResponse, error) {
-	client, _ := youtube.NewService(context.TODO(), option.WithAPIKey(YOUTUBE_API_KEY))
-	call := client.Search.List([]string{"snippet"}).Q(q).MaxResults(limit)
-	return call.Do()
-}
-
 func ConnectFunc(next tb.HandlerFunc) tb.HandlerFunc {
 	return func(c tb.Context) error {
 		if c.Message().Private() {
@@ -601,35 +593,19 @@ func ByteCount(b int64) string {
 		float64(b)/float64(div), "kMGTPE"[exp])
 }
 
-func SearchVideos(query string, limit int) ([]YoutubeVideo, error) {
-	var YouTubeApi = "https://www.youtube.com/youtubei/v1/search?key=AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
-	var Payload = strings.NewReader(`{"context":{"client":{"clientName":"WEB","clientVersion":"2.20220303.06.01"}},"query":"` + query + `"}`)
-	req, err := http.NewRequest("POST", YouTubeApi, Payload)
-	if err != nil {
-		return []YoutubeVideo{}, err
-	}
-	req.Header.Set("content-type", "application/json")
-	resp, err := Client.Do(req)
-	if err != nil {
-		return []YoutubeVideo{}, err
-	}
-	defer resp.Body.Close()
-	var result map[string]interface{}
-	json.NewDecoder(resp.Body).Decode(&result)
-	re := result["contents"].(map[string]interface{})["twoColumnSearchResultsRenderer"].(map[string]interface{})["primaryContents"].(map[string]interface{})["sectionListRenderer"].(map[string]interface{})["contents"].([]interface{})[0].(map[string]interface{})["itemSectionRenderer"].(map[string]interface{})["contents"].([]interface{})
-	d, _ := json.MarshalIndent(re[0].(map[string]interface{}), "", "  ")
-	f, _ := os.Create("test.json")
-	f.Write(d)
-	f.Close()
+func SearchVideos(q string, limit int) []YoutubeVideo {
+	vids := yt.Search(q, yt.SearchOptions{
+		Limit: limit,
+		Type:  "video",
+	})
 	var results = make([]YoutubeVideo, limit)
-	for i, vd := range re {
-		vd := vd.(map[string]interface{})
-		if i+1 >= limit && i != 0 {
-			break
+	for i, v := range vids {
+		results[i] = YoutubeVideo{
+			ID:        v.Video.Id,
+			Title:     v.Title,
+			URL:       v.Video.Url,
+			Thumbnail: v.Video.Thumbnail.Url,
 		}
-		log.Println(vd["videoId"])
-		results = append(results, YoutubeVideo{ID: vd["videoId"].(string), Title: vd["title"].(map[string]interface{})["runs"].([]interface{})[0].(map[string]interface{})["text"].(string)})
 	}
-	log.Println(results)
-	return results, nil
+	return results
 }
