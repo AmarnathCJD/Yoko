@@ -581,7 +581,7 @@ func PinterestSearch(c tb.Context) error {
 		}
 		Images = append(Images, &tb.Photo{File: tb.FromURL(v)})
 	}
-	fmt.Println(URLS)
+	fmt.Println(Images)
 	_, sendErr := c.Bot().SendAlbum(c.Chat(), Images)
 	return sendErr
 }
