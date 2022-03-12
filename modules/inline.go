@@ -269,20 +269,27 @@ func PinterestSearch(c tb.Context) error {
 		for _, g := range v.Objects {
 			if g.Images.Orig.URL != "" {
 				Urls = append(Urls, g.Images.Orig.URL)
+				fmt.Println(g.Images.Orig.URL)
 			}
 		}
 	}
 	fmt.Println(Urls)
-	results := make(tb.Results, len(Urls))
+	results := make(tb.Results, 2)
+	q := 0
 	for i, v := range Urls {
-		results[i] = &tb.PhotoResult{
-			ResultBase: tb.ResultBase{},
-			URL:        v,
-			Width:      0,
-			Height:     0,
-			Title:      fmt.Sprint(i),
+		fmt.Println(v)
+		if v != "" {
+			results[i] = &tb.PhotoResult{
+				ResultBase: tb.ResultBase{},
+				URL:        v,
+				Title:      fmt.Sprint(i),
+			}
+			results[i].SetResultID(strconv.Itoa(i))
+			q++
 		}
-		results[i].SetResultID(strconv.Itoa(i))
+		if q == 2 {
+			break
+		}
 	}
 	fmt.Println(results)
 	return c.Bot().Answer(c.Query(), &tb.QueryResponse{
