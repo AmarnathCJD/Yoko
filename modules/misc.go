@@ -572,17 +572,15 @@ func PinterestSearch(c tb.Context) error {
 			}
 		}
 	}
-	var Error error
+	var Images tb.Album
 	for i, v := range URLS {
 		if i > 3 {
 			break
 		}
-		Photo := &tb.Photo{File: tb.FromURL(v)}
-		if err := c.Reply(Photo); err != nil {
-			Error = err
-		}
+		Images = append(Images, &tb.Photo{File: tb.FromURL(v)})
 	}
-	return Error
+	_, sendErr := c.Bot().SendAlbum(c.Chat(), Images)
+	return sendErr
 }
 
 ////////////////////////////////// OLD-NEW /////////////////////////////////////////////
