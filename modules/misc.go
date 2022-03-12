@@ -422,7 +422,7 @@ func Telegraph(c tb.Context) error {
 	}
 	switch ToUpload.(type) {
 	case string:
-		req, err := http.NewRequest("GET", "https://api.telegra.ph/createPage?access_token="+TelegraphToken+"&title=Sample+Page&author_name=Anonymous&content="+ToUpload.(string)+"&return_content=true", nil)
+		req, _ := http.NewRequest("GET", "https://api.telegra.ph/createPage?access_token="+TelegraphToken+"&title=Sample+Page&author_name=Anonymous&content="+ToUpload.(string)+"&return_content=true", nil)
 		req.Header.Add("Content-Type", "application/json")
 		resp, err := Client.Do(req)
 		check(err)
@@ -503,6 +503,9 @@ func SongDownload(c tb.Context) error {
 		return c.Reply(err.Error())
 	}
 	stream, _, err := youtube.GetStream(video, video.Formats.FindByQuality("tiny"))
+	if err != nil {
+		return c.Reply(err.Error())
+	}
 	defer stream.Close()
 	outFile, _ := os.Create("song.mp3")
 	defer outFile.Close()

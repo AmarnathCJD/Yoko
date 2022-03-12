@@ -175,7 +175,7 @@ func GetObj(c tb.Context) (interface{}, string, error) {
 			}
 		}
 	} else {
-		return nil, "", fmt.Errorf("you dont seem to be referring to a user or the ID specified is incorrect...")
+		return nil, "", fmt.Errorf("you dont seem to be referring to a user or the ID specified is incorrect")
 	}
 }
 
