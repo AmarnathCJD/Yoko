@@ -566,6 +566,7 @@ func PinterestSearch(c tb.Context) error {
 	json.NewDecoder(resp.Body).Decode(&p)
 	URLS := []string{}
 	for _, v := range p.ResourceResponse.Data.Results {
+		fmt.Println(v.Images)
 		for _, g := range v.Objects {
 			if g.Images.Orig.URL != "" {
 				URLS = append(URLS, g.Images.Orig.URL)

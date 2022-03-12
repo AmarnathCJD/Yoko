@@ -170,6 +170,7 @@ type Pins struct {
 	ResourceResponse struct {
 		Data struct {
 			Results []struct {
+				Images  interface{} `json:"images"`
 				Objects []struct {
 					Images struct {
 						Orig struct {
