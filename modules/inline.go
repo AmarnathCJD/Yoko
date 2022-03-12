@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"net/url"
 	"strconv"
 	"strings"
 
@@ -47,8 +46,6 @@ func InlineQueryHandler(c tb.Context) error {
 		return nil
 	} else if strings.HasPrefix(query, "insta") {
 		return InstaGramSearch(c)
-	} else if strings.HasPrefix(query, "pin") {
-		return PinterestSearch(c)
 	}
 	return nil
 }
@@ -251,50 +248,4 @@ func InstaGramSearch(c tb.Context) error {
 		Results:   results,
 		CacheTime: 60,
 	})
-}
-
-func PinterestSearch(c tb.Context) error {
-	Args := GetArgs(c)
-	req, err := http.NewRequest("GET", `https://in.pinterest.com/resource/BaseSearchResource/get/?source_url=%2Fsearch%2Fpins%2F%3Fq%3Danime%26rs%3Dtyped%26term_meta%5B%5D%3Danime%257Ctyped&data=%7B%22options%22%3A%7B%22article%22%3Anull%2C%22appliedProductFilters%22%3A%22---%22%2C%22auto_correction_disabled%22%3Afalse%2C%22corpus%22%3Anull%2C%22customized_rerank_type%22%3Anull%2C%22filters%22%3Anull%2C%22query%22%3A%22`+url.QueryEscape(Args)+`%22%2C%22query_pin_sigs%22%3Anull%2C%22redux_normalize_feed%22%3Atrue%2C%22rs%22%3A%22typed%22%2C%22scope%22%3A%22pins%22%2C%22source_id%22%3Anull%2C%22no_fetch_context_on_resource%22%3Afalse%7D%2C%22context%22%3A%7B%7D%7D&_=1647078351002`, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-	req.Header.Set("cookie", `csrftoken=ef157ead38e23648ad920b3947167029; _b="AWE8wCyJ3SZDna0mrM3dRqAlBU5cT0RDGYpjd4nzFS++g5yM3ahjTivMA7KKR5J7XiE="; _pinterest_referrer=https://www.google.com/; _auth=1; _pinterest_sess=TWc9PSZUYWh0R0YwRjZ4VGxFeXI3UklsdjkwWGMvejlNTjNoUkVJZWRVK0VsMmY5YUNTaktRYjBVQUppeG1hOTdnSzA3eHJ2Z1VOSFdaYjlRaFpGaVJpRWEySExjTDRvTjVHcVA1MThyMzNZR3pVS0I0QjU4UFFDc2JBUWxVdjFrdEJTby9QbmNvcE01UXZTaFEvS3laNDhKRWRPM0pGVThtWEdmNDA3K0lnUXFhK3dmcTRsUURhMk5tSlBBL2JhaXZRL0xaWjRuOG4xREg5N3l2dWIxSUxDSENRQldCaEhZMWkvR1hXVTczODdsUmlXeE1yUDFNcmhyaTBIVGpoTVovcjZGNndXRitWdTFRNzBUeXJOY3Q4Tlp4QStnRUt2UDIrZlpOTS9TZnhOa3NIQ1ozK1pYV1Q5UEdlUklXR2MvczU3QXZ3TmVEYXJlWnhkWnQ2VVFoempOd1pub0NsTi9tQlI1U3k5UUsrOCtGUDRvLzVKUm1xdWFNRyt4VU1HMTlDaXdROUdOQk1nYzNYRWdhM284WWZHTEM0ek92V0JVZnRxek4zM1U3Sk1mcC9FQVI5Ukd5TXpoOVhtSDJuMTRCd2cvV29LMnRIcE1JbDhWdFJDeFJ1WUdqMnJTb1JUWkszOTB1N2U4SVdUR0ZkZXI5ODlWV2ljdUIxb2J1V3RLMHJrWkMxZDlFT2xNNE5kV2wxaFFpV2plaGFidHA5djQwV0M5UHZoYmY4citBN0tlZ3FKN1hQNEZmTm12UFRWenZ5ZEYzYkZ4dWhIVndTS2Z6d1pxYzZnemo0SXRWUWdZdFgrNXNBWFQ3UXRxTEdYR3lRZXEvdzVGVmlPdE5PM0JPQWZUaGQvUTZYS0NoWFZ6NDIvZmtMNHhZZmkra2EzTUoyeEhCWHNHK3VRSnh2RTkveEtXQkJscExqMGlQVklwZ2FvODdEQkd6NWRZYU45WlJhV0F5VTJLYm5VWnNYbVdtbm9pOGJ1ZTM2cGFrRmNiU2dKWDQxeHk5c0l0aHpaaEpzUEdiT2RJV3p2UlBweUloM1luSS8vWU93PT0mVDRSeUlMcm1sS1FrRXIzdklSQXkyNWpZVVFRPQ==; _routing_id="c92c85e8-cf4a-439f-8664-790c42f90b69"; sessionFunnelEventLogged=1; cm_sub=none`)
-	resp, err := Client.Do(req)
-	check(err)
-	var pins Pins
-	json.NewDecoder(resp.Body).Decode(&pins)
-	Urls := []string{}
-	for _, v := range pins.ResourceResponse.Data.Results {
-		for _, g := range v.Objects {
-			if g.Images.Orig.URL != "" {
-				Urls = append(Urls, g.Images.Orig.URL)
-				fmt.Println(g.Images.Orig.URL)
-			}
-		}
-	}
-	fmt.Println(Urls)
-	results := make(tb.Results, 2)
-	q := 0
-	for i, v := range Urls {
-		fmt.Println(v)
-		if v != "" {
-			results[i] = &tb.PhotoResult{
-				ResultBase: tb.ResultBase{},
-				URL:        v,
-				Title:      fmt.Sprint(i),
-			}
-			results[i].SetResultID(strconv.Itoa(i))
-			q++
-		}
-		if q == 2 {
-			break
-		}
-	}
-	fmt.Println(results)
-	return c.Bot().Answer(c.Query(), &tb.QueryResponse{
-		Results:   results,
-		CacheTime: 60,
-	})
-
 }
