@@ -165,3 +165,19 @@ type IPData struct {
 		Message string `json:"message"`
 	} `json:"error"`
 }
+
+type Pins struct {
+	ResourceResponse struct {
+		Data struct {
+			Results []struct {
+				Objects []struct {
+					Images struct {
+						Orig struct {
+							URL string `json:"url,omitempty"`
+						} `json:"orig,omitempty"`
+					} `json:"images,omitempty"`
+				} `json:"objects,omitempty"`
+			} `json:"results,omitempty"`
+		} `json:"data,omitempty"`
+	} `json:"resource_response,omitempty"`
+}
