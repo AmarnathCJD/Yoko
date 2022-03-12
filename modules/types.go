@@ -170,7 +170,7 @@ type Pins struct {
 	ResourceResponse struct {
 		Data struct {
 			Results []struct {
-				Images []struct {
+				Images struct {
 					Orig struct {
 						URL string `json:"url,omitempty"`
 					} `json:"orig,omitempty"`
