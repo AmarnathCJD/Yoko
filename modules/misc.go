@@ -574,6 +574,7 @@ func PinterestSearch(c tb.Context) error {
 	if len(URLS) == 0 {
 		return c.Reply("No results found!")
 	}
+	fmt.Println(URLS[0])
 	var Images tb.Album
 	for i, v := range URLS {
 		if i > 3 {
@@ -581,7 +582,7 @@ func PinterestSearch(c tb.Context) error {
 		}
 		Images = append(Images, &tb.Photo{File: tb.FromURL(v)})
 	}
-	fmt.Println(Images)
+	fmt.Println(len(Images))
 	_, sendErr := c.Bot().SendAlbum(c.Chat(), Images)
 	return sendErr
 }
