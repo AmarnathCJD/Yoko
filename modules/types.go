@@ -160,6 +160,7 @@ type YoutubeVideo struct {
 	Duration  string `json:"duration,omitempty"`
 	Views     string `json:"views,omitempty"`
 }
+
 type IPData struct {
 	IP       string `json:"ip"`
 	Hostname string `json:"hostname"`
@@ -170,5 +171,8 @@ type IPData struct {
 	Org      string `json:"org"`
 	Postal   string `json:"postal"`
 	Timezone string `json:"timezone"`
-	Error    string `json:"error,omitempty"`
+	Error    struct {
+		Code    int    `json:"code"`
+		Message string `json:"message"`
+	} `json:"error"`
 }

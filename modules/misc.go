@@ -532,11 +532,11 @@ func IPLookup(c tb.Context) error {
 	defer resp.Body.Close()
 	var d IPData
 	json.NewDecoder(resp.Body).Decode(&d)
-	if d.Error != "" {
-		return c.Reply(d.Error)
+	if d.Error.Message != "" {
+		return c.Reply(d.Error.Message)
 	}
 	var U = ""
-	U += "<b>IP:</b> " + d.IP + "\n"
+	U += "<b>IP:</b> <code>" + d.IP + "</code>\n"
 	U += "<b>City:</b> " + d.City + "\n"
 	U += "<b>Region:</b> " + d.Region + "\n"
 	U += "<b>Country:</b> " + d.Country + "\n"
