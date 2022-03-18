@@ -92,21 +92,19 @@ func ParseMD(c *tb.Message) string {
 
 }
 
-var FILLINGS = []FF{{"{first}", 1}, {"{last}", 2}, {"{username}", 3}, {"{fullname}", 5}, {"{id}", 4}, {"{chatname}", 6}, {"{mention}", 7}}
-
 func ParseString(t string, c tb.Context) (string, bool) {
+	var Fillings = map[string]int{"{first}": 1, "{last}": 2, "{username}": 3, "{fullname}": 5, "{id}": 4, "{chatname}": 6, "{mention}": 7}
 	q, preview := 0, true
 	if strings.Contains(t, "{preview}") {
 		preview = false
 		t = strings.ReplaceAll(t, "{preview}", "")
 	}
-	for _, f := range FILLINGS {
-		if strings.Contains(t, f.F) {
+	for a, b := range Fillings {
+		if strings.Contains(t, a) {
 			q++
-			t = strings.ReplaceAll(t, f.F, "%["+strconv.Itoa(f.INDEX)+"]s")
+			t = strings.ReplaceAll(t, a, "%["+strconv.Itoa(b)+"]s")
 
 		}
-
 	}
 	if strings.Contains(t, "{rules}") {
 		t = strings.ReplaceAll(t, "{rules}", "[Rules](buttonurl://rules)")
@@ -177,7 +175,7 @@ func GetObj(c tb.Context) (interface{}, string, error) {
 			}
 		}
 	} else {
-		return nil, "", fmt.Errorf("you dont seem to be referring to a user or the ID specified is incorrect...")
+		return nil, "", fmt.Errorf("you dont seem to be referring to a user or the ID specified is incorrect")
 	}
 }
 
@@ -321,7 +319,6 @@ func EscapeHTML(s string) string {
 	for x, y := range map[string]string{"<": "&lt;", ">": "&gt;", "&": "&amp;"} {
 		s = strings.ReplaceAll(s, x, y)
 	}
-
 	return s
 }
 

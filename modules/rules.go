@@ -56,6 +56,7 @@ func ResetRulesButton(c tb.Context) error {
 
 func PrivateRules(c tb.Context) error {
 	Private := GetArgs(c)
+	Private = strings.ToLower(Private)
 	if Private == "" {
 		P := db.PrivateRules(c.Chat().ID)
 		if P {

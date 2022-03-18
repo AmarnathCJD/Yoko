@@ -152,23 +152,37 @@ type AuddApi struct {
 }
 
 type YoutubeVideo struct {
-	Title     string `json:"title,omitempty"`
-	ID        string `json:"id,omitempty"`
-	Thumbnail string `json:"thumbnail,omitempty"`
-	Author    string `json:"author,omitempty"`
-	Published string `json:"published,omitempty"`
-	Duration  string `json:"duration,omitempty"`
-	Views     string `json:"views,omitempty"`
+	ID        string `json:"id"`
+	URL       string `json:"url"`
+	Title     string `json:"title"`
+	Thumbnail string `json:"thumbnail"`
 }
+
 type IPData struct {
-	IP       string `json:"ip"`
-	Hostname string `json:"hostname"`
-	City     string `json:"city"`
-	Region   string `json:"region"`
-	Country  string `json:"country"`
-	Loc      string `json:"loc"`
-	Org      string `json:"org"`
-	Postal   string `json:"postal"`
-	Timezone string `json:"timezone"`
-	Error    string `json:"error,omitempty"`
+	IP, Hostname, City, Region, Country, Loc, Org, Postal, Timezone string
+	Error                                                           struct {
+		Code    int    `json:"code"`
+		Message string `json:"message"`
+	} `json:"error"`
+}
+
+type Pins struct {
+	ResourceResponse struct {
+		Data struct {
+			Results []struct {
+				Images struct {
+					Orig struct {
+						URL string `json:"url,omitempty"`
+					} `json:"orig,omitempty"`
+				}
+				Objects []struct {
+					Images struct {
+						Orig struct {
+							URL string `json:"url,omitempty"`
+						} `json:"orig,omitempty"`
+					} `json:"images,omitempty"`
+				} `json:"objects,omitempty"`
+			} `json:"results,omitempty"`
+		} `json:"data,omitempty"`
+	} `json:"resource_response,omitempty"`
 }

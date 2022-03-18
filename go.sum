@@ -54,6 +54,8 @@ github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAE
 github.com/PuerkitoBio/goquery v1.5.0/go.mod h1:qD2PgZ9lccMbQlc7eEOjaeRlFQON7xY8kdmcsrnKqMg=
 github.com/PuerkitoBio/goquery v1.5.1 h1:PSPBGne8NIUWw+/7vFBV+kG2J/5MOjbzc7154OaKCSE=
 github.com/PuerkitoBio/goquery v1.5.1/go.mod h1:GsLWisAFVj4WgDibEWF4pvYnkVQBpKBKeU+7zCJoLcc=
+github.com/SherlockYigit/youtube-go v1.0.0 h1:/GnStyJGlEcRCt/+D9sVhhY4288+wKcXUJfMKb7NXxE=
+github.com/SherlockYigit/youtube-go v1.0.0/go.mod h1:MsnPpZ9QQSV4/+s1idsMR7SLBpzVf3MbkPvr3v9+5OY=
 github.com/StalkR/httpcache v1.0.0 h1:Px+QK86m7FEEvCfpfC+C0sNiUnRrLQyMVVJ6LKiXNvk=
 github.com/StalkR/httpcache v1.0.0/go.mod h1:yvbaYwH6w1USHPqgspMSwumbLwWE+B7jIZgfLYkTw1M=
 github.com/StalkR/imdb v1.0.7 h1:T9ra3IObhWoNB2I2CNT6EFe8sTQH56adKJdEQi1q0Ig=
