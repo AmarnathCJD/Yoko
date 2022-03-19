@@ -191,43 +191,43 @@ func GetUser(c tb.Context) (User, string) {
 		return User{}, ""
 	}
 	var user User
-	switch Obj.(type) {
+	switch Obj := Obj.(type) {
 	case tb.User:
 		user = User{
-			ID:       Obj.(tb.User).ID,
-			Username: "@" + Obj.(tb.User).Username,
-			First:    EscapeHTML(Obj.(tb.User).FirstName),
-			Last:     EscapeHTML(Obj.(tb.User).LastName),
+			ID:       Obj.ID,
+			Username: "@" + Obj.Username,
+			First:    EscapeHTML(Obj.FirstName),
+			Last:     EscapeHTML(Obj.LastName),
 			DC:       0,
-			Mention:  GetMention(Obj.(tb.User).ID, Obj.(tb.User).FirstName),
+			Mention:  GetMention(Obj.ID, Obj.FirstName),
 			Giga:     false,
 			Type:     "user",
 		}
 	case tb.Chat:
-		if Obj.(tb.Chat).Title != string("") {
+		if Obj.Title != string("") {
 			user = User{
-				ID:       Obj.(tb.Chat).ID,
-				Username: "@" + Obj.(tb.Chat).Username,
-				First:    EscapeHTML(Obj.(tb.Chat).Title),
+				ID:       Obj.ID,
+				Username: "@" + Obj.Username,
+				First:    EscapeHTML(Obj.Title),
 				DC:       0,
-				Mention:  EscapeHTML(Obj.(tb.Chat).Title),
+				Mention:  EscapeHTML(Obj.Title),
 				Giga:     false,
 				Type:     "chat",
 			}
 		} else {
 			user = User{
-				ID:       Obj.(tb.User).ID,
-				Username: "@" + Obj.(tb.User).Username,
-				First:    EscapeHTML(Obj.(tb.User).FirstName),
-				Last:     EscapeHTML(Obj.(tb.User).LastName),
+				ID:       Obj.ID,
+				Username: "@" + Obj.Username,
+				First:    EscapeHTML(Obj.FirstName),
+				Last:     EscapeHTML(Obj.LastName),
 				DC:       0,
-				Mention:  GetMention(Obj.(tb.User).ID, Obj.(tb.User).FirstName),
+				Mention:  GetMention(Obj.ID, Obj.FirstName),
 				Giga:     false,
 				Type:     "user",
 			}
 		}
 	case string:
-		user = ResolveUsername(Obj.(string))
+		user = ResolveUsername(Obj)
 	}
 	if user.Error != string("") {
 		c.Reply(user.Error)

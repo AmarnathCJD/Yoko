@@ -43,12 +43,6 @@ func GetChatbotMode(chat_id int64) bool {
 
 func IsChatbot(chat_id int64) bool {
 	return false
-	for _, x := range CB_CHATS {
-		if x == chat_id {
-			return true
-		}
-	}
-	return false
 }
 
 // will fix this later

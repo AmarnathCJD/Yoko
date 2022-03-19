@@ -11,8 +11,6 @@ import (
 
 	"github.com/StalkR/imdb"
 	googlesearch "github.com/rocketlaunchr/google-search"
-	"google.golang.org/api/option"
-	"google.golang.org/api/youtube/v3"
 	tb "gopkg.in/telebot.v3"
 )
 
@@ -180,18 +178,15 @@ func yt_search(c tb.Context) {
 		return
 	}
 	arg := args[1]
-	client, _ := youtube.NewService(context.TODO(), option.WithAPIKey(YOUTUBE_API_KEY))
-	call := client.Search.List([]string{"snippet"}).Q(arg).MaxResults(10)
-	resp, err := call.Do()
-	check(err)
+	result := SearchVideos(arg, 10)
 	results := make(tb.Results, 10)
-	for i, x := range resp.Items {
-		text := fmt.Sprintf("<b><a href='https://www.youtube.com/watch?v=%s'>%s</a></b>\n<b>%s</b>\n<b>Published:</b> %s\n\n <i>%s</i>", x.Id.VideoId, x.Snippet.Title, x.Snippet.ChannelTitle, x.Snippet.PublishedAt, x.Snippet.Description)
-		r := &tb.ArticleResult{ResultBase: tb.ResultBase{ReplyMarkup: inline_markup("yt"), Content: &tb.InputTextMessageContent{Text: text, DisablePreview: false}}, Title: x.Snippet.Title, Description: x.Snippet.ChannelTitle, ThumbURL: x.Snippet.Thumbnails.Medium.Url}
+	for i, x := range result {
+		text := fmt.Sprintf("<b><a href='%s'>%s</a></b>\n<b>%s</b>\n<b>Author:</b> %s", x.URL, x.Title, x.Title, x.Channel)
+		r := &tb.ArticleResult{ResultBase: tb.ResultBase{ReplyMarkup: inline_markup("yt"), Content: &tb.InputTextMessageContent{Text: text, DisablePreview: false}}, Title: x.Title, Description: x.Channel, ThumbURL: x.Thumbnail}
 		results[i] = r
 		results[i].SetResultID(strconv.Itoa(i))
 	}
-	err = c.Bot().Answer(c.Query(), &tb.QueryResponse{
+	err := c.Bot().Answer(c.Query(), &tb.QueryResponse{
 		Results:   results,
 		CacheTime: 60,
 	})

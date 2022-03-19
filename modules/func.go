@@ -583,6 +583,7 @@ func SearchVideos(q string, limit int) []YoutubeVideo {
 			Title:     v.Title,
 			URL:       v.Video.Url,
 			Thumbnail: v.Video.Thumbnail.Url,
+			Channel:   v.Channel.Name,
 		}
 	}
 	return results

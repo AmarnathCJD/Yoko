@@ -136,6 +136,7 @@ type YoutubeVideo struct {
 	URL       string `json:"url"`
 	Title     string `json:"title"`
 	Thumbnail string `json:"thumbnail"`
+	Channel   string `json:"channel"`
 }
 
 type IPData struct {
@@ -158,7 +159,4 @@ type Pins struct {
 			} `json:"results,omitempty"`
 		} `json:"data,omitempty"`
 	} `json:"resource_response,omitempty"`
-}
-
-type FileDB struct {
 }

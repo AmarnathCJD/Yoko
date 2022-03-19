@@ -20,7 +20,6 @@ import (
 	"github.com/fogleman/gg"
 
 	"github.com/StalkR/imdb"
-	tg "github.com/TechMinerApps/telegraph"
 	"github.com/anaskhan96/soup"
 	yt "github.com/kkdai/youtube/v2"
 	"go.mongodb.org/mongo-driver/bson"
@@ -420,9 +419,9 @@ func Telegraph(c tb.Context) error {
 	} else {
 		ToUpload = Args
 	}
-	switch ToUpload.(type) {
+	switch ToUpload := ToUpload.(type) {
 	case string:
-		req, _ := http.NewRequest("GET", "https://api.telegra.ph/createPage?access_token="+TelegraphToken+"&title=Sample+Page&author_name=Anonymous&content="+ToUpload.(string)+"&return_content=true", nil)
+		req, _ := http.NewRequest("GET", "https://api.telegra.ph/createPage?access_token="+TelegraphToken+"&title=Sample+Page&author_name=Anonymous&content="+ToUpload+"&return_content=true", nil)
 		req.Header.Add("Content-Type", "application/json")
 		resp, err := Client.Do(req)
 		check(err)
@@ -431,7 +430,7 @@ func Telegraph(c tb.Context) error {
 		json.NewDecoder(resp.Body).Decode(&d)
 		fmt.Println(d)
 	case tb.File:
-		return c.Reply(ToUpload.(tb.File).FileID)
+		return c.Reply(ToUpload.FileID)
 	}
 	return nil
 }
@@ -608,48 +607,6 @@ func stringInSlice(a string, list []string) bool {
 }
 
 type mapType map[string]interface{}
-
-func telesgraph(c tb.Context) error {
-	text := c.Message().Payload
-	title := time.Now().Format("01-02-2006 15:04:05 Monday")
-	if c.Message().IsReply() {
-		if c.Message().ReplyTo.Text != string("") {
-			text = c.Message().ReplyTo.Text
-			if c.Message().Payload != string("") {
-				title = c.Message().Payload
-			}
-		} else if c.Message().ReplyTo.Document != nil {
-			c.Bot().Download(&c.Message().ReplyTo.Document.File, "doc.txt")
-			data, err := ioutil.ReadFile("doc.txt")
-			if err != nil {
-				c.Reply(err.Error())
-				return nil
-			} else {
-				text = string(data)
-				if c.Message().Payload != string("") {
-					title = c.Message().Payload
-				}
-			}
-			os.Remove("doc.txt")
-		}
-	}
-	if text == string("") {
-		c.Reply("No text was provided!")
-		return nil
-	}
-	client := tg.NewClient()
-	client.CreateAccount(tg.Account{ShortName: "mika", AuthorName: c.Sender().FirstName})
-	content, _ := client.ContentFormat(text)
-	pageData := tg.Page{
-		Title:   title,
-		Content: content,
-	}
-	page, err := client.CreatePage(pageData, true)
-	fmt.Println(err)
-	menu.Inline(menu.Row(menu.URL("Telegraph", page.URL)))
-	c.Reply(fmt.Sprintf("Pasted to <a href='%s'>Tele.graph.org</a>!", page.URL), &tb.SendOptions{DisableWebPagePreview: true, ReplyMarkup: menu})
-	return nil
-}
 
 func Math(c tb.Context) error {
 	query := c.Message().Payload
