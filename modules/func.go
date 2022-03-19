@@ -27,82 +27,88 @@ var (
 	downvote = sel.Data("downvoteing", "thumbs_down")
 )
 
-func parse_message(m *tb.Message) (string, string, []string) {
-	if m.IsReply() {
-		file_id, file_type := get_file(m.ReplyTo)
-		buttons := ""
-		if m.ReplyTo.ReplyMarkup != nil {
-			buttons = get_reply_markup(m.ReplyTo)
-		}
-		Ptext := ParseMD(m)
-		args := strings.SplitN(Ptext, " ", 3)
-		if len(args) == 3 {
-			note, name := args[2], args[1]
-			note += buttons
-			return name, note, []string{file_id, file_type}
-		} else if len(args) == 2 {
-			if m.ReplyTo.Text != string("") {
-				Ptext := ParseMD(m.ReplyTo)
-				note, name := Ptext, args[1]
-				note += buttons
-				return name, note, []string{file_id, file_type}
-			} else {
-				return args[1], buttons, []string{file_id, file_type}
-			}
-		} else {
-			return "", buttons, []string{file_id, file_type}
-		}
-	} else {
-		Ptext := ParseMD(m)
-		args := strings.SplitN(Ptext, " ", 3)
-		if len(args) == 3 {
-			return args[1], args[2], nil
-		} else if len(args) == 2 {
-			return args[1], "", nil
-		} else {
-			return "", "", nil
-		}
-	}
-}
-
-func get_file(m *tb.Message) (string, string) {
-	if m.Document != nil {
-		return m.Document.FileID, "document"
-	} else if m.Photo != nil {
-		return m.Photo.FileID, "photo"
-	} else if m.Sticker != nil {
-		return m.Sticker.FileID, "sticker"
-	} else if m.Audio != nil {
-		return m.Audio.FileID, "audio"
-	} else if m.Voice != nil {
-		return m.Voice.FileID, "voice"
-	} else if m.Animation != nil {
-		return m.Animation.FileID, "animation"
-	} else if m.Video != nil {
-		return m.Video.FileID, "video"
-	} else if m.VideoNote != nil {
-		return m.VideoNote.FileID, "videonote"
+func GetFile(c tb.Context) (string, string) {
+	Message := c.Message().ReplyTo
+	if Message.Document != nil {
+		return Message.Document.FileID, "document"
+	} else if Message.Photo != nil {
+		return Message.Photo.FileID, "photo"
+	} else if Message.Sticker != nil {
+		return Message.Sticker.FileID, "sticker"
+	} else if Message.Audio != nil {
+		return Message.Audio.FileID, "audio"
+	} else if Message.Voice != nil {
+		return Message.Voice.FileID, "voice"
+	} else if Message.Animation != nil {
+		return Message.Animation.FileID, "animation"
+	} else if Message.Video != nil {
+		return Message.Video.FileID, "video"
+	} else if Message.VideoNote != nil {
+		return Message.VideoNote.FileID, "videonote"
 	} else {
 		return "", ""
 	}
 }
 
-func get_reply_markup(m *tb.Message) string {
-	reply_mark := ""
-	mark := m.ReplyMarkup
-	for _, y := range mark.InlineKeyboard {
-		btn_num := 0
-		btn := ""
-		for _, x := range y {
-			btn_num++
-			btn += fmt.Sprintf("\n[%s](buttonurl://%s:same)", x.Text, x.URL)
+func ParseMessage(c tb.Context) db.MsgDB {
+	FileID, FileType, Text, Name := "", "", "", ""
+	Args := strings.SplitN(c.Message().Text, " ", 3)
+	if c.Message().IsReply() {
+		FileID, FileType = GetFile(c)
+		var Buttons string
+		if c.Message().ReplyTo.ReplyMarkup != nil {
+			Buttons = GetReplyMarkup(c)
 		}
-		if btn_num < 2 {
-			btn = strings.Replace(btn, ":same", "", 2)
+		Text = ParseMD(c.Message().ReplyTo) + Buttons
+		if len(Args) == 3 {
+			Text = Args[2] + Text
 		}
-		reply_mark += btn
+	} else {
+		Text = ParseMD(c.Message())
 	}
-	return reply_mark
+	if len(Args) > 1 {
+		Name = Args[1]
+	}
+	return db.MsgDB{Name: Name, Text: Text, File: db.FileDB{FileID: FileID, FileType: FileType}}
+}
+
+func GetReplyMarkup(c tb.Context) string {
+	var MarkUp string
+	for _, b := range c.Message().ReplyTo.ReplyMarkup.InlineKeyboard {
+		ButtonNum := 0
+		var Buttons string
+		for _, Button := range b {
+			ButtonNum++
+			Buttons += fmt.Sprintf("\n[%s](buttonurl://%s:same)", Button.Text, Button.URL)
+		}
+		if ButtonNum < 2 {
+			Buttons = strings.Replace(Buttons, ":same", "", 2)
+		}
+		MarkUp += Buttons
+	}
+	return MarkUp
+}
+
+func GetSendable(Msg db.MsgDB) tb.Sendable {
+	File := Msg.File
+	if File.FileType == "document" {
+		return &tb.Document{File: tb.File{FileID: File.FileID}, Caption: Msg.Text}
+	} else if File.FileType == "photo" {
+		return &tb.Photo{File: tb.File{FileID: File.FileID}, Caption: Msg.Text}
+	} else if File.FileType == "sticker" {
+		return &tb.Sticker{File: tb.File{FileID: File.FileID}}
+	} else if File.FileType == "audio" {
+		return &tb.Audio{File: tb.File{FileID: File.FileID}, Caption: Msg.Text}
+	} else if File.FileType == "voice" {
+		return &tb.Voice{File: tb.File{FileID: File.FileID}, Caption: Msg.Text}
+	} else if File.FileType == "animation" {
+		return &tb.Animation{File: tb.File{FileID: File.FileID}, Caption: Msg.Text}
+	} else if File.FileType == "video" {
+		return &tb.Video{File: tb.File{FileID: File.FileID}, Caption: Msg.Text}
+	} else if File.FileType == "videonote" {
+		return &tb.VideoNote{File: tb.File{FileID: File.FileID}}
+	}
+	return nil
 }
 
 func button_parser(text string) (string, *tb.ReplyMarkup) {
@@ -492,29 +498,6 @@ func TakeAction(action string, t int32, user tb.User, chat tb.Chat) error {
 		return b.Unban(&chat, &user, false)
 	}
 	return nil
-}
-
-func GetFile(file bson.A, caption string) tb.Sendable {
-	id, t := file[0].(string), file[1].(string)
-	if t == "document" {
-		return &tb.Document{File: tb.File{FileID: id}, Caption: caption}
-	} else if t == "sticker" {
-		return &tb.Sticker{File: tb.File{FileID: id}}
-	} else if t == "photo" {
-		return &tb.Photo{File: tb.File{FileID: id}, Caption: caption}
-	} else if t == "audio" {
-		return &tb.Audio{File: tb.File{FileID: id}, Caption: caption}
-	} else if t == "voice" {
-		return &tb.Voice{File: tb.File{FileID: id}, Caption: caption}
-	} else if t == "video" {
-		return &tb.Video{File: tb.File{FileID: id}, Caption: caption}
-	} else if t == "animation" {
-		return &tb.Animation{File: tb.File{FileID: id}, Caption: caption}
-	} else if t == "videonote" {
-		return &tb.VideoNote{File: tb.File{FileID: id}}
-	} else {
-		return nil
-	}
 }
 
 var (

@@ -169,7 +169,6 @@ func StripeRs(cc string, month string, year string, cvc string, c tb.Context) st
 	} else if IsBotAdmin(c.Sender().ID) {
 		status = "Premium"
 	}
-	log.Print(cc + "|" + month + "|" + year + "|" + cvc + "-" + code + "|" + c.Sender().FirstName)
 	F := fmt.Sprintf(stripe_1, "Stripe 1$", cc, year, month, cvc, code, emoji, dcode, msg, bin, total_time, c.Sender().FirstName, status)
 	return F
 }

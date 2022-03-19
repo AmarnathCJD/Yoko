@@ -42,6 +42,7 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["doge"] = HANDLE{FUNC: DogeSticker}
 	HANDLERS["audd"] = HANDLE{FUNC: AuddIO}
 	HANDLERS["ip"] = HANDLE{FUNC: IPLookup}
+	HANDLERS["pinterest"] = HANDLE{FUNC: PinterestSearch}
 	// start.go
 	HANDLERS["start"] = HANDLE{FUNC: Start}
 	HANDLERS["help"] = HANDLE{FUNC: Help_Menu}
@@ -175,9 +176,15 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["del"] = HANDLE{FUNC: Delete, MIDDLEWARE: DeleteMessages}
 	HANDLERS["purgefrom"] = HANDLE{FUNC: PurgeFrom, MIDDLEWARE: DeleteMessages}
 	HANDLERS["purgeto"] = HANDLE{FUNC: PurgeTo, MIDDLEWARE: DeleteMessages}
-	HANDLERS["pinterest"] = HANDLE{FUNC: PinterestSearch}
+	// approval.go
+	HANDLERS["approve"] = HANDLE{FUNC: Approve, MIDDLEWARE: ChangeInfo}
+	HANDLERS["unapprove"] = HANDLE{FUNC: Unapprove, MIDDLEWARE: ChangeInfo}
+	HANDLERS["approved"] = HANDLE{FUNC: Approved}
+	HANDLERS["approval"] = HANDLE{FUNC: Approval}
+	HANDLERS["unapproveall"] = HANDLE{FUNC: DisapproveAll, MIDDLEWARE: ChangeInfo}
+	HANDLERS["disapprove"] = HANDLE{FUNC: Unapprove, MIDDLEWARE: ChangeInfo}
+	HANDLERS["disapproveall"] = HANDLE{FUNC: DisapproveAll, MIDDLEWARE: ChangeInfo}
 	return HANDLERS
-
 }
 
 func RegisterHandlers() {

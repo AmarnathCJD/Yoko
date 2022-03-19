@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/amarnathcjd/yoko/modules/db"
-	"go.mongodb.org/mongo-driver/bson"
 	tb "gopkg.in/telebot.v3"
 )
 
@@ -16,27 +15,26 @@ var (
 )
 
 func SaveFilter(c tb.Context) error {
-	name, note, file := parse_message(c.Message())
-	if name == string("") {
+	Message := ParseMessage(c)
+	if Message.Name == string("") {
 		c.Reply("You need to give the filter a name!")
 		return nil
-	} else if note == string("") && file == nil {
+	} else if Message.Text == string("") && Message.File.FileID == string("") {
 		c.Reply("You need to give the filter a name!")
 		return nil
 	}
-	c.Reply(fmt.Sprintf("Saved filter '%s'.", name))
-	db.Save_filter(c.Chat().ID, name, note, file)
-	return nil
+	db.SaveFilter(c.Chat().ID, Message)
+	return c.Reply(fmt.Sprintf("Saved filter '%s'.", Message.Name))
 }
 
 func AllFilters(c tb.Context) error {
-	f := db.Get_filters(c.Chat().ID)
+	f := db.GetFilters(c.Chat().ID)
 	if len(f) == 0 {
 		return c.Reply(fmt.Sprintf("No filters in %s!", c.Chat().Title))
 	} else {
 		txt := fmt.Sprintf("<b>Filters in %s:</b>", c.Chat().Title)
 		for _, x := range f {
-			txt += fmt.Sprintf("\n- <code>%s</code>", x)
+			txt += fmt.Sprintf("\n- <code>%s</code>", x.Name)
 		}
 		return c.Reply(txt)
 	}
@@ -46,11 +44,14 @@ func StopFilter(c tb.Context) error {
 	if c.Message().Payload == string("") {
 		return c.Reply("not enough arguments provided.")
 	} else {
-		stop := db.Del_filter(c.Chat().ID, c.Message().Payload)
-		if !stop {
+		if !db.FilterExists(c.Chat().ID, c.Message().Payload) {
 			return c.Reply("You haven't saved any filters on this word yet!")
-		} else {
+		}
+		err := db.DelFilter(c.Chat().ID, c.Message().Payload)
+		if err != nil {
 			return c.Reply(fmt.Sprintf("Filter <code>'%s'</code> has been stopped!", c.Message().Payload))
+		} else {
+			return c.Reply("Error: " + err.Error())
 		}
 	}
 }
@@ -75,7 +76,7 @@ func DelAllFCB(c tb.Context) error {
 		return c.Edit("You should be the chat creator to do this!")
 	} else if p.Role == tb.Creator {
 		c.Edit("Deleted all chat filters.")
-		db.Del_all_filters(c.Chat().ID)
+		db.DelAllFilters(c.Chat().ID)
 	}
 	return nil
 }
@@ -93,25 +94,23 @@ func CancelDALL(c tb.Context) error {
 }
 
 func FilterEvent(c tb.Context) (bool, error) {
-	f := db.Get_filters(c.Chat().ID)
+	f := db.GetFilters(c.Chat().ID)
 	if len(f) == 0 {
 		return false, nil
 	}
 	for _, x := range f {
-		pattern := `( |^|[^\w])(?i)` + x + `( |$|[^\w])`
+		pattern := `( |^|[^\w])(?i)` + x.Name + `( |$|[^\w])`
 		if match, _ := regexp.Match(pattern, []byte(c.Text())); match {
-			filter := db.Get_filter(c.Chat().ID, x)
-			text, p := ParseString(filter["text"].(string), c)
+			text, p := ParseString(x.Text, c)
 			text, btns := button_parser(text)
-			if filter["file"] != nil && len(filter["file"].(bson.A)) != 0 && filter["file"].(bson.A)[0] != string("") {
-				f := GetFile(filter["file"].(bson.A), text)
+			if x.File.FileID != string("") {
+				f := GetSendable(x)
 				_, err := f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()})
 				if err != nil && strings.Contains(err.Error(), "telegram unknown: Bad Request: can't parse entities") {
 					_, err = f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
 					return true, err
 				}
 			} else {
-
 				if err := c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()}); strings.Contains(err.Error(), "telegram unknown: Bad Request: can't parse entities") {
 					c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
 				}

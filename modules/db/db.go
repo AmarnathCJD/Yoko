@@ -8,12 +8,27 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+var (
+	database = db.Database("go")
+	opts     = options.Update().SetUpsert(true)
+)
+
 func DBinit() *mongo.Client {
 	db, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://go:amar0245@lon5-c12-1.mongo.objectrocket.com:43391,lon5-c12-2.mongo.objectrocket.com:43391,lon5-c12-0.mongo.objectrocket.com:43391/go?replicaSet=24e1adf7f54a48fba7350c36009da162&retryWrites=false"))
 	if err != nil {
 		panic(err)
 	}
 	return db
+}
+
+type MsgDB struct {
+	Name string `json:"name,omitempty"`
+	Text string `json:"text,omitempty"`
+	File FileDB `json:"file,omitempty"`
+}
+type FileDB struct {
+	FileID   string `json:"file_id,omitempty"`
+	FileType string `json:"file_type,omitempty"`
 }
 
 var db = DBinit()
@@ -75,4 +90,13 @@ func IndexInSlice(list bson.A, index string, value interface{}) (bool, int) {
 		return false, 0
 	}
 	return false, 0
+}
+
+func DupFunc(F []MsgDB, Name string) []MsgDB {
+	for i, x := range F {
+		if x.Name == Name {
+			return append(F[:i], F[i+1:]...)
+		}
+	}
+	return F
 }

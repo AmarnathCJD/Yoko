@@ -47,6 +47,14 @@ func IsApproved(chatID int64, userID int64) bool {
 	return false
 }
 
+func GetAllApproved(chatID int64) []int64 {
+	if Chat, ok := AllApproved[chatID]; ok {
+		return Chat.Users
+	} else {
+		return nil
+	}
+}
+
 func GetApproved(chatID int64) []int64 {
 	var a Approved
 	AP := approve.FindOne(context.TODO(), bson.M{"chat_id": chatID})

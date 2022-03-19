@@ -20,9 +20,9 @@ func Welcome_set(c tb.Context) error {
 		check((err))
 		if mode {
 			if len(file) != 0 {
-				text, btns := button_parser(text)
-				f := GetFile(file, text)
-				f.Send(c.Bot(), c.Chat(), &tb.SendOptions{ReplyTo: msg, ReplyMarkup: btns, DisableWebPagePreview: true})
+				// text, btns := button_parser(text)
+				// f := GetSendable(file)
+				// f.Send(c.Bot(), c.Chat(), &tb.SendOptions{ReplyTo: msg, ReplyMarkup: btns, DisableWebPagePreview: true})
 			} else {
 				c.Send(text, &tb.SendOptions{ReplyTo: msg, DisableWebPagePreview: true})
 			}
@@ -48,16 +48,16 @@ func Welcome_set(c tb.Context) error {
 }
 
 func Set_welcome(c tb.Context) error {
-	Text, Text2, File := parse_message(c.Message())
-	if c.Message().IsReply() {
-		Text += Text2
-	}
-	if Text == string("") && File == nil {
-		c.Reply("You need to give the welcome message some content!")
-		return nil
-	}
-	c.Reply("The new welcome message has been saved!")
-	db.Set_welcome(c.Chat().ID, Text, File)
+	//Text, Text2, File := parse_message(c.Message())
+	//if c.Message().IsReply() {
+	//	Text += Text2
+	//}
+	//if Text == string("") && File == nil {
+	//	c.Reply("You need to give the welcome message some content!")
+	//	return nil
+	//}
+	//c.Reply("The new welcome message has been saved!")
+	//db.Set_welcome(c.Chat().ID, Text, File)
 	return nil
 }
 
@@ -77,9 +77,9 @@ func OnChatMemberHandler(c tb.Context) error {
 			}
 			text, btns := button_parser(text)
 			if len(file) != 0 {
-				text, p := ParseString(text, c)
-				f := GetFile(file, text)
-				f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns})
+				//text, p := ParseString(text, c)
+				//f := GetFile(file, text)
+				//f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns})
 			} else {
 				text, p := ParseString(text, c)
 				c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns})

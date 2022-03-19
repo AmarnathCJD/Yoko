@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/amarnathcjd/yoko/modules/db"
 	tb "gopkg.in/telebot.v3"
 )
 
@@ -313,6 +314,23 @@ func (user *User) Chat() *tb.Chat {
 		Title:    user.First,
 		Username: user.Username,
 	}
+}
+
+func (user *User) Approved(chatID int64) bool {
+	if db.IsApproved(chatID, user.ID) {
+		return true
+	}
+	if user.ID == OWNER_ID || user.ID == BOT_ID {
+		return true
+	}
+	return false
+}
+
+func GetReason(r string) string {
+	if r != string("") {
+		return ", " + "\n<b>Reason:</b> " + r
+	}
+	return "."
 }
 
 func EscapeHTML(s string) string {

@@ -6,33 +6,31 @@ import (
 	"strings"
 
 	"github.com/amarnathcjd/yoko/modules/db"
-	"go.mongodb.org/mongo-driver/bson"
 	tb "gopkg.in/telebot.v3"
 )
 
 func Save(c tb.Context) error {
-	m := c.Message()
-	name, note, file := parse_message(m)
-	if name == string("") {
-		b.Reply(m, "You need to give the note a name!")
+	Message := ParseMessage(c)
+	if Message.Name == string("") {
+		c.Reply("You need to give the note a name!")
 		return nil
-	} else if note == string("") && file == nil {
-		b.Reply(m, "You need to give the note some content!")
+	} else if Message.Text == string("") && Message.File.FileID == string("") {
+		c.Reply("You need to give the note some content!")
 		return nil
 	}
-	b.Reply(m, fmt.Sprintf("✨ Saved note <code>%s</code>", name))
-	db.Save_note(m.Chat.ID, name, note, file)
+	c.Reply(fmt.Sprintf("✨ Saved note <code>%s</code>", Message.Name))
+	db.SaveNote(c.Chat().ID, Message)
 	return nil
 }
 
 func All_notes(c tb.Context) error {
 	m := c.Message()
-	notes := db.Get_notes(c.Chat().ID)
+	notes := db.GetNotes(c.Chat().ID)
 	if notes == nil {
 		b.Reply(m, fmt.Sprintf("There are no notes in %s!", m.Chat.Title))
 		return nil
 	}
-	mode := db.Pnote_settings(c.Chat().ID)
+	mode := db.PnoteSettings(c.Chat().ID)
 	if mode {
 		menu := &tb.ReplyMarkup{}
 		menu.Inline(menu.Row(menu.URL("Click me!", fmt.Sprintf("t.me/yoko_robot?start=allnotes_%d", c.Chat().ID))))
@@ -41,19 +39,19 @@ func All_notes(c tb.Context) error {
 	}
 	note := fmt.Sprintf("Notes in <b>%s</b>", c.Chat().Title)
 	for _, x := range notes {
-		note += fmt.Sprintf("\n<b>-</b> <code>#%s</code>", x.(bson.M)["name"].(string))
+		note += fmt.Sprintf("\n<b>-</b> <code>#%s</code>", x.Name)
 	}
 	b.Reply(m, note+"\nYou can retrieve these notes by using <code>/get notename</code>")
 	return nil
 }
 
 func Gnote(c tb.Context) error {
-	note := db.Get_note(c.Chat().ID, c.Message().Payload)
-	if note == nil {
+	note := db.GetNote(c.Chat().ID, c.Message().Payload)
+	if note.Name == string("") {
 		c.Reply("No note found!")
 		return nil
 	}
-	mode := db.Pnote_settings(c.Chat().ID)
+	mode := db.PnoteSettings(c.Chat().ID)
 	if mode {
 		menu := &tb.ReplyMarkup{}
 		menu.Inline(menu.Row(menu.URL("Click me!", fmt.Sprintf("t.me/missmikabot?start=notes_%d_%s", c.Chat().ID, c.Message().Payload))))
@@ -61,10 +59,10 @@ func Gnote(c tb.Context) error {
 		return nil
 	}
 
-	text, p := ParseString(note["note"].(string), c)
+	text, p := ParseString(note.Text, c)
 	text, btns := button_parser(text)
-	if note["file"] != nil && len(note["file"].(bson.A)) != 0 && note["file"].(bson.A)[0] != string("") {
-		f := GetFile(note["file"].(bson.A), text)
+	if note.File.FileID != string("") {
+		f := GetSendable(note)
 		_, err := f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()})
 		if err != nil && strings.Contains(err.Error(), "telegram unknown: Bad Request: can't parse entities") {
 			f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
@@ -81,21 +79,22 @@ func Gnote(c tb.Context) error {
 
 func Hash_note(c tb.Context) error {
 	args := strings.SplitN(c.Message().Text, "#", 2)
-	note := db.Get_note(c.Message().Chat.ID, args[1])
-	if note == nil {
+	args = strings.SplitN(args[1], " ", 2)
+	note := db.GetNote(c.Message().Chat.ID, args[1])
+	if note.Name == string("") {
 		return nil
 	}
-	mode := db.Pnote_settings(c.Chat().ID)
+	mode := db.PnoteSettings(c.Chat().ID)
 	if mode {
 		menu := &tb.ReplyMarkup{}
 		menu.Inline(menu.Row(menu.URL("Click me!", fmt.Sprintf("t.me/missmikabot?start=notes_%d_%s", c.Chat().ID, args[1]))))
 		c.Reply(fmt.Sprintf("Tap here to view '%s' in your private chat.", args[1]), menu)
 		return nil
 	}
-	text, p := ParseString(note["note"].(string), c)
+	text, p := ParseString(note.Text, c)
 	text, btns := button_parser(text)
-	if note["file"] != nil && len(note["file"].(bson.A)) != 0 && note["file"].(bson.A)[0] != string("") {
-		f := GetFile(note["file"].(bson.A), text)
+	if note.File.FileID != string("") {
+		f := GetSendable(note)
 		_, err := f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()})
 		if err != nil && strings.Contains(err.Error(), "telegram unknown: Bad Request: can't parse entities") {
 			f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
@@ -115,7 +114,7 @@ func clear_note(c tb.Context) error {
 		c.Reply("Which note should I remove?")
 		return nil
 	}
-	r := db.Del_note(c.Chat().ID, c.Message().Payload)
+	r := db.DelNote(c.Chat().ID, c.Message().Payload)
 	if !r {
 		c.Reply("You haven't saved any notes with this name yet!")
 		return nil
@@ -160,7 +159,7 @@ func del_all_notes_cb(c tb.Context) error {
 		c.Delete()
 	}
 	c.Edit("Deleted all chat notes.")
-	db.Del_all_notes(c.Chat().ID)
+	db.DelAllNotes(c.Chat().ID)
 	return nil
 }
 
@@ -179,7 +178,7 @@ func cancel_delall_cb(c tb.Context) error {
 
 func private_notes(c tb.Context) error {
 	if c.Message().Payload == string("") {
-		mode := db.Pnote_settings(c.Chat().ID)
+		mode := db.PnoteSettings(c.Chat().ID)
 		if !mode {
 			c.Reply("Your notes are currently being sent in the group.")
 		} else {
@@ -189,10 +188,10 @@ func private_notes(c tb.Context) error {
 		payload := c.Message().Payload
 		if stringInSlice(payload, []string{"enable", "yes", "on", "y"}) {
 			c.Reply("Mika will now send a message to your chat with a button redirecting to PM, where the user will receive the note.")
-			db.Set_pnote(c.Chat().ID, true)
+			db.SetPnote(c.Chat().ID, true)
 		} else if stringInSlice(payload, []string{"off", "disable", "no"}) {
 			c.Reply("Mika will now send notes straight to the group.")
-			db.Set_pnote(c.Chat().ID, false)
+			db.SetPnote(c.Chat().ID, false)
 		} else {
 			c.Reply(fmt.Sprintf("failed to get boolean value from input: expected one of y/yes/on or n/no/off; got: %s", payload))
 		}
@@ -203,14 +202,14 @@ func private_notes(c tb.Context) error {
 func PrivateStartNote(c tb.Context) error {
 	args := strings.SplitN(c.Message().Payload, "_", 3)
 	chat_id, _ := strconv.Atoi(args[1])
-	note := db.Get_note(int64(chat_id), args[2])
-	if note == nil {
+	note := db.GetNote(int64(chat_id), args[2])
+	if note.Name == "" {
 		return c.Reply("This note was not found ~")
 	}
-	text, p := ParseString(note["note"].(string), c)
+	text, p := ParseString(note.Text, c)
 
-	if note["file"] != nil && len(note["file"].(bson.A)) != 0 && note["file"].(bson.A)[0] != string("") {
-		f := GetFile(note["file"].(bson.A), text)
+	if note.File.FileID != "" {
+		f := GetSendable(note)
 		_, err := f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()})
 		if err != nil && strings.Contains(err.Error(), "telegram unknown: Bad Request: can't parse entities") {
 			_, err := f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
@@ -229,13 +228,13 @@ func PrivateStartNote(c tb.Context) error {
 func PrivateStartNotes(c tb.Context) error {
 	args := strings.SplitN(c.Message().Payload, "_", 2)
 	chat_id, _ := strconv.Atoi(args[1])
-	notes := db.Get_notes(int64(chat_id))
+	notes := db.GetNotes(int64(chat_id))
 	if notes == nil {
 		return c.Reply("There are no notes in that chat. ~")
 	}
 	out := fmt.Sprintf("<b>Notes in %s:</b>", args[1])
 	for _, x := range notes {
-		out += fmt.Sprintf("\n<b>-&gt;</b> <a href='t.me/missmikabot?start=notes_%s_%s'>%s</a>", args[1], x.(bson.M)["name"].(string), x.(bson.M)["name"].(string))
+		out += fmt.Sprintf("\n<b>-&gt;</b> <a href='t.me/missmikabot?start=notes_%s_%s'>%s</a>", args[1], x.Name, x.Name)
 	}
 	return c.Reply(out)
 }

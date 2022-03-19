@@ -2,7 +2,7 @@ package db
 
 import (
 	"context"
-	"fmt"
+
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -33,7 +33,6 @@ func GetUserPacks(user_id int64) []Pack {
 	if packs := stickers.FindOne(context.TODO(), bson.M{"user_id": user_id}); packs.Err() == nil {
 		packs.Decode(&s)
 	}
-	fmt.Println(s)
 	return s.Packs
 }
 

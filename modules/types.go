@@ -53,26 +53,6 @@ type InstSearch struct {
 	} `json:"users"`
 }
 
-type PintrestResp struct {
-	ResourceResponse struct {
-		Status string `json:"status"`
-		Data   struct {
-			Results []struct {
-				Objects []struct {
-					RecentPinImages struct {
-						One92X []struct {
-							URL           string `json:"url"`
-							Width         int    `json:"width"`
-							Height        int    `json:"height"`
-							DominantColor string `json:"dominant_color"`
-						} `json:"192x"`
-					} `json:"recent_pin_images"`
-				} `json:"objects"`
-			} `json:"results"`
-		} `json:"data"`
-	} `json:"resource_response"`
-}
-
 type UrbanDict struct {
 	List []struct {
 		Definition string `json:"definition"`
@@ -174,15 +154,11 @@ type Pins struct {
 					Orig struct {
 						URL string `json:"url,omitempty"`
 					} `json:"orig,omitempty"`
-				}
-				Objects []struct {
-					Images struct {
-						Orig struct {
-							URL string `json:"url,omitempty"`
-						} `json:"orig,omitempty"`
-					} `json:"images,omitempty"`
-				} `json:"objects,omitempty"`
+				} `json:"images,omitempty"`
 			} `json:"results,omitempty"`
 		} `json:"data,omitempty"`
 	} `json:"resource_response,omitempty"`
+}
+
+type FileDB struct {
 }
