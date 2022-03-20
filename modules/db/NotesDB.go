@@ -17,9 +17,9 @@ func SaveNote(chatID int64, Msg MsgDB) {
 	var Note []MsgDB
 	if N := notes.FindOne(context.TODO(), bson.M{"chat_id": chatID}); N.Err() != nil {
 		N.Decode(&Filters)
-                if NT, ok := NotesDB["notes"] ; ok {
-		Note = NT.([]MsgDB)
-}
+		if NT, ok := NotesDB["notes"]; ok {
+			Note = NT.([]MsgDB)
+		}
 	}
 	Note = DupFunc(Note, Msg.Name)
 	Note = append(Note, Msg)
@@ -39,9 +39,9 @@ func GetNote(chat_id int64, name string) MsgDB {
 	var Note []MsgDB
 	if N := notes.FindOne(context.TODO(), bson.M{"chat_id": chat_id}); N.Err() != nil {
 		N.Decode(&NotesDB)
-		if NT, ok := NotesDB["notes"] ; ok {
-		Note = NT.([]MsgDB)
-}
+		if NT, ok := NotesDB["notes"]; ok {
+			Note = NT.([]MsgDB)
+		}
 		for _, y := range Note {
 			if y.Name == name {
 				return y
