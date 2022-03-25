@@ -464,10 +464,10 @@ func AuddIO(c tb.Context) error {
 	defer resp.Body.Close()
 	var d AuddApi
 	json.NewDecoder(resp.Body).Decode(&d)
-	if d.Result.Title == "" {
-		return c.Reply("No results found.")
-	} else if d.Error.ErrorMessage != "" {
+        if d.Error.ErrorMessage != "" {
 		return c.Reply(d.Error.ErrorMessage)
+	} else if d.Result.Title == "" {
+		return c.Reply("No results found.")
 	}
 	var U = ""
 	U += "<b>Title:</b> " + d.Result.Title + "\n"
