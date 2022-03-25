@@ -20,7 +20,7 @@ func Exec(c tb.Context) error {
 	} else {
 		var stdout bytes.Buffer
 		var stderr bytes.Buffer
-		proc := exec.Command("bash", "-c", c.Message().Payload)
+		proc := exec.Command("bash", "-c", GetArgs(c))
 		proc.Stdout = &stdout
 		proc.Stderr = &stderr
 		err := proc.Run()
