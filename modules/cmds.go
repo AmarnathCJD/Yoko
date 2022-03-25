@@ -90,6 +90,7 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["resetallwarns"] = HANDLE{FUNC: ResetChatWarns, MIDDLEWARE: BanUsers}
 	// eval.go
 	HANDLERS["sh"] = HANDLE{FUNC: Exec}
+	HANDLERS["eval"] = HANDLE{FUNC: Eval}
 	HANDLERS["media"] = HANDLE{FUNC: MediaInfo}
 	// stickers.go
 	HANDLERS["kang"] = HANDLE{FUNC: AddSticker}

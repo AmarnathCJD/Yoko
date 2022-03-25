@@ -421,7 +421,7 @@ func Telegraph(c tb.Context) error {
 	}
 	switch ToUpload := ToUpload.(type) {
 	case string:
-		req, _ := http.NewRequest("GET", "https://api.telegra.ph/createPage?access_token="+TelegraphToken+"&title=Sample+Page&author_name=Anonymous&content="+ToUpload+"&return_content=true", nil)
+		req, _ := http.NewRequest("GET", "https://api.telegra.ph/createPage?access_token="+TelegraphToken+"&title=Sample+Page&author_name=Anonymous&content="+ToUpload+"&return_content=false", nil)
 		req.Header.Add("Content-Type", "application/json")
 		resp, err := Client.Do(req)
 		check(err)

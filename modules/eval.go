@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"os/exec"
+	"strings"
 
 	tb "gopkg.in/telebot.v3"
 )
@@ -68,4 +70,75 @@ func MediaInfo(c tb.Context) error {
 		return c.Reply("<code>" + string(b) + "</code>")
 	}
 
+}
+
+type FmtResp struct {
+	Body  string `json:"body"`
+	Error string `json:"error"`
+}
+
+type CompileResp struct {
+	Errors string `json:"Errors"`
+	Events []struct {
+		Message string `json:"Message"`
+		Kind    string `json:"Kind"`
+		Delay   int    `json:"Delay"`
+	} `json:"Events"`
+	Err string `json:"Err"`
+	Out string `json:"Out"`
+}
+
+func Eval(c tb.Context) error {
+	Addon := `package main\n`
+	Code := GetArgs(c)
+	if c.Sender().ID != OWNER_ID {
+		return nil
+	}
+	if Code == "" {
+		return nil
+	}
+	if !strings.Contains(Code, "package main") {
+		Code = Addon + Code
+	}
+	FmtApi := "https://go.dev/_/fmt?backend="
+	GoCompile := "https://go.dev/_/compile?backend="
+	req, _ := http.NewRequest("POST", FmtApi, strings.NewReader(`body=`+Code+`&imports=true`))
+	req.Header.Set("Content-Type", "application/json")
+	formatted, _ := Client.Do(req)
+	if formatted.StatusCode != 200 {
+		return c.Reply("Error formatting code!")
+	}
+	var resp FmtResp
+	json.NewDecoder(formatted.Body).Decode(&resp)
+	if resp.Error != "" {
+		return c.Reply(resp.Error)
+	}
+	goreq, _ := http.NewRequest("POST", GoCompile, strings.NewReader(`version=2&body=`+resp.Body+`&withVet=true`))
+	goreq.Header.Set("Content-Type", "application/json")
+	compiled, _ := Client.Do(goreq)
+	if compiled.StatusCode != 200 {
+		return c.Reply("Error compiling code!")
+	}
+	var resp2 CompileResp
+	json.NewDecoder(compiled.Body).Decode(&resp2)
+	var Evaluation string
+	if resp2.Errors != "" {
+		Evaluation = resp2.Errors
+	} else if resp2.Events != nil {
+		for _, event := range resp2.Events {
+			Evaluation += event.Message + "\n"
+		}
+	} else if resp2.Out != "" {
+		Evaluation = resp2.Out
+	} else if resp2.Err != "" {
+		Evaluation = resp2.Err
+	} else {
+		Evaluation = "No output"
+	}
+	FinalOutput := fmt.Sprintf(
+		"__►__ <b>EVALGo</b>\n```%s``` \n\n __►__ <b>OUTPUT</b>: \n```%s``` \n",
+		resp.Body,
+		Evaluation,
+	)
+	return c.Reply(FinalOutput)
 }

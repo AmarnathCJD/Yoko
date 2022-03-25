@@ -748,4 +748,6 @@ func FedExport(c tb.Context) error {
 	return nil
 }
 
-// soon
+func FedImport(c tb.Context) error {
+	return nil
+}
