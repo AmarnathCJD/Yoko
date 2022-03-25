@@ -467,8 +467,8 @@ func AuddIO(c tb.Context) error {
 	if d.Result.Title == "" {
 		return c.Reply("No results found.")
 	} else if d.Error.ErrorMessage != "" {
-                return c.Reply(d.Error.ErrorMessage)
-        }
+		return c.Reply(d.Error.ErrorMessage)
+	}
 	var U = ""
 	U += "<b>Title:</b> " + d.Result.Title + "\n"
 	U += "<b>Artist:</b> " + d.Result.Artist + "\n"
