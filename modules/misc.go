@@ -464,7 +464,7 @@ func AuddIO(c tb.Context) error {
 	defer resp.Body.Close()
 	var d AuddApi
 	json.NewDecoder(resp.Body).Decode(&d)
-        fmt.Println(d)
+        log.Println(d)
 	if d.Result.Title == "" {
 		return c.Reply("No results found.")
 	}
