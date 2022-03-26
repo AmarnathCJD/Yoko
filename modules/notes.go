@@ -77,9 +77,8 @@ func Gnote(c tb.Context) error {
 	return nil
 }
 
-func Hash_note(c tb.Context) error {
+func HashNote(c tb.Context) error {
 	args := strings.SplitN(c.Message().Text, "#", 2)
-	args = strings.SplitN(args[1], " ", 2)
 	note := db.GetNote(c.Message().Chat.ID, args[1])
 	if note.Name == string("") {
 		return nil
@@ -87,7 +86,7 @@ func Hash_note(c tb.Context) error {
 	mode := db.PnoteSettings(c.Chat().ID)
 	if mode {
 		menu := &tb.ReplyMarkup{}
-		menu.Inline(menu.Row(menu.URL("Click me!", fmt.Sprintf("t.me/missmikabot?start=notes_%d_%s", c.Chat().ID, args[1]))))
+		menu.Inline(menu.Row(menu.URL("Click me!", fmt.Sprintf("t.me/%s?start=notes_%d_%s", BOT_USERNAME, c.Chat().ID, args[1]))))
 		c.Reply(fmt.Sprintf("Tap here to view '%s' in your private chat.", args[1]), menu)
 		return nil
 	}

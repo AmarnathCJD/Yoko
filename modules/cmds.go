@@ -265,7 +265,7 @@ func OnTextHandler(c tb.Context) error {
 		return err
 	}
 	if match, _ := regexp.MatchString("\\#(\\S+)", c.Message().Text); match {
-		Hash_note(c)
+		HashNote(c)
 		return nil
 	}
 	if afk := AFK(c); afk {
