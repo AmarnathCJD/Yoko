@@ -71,7 +71,7 @@ func DelNote(chat_id int64, name string) bool {
 			break
 		}
 	}
-	Notes[chat_id] = NT
+	Notes[chat_id] = DupFunc(NT, name)
 	notes.UpdateOne(context.TODO(), bson.M{"chat_id": chat_id}, bson.D{{Key: "$set", Value: bson.D{{Key: "notes", Value: NT}}}})
 	return Exists
 }
