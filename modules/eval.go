@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"os/exec"
 	"strings"
@@ -121,6 +122,7 @@ func Eval(c tb.Context) error {
 	}
 	var resp2 CompileResp
 	json.NewDecoder(compiled.Body).Decode(&resp2)
+	log.Println(resp2)
 	var Evaluation string
 	if resp2.Errors != "" {
 		Evaluation = resp2.Errors
@@ -136,7 +138,7 @@ func Eval(c tb.Context) error {
 		Evaluation = "No output"
 	}
 	FinalOutput := fmt.Sprintf(
-		"__►__ <b>EVALGo</b>\n```%s``` \n\n __►__ <b>OUTPUT</b>: \n```%s``` \n",
+		"__►__ <b>EVALGo</b>\n<code>%s</code> \n\n __►__ <b>OUTPUT</b>: \n<code>%s</code> \n",
 		resp.Body,
 		Evaluation,
 	)
