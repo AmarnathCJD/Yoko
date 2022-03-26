@@ -11,6 +11,7 @@ import (
 
 func Save(c tb.Context) error {
 	Message := ParseMessage(c)
+	fmt.Println(Message)
 	if Message.Name == string("") {
 		c.Reply("You need to give the note a name!")
 		return nil
@@ -23,17 +24,22 @@ func Save(c tb.Context) error {
 	return nil
 }
 
-func All_notes(c tb.Context) error {
+func AllNotes(c tb.Context) error {
+	var Title string
+	if c.Message().Private() {
+		Title = c.Sender().FirstName
+	} else {
+		Title = c.Chat().Title
+	}
 	m := c.Message()
 	notes := db.GetNotes(c.Chat().ID)
 	if notes == nil {
-		b.Reply(m, fmt.Sprintf("There are no notes in %s!", m.Chat.Title))
-		return nil
+		return c.Reply(fmt.Sprintf("There are no notes in %s!", Title))
 	}
 	mode := db.PnoteSettings(c.Chat().ID)
 	if mode {
 		menu := &tb.ReplyMarkup{}
-		menu.Inline(menu.Row(menu.URL("Click me!", fmt.Sprintf("t.me/yoko_robot?start=allnotes_%d", c.Chat().ID))))
+		menu.Inline(menu.Row(menu.URL("Click me!", fmt.Sprintf("t.me/%s?start=allnotes_%d", BOT_USERNAME, c.Chat().ID))))
 		c.Reply("Tap here to view all notes in this chat.", menu)
 		return nil
 	}
@@ -45,7 +51,7 @@ func All_notes(c tb.Context) error {
 	return nil
 }
 
-func Gnote(c tb.Context) error {
+func Getnote(c tb.Context) error {
 	note := db.GetNote(c.Chat().ID, c.Message().Payload)
 	if note.Name == string("") {
 		c.Reply("No note found!")
@@ -58,7 +64,6 @@ func Gnote(c tb.Context) error {
 		c.Reply(fmt.Sprintf("Tap here to view '%s' in your private chat.", c.Message().Payload), menu)
 		return nil
 	}
-
 	text, p := ParseString(note.Text, c)
 	text, btns := button_parser(text)
 	if note.File.FileID != string("") {
@@ -68,8 +73,7 @@ func Gnote(c tb.Context) error {
 			f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
 		}
 	} else {
-
-		if err := c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()}); strings.Contains(err.Error(), "telegram unknown: Bad Request: can't parse entities") {
+		if err := c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()}); err != nil && strings.Contains(err.Error(), "telegram unknown: Bad Request: can't parse entities") {
 			c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
 		}
 
@@ -99,11 +103,9 @@ func HashNote(c tb.Context) error {
 			f.Send(c.Bot(), c.Chat(), &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
 		}
 	} else {
-
-		if err := c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()}); strings.Contains(err.Error(), "telegram unknown: Bad Request: can't parse entities") {
+		if err := c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message()}); err != nil && strings.Contains(err.Error(), "telegram unknown: Bad Request: can't parse entities") {
 			c.Send(text, &tb.SendOptions{DisableWebPagePreview: p, ReplyMarkup: btns, ReplyTo: c.Message(), ParseMode: "Markdown"})
 		}
-
 	}
 	return nil
 }

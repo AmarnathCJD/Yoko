@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"log"
 
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -13,48 +12,43 @@ var (
 	Notes = LoadNotes()
 )
 
+type NotesDB struct {
+	ChatID int64   `json:"chat_id,omitempty"`
+	Notes  []MsgDB `json:"notes,omitempty"`
+}
+
 func SaveNote(chatID int64, Msg MsgDB) {
-	var NotesDB bson.M
+	var NoteDB NotesDB
 	var Note []MsgDB
-	if N := notes.FindOne(context.TODO(), bson.M{"chat_id": chatID}); N.Err() != nil {
-		N.Decode(&Filters)
-		if NT, ok := NotesDB["notes"]; ok {
-			Note = NT.([]MsgDB)
-		}
+	if N := notes.FindOne(context.TODO(), bson.M{"chat_id": chatID}); N.Err() == nil {
+		N.Decode(&NoteDB)
+		Note = NoteDB.Notes
 	}
 	Note = DupFunc(Note, Msg.Name)
 	Note = append(Note, Msg)
 	Notes[chatID] = append(Notes[chatID], Msg)
 	notes.UpdateOne(context.TODO(), bson.M{"chat_id": chatID}, bson.D{{Key: "$set", Value: bson.D{{Key: "notes", Value: Note}}}}, opts)
-	log.Println("Saved note: " + Msg.Name)
-	log.Println(Notes)
 }
 
 func GetNotes(chat_id int64) []MsgDB {
 	if N, ok := Notes[chat_id]; ok {
-		log.Println(N)
 		return N
 	}
 	return nil
 }
 
 func GetNote(chat_id int64, name string) MsgDB {
-	var NotesDB bson.M
+	var NoteDB NotesDB
 	var Note []MsgDB
-	if N := notes.FindOne(context.TODO(), bson.M{"chat_id": chat_id}); N.Err() != nil {
-		log.Println("Hexx")
-		N.Decode(&NotesDB)
-		if NT, ok := NotesDB["notes"]; ok {
-			Note = NT.([]MsgDB)
-		}
-		log.Println(Note)
+	if N := notes.FindOne(context.TODO(), bson.M{"chat_id": chat_id}); N.Err() == nil {
+		N.Decode(&NoteDB)
+		Note = NoteDB.Notes
 		for _, y := range Note {
 			if y.Name == name {
 				return y
 			}
 		}
 	}
-	log.Println("null")
 	return MsgDB{}
 }
 
@@ -82,7 +76,7 @@ func SetPnote(chat_id int64, mode bool) {
 
 func PnoteSettings(chat_id int64) bool {
 	var pnotes bson.M
-	if N := pnote.FindOne(context.TODO(), bson.M{"chat_id": chat_id}); N.Err() != nil {
+	if N := pnote.FindOne(context.TODO(), bson.M{"chat_id": chat_id}); N.Err() == nil {
 		N.Decode(&pnotes)
 		if NT, ok := pnotes["mode"]; ok {
 			return NT.(bool)
@@ -114,7 +108,26 @@ func LoadNotes() map[int64][]MsgDB {
 	array := map[int64][]MsgDB{}
 	for _, x := range files {
 		for _, y := range x["notes"].(bson.A) {
-			array[x["chat_id"].(int64)] = append(array[x["chat_id"].(int64)], MsgDB{y.(bson.M)["name"].(string), y.(bson.M)["text"].(string), y.(bson.M)["file"].(FileDB)})
+			y := y.(bson.M)
+			var File FileDB
+			var Text string
+			var Name string
+			if y["file"] != nil {
+				FileM := y["file"].(bson.M)
+				if FileM["file_id"] != nil {
+					File.FileID = FileM["file_id"].(string)
+				}
+				if FileM["file_type"] != nil {
+					File.FileType = FileM["file_type"].(string)
+				}
+			}
+			if y["text"] != nil {
+				Text = y["text"].(string)
+			}
+			if y["name"] != nil {
+				Name = y["name"].(string)
+			}
+			array[x["chat_id"].(int64)] = append(array[x["chat_id"].(int64)], MsgDB{File: File, Text: Text, Name: Name})
 		}
 	}
 	return array

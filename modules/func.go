@@ -64,9 +64,20 @@ func ParseMessage(c tb.Context) db.MsgDB {
 			Text = Args[2] + Text
 		}
 	} else {
-		Text = ParseMD(c.Message())
+		if len(Args) == 3 && Args[1] != "" {
+			Text = ParseMD(c.Message())
+			Split := strings.SplitN(Text, " ", 2)
+			for _, b := range []string{"!", "/", "?"} {
+				if strings.HasPrefix(Text, b) {
+					Text = Split[1]
+					break
+				}
+			}
+		}
 	}
-	if len(Args) > 1 {
+	if len(Args) > 1 && c.Message().IsReply() {
+		Name = Args[1]
+	} else if len(Args) >= 2 {
 		Name = Args[1]
 	}
 	return db.MsgDB{Name: Name, Text: Text, File: db.FileDB{FileID: FileID, FileType: FileType}}

@@ -48,9 +48,9 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["help"] = HANDLE{FUNC: Help_Menu}
 	// notes.go
 	HANDLERS["save"] = HANDLE{FUNC: Save, MIDDLEWARE: ChangeInfo}
-	HANDLERS["saved"] = HANDLE{FUNC: All_notes}
-	HANDLERS["notes"] = HANDLE{FUNC: All_notes}
-	HANDLERS["get"] = HANDLE{FUNC: Gnote}
+	HANDLERS["saved"] = HANDLE{FUNC: AllNotes}
+	HANDLERS["notes"] = HANDLE{FUNC: AllNotes}
+	HANDLERS["get"] = HANDLE{FUNC: Getnote}
 	HANDLERS["clear"] = HANDLE{FUNC: clear_note, MIDDLEWARE: ChangeInfo}
 	HANDLERS["clearall"] = HANDLE{FUNC: clear_all, MIDDLEWARE: ChangeInfo}
 	HANDLERS["privatenotes"] = HANDLE{FUNC: private_notes, MIDDLEWARE: ChangeInfo}

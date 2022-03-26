@@ -11,6 +11,7 @@ import (
 const OWNER_ID = int64(1763477650)
 const ResolveURL = "https://707c80624779.up.railway.app/username?username="
 const TelegraphToken = "11b5d2394a13e4dc286ab2c29a7df8a2b02844c76e7cf7a7300d6e5420fd"
+const AuddKey = "ad8dbc01e3f943dbc07e1a3abf9b9ce3"
 
 // vars
 var BOT_USERNAME = b.Me.Username

@@ -131,6 +131,22 @@ type AuddApi struct {
 	} `json:"result"`
 }
 
+type AuddEntrp struct {
+	ExecutionTime string `json:"execution_time"`
+	Result        []struct {
+		Offset string `json:"offset"`
+		Songs  []struct {
+			Album       string `json:"album"`
+			Artist      string `json:"artist"`
+			Label       string `json:"label"`
+			ReleaseDate string `json:"release_date"`
+			SongLink    string `json:"song_link"`
+			Timecode    string `json:"timecode"`
+			Title       string `json:"title"`
+		} `json:"songs"`
+	} `json:"result"`
+	Status string `json:"status"`
+}
 type YoutubeVideo struct {
 	ID        string `json:"id"`
 	URL       string `json:"url"`

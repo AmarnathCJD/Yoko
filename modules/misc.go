@@ -437,14 +437,18 @@ func Telegraph(c tb.Context) error {
 
 func AuddIO(c tb.Context) error {
 	if !c.Message().IsReply() {
-		return c.Reply("reply to an audio message!")
-	} else if c.Message().ReplyTo.Audio == nil && c.Message().ReplyTo.Video == nil {
-		return c.Reply("reply to an audio/video message!")
+		return c.Reply("Reply to an audio message!")
+	} else if c.Message().ReplyTo.Audio == nil && c.Message().ReplyTo.Video == nil && c.Message().ReplyTo.Voice == nil && c.Message().ReplyTo.VideoNote == nil {
+		return c.Reply("Reply to an audio/video message!")
 	}
 	if c.Message().ReplyTo.Audio != nil {
 		c.Bot().Download(&c.Message().ReplyTo.Audio.File, "audio.mp3")
 	} else if c.Message().ReplyTo.Video != nil {
 		c.Bot().Download(&c.Message().ReplyTo.Video.File, "audio.mp3")
+	} else if c.Message().ReplyTo.Voice != nil {
+		c.Bot().Download(&c.Message().ReplyTo.Voice.File, "audio.mp3")
+	} else if c.Message().ReplyTo.VideoNote != nil {
+		c.Bot().Download(&c.Message().ReplyTo.VideoNote.File, "audio.mp3")
 	}
 	pipeReader, pipeWriter := io.Pipe()
 	writer := multipart.NewWriter(pipeWriter)
@@ -453,8 +457,8 @@ func AuddIO(c tb.Context) error {
 		if err := addFileToWriter(writer, "audio.mp3", "file", "audio.mp3"); err != nil {
 			pipeWriter.CloseWithError(err)
 		}
-		writer.WriteField("api_token", "test")
-		writer.WriteField("return", "apple_music,spotify")
+		writer.WriteField("api_token", AuddKey)
+		writer.WriteField("return", "apple_music,spotify,musicbrainz,deezer,napster,lyrics")
 		writer.Close()
 	}()
 	resp, err := Client.Post("https://api.audd.io", writer.FormDataContentType(), pipeReader)
@@ -466,16 +470,34 @@ func AuddIO(c tb.Context) error {
 	json.NewDecoder(resp.Body).Decode(&d)
 	if d.Error.ErrorMessage != "" {
 		if strings.Contains(d.Error.ErrorMessage, "Recognition failed: too big audio") {
-			resp2, err := Client.Post("https://enterprise.audd.io", writer.FormDataContentType(), pipeReader)
+			pipeReader, pipeWriter := io.Pipe()
+			writer := multipart.NewWriter(pipeWriter)
+			go func() {
+				defer pipeWriter.Close()
+				if err := addFileToWriter(writer, "audio.mp3", "file", "audio.mp3"); err != nil {
+					pipeWriter.CloseWithError(err)
+				}
+				writer.WriteField("api_token", AuddKey)
+				writer.WriteField("return", "apple_music,spotify,musicbrainz,deezer,napster,lyrics")
+				writer.Close()
+			}()
+			resp2, err := http.DefaultClient.Post("https://enterprise.audd.io", writer.FormDataContentType(), pipeReader)
 			if err != nil {
 				return c.Reply(err.Error())
 			}
 			defer resp2.Body.Close()
-			json.NewDecoder(resp2.Body).Decode(&d)
-			fmt.Println(d)
-			if d.Error.ErrorMessage != "" {
-				return c.Reply(d.Error.ErrorMessage)
+			var d2 AuddEntrp
+			json.NewDecoder(resp2.Body).Decode(&d2)
+			if len(d2.Result) == 0 {
+				return c.Reply("No results found.")
 			}
+			Result := d2.Result[len(d2.Result)-1].Songs[0]
+			d.Result.Title = Result.Title
+			d.Result.Artist = Result.Artist
+			d.Result.Album = Result.Album
+			d.Result.ReleaseDate = Result.ReleaseDate
+			d.Result.Label = Result.Label
+			d.Result.Spotify.ExternalUrls.Spotify = Result.SongLink
 		} else {
 			return c.Reply(d.Error.ErrorMessage)
 		}
