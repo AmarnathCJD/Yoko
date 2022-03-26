@@ -31,6 +31,7 @@ func SaveNote(chatID int64, Msg MsgDB) {
 
 func GetNotes(chat_id int64) []MsgDB {
 	if N, ok := Notes[chat_id]; ok {
+		log.Println(N)
 		return N
 	}
 	return nil
@@ -44,12 +45,14 @@ func GetNote(chat_id int64, name string) MsgDB {
 		if NT, ok := NotesDB["notes"]; ok {
 			Note = NT.([]MsgDB)
 		}
+		log.Println(Note)
 		for _, y := range Note {
 			if y.Name == name {
 				return y
 			}
 		}
 	}
+	log.Println("null")
 	return MsgDB{}
 }
 

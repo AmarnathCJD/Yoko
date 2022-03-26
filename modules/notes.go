@@ -79,7 +79,7 @@ func Gnote(c tb.Context) error {
 
 func HashNote(c tb.Context) error {
 	args := strings.SplitN(c.Message().Text, "#", 2)
-	note := db.GetNote(c.Message().Chat.ID, args[1])
+	note := db.GetNote(c.Chat().ID, args[1])
 	if note.Name == string("") {
 		return nil
 	}
