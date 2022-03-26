@@ -113,7 +113,7 @@ func LoadNotes() map[int64][]MsgDB {
 	r.All(context.TODO(), &files)
 	array := map[int64][]MsgDB{}
 	for _, x := range files {
-		for _, y := range x["filters"].(bson.A) {
+		for _, y := range x["notes"].(bson.A) {
 			array[x["chat_id"].(int64)] = append(array[x["chat_id"].(int64)], MsgDB{y.(bson.M)["name"].(string), y.(bson.M)["text"].(string), y.(bson.M)["file"].(FileDB)})
 		}
 	}
