@@ -109,7 +109,7 @@ func NoteExists(chat_id int64, name string) bool {
 
 func LoadNotes() map[int64][]MsgDB {
 	var files []bson.M
-	r, _ := filters.Find(context.TODO(), bson.M{})
+	r, _ := notes.Find(context.TODO(), bson.M{})
 	r.All(context.TODO(), &files)
 	array := map[int64][]MsgDB{}
 	for _, x := range files {
