@@ -466,9 +466,13 @@ func AuddIO(c tb.Context) error {
 	json.NewDecoder(resp.Body).Decode(&d)
 	if d.Error.ErrorMessage != "" {
 		if strings.Contains(d.Error.ErrorMessage, "Recognition failed: too big audio") {
-			resp2, _ := Client.Post("https://enterprise.audd.io", writer.FormDataContentType(), pipeReader)
+			resp2, err := Client.Post("https://enterprise.audd.io", writer.FormDataContentType(), pipeReader)
+			if err != nil {
+				return c.Reply(err.Error())
+			}
 			defer resp2.Body.Close()
 			json.NewDecoder(resp2.Body).Decode(&d)
+			fmt.Println(d)
 			if d.Error.ErrorMessage != "" {
 				return c.Reply(d.Error.ErrorMessage)
 			}

@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"log"
 
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -25,6 +26,7 @@ func SaveNote(chatID int64, Msg MsgDB) {
 	Note = append(Note, Msg)
 	Notes[chatID] = Note
 	notes.UpdateOne(context.TODO(), bson.M{"chat_id": chatID}, bson.D{{Key: "$set", Value: bson.D{{Key: "notes", Value: Note}}}})
+	log.Println("Saved note: " + Msg.Name)
 }
 
 func GetNotes(chat_id int64) []MsgDB {
