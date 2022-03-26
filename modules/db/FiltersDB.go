@@ -15,7 +15,9 @@ func SaveFilter(chatID int64, msg MsgDB) error {
 	var Filter []MsgDB
 	if F := filters.FindOne(context.TODO(), bson.M{"chat_id": chatID}); F.Err() != nil {
 		F.Decode(&Filters)
-		Filter = FilterDB["filters"].([]MsgDB)
+		if F, ok := FilterDB["filters"]; ok {
+			Filter = F.([]MsgDB)
+		}
 	}
 	Filter = DupFunc(Filter, msg.Name)
 	Filter = append(Filter, msg)
