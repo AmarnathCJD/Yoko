@@ -24,7 +24,7 @@ func SaveNote(chatID int64, Msg MsgDB) {
 	}
 	Note = DupFunc(Note, Msg.Name)
 	Note = append(Note, Msg)
-	Notes[chatID] = Note
+	Notes[chatID] = append(Notes[chatID], Msg)
 	notes.UpdateOne(context.TODO(), bson.M{"chat_id": chatID}, bson.D{{Key: "$set", Value: bson.D{{Key: "notes", Value: Note}}}}, opts)
 	log.Println("Saved note: " + Msg.Name)
 	log.Println(Notes)
