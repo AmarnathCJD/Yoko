@@ -79,7 +79,9 @@ func PnoteSettings(chat_id int64) bool {
 	var pnotes bson.M
 	if N := pnote.FindOne(context.TODO(), bson.M{"chat_id": chat_id}); N.Err() != nil {
 		N.Decode(&pnotes)
-		return pnotes["mode"].(bool)
+		if NT, ok := pnotes["mode"]; ok {
+			return NT.(bool)
+		}
 	}
 	return false
 }
