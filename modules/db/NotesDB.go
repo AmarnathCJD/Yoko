@@ -42,6 +42,7 @@ func GetNote(chat_id int64, name string) MsgDB {
 	var NotesDB bson.M
 	var Note []MsgDB
 	if N := notes.FindOne(context.TODO(), bson.M{"chat_id": chat_id}); N.Err() != nil {
+		log.Println("Hexx")
 		N.Decode(&NotesDB)
 		if NT, ok := NotesDB["notes"]; ok {
 			Note = NT.([]MsgDB)
