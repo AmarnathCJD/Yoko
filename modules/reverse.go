@@ -52,10 +52,17 @@ func ReverseSearch(c tb.Context) error {
 	if err != nil {
 		return err
 	}
-	if len(ar) == 0 || q == "" {
+	if len(ar) == 1 || q == "" {
 		return fmt.Errorf("no results found")
 	}
-	return c.Reply(fmt.Sprintf("Search results for %s", q))
+	c.Reply(fmt.Sprintf("<a href='%s'>Search results for %s</a>", ar[len(ar)-1], q))
+	var Images tb.Album
+	if len(ar) == 3 {
+		Images = append(Images, &tb.Photo{File: tb.FromURL(ar[0])})
+		Images = append(Images, &tb.Photo{File: tb.FromURL(ar[1])})
+	}
+	_, sendErr := c.Bot().SendAlbum(c.Chat(), Images)
+	return sendErr
 }
 
 func (im *Imgdata) ImgFromFile(file string) ([]string, string, error) {
@@ -101,6 +108,7 @@ func (im *Imgdata) ImgFromFile(file string) ([]string, string, error) {
 		r.Contenttype = ""
 	}
 	ar, q, err := r.getURLs(res, im.WebPage)
+	ar = append(ar, r.URL)
 	if err != nil {
 		return nil, q, err
 	}
