@@ -3,6 +3,7 @@ module github.com/amarnathcjd/yoko
 go 1.17
 
 require (
+	github.com/PuerkitoBio/goquery v1.5.1
 	github.com/SherlockYigit/youtube-go v1.0.0
 	github.com/StalkR/imdb v1.0.7
 	github.com/fogleman/gg v1.3.0
@@ -11,7 +12,6 @@ require (
 )
 
 require (
-	github.com/PuerkitoBio/goquery v1.5.1 // indirect
 	github.com/andybalholm/cascadia v1.2.0 // indirect
 	github.com/antchfx/htmlquery v1.2.3 // indirect
 	github.com/antchfx/xmlquery v1.2.4 // indirect
