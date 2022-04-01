@@ -57,7 +57,7 @@ func ReverseSearch(c tb.Context) error {
 	}
 	c.Reply(fmt.Sprintf("<a href='%s'>Search results for %s</a>", ar[len(ar)-1], q))
 	var Images tb.Album
-	if len(ar) == 3 {
+	if len(ar) >= 3 {
 		Images = append(Images, &tb.Photo{File: tb.FromURL(ar[0])})
 		Images = append(Images, &tb.Photo{File: tb.FromURL(ar[1])})
 	}
