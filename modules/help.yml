@@ -1,0 +1,12 @@
+---
+lang:
+  - en
+  - ru
+  - ml
+
+help:
+  afk: |
+    <b>AFK</b>
+  admin: |
+    <b>Admin</b>
+    
