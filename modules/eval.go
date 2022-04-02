@@ -114,7 +114,7 @@ func Eval(c tb.Context) error {
 	if resp.Error != "" {
 		return c.Reply(resp.Error)
 	}
-        log.Println(resp)
+	log.Println(resp)
 	goreq, _ := http.NewRequest("POST", GoCompile, strings.NewReader(`version=2&body=`+resp.Body+`&withVet=true`))
 	goreq.Header.Set("Content-Type", "application/json")
 	compiled, _ := Client.Do(goreq)
