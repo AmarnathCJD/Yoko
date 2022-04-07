@@ -2,13 +2,16 @@ package modules
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"mime/multipart"
 	"net/http"
+	"net/url"
 	"os"
 	"regexp"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
@@ -189,4 +192,83 @@ func (r *requestParams) getURLs(res *http.Response, imWebPage bool) ([]string, s
 		return nil, "", fmt.Errorf("no image found")
 	}
 	return ar, match, nil
+}
+
+func SearchSpotify(query string) {
+	spotifyURL := "https://open.spotify.com/search/results/" + query
+	res, err := http.Get(spotifyURL)
+	if err != nil {
+		return
+	}
+	doc, err := goquery.NewDocumentFromReader(res.Body)
+	if err != nil {
+		return
+	}
+	doc.Find("div").Each(func(_ int, s *goquery.Selection) {
+		if s.HasClass("search-result-track") {
+			s.Find("a").Each(func(_ int, s *goquery.Selection) {
+				if s.HasClass("track-name-link") {
+					fmt.Println(s.Text())
+				}
+			})
+		}
+	})
+}
+
+// Lyrics Finder
+
+func LyricsFind(query string) (string, string, string) {
+	var ShazamSearchUri = "https://www.shazam.com/services/search/v4/en-US/IN/web/search?term=" + url.QueryEscape(query) + "&numResults=3&offset=0&types=artists,songs&limit=3"
+	resp, err := http.DefaultClient.Get(ShazamSearchUri)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer resp.Body.Close()
+	var data MusicSearch
+	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
+		fmt.Println(err)
+	}
+	Key := data.Tracks.Hits[0].Track.Key
+	Thumb := data.Tracks.Hits[0].Track.Images.Background
+	Lyrics := LyricsFindByKey(Key)
+	if Lyrics == "" {
+		return "No Lyrics Found", "", ""
+	} else {
+		return Lyrics, Thumb, data.Tracks.Hits[0].Track.Subtitle
+	}
+}
+
+func LyricsFindByKey(key string) string {
+	var SHzmUri = "https://www.shazam.com/discovery/v5/en-US/IN/web/-/track/" + key + "?shazamapiversion=v3&video=v3"
+	fmt.Println(SHzmUri)
+	resp, err := http.DefaultClient.Get(SHzmUri)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer resp.Body.Close()
+	var data Lyrics
+	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
+		fmt.Println(err)
+	}
+	var lyrics string
+	for _, v := range data.Sections {
+		if v.Type == "LYRICS" {
+			lyrics = strings.Join(v.Text, "\n")
+		}
+	}
+	return lyrics
+}
+
+func LyricsFinderHandle(c tb.Context) error {
+	query := GetArgs(c)
+	lyrics, thumb, name := LyricsFind(query)
+	if lyrics == "" {
+		return c.Reply("No Lyrics Found")
+	}
+	LYRICS := "Lyrics for <b>" + name + "</b>\n" + lyrics
+	if thumb != "" {
+		return c.Reply(&tb.Photo{File: tb.FromURL(thumb), Caption: LYRICS})
+	} else {
+		return c.Reply(LYRICS)
+	}
 }

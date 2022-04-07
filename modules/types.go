@@ -176,3 +176,28 @@ type Pins struct {
 		} `json:"data,omitempty"`
 	} `json:"resource_response,omitempty"`
 }
+
+type MusicSearch struct {
+	Tracks struct {
+		Hits []struct {
+			Track struct {
+				Key      string `json:"key"`
+				Title    string `json:"title"`
+				Subtitle string `json:"subtitle"`
+				Images   struct {
+					Background string `json:"background"`
+					Coverart   string `json:"coverart"`
+					Coverarthq string `json:"coverarthq"`
+					Joecolor   string `json:"joecolor"`
+				} `json:"images"`
+			} `json:"track"`
+		} `json:"hits"`
+	} `json:"tracks"`
+}
+
+type Lyrics struct {
+	Sections []struct {
+		Type string   `json:"type"`
+		Text []string `json:"text,omitempty"`
+	}
+}
