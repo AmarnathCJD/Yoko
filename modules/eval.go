@@ -13,7 +13,7 @@ import (
 )
 
 func Exec(c tb.Context) error {
-	if c.Sender().ID != int64(1833850637) {
+	if c.Sender().ID != OWNER_ID {
 		return nil
 	}
 	if c.Message().Payload == string("") {
@@ -37,7 +37,7 @@ func Exec(c tb.Context) error {
 }
 
 func MediaInfo(c tb.Context) error {
-	if c.Sender().ID != int64(1833850637) {
+	if c.Sender().ID != OWNER_ID {
 		return nil
 	}
 	if !c.Message().IsReply() {
@@ -114,6 +114,7 @@ func Eval(c tb.Context) error {
 	if resp.Error != "" {
 		return c.Reply(resp.Error)
 	}
+	log.Println(resp)
 	goreq, _ := http.NewRequest("POST", GoCompile, strings.NewReader(`version=2&body=`+resp.Body+`&withVet=true`))
 	goreq.Header.Set("Content-Type", "application/json")
 	compiled, _ := Client.Do(goreq)
