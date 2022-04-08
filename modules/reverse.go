@@ -340,3 +340,45 @@ func DictionaryHandle(c tb.Context) error {
 	}
 	return c.Reply(result)
 }
+
+func YTSearch(query string, limit int) []YTVideo {
+BaseURL = "https://flaskapp-production.up.railway.app/youtube?q=" + url.QueryEscape(query)
+resp, err := Client.Get(BaseURL)
+if err != nil {
+log.Println(err)
+return []YTVideo{}
+}
+defer resp.Body.Close()
+var data []YT
+if err := json.NewDecoder(resp.Body).Decode(&YT) ; err != nil {
+log.Println(err)
+return []YTVideo{}
+}
+var length int
+if len(data) <= limit {
+length = len(data)
+}
+var result = make([]YTVideo, length)
+for i, v := range data; i+1 <= limit {
+result[i] = YTVideo{
+ID: v.ID
+Title: v.Title
+	PublishedTime: v.PublishedTime
+	Duration: v.Duration
+	ViewCount: v.ViewCount.Short
+	Thumbnail: v.Thumbnails[0].URL
+	Description: v.DescriptionSnippet.Text
+	Channel: v.Channel.Name
+	Link: v.Link
+}
+}
+return result
+}
+
+
+
+
+
+
+
+}
