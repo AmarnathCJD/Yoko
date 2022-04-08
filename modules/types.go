@@ -229,3 +229,27 @@ type OxfordDict struct {
 		} `json:"lexicalEntries"`
 	} `json:"results"`
 }
+
+type YT []struct {
+	ID            string `json:"id"`
+	Title         string `json:"title"`
+	PublishedTime string `json:"publishedTime"`
+	Duration      string `json:"duration"`
+	ViewCount     struct {
+		Text  string `json:"text"`
+		Short string `json:"short"`
+	} `json:"viewCount"`
+	Thumbnails []struct {
+		URL    string `json:"url"`
+		Width  int    `json:"width"`
+		Height int    `json:"height"`
+	} `json:"thumbnails"`
+	DescriptionSnippet []struct {
+		Text string `json:"text"`
+		Bold bool   `json:"bold,omitempty"`
+	} `json:"descriptionSnippet"`
+	Channel struct {
+		Name       string `json:"name"`
+	} `json:"channel"`
+	Link       string      `json:"link"`
+}
