@@ -249,7 +249,7 @@ type YT []struct {
 		Bold bool   `json:"bold,omitempty"`
 	} `json:"descriptionSnippet"`
 	Channel struct {
-		Name       string `json:"name"`
+		Name string `json:"name"`
 	} `json:"channel"`
-	Link       string      `json:"link"`
+	Link string `json:"link"`
 }
