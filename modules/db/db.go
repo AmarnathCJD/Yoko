@@ -14,7 +14,7 @@ var (
 )
 
 func DBinit() *mongo.Client {
-	db, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://mongo:7k2uSMwYrmTTq8pJbTLA@containers-us-west-21.railway.app:7490"))
+	db, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb+srv://user:user@cluster0.hlrtz.mongodb.net/go?retryWrites=true&w=majority"))
 	if err != nil {
 		panic(err)
 	}
