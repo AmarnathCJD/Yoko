@@ -323,7 +323,7 @@ func DictionaryHandle(c tb.Context) error {
 			defer resp.Body.Close()
 			data, _ := ioutil.ReadAll(resp.Body)
 			os.WriteFile("pronunciation.mp3", data, 0644)
-			return c.Reply(&tb.Audio{File: tb.FromDisk("pronunciation.mp3"), Title: "Pronunciation"})
+			return c.Reply(&tb.Audio{File: tb.FromDisk("pronunciation.mp3"), Title: query, Performer: "Oxford Dictionary", Caption: result, MIME: "audio/mpeg"})
 		}
 	}
 	return c.Reply(result)
