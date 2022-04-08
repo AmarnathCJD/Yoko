@@ -311,6 +311,6 @@ func DictionaryHandle(c tb.Context) error {
 		result += data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Examples[0].Text
 	}
 	result += "\n              <b><i>-Oxford Dictionary</i></b>"
-	fmt.Println(data.Results[0].LexicalEntries[0].Entries[0].Pronunciations[0].AudioFile)
+	log.Println(data.Results[0].LexicalEntries[0].Entries[0].Pronunciations[0].AudioFile)
 	return c.Reply(result)
 }
