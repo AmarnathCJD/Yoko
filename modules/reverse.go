@@ -314,9 +314,9 @@ func DictionaryHandle(c tb.Context) error {
 			if i != len(data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Synonyms)-1 || i != 4 {
 				result += ", "
 			}
-                        if i == 4 {
-break
-}
+			if i == 4 {
+				break
+			}
 		}
 	}
 	if data.Results[0].LexicalEntries != nil && data.Results[0].LexicalEntries[0].Entries != nil && data.Results[0].LexicalEntries[0].Entries[0].Senses != nil && data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Examples != nil {
