@@ -528,7 +528,7 @@ func AuddIO(c tb.Context) error {
 
 func SongDownload(c tb.Context) error {
 	Args := GetArgs(c)
-	result := SearchVideos(Args, 1)
+	result := YTSearch(Args, 1)
 	if len(result) == 0 {
 		return c.Reply("No results found.")
 	}
