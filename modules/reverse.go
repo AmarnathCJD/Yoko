@@ -342,7 +342,7 @@ func DictionaryHandle(c tb.Context) error {
 }
 
 func YTSearch(query string, limit int) []YTVideo {
-BaseURL = "https://flaskapp-production.up.railway.app/youtube?q=" + url.QueryEscape(query)
+BaseURL := "https://flaskapp-production.up.railway.app/youtube?q=" + url.QueryEscape(query)
 resp, err := Client.Get(BaseURL)
 if err != nil {
 log.Println(err)
@@ -367,7 +367,7 @@ Title: v.Title,
 	Duration: v.Duration,
 	ViewCount: v.ViewCount.Short,
 	Thumbnail: v.Thumbnails[0].URL,
-	Description: v.DescriptionSnippet.Text,
+	Description: v.DescriptionSnippet[0].Text,
 	Channel: v.Channel.Name,
 	Link: v.Link,
 }
