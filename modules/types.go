@@ -201,3 +201,28 @@ type Lyrics struct {
 		Text []string `json:"text,omitempty"`
 	}
 }
+
+type OxfordDict struct {
+	Results []struct {
+		LexicalEntries []struct {
+			Entries []struct {
+				Senses []struct {
+					Definitions []string `json:"definitions"`
+					Examples    []struct {
+						Text string `json:"text"`
+					} `json:"examples"`
+					ID              string `json:"id"`
+					SemanticClasses []struct {
+						ID   string `json:"id"`
+						Text string `json:"text"`
+					} `json:"semanticClasses"`
+					ShortDefinitions []string `json:"shortDefinitions"`
+					Synonyms         []struct {
+						Language string `json:"language"`
+						Text     string `json:"text"`
+					} `json:"synonyms"`
+				} `json:"senses"`
+			} `json:"entries"`
+		} `json:"lexicalEntries"`
+	} `json:"results"`
+}

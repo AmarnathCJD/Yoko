@@ -45,6 +45,7 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["pinterest"] = HANDLE{FUNC: PinterestSearch}
 	HANDLERS["reverse"] = HANDLE{FUNC: ReverseSearch}
 	HANDLERS["lyrics"] = HANDLE{FUNC: LyricsFinderHandle}
+	HANDLERS["define"] = HANDLE{FUNC: DictionaryHandle}
 	// start.go
 	HANDLERS["start"] = HANDLE{FUNC: Start}
 	HANDLERS["help"] = HANDLE{FUNC: Help_Menu}

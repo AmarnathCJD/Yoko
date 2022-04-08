@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"mime/multipart"
 	"net/http"
 	"net/url"
@@ -256,6 +257,7 @@ func LyricsFindByKey(key string) string {
 			lyrics = strings.Join(v.Text, "\n")
 		}
 	}
+	log.Println(lyrics)
 	return lyrics
 }
 
@@ -271,4 +273,37 @@ func LyricsFinderHandle(c tb.Context) error {
 	} else {
 		return c.Reply(LYRICS)
 	}
+}
+
+func SearchDictionary(word string) OxfordDict {
+	req, _ := http.NewRequest("GET", "https://od-api.oxforddictionaries.com:443/api/v2/entries/"+"en-gb"+"/"+url.QueryEscape(strings.ToLower(word)), nil)
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("app_id", "b202020b")
+	req.Header.Add("app_key", "192992140ee9309602f090659e50eff8")
+	resp, err := Client.Do(req)
+	if err != nil {
+		fmt.Println(err)
+		return OxfordDict{}
+	}
+	defer resp.Body.Close()
+	var data OxfordDict
+	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
+		fmt.Println(err)
+		return OxfordDict{}
+	} else {
+		return data
+	}
+}
+
+func DictionaryHandle(c tb.Context) error {
+	query := GetArgs(c)
+	data := SearchDictionary(query)
+	if data.Results == nil {
+		return c.Reply("No results found")
+	}
+	var result string
+	for _, v := range data.Results {
+		result += v.LexicalEntries[0].Entries[0].Senses[0].Definitions[0] + "\n"
+	}
+	return c.Reply(result)
 }
