@@ -377,11 +377,3 @@ break
 }
 return result
 }
-
-
-
-
-
-
-
-}
