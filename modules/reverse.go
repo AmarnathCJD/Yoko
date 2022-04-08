@@ -349,8 +349,8 @@ log.Println(err)
 return []YTVideo{}
 }
 defer resp.Body.Close()
-var data []YT
-if err := json.NewDecoder(resp.Body).Decode(&YT) ; err != nil {
+var data YT
+if err := json.NewDecoder(resp.Body).Decode(&data) ; err != nil {
 log.Println(err)
 return []YTVideo{}
 }
