@@ -359,7 +359,7 @@ if len(data) <= limit {
 length = len(data)
 }
 var result = make([]YTVideo, length)
-for i, v := range data; i+1 <= limit {
+for i, v := range data {
 result[i] = YTVideo{
 ID: v.ID,
 Title: v.Title,
