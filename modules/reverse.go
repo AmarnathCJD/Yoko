@@ -371,5 +371,7 @@ func YTSearch(query string, limit int) []YTVideo {
 			break
 		}
 	}
+        d, _ := json.Marshal(result[0])
+        log.Println(d)
 	return result
 }
