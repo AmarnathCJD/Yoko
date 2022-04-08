@@ -253,3 +253,15 @@ type YT []struct {
 	} `json:"channel"`
 	Link string `json:"link"`
 }
+
+type YTVideo struct {
+ID string
+Title string
+PublishedTime string
+Duration string
+ViewCount string 
+Thumbnail string
+Description string
+Channel string
+Link string
+}
