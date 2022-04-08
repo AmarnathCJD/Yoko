@@ -282,13 +282,13 @@ func SearchDictionary(word string) OxfordDict {
 	req.Header.Add("app_key", "192992140ee9309602f090659e50eff8")
 	resp, err := Client.Do(req)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return OxfordDict{}
 	}
 	defer resp.Body.Close()
 	var data OxfordDict
 	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return OxfordDict{}
 	} else {
 		return data
@@ -301,6 +301,7 @@ func DictionaryHandle(c tb.Context) error {
 	if data.Results == nil {
 		return c.Reply("No results found")
 	}
+	log.Println(data)
 	var result string
 	result += "<b>Definition for <u>" + strings.Title(query) + "</u></b>\n"
 	result += data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Definitions[0]
