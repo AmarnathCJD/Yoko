@@ -302,11 +302,11 @@ func DictionaryHandle(c tb.Context) error {
 		return c.Reply("No results found")
 	}
 	var result string
-	result += "<b>Definition for <u>" + strings.Title(query) + "</u></b>\n\n"
+	result += "<b>Definition for <u>" + strings.Title(query) + "</u></b>\n"
 	result += data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Definitions[0]
 	result += "\n\n"
 	result += "<b>Example:</b>\n"
 	result += data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Examples[0].Text
-	result += "\n       -Oxford Dictionary"
+	result += "\n              <b><i>-Oxford Dictionary</i></b>"
 	return c.Reply(result)
 }
