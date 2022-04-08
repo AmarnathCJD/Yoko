@@ -304,10 +304,13 @@ func DictionaryHandle(c tb.Context) error {
 	log.Println(data)
 	var result string
 	result += "<b>Definition for <u>" + strings.Title(query) + "</u></b>\n"
-	result += data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Definitions[0]
-	result += "\n\n"
-	result += "<b>Example:</b>\n"
-	result += data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Examples[0].Text
+	if data.Results[0].LexicalEntries != nil && data.Results[0].LexicalEntries[0].Entries != nil && data.Results[0].LexicalEntries[0].Entries[0].Senses != nil && data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Definitions != nil {
+		result += data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Definitions[0] + "\n\n"
+	}
+	if data.Results[0].LexicalEntries != nil && data.Results[0].LexicalEntries[0].Entries != nil && data.Results[0].LexicalEntries[0].Entries[0].Senses != nil && data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Examples != nil {
+		result += "<b>Example:</b>\n"
+		result += data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Examples[0].Text
+	}
 	result += "\n              <b><i>-Oxford Dictionary</i></b>"
 	return c.Reply(result)
 }
