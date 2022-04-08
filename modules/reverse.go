@@ -354,11 +354,7 @@ func YTSearch(query string, limit int) []YTVideo {
 		log.Println(err)
 		return []YTVideo{}
 	}
-	var length int
-	if len(data) <= limit {
-		length = len(data)
-	}
-	var result = make([]YTVideo, length)
+	var result = make([]YTVideo, limit)
 	for i, v := range data {
 		result[i] = YTVideo{
 			ID:            v.ID,
@@ -371,7 +367,7 @@ func YTSearch(query string, limit int) []YTVideo {
 			Channel:       v.Channel.Name,
 			Link:          v.Link,
 		}
-		if i >= length {
+		if i >= limit-1 {
 			break
 		}
 	}
