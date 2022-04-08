@@ -206,6 +206,9 @@ type OxfordDict struct {
 	Results []struct {
 		LexicalEntries []struct {
 			Entries []struct {
+				Pronunciations []struct {
+					AudioFile string `json:"audioFile"`
+				} `json:"pronunciations"`
 				Senses []struct {
 					Definitions []string `json:"definitions"`
 					Examples    []struct {
