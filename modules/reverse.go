@@ -309,7 +309,7 @@ func DictionaryHandle(c tb.Context) error {
 	}
         if data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Synonyms != nil {
                 result += "\n\n<b>Synonyms:</b>\n"
-                for i, v range := data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Synonyms {
+                for i, v := range data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Synonyms {
 result += v.Text
 if i != len(data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Synonyms) - 1{
 result += ", "
