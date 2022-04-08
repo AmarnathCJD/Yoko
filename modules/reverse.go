@@ -312,7 +312,22 @@ func DictionaryHandle(c tb.Context) error {
 	}
 	result += "\n              <b><i>-Oxford Dictionary</i></b>"
 	if data.Results[0].LexicalEntries != nil && data.Results[0].LexicalEntries[0].Entries != nil && data.Results[0].LexicalEntries[0].Entries[0].Pronunciations != nil {
-		return c.Reply(&tb.Audio{File: tb.FromURL(data.Results[0].LexicalEntries[0].Entries[0].Pronunciations[0].AudioFile), Caption: result, Title: query, FileName: query + ".mp3", MIME: "audio/mpeg", Performer: "Oxford Dictionary"})
+		aud := data.Results[0].LexicalEntries[0].Entries[0].Pronunciations[0].AudioFile
+		if aud != "" {
+			resp, err := http.Get(aud)
+			if err != nil {
+				log.Println(err)
+				return c.Reply(result)
+			}
+			defer resp.Body.Close()
+			var audio []byte
+			if err := json.NewDecoder(resp.Body).Decode(&audio); err != nil {
+				log.Println(err)
+				return c.Reply(result)
+			}
+			os.WriteFile("pronunciation.mp3", audio, 0644)
+			return c.Reply(&tb.Audio{File: tb.FromDisk("pronunciation.mp3"), Title: "Pronunciation"})
+		}
 	}
 	return c.Reply(result)
 }
