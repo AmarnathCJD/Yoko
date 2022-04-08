@@ -301,14 +301,13 @@ func DictionaryHandle(c tb.Context) error {
 	if data.Results == nil {
 		return c.Reply("No results found")
 	}
-	log.Println(data)
 	var result string
 	result += "<b>Definition for <u>" + strings.Title(query) + "</u></b>\n"
 	if data.Results[0].LexicalEntries != nil && data.Results[0].LexicalEntries[0].Entries != nil && data.Results[0].LexicalEntries[0].Entries[0].Senses != nil && data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Definitions != nil {
-		result += data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Definitions[0] + "\n\n"
+		result += data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Definitions[0]
 	}
 	if data.Results[0].LexicalEntries != nil && data.Results[0].LexicalEntries[0].Entries != nil && data.Results[0].LexicalEntries[0].Entries[0].Senses != nil && data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Examples != nil {
-		result += "<b>Example:</b>\n"
+		result += "\n\n<b>Example:</b>\n"
 		result += data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Examples[0].Text
 	}
 	result += "\n              <b><i>-Oxford Dictionary</i></b>"
