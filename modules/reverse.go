@@ -302,8 +302,10 @@ func DictionaryHandle(c tb.Context) error {
 		return c.Reply("No results found")
 	}
 	var result string
-	for _, v := range data.Results {
-		result += v.LexicalEntries[0].Entries[0].Senses[0].Definitions[0] + "\n"
-	}
+	result += "Definition for <b>" + query + "</b>\n"
+	result += data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Definitions[0]
+	result += "\n\n"
+	result += "Examples:\n"
+	result += data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Examples[0].Text
 	return c.Reply(result)
 }
