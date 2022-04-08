@@ -311,6 +311,8 @@ func DictionaryHandle(c tb.Context) error {
 		result += data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Examples[0].Text
 	}
 	result += "\n              <b><i>-Oxford Dictionary</i></b>"
-	log.Println(data.Results[0].LexicalEntries[0].Entries[0].Pronunciations[0].AudioFile)
+	if data.Results[0].LexicalEntries != nil && data.Results[0].LexicalEntries[0].Entries != nil && data.Results[0].LexicalEntries[0].Entries[0].Pronunciations != nil {
+		return c.Reply(&tb.Audio{File: tb.FromURL(data.Results[0].LexicalEntries[0].Entries[0].Pronunciations[0].AudioFile), Caption: result})
+	}
 	return c.Reply(result)
 }
