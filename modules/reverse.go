@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"mime/multipart"
 	"net/http"
@@ -320,12 +321,8 @@ func DictionaryHandle(c tb.Context) error {
 				return c.Reply(result)
 			}
 			defer resp.Body.Close()
-			var audio []byte
-			if err := json.NewDecoder(resp.Body).Decode(&audio); err != nil {
-				log.Println(err)
-				return c.Reply(result)
-			}
-			os.WriteFile("pronunciation.mp3", audio, 0644)
+			data, _ := ioutil.ReadAll(resp.Body)
+			os.WriteFile("pronunciation.mp3", data, 0644)
 			return c.Reply(&tb.Audio{File: tb.FromDisk("pronunciation.mp3"), Title: "Pronunciation"})
 		}
 	}
