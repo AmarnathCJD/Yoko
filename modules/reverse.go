@@ -361,15 +361,18 @@ length = len(data)
 var result = make([]YTVideo, length)
 for i, v := range data; i+1 <= limit {
 result[i] = YTVideo{
-ID: v.ID
-Title: v.Title
-	PublishedTime: v.PublishedTime
-	Duration: v.Duration
-	ViewCount: v.ViewCount.Short
-	Thumbnail: v.Thumbnails[0].URL
-	Description: v.DescriptionSnippet.Text
-	Channel: v.Channel.Name
-	Link: v.Link
+ID: v.ID,
+Title: v.Title,
+	PublishedTime: v.PublishedTime,
+	Duration: v.Duration,
+	ViewCount: v.ViewCount.Short,
+	Thumbnail: v.Thumbnails[0].URL,
+	Description: v.DescriptionSnippet.Text,
+	Channel: v.Channel.Name,
+	Link: v.Link,
+}
+if i >= length {
+break
 }
 }
 return result
