@@ -307,6 +307,9 @@ func DictionaryHandle(c tb.Context) error {
 	if data.Results[0].LexicalEntries != nil && data.Results[0].LexicalEntries[0].Entries != nil && data.Results[0].LexicalEntries[0].Entries[0].Senses != nil && data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Definitions != nil {
 		result += data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Definitions[0]
 	}
+        if data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Synonyms != nil {
+
+}
 	if data.Results[0].LexicalEntries != nil && data.Results[0].LexicalEntries[0].Entries != nil && data.Results[0].LexicalEntries[0].Entries[0].Senses != nil && data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Examples != nil {
 		result += "\n\n<b>Example:</b>\n"
 		result += data.Results[0].LexicalEntries[0].Entries[0].Senses[0].Examples[0].Text
