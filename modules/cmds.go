@@ -46,7 +46,7 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["reverse"] = HANDLE{FUNC: ReverseSearch}
 	HANDLERS["lyrics"] = HANDLE{FUNC: LyricsFinderHandle}
 	HANDLERS["define"] = HANDLE{FUNC: DictionaryHandle}
-        HANDLERS["pypi"] = HANDLE{FUNC: PyPiHandle}
+	HANDLERS["pypi"] = HANDLE{FUNC: PyPiHandle}
 	// start.go
 	HANDLERS["start"] = HANDLE{FUNC: Start}
 	HANDLERS["help"] = HANDLE{FUNC: Help_Menu}
