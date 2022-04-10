@@ -375,3 +375,37 @@ func YTSearch(query string, limit int) []YTVideo {
 	log.Println(string(d))
 	return result
 }
+
+func PyPi(query string) []Package {
+	baseUrl := "https://pypi.org/search/?q=" + url.QueryEscape(query)
+	resp, err := http.Get(baseUrl)
+	if err != nil {
+		log.Print(err)
+	}
+	doc, _ := goquery.NewDocumentFromReader(resp.Body)
+	var R []Package
+	doc.Find(".package-snippet").Each(func(i int, s *goquery.Selection) {
+		R = append(R, Package{s.Find(".package-snippet__name").Text(), s.Find(".package-snippet__version").Text(), s.Find(".package-snippet__released").Text(), s.Find(".package-snippet__description").Text()})
+	})
+	return R
+}
+
+type Package struct {
+	Name        string
+	Version     string
+	Released    string
+	Description string
+}
+
+func PyPiHandle(c tb.Context) error {
+Search := PyPi(GetArgs(c))
+if len(Search) == 0{
+return c.Reply("No results found.")
+}
+var result = fmt.Sprintf("<b>Results for %s:</b>")
+
+for i, v := range Search {
+result += fmt.Sprintf("\n%d. %s: %s", i+1, v.Name, v.Description)
+}
+return c.Reply(result)
+}
