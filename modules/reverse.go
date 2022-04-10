@@ -398,14 +398,14 @@ type Package struct {
 }
 
 func PyPiHandle(c tb.Context) error {
-Search := PyPi(GetArgs(c))
-if len(Search) == 0{
-return c.Reply("No results found.")
-}
-var result = fmt.Sprintf("<b>Results for %s:</b>")
+	Search := PyPi(GetArgs(c))
+	if len(Search) == 0 {
+		return c.Reply("No results found.")
+	}
+	var result = fmt.Sprintf("<b>Results for %s:</b>")
 
-for i, v := range Search {
-result += fmt.Sprintf("\n%d. %s: %s", i+1, v.Name, v.Description)
-}
-return c.Reply(result)
+	for i, v := range Search {
+		result += fmt.Sprintf("\n%d. %s: %s", i+1, v.Name, v.Description)
+	}
+	return c.Reply(result)
 }
