@@ -2,7 +2,7 @@ package db
 
 import (
 	"context"
-
+        "os"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -14,7 +14,7 @@ var (
 )
 
 func DBinit() *mongo.Client {
-	db, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb+srv://user:user@cluster0.hlrtz.mongodb.net/go?retryWrites=true&w=majority"))
+	db, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(os.Getenv("MONGO_DB_URI"))
 	if err != nil {
 		panic(err)
 	}
