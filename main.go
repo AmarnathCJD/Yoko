@@ -15,7 +15,7 @@ func main() {
 	writer := io.MultiWriter(os.Stdout, os.Stderr)
 	log.SetOutput(writer)
 	log.SetOutput(f)
-	log.Print("Bot Started")
+	log.Print("Bot Started.")
 	mod.RegisterHandlers()
 	bot.Bot.Start()
 }
