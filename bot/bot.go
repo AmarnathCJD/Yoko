@@ -4,7 +4,7 @@ import (
 	"fmt"
 	tb "gopkg.in/telebot.v3"
 	"log"
-        "os"
+	"os"
 )
 
 func BotInit() tb.Bot {
