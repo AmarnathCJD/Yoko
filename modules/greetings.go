@@ -71,10 +71,6 @@ func OnChatMemberHandler(c tb.Context) error {
 	upd := c.ChatMember()
 	if upd.NewChatMember != nil && upd.OldChatMember != nil {
 		if upd.NewChatMember.Role == tb.Member && upd.OldChatMember.Role != tb.Restricted {
-                        lock_c := db.Get_locks(m.Chat.ID)
-                        if stringInSlice(lock_c, "join") {
-                             c.Send("Lawda")
-                        }
 			text, file, mode := db.Get_welcome(c.Chat().ID)
 			if !mode {
 				return nil
