@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	bot "github.com/amarnathcjd/yoko/bot"
