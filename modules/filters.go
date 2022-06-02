@@ -44,10 +44,10 @@ func StopFilter(c tb.Context) error {
 	if c.Message().Payload == string("") {
 		return c.Reply("not enough arguments provided.")
 	} else {
-		if !db.FilterExists(c.Chat().ID, c.Message().Payload) {
+		if !db.IsFilterExists(c.Chat().ID, c.Message().Payload) {
 			return c.Reply("You haven't saved any filters on this word yet!")
 		}
-		err := db.DelFilter(c.Chat().ID, c.Message().Payload)
+		err := db.RemoveFilter(c.Chat().ID, c.Message().Payload)
 		if err != nil {
 			return c.Reply(fmt.Sprintf("Filter <code>'%s'</code> has been stopped!", c.Message().Payload))
 		} else {
@@ -76,7 +76,7 @@ func DelAllFCB(c tb.Context) error {
 		return c.Edit("You should be the chat creator to do this!")
 	} else if p.Role == tb.Creator {
 		c.Edit("Deleted all chat filters.")
-		db.DelAllFilters(c.Chat().ID)
+		db.PurgeFilters(c.Chat().ID)
 	}
 	return nil
 }

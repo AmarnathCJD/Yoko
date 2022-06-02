@@ -297,52 +297,6 @@ func Imdb(c tb.Context) error {
 	return c.Reply(Movie)
 }
 
-func InstaCSearch(c tb.Context) error {
-	Username := GetArgs(c)
-	ApiUrl := `https://www.instagram.com/` + Username + `/?__a=1`
-	req, _ := http.NewRequest("GET", ApiUrl, nil)
-	req.Header.Add("cookie", InstagramCookies)
-	res, err := Client.Do(req)
-	if err != nil {
-		log.Print(err)
-	}
-	defer res.Body.Close()
-	var d map[string]interface{}
-	json.NewDecoder(res.Body).Decode(&d)
-	if _, ok := d["graphql"]; !ok {
-		return c.Reply("No such username found in Instagram.")
-	}
-	GraphQL := d["graphql"].(map[string]interface{})["user"].(map[string]interface{})
-	var U = ""
-	if ID, ok := GraphQL["id"]; ok {
-		U += "<b>ID:</b> <code>" + ID.(string) + "</code>\n"
-	}
-	if name, ok := GraphQL["full_name"]; ok {
-		U += "<b>FullName:</b> " + EscapeHTML(name.(string)) + "\n"
-	}
-	if uname, ok := GraphQL["username"]; ok {
-		U += "<b>Username:</b> <a href='https://instagram.com/" + uname.(string) + "'>" + strings.Title(uname.(string)) + "</a>\n"
-	}
-	if site, ok := GraphQL["external_url"]; ok && site != nil {
-		U += "<b>Website:</b> <code>" + EscapeHTML(site.(string)) + "</code>\n"
-	}
-	Followers := GraphQL["edge_followed_by"].(map[string]interface{})["count"].(float64)
-	Following := GraphQL["edge_follow"].(map[string]interface{})["count"].(float64)
-	if bio, ok := GraphQL["biography"]; ok && bio.(string) != "" {
-		U += "<b>Bio:</b> " + EscapeHTML(bio.(string)) + "\n"
-	}
-	if Vf, ok := GraphQL["is_verified"]; ok {
-		U += "<b>Verified:</b> " + fmt.Sprint(Vf) + "\n"
-	}
-	U += "<b>Following:</b> <code>" + fmt.Sprint(int(Following)) + "</code>\n"
-	U += "<b>Followers:</b> <code>" + fmt.Sprint(int(Followers)) + "</code>"
-	sel.Inline(sel.Row(sel.URL(GraphQL["username"].(string), "https://instagram.com/"+GraphQL["username"].(string))))
-	if pfp, ok := GraphQL["profile_pic_url_hd"]; ok {
-		return c.Reply(&tb.Photo{File: tb.FromURL(pfp.(string)), Caption: U}, &tb.SendOptions{DisableWebPagePreview: true, ReplyMarkup: sel})
-	}
-	return c.Reply(U, &tb.SendOptions{DisableWebPagePreview: true, ReplyMarkup: sel})
-}
-
 func Roll(c tb.Context) error {
 	return c.Reply(&tb.Dice{Type: "🎲", Value: rand.Intn(6)})
 }

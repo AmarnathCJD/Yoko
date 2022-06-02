@@ -1,20 +1,17 @@
 package main
 
 import (
-	"io"
+	"fmt"
 	"log"
-	"os"
 
 	bot "github.com/amarnathcjd/yoko/bot"
 	mod "github.com/amarnathcjd/yoko/modules"
+	db "github.com/amarnathcjd/yoko/modules/db"
 )
 
 func main() {
-	f, _ := os.OpenFile("log.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	defer f.Close()
-	writer := io.MultiWriter(os.Stdout, os.Stderr)
-	log.SetOutput(writer)
-	log.SetOutput(f)
+	fmt.Println(db.GetFiltersFromDB(100))
+	return
 	log.Print("Bot Started.")
 	mod.RegisterHandlers()
 	bot.Bot.Start()

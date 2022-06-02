@@ -217,65 +217,6 @@ func SearchSpotify(query string) {
 	})
 }
 
-// Lyrics Finder
-
-func LyricsFind(query string) (string, string, string) {
-	var ShazamSearchUri = "https://www.shazam.com/services/search/v4/en-US/IN/web/search?term=" + url.QueryEscape(query) + "&numResults=3&offset=0&types=artists,songs&limit=3"
-	resp, err := http.DefaultClient.Get(ShazamSearchUri)
-	if err != nil {
-		fmt.Println(err)
-	}
-	defer resp.Body.Close()
-	var data MusicSearch
-	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
-		fmt.Println(err)
-	}
-	Key := data.Tracks.Hits[0].Track.Key
-	Thumb := data.Tracks.Hits[0].Track.Images.Background
-	Lyrics := LyricsFindByKey(Key)
-	if Lyrics == "" {
-		return "No Lyrics Found", "", ""
-	} else {
-		return Lyrics, Thumb, data.Tracks.Hits[0].Track.Subtitle
-	}
-}
-
-func LyricsFindByKey(key string) string {
-	var SHzmUri = "https://www.shazam.com/discovery/v5/en-US/IN/web/-/track/" + key + "?shazamapiversion=v3&video=v3"
-	fmt.Println(SHzmUri)
-	resp, err := http.DefaultClient.Get(SHzmUri)
-	if err != nil {
-		fmt.Println(err)
-	}
-	defer resp.Body.Close()
-	var data Lyrics
-	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
-		fmt.Println(err)
-	}
-	var lyrics string
-	for _, v := range data.Sections {
-		if v.Type == "LYRICS" {
-			lyrics = strings.Join(v.Text, "\n")
-		}
-	}
-	log.Println(lyrics)
-	return lyrics
-}
-
-func LyricsFinderHandle(c tb.Context) error {
-	query := GetArgs(c)
-	lyrics, thumb, name := LyricsFind(query)
-	if lyrics == "" {
-		return c.Reply("No Lyrics Found")
-	}
-	LYRICS := "Lyrics for <b>" + name + "</b>\n" + lyrics
-	if thumb != "" {
-		return c.Reply(&tb.Photo{File: tb.FromURL(thumb), Caption: LYRICS})
-	} else {
-		return c.Reply(LYRICS)
-	}
-}
-
 func SearchDictionary(word string) OxfordDict {
 	req, _ := http.NewRequest("GET", "https://od-api.oxforddictionaries.com:443/api/v2/entries/"+"en-gb"+"/"+url.QueryEscape(strings.ToLower(word)), nil)
 	req.Header.Add("Accept", "application/json")
@@ -402,10 +343,12 @@ func PyPiHandle(c tb.Context) error {
 	if len(Search) == 0 {
 		return c.Reply("No results found.")
 	}
-	var result = fmt.Sprintf("<b>Results for %s:</b>")
-
+	var result = fmt.Sprintf("<b>Results for %s:</b>", GetArgs(c))
 	for i, v := range Search {
-		result += fmt.Sprintf("\n%d. %s: %s", i+1, v.Name, v.Description)
+		result += fmt.Sprintf("\n<b>%d.</b> <a href=\"%s\">%s</a>", i+1, v.Name, v.Name)
+		if i == 10 {
+			break
+		}
 	}
-	return c.Reply(result)
+	return c.Reply(result, &tb.SendOptions{DisableWebPagePreview: true})
 }

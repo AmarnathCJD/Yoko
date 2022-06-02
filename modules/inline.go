@@ -4,8 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
-	"net/http"
 	"strconv"
 	"strings"
 
@@ -42,8 +40,6 @@ func InlineQueryHandler(c tb.Context) error {
 	} else if strings.HasPrefix(query, "yt") {
 		yt_search(c)
 		return nil
-	} else if strings.HasPrefix(query, "insta") {
-		return InstaGramSearch(c)
 	}
 	return nil
 }
@@ -191,56 +187,4 @@ func yt_search(c tb.Context) {
 		CacheTime: 60,
 	})
 	check(err)
-}
-
-func InstaGramSearch(c tb.Context) error {
-	q := c.Query().Text
-	args := strings.SplitN(q, " ", 2)
-	if len(args) == 1 {
-		return nil
-	}
-	arg := args[1]
-	InstaUrl := `https://www.instagram.com/web/search/topsearch/?context=blended&query=` + arg + `&rank_token=0.29359664635546645&include_reel=true`
-	req, _ := http.NewRequest("GET", InstaUrl, nil)
-	req.Header.Add("cookie", InstagramCookies)
-	resp, err := Client.Do(req)
-	if err != nil {
-		log.Print(err)
-	}
-	defer resp.Body.Close()
-	var data InstSearch
-	json.NewDecoder(resp.Body).Decode(&data)
-	Len := len(data.Users)
-	if Len > 10 {
-		Len = 10
-	}
-	results := make(tb.Results, Len)
-	qd := 0
-	for i, x := range data.Users {
-		if qd >= 10 {
-			break
-		}
-		qd++
-		text := ""
-		User := x.User
-		if User.Username != "" {
-			text += fmt.Sprintf("<b>@%s</b>\n", User.Username)
-		}
-		if User.FullName != "" {
-			text += fmt.Sprintf("<b>FullName: </b>%s\n", User.FullName)
-		}
-		text += fmt.Sprintf("<b>Pk: </b>%s\n", User.Pk)
-		text += fmt.Sprintf("<b>Verified: </b>%v\n", User.IsVerified)
-		text += fmt.Sprintf("<b>Private: </b>%v\n", User.IsPrivate)
-		text += fmt.Sprintf("<b>HasAnonymousProfilePicture: </b>%v\n", User.HasAnonymousProfilePicture)
-		text += fmt.Sprintf("<b>Seen: </b>%d\n", User.Seen)
-		text += fmt.Sprintf("<b>HasHighlightReels: </b>%v\n", User.HasHighlightReels)
-		r := &tb.ArticleResult{ResultBase: tb.ResultBase{ReplyMarkup: inline_markup("insta"), Content: &tb.InputTextMessageContent{Text: text, DisablePreview: false}}, Title: User.Username, Description: User.FullName}
-		results[i] = r
-		results[i].SetResultID(strconv.Itoa(i))
-	}
-	return c.Bot().Answer(c.Query(), &tb.QueryResponse{
-		Results:   results,
-		CacheTime: 60,
-	})
 }

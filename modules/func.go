@@ -76,11 +76,19 @@ func ParseMessage(c tb.Context) db.MsgDB {
 		}
 	}
 	if len(Args) > 1 && c.Message().IsReply() {
-		Name = Args[1]
+		Name = GetQueryName(Args[1] + " " + Args[2])
 	} else if len(Args) >= 2 {
-		Name = Args[1]
+		Name = GetQueryName(Args[1])
 	}
 	return db.MsgDB{Name: Name, Text: Text, File: db.FileDB{FileID: FileID, FileType: FileType}}
+}
+
+func GetQueryName(query string) string {
+	r := regexp.MustCompile(`\(.*\)`)
+	if r.Match([]byte(query)) {
+		return strings.Trim(r.FindString(query), "()")
+	}
+	return query
 }
 
 func GetReplyMarkup(c tb.Context) string {

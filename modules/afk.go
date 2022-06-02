@@ -56,11 +56,11 @@ func AFK(c tb.Context) bool {
 			if db.IsAfk(user_id) {
 				a := db.GetAfk(user_id)
 				reason := "."
-				if r, ok := a["reason"]; ok && r != string("") {
-					reason = fmt.Sprintf(",\n<b>Reason:</b> %s", r.(string))
+				if r, ok := a["reason"]; ok && r.(string) != "" {
+					reason = GetReason(r.(string))
 				}
 				since := get_readable_time(time.Unix(int64(a["time"].(int64)), 0), time.Now())
-				if err := c.Reply(EscapeHTML(fmt.Sprintf("<b>%s</b> is AFK !\nLast Seen: %s ago.%s", a["fname"].(string), since.Truncate(time.Second).String(), reason))); err != nil {
+				if err := c.Reply(fmt.Sprintf("<b>%s</b> is AFK !\nLast Seen: %s ago.%s", FormatString(a["fname"].(string)), since.Truncate(time.Second).String(), FormatString(reason))); err != nil {
 					log.Println(err)
 				}
 				return true

@@ -2,12 +2,20 @@ package bot
 
 import (
 	"fmt"
-	tb "gopkg.in/telebot.v3"
 	"log"
 	"os"
+
+	dotenv "github.com/joho/godotenv"
+	tb "gopkg.in/telebot.v3"
 )
 
 func BotInit() tb.Bot {
+	if err := dotenv.Load(); err != nil {
+		log.Println("Error loading .env file")
+	}
+	if os.Getenv("TOKEN") == "" {
+		log.Fatal("Please set the TOKEN environment variable")
+	}
 	b, _ := tb.NewBot(tb.Settings{
 		URL:         "",
 		Token:       os.Getenv("TOKEN"),

@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/amarnathcjd/yoko/modules/db"
+	"github.com/microcosm-cc/bluemonday"
 	tb "gopkg.in/telebot.v3"
 )
 
@@ -21,15 +22,6 @@ var (
 	Spoiler   = regexp.MustCompile(`\|\|(.*?)\|\|`)
 	Code      = regexp.MustCompile("`(.*?)`")
 )
-
-func Te(c tb.Context) error {
-	r, _ := GetUser(c)
-	b, _ := json.Marshal(r)
-	fmt.Println(b)
-	log.Print(b)
-	c.Reply(string(fmt.Sprint(r)))
-	return nil
-}
 
 func ParseMD(c *tb.Message) string {
 	text := c.Text
@@ -394,4 +386,9 @@ func ParseCountry(s string) string {
 		}
 	}
 	return "US"
+}
+
+func FormatString(s string) string {
+	p := bluemonday.StripTagsPolicy()
+	return p.Sanitize(s)
 }

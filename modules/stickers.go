@@ -3,6 +3,8 @@ package modules
 import (
 	"encoding/json"
 	"fmt"
+	"image"
+	"image/jpeg"
 	"io"
 	"mime/multipart"
 	"net/http"
@@ -12,6 +14,7 @@ import (
 
 	db "github.com/amarnathcjd/yoko/modules/db"
 	"github.com/anaskhan96/soup"
+	"github.com/nfnt/resize"
 	tb "gopkg.in/telebot.v3"
 )
 
@@ -264,3 +267,55 @@ func addFileToWriter(writer *multipart.Writer, filename, field string, file inte
 	_, err = io.Copy(part, reader)
 	return err
 }
+
+func IsSticker(c tb.Context) (bool, *tb.Sticker) {
+	r := c.Message().ReplyTo
+	if r == nil {
+		return false, nil
+	}
+	if r.Sticker != nil {
+		return true, r.Sticker
+	}
+	if r.Photo != nil {
+		return ImageToSticker(r.Photo.File, *c.Bot(), *c.Sender())
+	}
+	if r.Document != nil {
+		if strings.Contains(r.Document.FileName, "webm") {
+			return true, &tb.Sticker{File: tb.File{FileID: c.Message().ReplyTo.Document.File.FileID}, Video: true, Animated: false, Emoji: ""}
+		}
+	}
+	return false, nil
+}
+
+func ImageToSticker(f tb.File, bot tb.Bot, user tb.User) (bool, *tb.Sticker) {
+	err := bot.Download(&f, "sticker.webp")
+	if err != nil {
+		return false, nil
+	}
+	file, err := os.Open("sticker.webp")
+	if err != nil {
+		return false, nil
+	}
+	defer file.Close()
+	img, _, err := image.Decode(file)
+	if err != nil {
+		return false, nil
+	}
+	m := resize.Resize(512, 0, img, resize.Lanczos3)
+	out, err := os.Create("sticker.png")
+	if err != nil {
+		return false, nil
+	}
+	defer out.Close()
+	err = jpeg.Encode(out, m, &jpeg.Options{Quality: 100})
+	if err != nil {
+		return false, nil
+	}
+	sf, err := bot.UploadSticker(&user, &tb.File{FileLocal: "sticker.png"})
+	if err != nil {
+		return false, nil
+	}
+	return true, &tb.Sticker{File: *sf, Video: false, Animated: false, Emoji: ""}
+}
+
+// sooon

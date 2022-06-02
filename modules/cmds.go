@@ -36,7 +36,6 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["rs"] = HANDLE{FUNC: RsStripe}
 	HANDLERS["wiki"] = HANDLE{FUNC: WikiPedia}
 	HANDLERS["fake"] = HANDLE{FUNC: FakeGen}
-	HANDLERS["insta"] = HANDLE{FUNC: InstaCSearch}
 	HANDLERS["roll"] = HANDLE{FUNC: Roll}
 	HANDLERS["json"] = HANDLE{FUNC: Json}
 	HANDLERS["doge"] = HANDLE{FUNC: DogeSticker}
@@ -44,7 +43,6 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["ip"] = HANDLE{FUNC: IPLookup}
 	HANDLERS["pinterest"] = HANDLE{FUNC: PinterestSearch}
 	HANDLERS["reverse"] = HANDLE{FUNC: ReverseSearch}
-	HANDLERS["lyrics"] = HANDLE{FUNC: LyricsFinderHandle}
 	HANDLERS["define"] = HANDLE{FUNC: DictionaryHandle}
 	HANDLERS["pypi"] = HANDLE{FUNC: PyPiHandle}
 	// start.go
@@ -167,8 +165,8 @@ func GatherHandlers() map[string]HANDLE {
 	HANDLERS["logs"] = HANDLE{FUNC: Logs}
 	HANDLERS["ping"] = HANDLE{FUNC: Ping}
 	HANDLERS["stats"] = HANDLE{FUNC: Stats}
-	HANDLERS["pong"] = HANDLE{FUNC: Te}
 	HANDLERS["sendmessage"] = HANDLE{FUNC: SendMessage}
+	HANDLERS["update"] = HANDLE{FUNC: UpdateRepo}
 	// rules.go
 	HANDLERS["rules"] = HANDLE{FUNC: Rules}
 	HANDLERS["setrules"] = HANDLE{FUNC: SetRules, MIDDLEWARE: ChangeInfo}

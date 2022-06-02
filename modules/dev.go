@@ -3,6 +3,8 @@ package modules
 import (
 	"encoding/json"
 	"fmt"
+	"os"
+	"os/exec"
 	"strconv"
 	"strings"
 	"time"
@@ -201,4 +203,20 @@ func GetSystemDetails() SysInfo {
 		Memory:   fmt.Sprintf("%v/%v", ByteCount(int64(vmStat.Used)), ByteCount(int64(vmStat.Total))),
 		Disk:     fmt.Sprintf("%v/%v", ByteCount(int64(diskStat.Used)), ByteCount(int64(diskStat.Total))),
 	}
+}
+
+func UpdateRepo(c tb.Context) error {
+	if !IsBotAdmin(c.Sender().ID) {
+		return nil
+	}
+	if _, err := exec.Command("git", "pull").Output(); err != nil {
+		return c.Reply("Error updating repo!")
+	}
+	exec.Command("go", "build").Run()
+	exec.Command("./yoko").Run()
+	return c.Reply("Repo updated!")
+	go func() {
+		os.Exit(0)
+	}()
+	return nil
 }

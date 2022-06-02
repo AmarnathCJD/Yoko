@@ -2,66 +2,24 @@ package db
 
 import (
 	"context"
+	"regexp"
+	"strings"
 
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-var filters = database.Collection("filters")
+var (
+	filters       = database.Collection("filters")
+	Filters       = make(map[int64][]MsgDB)
+	bracket_regex = regexp.MustCompile(`\(.*\)`)
+)
 
-var Filters = make(map[int64][]MsgDB)
-
-func SaveFilter(chatID int64, msg MsgDB) error {
-	var FilterDB bson.M
-	var Filter []MsgDB
-	if F := filters.FindOne(context.TODO(), bson.M{"chat_id": chatID}); F.Err() != nil {
-		F.Decode(&Filters)
-		if F, ok := FilterDB["filters"]; ok {
-			Filter = F.([]MsgDB)
-		}
-	}
-	Filter = DupFunc(Filter, msg.Name)
-	Filter = append(Filter, msg)
-	_, err := filters.UpdateOne(context.TODO(), bson.M{"chat_id": chatID}, bson.D{{Key: "$set", Value: bson.D{{Key: "filters", Value: Filters}}}}, opts)
-	Filters[chatID] = Filter
-	return err
+type FilterDocument struct {
+	ChatID  int64
+	Filters []MsgDB
 }
 
-func GetFilters(chatID int64) []MsgDB {
-	if F, ok := Filters[chatID]; ok {
-		return F
-	} else {
-		return nil
-	}
-}
-
-func GetFilter(chat_id int64, name string) *MsgDB {
-	if F, ok := Filters[chat_id]; ok {
-		for _, x := range F {
-			if x.Name == name {
-				return &x
-			}
-		}
-	}
-	return nil
-}
-
-func DelFilter(chatID int64, Name string) error {
-	var Fl []MsgDB
-	if F, ok := Filters[chatID]; ok {
-		Filters[chatID] = DupFunc(F, Name)
-		Fl = Filters[chatID]
-	}
-	_, err := filters.UpdateOne(context.TODO(), bson.M{"chat_id": chatID}, bson.D{{Key: "$set", Value: bson.D{{Key: "filters", Value: Fl}}}}, opts)
-	return err
-}
-
-func DelAllFilters(chatID int64) error {
-	_, err := filters.DeleteOne(context.TODO(), bson.M{"chat_id": chatID})
-	Filters[chatID] = []MsgDB{}
-	return err
-}
-
-func FilterExists(chatID int64, name string) bool {
+func IsFilterExists(chatID int64, name string) bool {
 	if F, ok := Filters[chatID]; ok {
 		for _, x := range F {
 			if x.Name == name {
@@ -72,15 +30,92 @@ func FilterExists(chatID int64, name string) bool {
 	return false
 }
 
-func LoadFilters() map[int64][]MsgDB {
-	var files []bson.M
-	r, _ := filters.Find(context.TODO(), bson.M{})
-	r.All(context.TODO(), &files)
-	array := map[int64][]MsgDB{}
-	for _, x := range files {
-		for _, y := range x["filters"].(bson.A) {
-			array[x["chat_id"].(int64)] = append(array[x["chat_id"].(int64)], MsgDB{y.(bson.M)["name"].(string), y.(bson.M)["text"].(string), y.(bson.M)["file"].(FileDB)})
+func SaveFilter(chatID int64, msg MsgDB) error {
+	if bracket_regex.MatchString(msg.Name) {
+		return SaveFilters(chatID, msg)
+	}
+	_, err := filters.UpdateOne(context.TODO(), bson.M{"chat_id": chatID}, bson.D{{Key: "$push", Value: bson.D{{Key: "filters", Value: msg}}}}, opts)
+	if IsFilterExists(chatID, msg.Name) {
+		Filters[chatID] = DupFunc(Filters[chatID], msg.Name)
+	} else {
+		Filters[chatID] = append(Filters[chatID], msg)
+	}
+	return err
+}
+
+func SaveFilters(chatID int64, msg MsgDB) error {
+	var names []string
+	for _, x := range strings.Split(msg.Name, ",") {
+		names = append(names, strings.Trim(x, "()"))
+	}
+	_, err := filters.UpdateOne(context.TODO(), bson.M{"chat_id": chatID}, bson.D{{Key: "$push", Value: bson.D{{Key: "filters", Value: msg}}}}, opts)
+	for _, x := range names {
+		if IsFilterExists(chatID, x) {
+			Filters[chatID] = DupFunc(Filters[chatID], x)
+		} else {
+			msg.Name = x
+			Filters[chatID] = append(Filters[chatID], msg)
 		}
 	}
-	return array
+	return err
+}
+
+func RemoveFilter(chatID int64, name string) error {
+	_, err := filters.UpdateOne(context.TODO(), bson.M{"chat_id": chatID}, bson.D{{Key: "$pull", Value: bson.D{{Key: "filters", Value: bson.M{"name": name}}}}}, opts)
+	if IsFilterExists(chatID, name) {
+		Filters[chatID] = DupFunc(Filters[chatID], name)
+	}
+	return err
+}
+
+func GetFiltersFromDB(chatID int64) []MsgDB {
+	var document FilterDocument
+	r := filters.FindOne(context.TODO(), bson.M{"chat_id": chatID})
+	r.Decode(&document)
+	return document.Filters
+}
+
+func GetFilter(chatID int64, name string) *MsgDB {
+	if F, ok := Filters[chatID]; ok {
+		for _, x := range F {
+			if x.Name == name {
+				return &x
+			}
+		}
+	}
+	return nil
+}
+
+func GetFilters(chatID int64) []MsgDB {
+	if F, ok := Filters[chatID]; ok {
+		return F
+	} else {
+		return nil
+	}
+}
+
+func PurgeFilters(chatID int64) error {
+	_, err := filters.DeleteOne(context.TODO(), bson.M{"chat_id": chatID})
+	if err != nil {
+		return err
+	}
+	delete(Filters, chatID)
+	return nil
+}
+
+func LoadFilters() map[int64][]MsgDB {
+	var documents []FilterDocument
+	r, err := filters.Find(context.TODO(), bson.M{})
+	if err != nil {
+		return nil
+	}
+	r.All(context.TODO(), &documents)
+	for _, x := range documents {
+		Filters[x.ChatID] = x.Filters
+	}
+	return Filters
+}
+
+func init() {
+	LoadFilters()
 }
