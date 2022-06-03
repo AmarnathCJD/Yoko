@@ -283,13 +283,15 @@ func Imdb(c tb.Context) error {
 	Directors = strings.TrimSuffix(Directors, ", ")
 	AKA = strings.TrimSuffix(AKA, ", ")
 	Actors = strings.TrimSuffix(Actors, ", ")
-	Movie += "<b>Year:</b> <code>" + fmt.Sprint(Title.Year) + "</code>\n"
+        if Title.Year != 0 {
+	 Movie += "<b>Year:</b> <code>" + fmt.Sprint(Title.Year) + "</code>\n"
+        }
 	Movie += "<b>Rating:</b> <code>" + fmt.Sprint(Title.Rating) + "</code>\n"
 	Movie += "<b>Genre:</b> " + Genres + "\n"
 	Movie += "<b>Runtime:</b> <code>" + fmt.Sprint(Title.Duration) + "</code>\n"
 	Movie += "<b>Actors:</b> " + Actors + "\n"
 	Movie += "<b>Directors:</b> " + Directors + "\n"
-	Movie += "<b>Plot:</b> <i>" + Title.Description + "</i>\n"
+	Movie += "<b>Plot:</b> <i>" + strings.ReplaceAll(Title.Description, "&apos;", "'") + "</i>\n"
 	Movie += "<b>AKA:</b> " + AKA + "\n"
 	if Title.Poster.URL != "" {
 		return c.Reply(&tb.Photo{File: tb.FromURL(Title.Poster.URL), Caption: Movie})
@@ -322,6 +324,9 @@ func UDict(c tb.Context) error {
 	U += "<b>Definition:</b> " + d.List[0].Definition + "\n\n"
 	U += "<b>Example:</b> " + d.List[0].Example + "\n"
 	U += "\n<b>Author:</b> " + d.List[0].Author
+        if U == string("") {
+            return c.Reply("No results found.")
+        }
 	sel.Inline(sel.Row(sel.Data("👍"+fmt.Sprint(d.List[0].ThumbsUp), "thumbs_up"), sel.Data("👎"+fmt.Sprint(d.List[0].ThumbsDown), "thumbs_down")))
 	return c.Reply(U, sel)
 }
