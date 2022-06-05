@@ -668,7 +668,7 @@ func Paste(c tb.Context) error {
 		}
 		URL := fmt.Sprintf("https://www.toptal.com/developers/hastebin/%s", key)
 		sel.Inline(sel.Row(sel.URL("View Paste", URL)))
-		c.Reply(fmt.Sprintf("<b>Pasted to <a href='%s'>HasteBin</a></b>", URL), sel)
+		c.Reply(fmt.Sprintf("<b>Pasted to <a href='%s'>HasteBin</a></b>", URL), &tb.SendOptions{DisableWebPagePreview: true, ReplyMarkup: sel})
 		return nil
 	}
 	postBody, _ := json.Marshal(map[string]string{
