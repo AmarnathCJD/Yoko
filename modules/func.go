@@ -218,7 +218,9 @@ func AddAdmins(next tb.HandlerFunc) tb.HandlerFunc {
 		} else if c.Sender().ID == int64(1087968824) {
 			AnonAdmin(next, "add_admins", c)
 			return nil
-		}
+		} else if c.Sender().ID == OWNER_ID {
+return next(c)
+}
 		p, _ := c.Bot().ChatMemberOf(c.Chat(), c.Sender())
 		if p.Role == "member" {
 			c.Reply("You need to be an admin to do this!")
