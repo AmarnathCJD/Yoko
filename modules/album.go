@@ -9,7 +9,7 @@ import (
 )
 
 func OnMediaHandler(c tb.Context) error {
-        if afk := AFK(c); afk {
+	if afk := AFK(c); afk {
 		return nil
 	}
 	if c.Message().AlbumID != string("") {
