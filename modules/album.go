@@ -1,7 +1,6 @@
 package modules
 
 import (
-	"fmt"
 	"time"
 
 	tb "gopkg.in/telebot.v3"
@@ -42,7 +41,7 @@ func AppendAlbum(data string, _time int64, f *tb.Photo, c tb.Context) {
 		a[i].Files = append(a[i].Files, f)
 		_, i = AlbumExist(data)
 		go func() {
-			time.Sleep(time.Second * 1)
+			time.Sleep(time.Millsecond * 100)
 			SendAlbum(i, c)
 		}()
 	} else {
