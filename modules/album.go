@@ -1,39 +1,30 @@
-package modules
+package main
 
 import (
-"time"
-tb "gopkg.in/telebot.v3"
+	"fmt"
+	"time"
+
+	tb "gopkg.in/telebot.v3"
 )
 
 func OnMediaHandler(c tb.Context) error {
 	if c.Message().AlbumID != string("") {
 		copyAlbum(c)
-}
+	}
 	return nil
 }
 
-
-func copyAlbum(c) {
-
+func copyAlbum(c tb.Context) {
+	AppendAlbum(c.Message().AlbumID, time.Now().Unix(), c.Message().Photo)
 }
 
 type Album struct {
 	AlbumID   string
 	TimeStamp int64
-	Files     []string
+	Files     tb.Album
 }
 
 var a []Album
-
-func main() {
-	data := "100"
-	_time := time.Now().Unix()
-	AppendAlbum(data, _time, "1")
-	AppendAlbum(data, _time, "2")
-	AppendAlbum(data, _time, "3")
-	time.Sleep(time.Second * 1)
-	AppendAlbum("200", time.Now().Unix(), "4")
-}
 
 func AlbumExist(id string) (bool, int) {
 	for i, b := range a {
@@ -44,14 +35,14 @@ func AlbumExist(id string) (bool, int) {
 	return false, 0
 }
 
-func AppendAlbum(data string, _time int64, f string) {
+func AppendAlbum(data string, _time int64, f *tb.Photo) {
 	e, i := AlbumExist(data)
 	if !e {
-		a = append(a, Album{data, _time, []string{f}})
+		a = append(a, Album{data, _time, tb.Album{}})
+		a[i].Files = append(a[i].Files, f)
 		_, i = AlbumExist(data)
 		go func() {
 			time.Sleep(time.Second * 1)
-			fmt.Println("Hui")
 			SendAlbum(i)
 		}()
 	} else {
