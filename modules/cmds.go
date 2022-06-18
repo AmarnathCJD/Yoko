@@ -230,11 +230,11 @@ func CallBackHandlers() {
 	bot.Bot.Handle(&upvote, VotingCB)
 	bot.Bot.Handle(&downvote, VotingCB)
 	bot.Bot.Handle(tb.OnAddedToGroup, AddedToGroupHandler)
+        bot.Bot.Handle(tb.OnPhoto, AlbumCopy)
 	bot.Bot.Handle(tb.OnMedia, OnMediaHandler)
 }
 
 func OnMediaHandler(c tb.Context) error {
-
 	if afk := AFK(c); afk {
 		return nil
 	}
@@ -281,4 +281,8 @@ func AddedToGroupHandler(c tb.Context) error {
 		db.AddChat(db.Chat{Id: c.Chat().ID, Title: c.Chat().Title})
 	}
 	return nil
+}
+
+func AlbumCopy(c tb.Context) error {
+     return c.Reply("oki")
 }
