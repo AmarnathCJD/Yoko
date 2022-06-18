@@ -1,13 +1,13 @@
 package modules
 
 import (
-	"time"
 	"fmt"
 	"github.com/amarnathcjd/yoko/bot"
 	"github.com/amarnathcjd/yoko/modules/db"
 	tb "gopkg.in/telebot.v3"
 	"regexp"
 	"strings"
+	"time"
 )
 
 type HANDLE struct {
@@ -234,14 +234,14 @@ func CallBackHandlers() {
 }
 
 var (
-groups = make(map[string]map[string]string)
+	groups = make(map[string]map[string]string)
 )
 
 func OnMediaHandler(c tb.Context) error {
 	if c.Message().AlbumID != string("") {
-return c.Reply(fmt.Sprint(time.Now().Unix()))
-}
-return nil
+		return c.Reply(fmt.Sprint(time.Now().Unix()))
+	}
+	return nil
 
 }
 
