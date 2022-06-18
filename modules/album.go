@@ -3,6 +3,7 @@ package modules
 import (
 	"fmt"
 	"time"
+        "sort"
 
 	tb "gopkg.in/telebot.v3"
 )
@@ -53,7 +54,6 @@ func AppendAlbum(data string, _time int64, f *tb.Photo, c tb.Context) {
 func SendAlbum(_id int, c tb.Context) {
 	_, err := c.Bot().SendAlbum(c.Chat(), a[_id].Files)
 	if err != nil {
-
 		fmt.Println(err)
 	}
 }
