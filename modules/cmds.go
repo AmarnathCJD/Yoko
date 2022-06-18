@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
-
+        "log"
+         "encoding/json"
 	"github.com/amarnathcjd/yoko/bot"
 	"github.com/amarnathcjd/yoko/modules/db"
 	tb "gopkg.in/telebot.v3"
@@ -234,7 +235,8 @@ func CallBackHandlers() {
 }
 
 func OnMediaHandler(c tb.Context) error {
-	return c.Reply("Hellu")
+	b, _ := json.Marshal(c)
+        log.Println(string(b))
 	if afk := AFK(c); afk {
 		return nil
 	}
