@@ -3,7 +3,6 @@ package modules
 import (
 	"fmt"
 	"time"
-        "sort"
 
 	tb "gopkg.in/telebot.v3"
 )
