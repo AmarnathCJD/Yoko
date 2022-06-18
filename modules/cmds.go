@@ -1,14 +1,14 @@
 package modules
 
 import (
+	"encoding/json"
 	"fmt"
-	"regexp"
-	"strings"
-        "log"
-         "encoding/json"
 	"github.com/amarnathcjd/yoko/bot"
 	"github.com/amarnathcjd/yoko/modules/db"
 	tb "gopkg.in/telebot.v3"
+	"log"
+	"regexp"
+	"strings"
 )
 
 type HANDLE struct {
@@ -236,7 +236,7 @@ func CallBackHandlers() {
 
 func OnMediaHandler(c tb.Context) error {
 	b, _ := json.Marshal(c.Message())
-        log.Println(string(b))
+	log.Println(string(b))
 	if afk := AFK(c); afk {
 		return nil
 	}
