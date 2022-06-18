@@ -3,6 +3,7 @@ package modules
 import (
 	"fmt"
 	"time"
+        "encoding/json"
 
 	tb "gopkg.in/telebot.v3"
 )
@@ -44,7 +45,7 @@ func AppendAlbum(data string, _time int64, f *tb.Photo, c tb.Context) {
 		a[i].Files = append(a[i].Files, f)
 		_, i = AlbumExist(data)
 		go func() {
-			time.Sleep(time.Second * 1)
+			time.Sleep(time.Second * 2)
 			SendAlbum(i, c)
 		}()
 	} else {
@@ -53,7 +54,10 @@ func AppendAlbum(data string, _time int64, f *tb.Photo, c tb.Context) {
 }
 
 func SendAlbum(_id int, c tb.Context) {
-	_, err := c.Bot().SendAlbum(c.Chat(), a[_id].Files)
+        msgs := a[_id].Files
+        b, _ := json.Marshal(msgs)
+        fmt.Println(string(b))
+	_, err := c.Bot().SendAlbum(c.Chat(), msgs)
 	if err != nil {
 		fmt.Println(err)
 	}
