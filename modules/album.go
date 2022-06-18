@@ -2,12 +2,13 @@ package modules
 
 import (
 "time"
+tb "gopkg.in/telebot.v3"
 )
 
 func OnMediaHandler(c tb.Context) error {
 	if c.Message().AlbumID != string("") {
-		return c.Reply(fmt.Sprint(time.Now().Unix()))
-	}
+		copyAlbum(c)
+}
 	return nil
 }
 
