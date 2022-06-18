@@ -51,5 +51,5 @@ func AppendAlbum(data string, _time int64, f *tb.Photo, c tb.Context) {
 }
 
 func SendAlbum(_id int, c tb.Context) {
-	c.Bot.Send(c.Chat(), a[_id].Files)
+	c.Bot().Send(c.Chat(), a[_id].Files)
 }
