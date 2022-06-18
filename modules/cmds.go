@@ -1,12 +1,11 @@
 package modules
 
 import (
-	"encoding/json"
+	"time"
 	"fmt"
 	"github.com/amarnathcjd/yoko/bot"
 	"github.com/amarnathcjd/yoko/modules/db"
 	tb "gopkg.in/telebot.v3"
-	"log"
 	"regexp"
 	"strings"
 )
@@ -234,13 +233,15 @@ func CallBackHandlers() {
 	bot.Bot.Handle(tb.OnMedia, OnMediaHandler)
 }
 
+var (
+groups = make(map[string]map[string]string)
+)
+
 func OnMediaHandler(c tb.Context) error {
-	b, _ := json.Marshal(c.Message())
-	log.Println(string(b))
-	if afk := AFK(c); afk {
-		return nil
-	}
-	return nil
+	if c.Message().AlbumID != string("") {
+return c.Reply(fmt.Sprint(time.Now().Unix()))
+}
+return nil
 
 }
 
