@@ -233,18 +233,6 @@ func CallBackHandlers() {
 	bot.Bot.Handle(tb.OnMedia, OnMediaHandler)
 }
 
-var (
-	groups = make(map[string]map[string]string)
-)
-
-func OnMediaHandler(c tb.Context) error {
-	if c.Message().AlbumID != string("") {
-		return c.Reply(fmt.Sprint(time.Now().Unix()))
-	}
-	return nil
-
-}
-
 func OnTextHandler(c tb.Context) error {
 	if strings.HasPrefix(c.Message().Text, "!") || strings.HasPrefix(c.Message().Text, "?") {
 		cmd := strings.Split(c.Message().Text, " ")[0][1:]
