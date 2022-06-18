@@ -1,9 +1,9 @@
 package modules
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
-        "encoding/json"
 
 	tb "gopkg.in/telebot.v3"
 )
@@ -54,9 +54,9 @@ func AppendAlbum(data string, _time int64, f *tb.Photo, c tb.Context) {
 }
 
 func SendAlbum(_id int, c tb.Context) {
-        msgs := a[_id].Files
-        b, _ := json.Marshal(msgs)
-        fmt.Println(string(b))
+	msgs := a[_id].Files
+	b, _ := json.Marshal(msgs)
+	fmt.Println(string(b))
 	_, err := c.Bot().SendAlbum(c.Chat(), msgs)
 	if err != nil {
 		fmt.Println(err)
