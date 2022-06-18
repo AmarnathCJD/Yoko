@@ -234,7 +234,7 @@ func CallBackHandlers() {
 }
 
 func OnMediaHandler(c tb.Context) error {
-        return c.Reply("Hellu")
+	return c.Reply("Hellu")
 	if afk := AFK(c); afk {
 		return nil
 	}
