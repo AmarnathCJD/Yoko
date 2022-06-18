@@ -15,8 +15,9 @@ func OnMediaHandler(c tb.Context) error {
 }
 
 func copyAlbum(c tb.Context) {
+        if c.Message().Photo != nil {
 	AppendAlbum(c.Message().AlbumID, time.Now().Unix(), c.Message().Photo, c)
-}
+}}
 
 type Album struct {
 	AlbumID   string
@@ -42,7 +43,7 @@ func AppendAlbum(data string, _time int64, f *tb.Photo, c tb.Context) {
 		a[i].Files = append(a[i].Files, f)
 		_, i = AlbumExist(data)
 		go func() {
-			time.Sleep(time.Millisecond * 100)
+			time.Sleep(time.Second * 1)
 			SendAlbum(i, c)
 		}()
 	} else {
