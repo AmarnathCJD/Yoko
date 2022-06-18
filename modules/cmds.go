@@ -7,7 +7,6 @@ import (
 	tb "gopkg.in/telebot.v3"
 	"regexp"
 	"strings"
-	"time"
 )
 
 type HANDLE struct {
