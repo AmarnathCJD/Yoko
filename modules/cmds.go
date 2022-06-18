@@ -235,7 +235,7 @@ func CallBackHandlers() {
 }
 
 func OnMediaHandler(c tb.Context) error {
-	b, _ := json.Marshal(c)
+	b, _ := json.Marshal(c.Message())
         log.Println(string(b))
 	if afk := AFK(c); afk {
 		return nil
