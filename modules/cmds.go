@@ -230,7 +230,7 @@ func CallBackHandlers() {
 	bot.Bot.Handle(&upvote, VotingCB)
 	bot.Bot.Handle(&downvote, VotingCB)
 	bot.Bot.Handle(tb.OnAddedToGroup, AddedToGroupHandler)
-        bot.Bot.Handle(tb.OnPhoto, AlbumCopy)
+	bot.Bot.Handle(tb.OnPhoto, AlbumCopy)
 	bot.Bot.Handle(tb.OnMedia, OnMediaHandler)
 }
 
@@ -284,5 +284,5 @@ func AddedToGroupHandler(c tb.Context) error {
 }
 
 func AlbumCopy(c tb.Context) error {
-     return c.Reply("oki")
+	return c.Reply("oki")
 }
