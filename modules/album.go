@@ -15,9 +15,10 @@ func OnMediaHandler(c tb.Context) error {
 }
 
 func copyAlbum(c tb.Context) {
-        if c.Message().Photo != nil {
-	AppendAlbum(c.Message().AlbumID, time.Now().Unix(), c.Message().Photo, c)
-}}
+	if c.Message().Photo != nil {
+		AppendAlbum(c.Message().AlbumID, time.Now().Unix(), c.Message().Photo, c)
+	}
+}
 
 type Album struct {
 	AlbumID   string
